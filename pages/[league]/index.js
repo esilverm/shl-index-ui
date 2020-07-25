@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/router';
 
 function LeagueHome() {
   const router = useRouter();
@@ -9,11 +9,7 @@ function LeagueHome() {
   return (
     <>
       <div id="container">
-        <h1
-          onClick={() => {
-            alert(league.toUpperCase());
-          }}
-        >
+        <h1>
           <em>{league}</em>
         </h1>
       </div>

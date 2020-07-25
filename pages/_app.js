@@ -1,9 +1,11 @@
-import App from "next/app";
-import { ThemeProvider } from "styled-components";
+/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
+import App from 'next/app';
+import { ThemeProvider } from 'styled-components';
 
 const theme = {
   colors: {
-    primary: "#0070f3",
+    primary: '#0070f3',
   },
 };
 

@@ -1,11 +1,25 @@
-import Link from "next/link";
-import styled from "styled-components";
+import React from 'react';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 const StyledLink = ({ as, children, className, href }) => (
   <Link href={href} as={as} passHref>
-    <a className={className}>{children}</a>
+    <span className={className}>{children}</span>
   </Link>
 );
+
+StyledLink.propTypes = {
+  as: PropTypes.string.isRequired,
+  children: PropTypes.element,
+  className: PropTypes.string,
+  href: PropTypes.string.isRequired,
+};
+
+StyledLink.defaultProps = {
+  children: <></>,
+  className: '',
+};
 
 export default styled(StyledLink)`
   color: #0075e0;
