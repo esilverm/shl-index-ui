@@ -11,13 +11,13 @@ const StyledLink = ({ as, children, className, href }) => (
 
 StyledLink.propTypes = {
   as: PropTypes.string.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.string || PropTypes.object || PropTypes.element,
   className: PropTypes.string,
   href: PropTypes.string.isRequired,
 };
 
 StyledLink.defaultProps = {
-  children: <></>,
+  children: '',
   className: '',
 };
 

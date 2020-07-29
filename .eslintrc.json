@@ -18,6 +18,8 @@
       {
         "extensions": [".js", ".jsx"]
       }
-    ]
+    ],
+    "global-require": "off",
+    "import/no-unresolved": "off"
   }
 }
