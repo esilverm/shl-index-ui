@@ -14,9 +14,11 @@
     "next": "9.4.4",
     "next-compose-plugins": "^2.2.0",
     "next-optimized-images": "^2.6.2",
+    "next-seo": "^4.7.3",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-table": "^7.3.2",
     "styled-components": "^5.1.1",
     "webp-loader": "^0.6.0"
   },

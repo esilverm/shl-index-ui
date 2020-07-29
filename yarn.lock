@@ -5313,6 +5313,11 @@ next-optimized-images@^2.6.2:
     raw-loader "^2.0.0"
     url-loader "^1.1.2"
 
+next-seo@^4.7.3:
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-4.7.3.tgz#8da82dca4f425c84392c4a8462f215dfcb4195b0"
+  integrity sha512-hEl6fVbYU6h0EqGTqsVM3aEbn+ejlV7JjjIRLzT8at5TDxXQWs1Ypd0UA9oalHfVo7rDbWawD9rrvMe+PWl4kw==
+
 next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
@@ -6518,6 +6523,11 @@ react-refresh@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
+
+react-table@^7.3.2:
+  version "7.3.2"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.3.2.tgz#def43b9777e0ef5839608104a557c3f1c365b2ff"
+  integrity sha512-n8ZvC8tzuDa3qK9PFlcXmo58JCRfxg/3LlvG8YJywvsQKiCnTfK6lDSp8a3WsAOBcZvBtGgyeoke7pBfAdB8jA==
 
 react@16.13.1:
   version "16.13.1"

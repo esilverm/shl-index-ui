@@ -1,15 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 export default function Home() {
   return (
     <>
+      <NextSeo
+        title="Home | SHL Index"
+        description="The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world."
+        // canonical=""
+        openGraph={{
+          url: '',
+          title: 'Home | SHL Index',
+          description:
+            'The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world.',
+        }}
+      />
       <Container>
         <Title>Welcome to the SHL Index</Title>
         <Action>Select a League</Action>
         <LeagueListContainer>
-          <Link href="/shl">
+          <Link href="/[league]" as="/shl" passHref>
             <LeagueLink>
               <picture>
                 <source
@@ -29,7 +41,7 @@ export default function Home() {
               </picture>
             </LeagueLink>
           </Link>
-          <Link href="/smjhl">
+          <Link href="/[league]" as="/smjhl" passHref>
             <LeagueLink>
               <picture>
                 <source
@@ -49,7 +61,7 @@ export default function Home() {
               </picture>
             </LeagueLink>
           </Link>
-          <Link href="/iihf">
+          <Link href="/[league]" as="/iihf" passHref>
             <LeagueLink>
               <picture>
                 <source
@@ -69,7 +81,7 @@ export default function Home() {
               </picture>
             </LeagueLink>
           </Link>
-          <Link href="/wjc">
+          <Link href="/[league]" as="/wjc" passHref>
             <LeagueLink>
               <picture>
                 <source
@@ -111,7 +123,7 @@ const Title = styled.h2`
   text-align: center;
   margin-bottom: 70px;
   font-size: 3rem;
-  color: ${({ theme }) => theme.colors.grey200};
+  color: ${({ theme }) => theme.colors.grey800};
   letter-spacing: 0.1rem;
 `;
 
@@ -120,7 +132,7 @@ const Action = styled.h2`
   font-weight: 600;
   text-align: center;
   font-size: 2.4rem;
-  color: ${({ theme }) => theme.colors.grey200};
+  color: ${({ theme }) => theme.colors.grey700};
   letter-spacing: 0.1rem;
 
   @media screen and (max-width: 768px) {
@@ -149,7 +161,7 @@ const LeagueLink = styled.div`
   min-height: 200px;
   margin: 4% 2.5%;
   transform: scale(1);
-  background-color: ${({ theme }) => theme.colors.grey800};
+  background-color: ${({ theme }) => theme.colors.grey100};
   & img {
     width: 80%;
     height: 80%;
