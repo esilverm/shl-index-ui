@@ -162,6 +162,14 @@ const LeagueLink = styled.div`
   margin: 4% 2.5%;
   transform: scale(1);
   background-color: ${({ theme }) => theme.colors.grey100};
+
+  &:first-child img {
+    width: 75%;
+    height: 75%;
+    top: 13%;
+    left: 14.3%;
+  }
+
   & img {
     width: 80%;
     height: 80%;
