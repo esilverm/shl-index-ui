@@ -17,6 +17,9 @@ module.exports = withPlugins([
       svgo: {
         plugins: [{ removeComments: false }],
       },
+      responsive: {
+        adapter: require('responsive-loader/sharp'),
+      },
     },
   ],
 
