@@ -1,12 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import Sprites from '../public/team_logos';
-
 function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
+  const [HomeIcon, setHomeIcon] = useState(React.Fragment);
+  const [AwayIcon, setAwayIcon] = useState(React.Fragment);
   const months = [
     'Jan',
     'Feb',
@@ -28,18 +29,39 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
     'Hamilton',
     'Toronto',
     'Manhattan',
-    'NewEngland',
-    'TampaBay',
+    'New_England',
+    'Tampa',
     'Baltimore',
     'Calgary',
     'Edmonton',
     'Minnesota',
     'Winnipeg',
-    'SanFrancisco',
-    'LosAngeles',
-    'NewOrleans',
+    'San_Francisco',
+    'Los_Angeles',
+    'New_Orleans',
     'Texas',
   ];
+
+  useEffect(() => {
+    setHomeIcon(() =>
+      dynamic(() =>
+        import(
+          `../public/team_logos/${league.toUpperCase()}/${
+            teams[+gameid.substr(5, 2)]
+          }.svg?sprite`
+        )
+      )
+    );
+    setAwayIcon(() =>
+      dynamic(() =>
+        import(
+          `../public/team_logos/${league.toUpperCase()}/${
+            teams[+gameid.substr(7, 2)]
+          }.svg?sprite`
+        )
+      )
+    );
+  }, []);
 
   // eslint-disable-next-line camelcase
   const teams_short = [
@@ -62,9 +84,10 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
   ];
 
   // const League = Sprites[league.toUpperCase()];
-  const League = Sprites.SHL;
-  const HomeTeam = isDate ? null : League[teams[+gameid.substr(5, 2)]];
-  const AwayTeam = isDate ? null : League[teams[+gameid.substr(7, 2)]];
+  // const League = Sprites.SHL;
+
+  // const HomeTeam = isDate ? null : League[teams[+gameid.substr(5, 2)]];
+  // const AwayTeam = isDate ? null : League[teams[+gameid.substr(7, 2)]];
 
   const winner = data.homeScore > data.awayScore;
   return (
@@ -84,7 +107,7 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
           <Game>
             <TeamLine winner={winner}>
               <TeamIcon>
-                <HomeTeam />
+                <HomeIcon />
               </TeamIcon>
               <span className="sbi-shortname">
                 {teams_short[+gameid.substr(5, 2)]}
@@ -93,7 +116,7 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
             </TeamLine>
             <TeamLine winner={!winner}>
               <TeamIcon>
-                <AwayTeam />
+                <AwayIcon />
               </TeamIcon>
               <span className="sbi-shortname">
                 {teams_short[+gameid.substr(7, 2)]}

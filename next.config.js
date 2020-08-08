@@ -14,9 +14,9 @@ module.exports = withPlugins([
         preset: 'default',
         quality: 80,
       },
-      // svgo: {
-      //   plugins: [{ removeComments: false }],
-      // },
+      svgo: {
+        plugins: [{ removeComments: false }],
+      },
     },
   ],
 
