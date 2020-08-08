@@ -9,6 +9,7 @@ const theme = {
     grey900: '#212529',
     grey800: '#343A40',
     grey700: '#495057',
+    grey650: '#6B737B',
     grey600: '#6C757D',
     grey500: '#ADB5BD',
     grey400: '#CED4DA',

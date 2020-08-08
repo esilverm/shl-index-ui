@@ -1,13 +1,17 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
-  const [HomeIcon, setHomeIcon] = useState(React.Fragment);
-  const [AwayIcon, setAwayIcon] = useState(React.Fragment);
+function ScoreBarItem({
+  data,
+  gameid = '',
+  isDate = false,
+  league,
+  HomeIcon,
+  AwayIcon,
+}) {
   const months = [
     'Jan',
     'Feb',
@@ -22,47 +26,6 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
     'Nov',
     'Dec',
   ];
-
-  const teams = [
-    'Buffalo',
-    'Chicago',
-    'Hamilton',
-    'Toronto',
-    'Manhattan',
-    'New_England',
-    'Tampa',
-    'Baltimore',
-    'Calgary',
-    'Edmonton',
-    'Minnesota',
-    'Winnipeg',
-    'San_Francisco',
-    'Los_Angeles',
-    'New_Orleans',
-    'Texas',
-  ];
-
-  useEffect(() => {
-    // @HERE Modify this to be league.toUpperCase() in the future
-    setHomeIcon(() =>
-      dynamic(() =>
-        import(
-          `../public/team_logos/${'SHL'}/${
-            teams[+gameid.substr(5, 2)]
-          }.svg?sprite`
-        )
-      )
-    );
-    setAwayIcon(() =>
-      dynamic(() =>
-        import(
-          `../public/team_logos/${'SHL'}/${
-            teams[+gameid.substr(7, 2)]
-          }.svg?sprite`
-        )
-      )
-    );
-  }, []);
 
   // eslint-disable-next-line camelcase
   const teams_short = [
@@ -89,7 +52,6 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
 
   // const HomeTeam = isDate ? null : League[teams[+gameid.substr(5, 2)]];
   // const AwayTeam = isDate ? null : League[teams[+gameid.substr(7, 2)]];
-
   const winner = data.homeScore > data.awayScore;
   return (
     <>
@@ -145,11 +107,15 @@ ScoreBarItem.propTypes = {
   gameid: PropTypes.string,
   isDate: PropTypes.bool,
   league: PropTypes.string.isRequired,
+  HomeIcon: PropTypes.element,
+  AwayIcon: PropTypes.element,
 };
 
 ScoreBarItem.defaultProps = {
   gameid: '',
   isDate: false,
+  HomeIcon: null,
+  AwayIcon: null,
 };
 
 const Date = styled.div`
@@ -206,7 +172,7 @@ const TeamLine = styled.div`
   display: grid;
   grid-template-columns: 12% 65px 1fr;
   color: ${({ winner, theme }) =>
-    winner ? theme.colors.grey900 : theme.colors.grey600};
+    winner ? theme.colors.grey900 : theme.colors.grey650};
   & .sbi-shortname {
     font-weight: 700;
     margin-left: 10px;
@@ -236,4 +202,4 @@ const GameResultText = styled.span`
   font-size: 0.8rem;
 `;
 
-export default ScoreBarItem;
+export default React.memo(ScoreBarItem);

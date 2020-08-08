@@ -159,7 +159,7 @@ function HeaderBar({ league, showScoreBar = true }) {
                 <source
                   srcSet={require(`../public/league_logos/${encodeURI(
                     league.toUpperCase()
-                  )}.png`)}
+                  )}.png?webp`)}
                   type="image/webp"
                 />
                 <source

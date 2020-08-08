@@ -21,6 +21,7 @@
     "react-dom": "16.13.1",
     "react-horizontal-scrolling-menu": "^0.7.7",
     "react-icons": "^3.10.0",
+    "react-spinners-kit": "^1.9.1",
     "react-table": "^7.3.2",
     "react-visibility-sensor": "^5.1.1",
     "responsive-loader": "^2.0.0",
