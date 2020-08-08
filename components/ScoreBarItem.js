@@ -43,10 +43,11 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
   ];
 
   useEffect(() => {
+    // @HERE Modify this to be league.toUpperCase() in the future
     setHomeIcon(() =>
       dynamic(() =>
         import(
-          `../public/team_logos/${league.toUpperCase()}/${
+          `../public/team_logos/${'SHL'}/${
             teams[+gameid.substr(5, 2)]
           }.svg?sprite`
         )
@@ -55,7 +56,7 @@ function ScoreBarItem({ data, gameid = '', isDate = false, league }) {
     setAwayIcon(() =>
       dynamic(() =>
         import(
-          `../public/team_logos/${league.toUpperCase()}/${
+          `../public/team_logos/${'SHL'}/${
             teams[+gameid.substr(7, 2)]
           }.svg?sprite`
         )
