@@ -1,6 +1,6 @@
 // next.config.js
-const withPlugins = require('next-compose-plugins');
-const optimizedImages = require('next-optimized-images');
+const withPlugins = require("next-compose-plugins");
+const optimizedImages = require("next-optimized-images");
 
 module.exports = withPlugins([
   [
@@ -11,17 +11,13 @@ module.exports = withPlugins([
         optimizationLevel: 3,
       },
       webp: {
-        preset: 'default',
+        preset: "default",
         quality: 80,
       },
-      svgo: {
-        plugins: [{ removeComments: false }],
-      },
       responsive: {
-        adapter: require('responsive-loader/sharp'),
+        adapter: require("responsive-loader/sharp"),
       },
     },
   ],
-
   // your other plugins here
 ]);
