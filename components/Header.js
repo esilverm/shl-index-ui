@@ -3,11 +3,13 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import VisibilitySensor from 'react-visibility-sensor';
-
+import { HamburgerCollapse } from 'react-animated-burgers';
+import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
 
-function HeaderBar({ league, showScoreBar = true }) {
+function HeaderBar({ league, showScoreBar = true, activePage = '' }) {
   const [scheduleVisible, setScheduleVisible] = useState(true);
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   const list = [
     { type: 'date', season: '55', gameid: '1010' },
@@ -158,7 +160,7 @@ function HeaderBar({ league, showScoreBar = true }) {
         aria-label="Main"
       >
         <Container>
-          <Link href="/[league]" as={`/${league}`} passHref tabIndex={0} >
+          <Link href="/[league]" as={`/${league}`} passHref>
             <Logo
               scheduleNotVisible={!scheduleVisible || !showScoreBar}
               role="link"
@@ -187,6 +189,73 @@ function HeaderBar({ league, showScoreBar = true }) {
               </picture>
             </Logo>
           </Link>
+          <MenuDrawer active={drawerVisible}>
+            <Link href="/[league]/scores" as={`/${league}/scores`} passHref>
+              <MenuItem
+                active={activePage === 'scores'}
+                role="link"
+                tabIndex={0}
+              >
+                Scores
+              </MenuItem>
+            </Link>
+            <Link href="/[league]/team" as={`/${league}/team`} passHref>
+              <MenuItem
+                active={activePage === 'teams'}
+                role="link"
+                tabIndex={0}
+              >
+                Teams
+              </MenuItem>
+            </Link>
+            <Link
+              href="/[league]/standings"
+              as={`/${league}/standings`}
+              passHref
+            >
+              <MenuItem
+                active={activePage === 'standings'}
+                role="link"
+                tabIndex={0}
+              >
+                Standings
+              </MenuItem>
+            </Link>
+            <Link href="/[league]/stats" as={`/${league}/stats`} passHref>
+              <MenuItem
+                active={activePage === 'stats'}
+                role="link"
+                tabIndex={0}
+              >
+                Stats
+              </MenuItem>
+            </Link>
+            <Link href="/[league]/schedule" as={`/${league}/schedule`} passHref>
+              <MenuItem
+                active={activePage === 'schedule'}
+                role="link"
+                tabIndex={0}
+              >
+                Schedule
+              </MenuItem>
+            </Link>
+            <Link href="/[league]/player " as={`/${league}/player`} passHref>
+              <MenuItem
+                active={activePage === 'players'}
+                role="link"
+                tabIndex={0}
+              >
+                Players
+              </MenuItem>
+            </Link>
+          </MenuDrawer>
+          <HamburgerIcon
+            isActive={drawerVisible}
+            toggleButton={() => setDrawerVisible(() => !drawerVisible)}
+            barColor="#F8F9FA"
+            buttonWidth={24}
+          />
+          <SearchIcon size={24} />
         </Container>
       </HeaderNav>
     </header>
@@ -215,9 +284,19 @@ const Container = styled.div`
   width: 75%;
   height: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   @media screen and (max-width: 768px) {
     width: 90%;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    padding: 0 5%;
+    position: relative;
+    justify-content: space-between;
   }
 `;
 
@@ -225,25 +304,99 @@ const Logo = styled.div`
   transition: all 200ms;
   height: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `100%` : `150%`)};
   width: max-content;
-  margin-left: 2%;
+  margin: 0 1% 0 2%;
 
   & img {
     position: relative;
-    top: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `5%` : `-10%`)};
+    top: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `2.5%` : `5%`)};
     object-fit: contain;
     border-radius: 5px;
     transition: all 200ms ease-out;
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 600px) {
+    order: 2;
+    height: 100%;
+    margin: 0;
+
+    & img {
+      top: 2.5%;
+      margin: 0;
+    }
+  }
+`;
+
+const MenuDrawer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  width: auto;
+
+  @media screen and (max-width: 600px) {
+    order: 0;
+    flex-direction: column;
+    position: absolute;
+    background-color: ${({ theme }) => theme.colors.grey800};
+    width: 100%;
+    height: auto;
+    top: 64px;
+    left: 0;
+    ${({ active }) => (active ? '' : 'display: none;')}
+  }
+`;
+
+const MenuItem = styled.div`
+  color: ${({ theme }) => theme.colors.grey100};
+  font-size: 14px;
+  font-weight: 700;
+  height: 100%;
+  width: max-content;
+  padding: 0 10px;
+  ${({ active, theme }) =>
+    active ? `border-bottom: 5px solid ${theme.colors.grey100};` : ``}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0183da;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    height: 50px;
+  }
+`;
+
+const HamburgerIcon = styled(HamburgerCollapse)`
+  @media screen and (min-width: 601px) {
+    display: none !important;
+  }
+`;
+
+const SearchIcon = styled(ImSearch)`
+  order: 3;
+  color: ${({ theme }) => theme.colors.grey100};
+  cursor: pointer;
+  margin: 9px;
+
+  @media screen and (min-width: 601px) {
+    display: none;
   }
 `;
 
 HeaderBar.propTypes = {
   league: PropTypes.string.isRequired,
   showScoreBar: PropTypes.bool,
+  activePage: PropTypes.string,
 };
 
 HeaderBar.defaultProps = {
   showScoreBar: true,
+  activePage: '',
 };
 
 export default HeaderBar;
