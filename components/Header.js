@@ -158,7 +158,7 @@ function HeaderBar({ league, showScoreBar = true }) {
         aria-label="Main"
       >
         <Container>
-          <Link href="/[league]" as={`/${league}`} passHref tabIndex={0}>
+          <Link href="/[league]" as={`/${league}`} passHref tabIndex={0} >
             <Logo
               scheduleNotVisible={!scheduleVisible || !showScoreBar}
               role="link"

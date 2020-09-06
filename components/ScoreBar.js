@@ -116,6 +116,12 @@ const Container = styled.div`
     height: 100%;
   }
 
+  & .menu-wrapper--inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
   & .scroll-menu-arrow--disabled {
     visibility: hidden;
   }

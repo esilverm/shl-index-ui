@@ -127,7 +127,6 @@ const Date = styled.div`
   border-right: 1px solid ${({ theme }) => theme.colors.grey500};
   background-color: ${({ theme }) => theme.colors.grey200};
   position: relative;
-  top: -32px;
 
   & span {
     color: ${({ theme }) => theme.colors.grey900};
