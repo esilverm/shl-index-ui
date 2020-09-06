@@ -32,8 +32,9 @@ function ScoreBar({ data, league }) {
   ];
 
   useEffect(() => {
+    // Dynamically import svg icons based on the league chosen
     (async () => {
-      const { default: s } = await import(`../public/team_logos/${'SHL'}/`);
+      const { default: s } = await import(`../public/team_logos/${'SHL'}/`); // league.toUpperCase();
       setSprites(() => s);
       setLoading(() => false);
     })();
@@ -65,17 +66,18 @@ function ScoreBar({ data, league }) {
           translate={-189 * (data.length / 4)}
           wheel={false}
           arrowLeft={
-            <Arrow>
-              <BsChevronLeft size="2rem" />
+            <Arrow aria-label="Go Left">
+              <BsChevronLeft size="2rem" aria-label="Arrow Pointing Left" />
             </Arrow>
           }
           arrowRight={
-            <Arrow right>
-              <BsChevronRight size="2rem" />
+            <Arrow right aria-label="Go Right">
+              <BsChevronRight size="2rem" aria-label="Arrow Pointing Right" />
             </Arrow>
           }
           selected={selected}
           onSelect={onSelect}
+          useButtonRole={false}
           menuStyle={{
             height: '100%',
             display: 'flex',
@@ -93,6 +95,7 @@ ScoreBar.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   league: PropTypes.string.isRequired,
 };
+
 const SpinContainer = styled.div`
   width: 100%;
   height: 100%;

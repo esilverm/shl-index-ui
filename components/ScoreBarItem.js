@@ -47,17 +47,13 @@ function ScoreBarItem({
     'TEX',
   ];
 
-  // const League = Sprites[league.toUpperCase()];
-  // const League = Sprites.SHL;
-
-  // const HomeTeam = isDate ? null : League[teams[+gameid.substr(5, 2)]];
-  // const AwayTeam = isDate ? null : League[teams[+gameid.substr(7, 2)]];
   const winner = data.homeScore > data.awayScore;
+
   return (
     <>
       {isDate ? (
-        <Date>
-          <span>
+        <Date role="presentation" aria-label="Score Bar Date">
+          <span aria-label="Date">
             {months[+gameid.substr(0, 2) - 1]} {gameid.substr(2, 2)}
           </span>
         </Date>
@@ -67,26 +63,30 @@ function ScoreBarItem({
           as={`/${league}/${data.season}/game/${gameid}`}
           passHref
         >
-          <Game>
+          <Game role="link" aria-label="Game Result" tabIndex={0}>
             <TeamLine winner={winner}>
               <TeamIcon>
-                <HomeIcon />
+                <HomeIcon aria-label={teams_short[+gameid.substr(5, 2)]} />
               </TeamIcon>
-              <span className="sbi-shortname">
+              <span className="sbi-shortname" aria-label="Home Team">
                 {teams_short[+gameid.substr(5, 2)]}
               </span>
-              <span className="sbi-score">{data.homeScore}</span>
+              <span className="sbi-score" aria-label="Home Score">
+                {data.homeScore}
+              </span>
             </TeamLine>
             <TeamLine winner={!winner}>
               <TeamIcon>
-                <AwayIcon />
+                <AwayIcon aria-label={teams_short[+gameid.substr(7, 2)]} />
               </TeamIcon>
-              <span className="sbi-shortname">
+              <span className="sbi-shortname" aria-label="Away Team">
                 {teams_short[+gameid.substr(7, 2)]}
               </span>
-              <span className="sbi-score">{data.awayScore}</span>
+              <span className="sbi-score" aria-label="Away Score">
+                {data.awayScore}
+              </span>
             </TeamLine>
-            <GameResultText>
+            <GameResultText aria-label="Game Result">
               FINAL{data.shootout ? '/SO' : data.ot ? '/OT' : ''}
             </GameResultText>
           </Game>
@@ -127,7 +127,8 @@ const Date = styled.div`
   border-right: 1px solid ${({ theme }) => theme.colors.grey500};
   background-color: ${({ theme }) => theme.colors.grey200};
   position: relative;
-  top: -34px;
+  top: -32px;
+
   & span {
     color: ${({ theme }) => theme.colors.grey900};
     font-weight: 700;

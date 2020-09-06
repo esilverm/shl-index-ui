@@ -22,7 +22,7 @@ export default function Home() {
         <Action>Select a League</Action>
         <LeagueListContainer>
           <Link href="/[league]" as="/shl" passHref>
-            <LeagueLink>
+            <LeagueLink role="link" tabIndex={0}>
               <picture>
                 <source
                   srcSet={require('../public/league_logos/SHL.png?webp')}
@@ -42,7 +42,7 @@ export default function Home() {
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/smjhl" passHref>
-            <LeagueLink>
+            <LeagueLink role="link" tabIndex={0}>
               <picture>
                 <source
                   srcSet={require('../public/league_logos/SMJHL.png?webp')}
@@ -62,7 +62,7 @@ export default function Home() {
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/iihf" passHref>
-            <LeagueLink>
+            <LeagueLink role="link" tabIndex={0}>
               <picture>
                 <source
                   srcSet={require('../public/league_logos/IIHF.png?webp')}
@@ -82,7 +82,7 @@ export default function Home() {
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/wjc" passHref>
-            <LeagueLink>
+            <LeagueLink role="link" tabIndex={0}>
               <picture>
                 <source
                   srcSet={require('../public/league_logos/WJC.png?webp')}

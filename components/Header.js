@@ -140,8 +140,9 @@ function HeaderBar({ league, showScoreBar = true }) {
       shootout: 0,
     },
   ];
+
   return (
-    <>
+    <header>
       {showScoreBar && (
         <VisibilitySensor
           partialVisibility
@@ -151,10 +152,18 @@ function HeaderBar({ league, showScoreBar = true }) {
           <ScoreBar data={list} league={league} />
         </VisibilitySensor>
       )}
-      <Header sticky={!scheduleVisible || !showScoreBar}>
+      <HeaderNav
+        sticky={!scheduleVisible || !showScoreBar}
+        role="navigation"
+        aria-label="Main"
+      >
         <Container>
-          <Link href="/[league]" as={`/${league}`} passHref>
-            <Logo scheduleNotVisible={!scheduleVisible || !showScoreBar}>
+          <Link href="/[league]" as={`/${league}`} passHref tabIndex={0}>
+            <Logo
+              scheduleNotVisible={!scheduleVisible || !showScoreBar}
+              role="link"
+              tabIndex={0}
+            >
               <picture>
                 <source
                   srcSet={require(`../public/league_logos/${encodeURI(
@@ -179,12 +188,12 @@ function HeaderBar({ league, showScoreBar = true }) {
             </Logo>
           </Link>
         </Container>
-      </Header>
-    </>
+      </HeaderNav>
+    </header>
   );
 }
 
-const Header = styled.div`
+const HeaderNav = styled.div`
   ${({ sticky }) =>
     sticky
       ? ` 
@@ -214,8 +223,8 @@ const Container = styled.div`
 
 const Logo = styled.div`
   transition: all 200ms;
-
   height: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `100%` : `150%`)};
+  width: max-content;
   margin-left: 2%;
 
   & img {
