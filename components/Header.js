@@ -165,29 +165,10 @@ function HeaderBar({ league, showScoreBar = true, activePage = '' }) {
               scheduleNotVisible={!scheduleVisible || !showScoreBar}
               role="link"
               tabIndex={0}
-            >
-              <picture>
-                <source
-                  srcSet={require(`../public/league_logos/${encodeURI(
-                    league.toUpperCase()
-                  )}.png?webp`)}
-                  type="image/webp"
-                />
-                <source
-                  srcSet={require(`../public/league_logos/${encodeURI(
-                    league.toUpperCase()
-                  )}.png`)}
-                  type="image/png"
-                />
-                <img
-                  src={require(`../public/league_logos/${encodeURI(
-                    league.toUpperCase()
-                  )}.png`)}
-                  alt="SHL Logo"
-                  height="90%"
-                />
-              </picture>
-            </Logo>
+              dangerouslySetInnerHTML={{
+                __html: require(`../public/league_logos/${league.toUpperCase()}.svg?include`),
+              }}
+            />
           </Link>
           <MenuDrawer active={drawerVisible}>
             <Link href="/[league]/scores" as={`/${league}/scores`} passHref>
@@ -315,8 +296,9 @@ const Logo = styled.div`
   width: max-content;
   margin: 0 1% 0 2%;
 
-  & img {
+  & svg {
     position: relative;
+    height: 95%;
     top: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `2.5%` : `5%`)};
     object-fit: contain;
     border-radius: 5px;
@@ -329,7 +311,7 @@ const Logo = styled.div`
     height: 100%;
     margin: 0;
 
-    & img {
+    & svg {
       top: 2.5%;
       margin: 0;
     }

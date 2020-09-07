@@ -3,6 +3,11 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 
+import SHLLogo from '../public/league_logos/SHL.svg?sprite';
+import SMJHLLogo from '../public/league_logos/SMJHL.svg?sprite';
+import IIHFLogo from '../public/league_logos/IIHF.svg?sprite';
+import WJCLogo from '../public/league_logos/WJC.svg?sprite';
+
 export default function Home() {
   return (
     <>
@@ -23,82 +28,22 @@ export default function Home() {
         <LeagueListContainer>
           <Link href="/[league]" as="/shl" passHref>
             <LeagueLink role="link" tabIndex={0}>
-              <picture>
-                <source
-                  srcSet={require('../public/league_logos/SHL.png?webp')}
-                  type="image/webp"
-                />
-                <source
-                  srcSet={require('../public/league_logos/SHL.png')}
-                  type="image/png"
-                />
-                <img
-                  src={require('../public/league_logos/SHL.png')}
-                  alt="SHL Logo"
-                  width="80%"
-                  height="80%"
-                />
-              </picture>
+              <SHLLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/smjhl" passHref>
             <LeagueLink role="link" tabIndex={0}>
-              <picture>
-                <source
-                  srcSet={require('../public/league_logos/SMJHL.png?webp')}
-                  type="image/webp"
-                />
-                <source
-                  srcSet={require('../public/league_logos/SMJHL.png')}
-                  type="image/png"
-                />
-                <img
-                  src={require('../public/league_logos/SMJHL.png')}
-                  alt="SMJHL Logo"
-                  width="80%"
-                  height="80%"
-                />
-              </picture>
+              <SMJHLLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/iihf" passHref>
             <LeagueLink role="link" tabIndex={0}>
-              <picture>
-                <source
-                  srcSet={require('../public/league_logos/IIHF.png?webp')}
-                  type="image/webp"
-                />
-                <source
-                  srcSet={require('../public/league_logos/IIHF.png')}
-                  type="image/png"
-                />
-                <img
-                  src={require('../public/league_logos/IIHF.png')}
-                  alt="IIHF Logo"
-                  width="80%"
-                  height="80%"
-                />
-              </picture>
+              <IIHFLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/wjc" passHref>
             <LeagueLink role="link" tabIndex={0}>
-              <picture>
-                <source
-                  srcSet={require('../public/league_logos/WJC.png?webp')}
-                  type="image/webp"
-                />
-                <source
-                  srcSet={require('../public/league_logos/WJC.png')}
-                  type="image/png"
-                />
-                <img
-                  src={require('../public/league_logos/WJC.png')}
-                  alt="WJC Logo"
-                  width="80%"
-                  height="80%"
-                />
-              </picture>
+              <WJCLogo />
             </LeagueLink>
           </Link>
         </LeagueListContainer>
@@ -163,14 +108,14 @@ const LeagueLink = styled.div`
   transform: scale(1);
   background-color: ${({ theme }) => theme.colors.grey100};
 
-  &:first-child img {
+  &:first-child svg {
     width: 75%;
     height: 75%;
     top: 13%;
     left: 14.3%;
   }
 
-  & img {
+  & svg {
     width: 80%;
     height: 80%;
     position: absolute;
