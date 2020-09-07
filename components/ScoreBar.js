@@ -67,12 +67,12 @@ function ScoreBar({ data, league }) {
           wheel={false}
           arrowLeft={
             <Arrow aria-label="Go Left">
-              <BsChevronLeft size="2rem" aria-label="Arrow Pointing Left" />
+              <BsChevronLeft size="30px" aria-label="Arrow Pointing Left" />
             </Arrow>
           }
           arrowRight={
             <Arrow right aria-label="Go Right">
-              <BsChevronRight size="2rem" aria-label="Arrow Pointing Right" />
+              <BsChevronRight size="30px" aria-label="Arrow Pointing Right" />
             </Arrow>
           }
           selected={selected}
