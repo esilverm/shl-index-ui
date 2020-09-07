@@ -298,7 +298,7 @@ const Logo = styled.div`
 
   & svg {
     position: relative;
-    height: 95%;
+    height: 90%;
     top: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `2.5%` : `5%`)};
     object-fit: contain;
     border-radius: 5px;
@@ -312,7 +312,7 @@ const Logo = styled.div`
     margin: 0;
 
     & svg {
-      top: 2.5%;
+      top: 5%;
       margin: 0;
     }
   }
