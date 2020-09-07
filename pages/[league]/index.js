@@ -51,7 +51,7 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-export async function getStaticPaths() {
+export const getStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
 
   const paths = leagues.map((league) => ({
@@ -59,10 +59,10 @@ export async function getStaticPaths() {
   }));
 
   return { paths, fallback: false };
-}
+};
 
-export async function getStaticProps(ctx) {
+export const getStaticProps = async (ctx) => {
   return { props: { league: ctx.params.league } };
-}
+};
 
 export default LeagueHome;

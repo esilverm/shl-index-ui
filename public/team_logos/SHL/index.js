@@ -1,3 +1,4 @@
+import Atlanta from './Atlanta.svg?sprite';
 import Baltimore from './Baltimore.svg?sprite';
 import Buffalo from './Buffalo.svg?sprite';
 import Calgary from './Calgary.svg?sprite';
@@ -10,6 +11,7 @@ import Minnesota from './Minnesota.svg?sprite';
 import NewEngland from './New_England.svg?sprite';
 import NewOrleans from './New_Orleans.svg?sprite';
 import SanFrancisco from './San_Francisco.svg?sprite';
+import Seattle from './Seattle.svg?sprite';
 import TampaBay from './Tampa.svg?sprite';
 import Texas from './Texas.svg?sprite';
 import Toronto from './Toronto.svg?sprite';
@@ -17,6 +19,7 @@ import WestKendall from './West_Kendall.svg?sprite';
 import Winnipeg from './Winnipeg.svg?sprite';
 
 export default {
+  Atlanta,
   Baltimore,
   Buffalo,
   Calgary,
@@ -29,6 +32,7 @@ export default {
   NewEngland,
   NewOrleans,
   SanFrancisco,
+  Seattle,
   TampaBay,
   Texas,
   Toronto,

@@ -1,0 +1,326 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation for the Simulation Hockey League API. You can find out more about the SHL at [simulationhockey.com](https://simulationhockey.com/index.php). This API is a work in progress so expect future changes.\nNOTE: Whenever left unspecified, the season defaults to the current one."
+  version: "1.0.0"
+  title: "Simulation Hockey League"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "MIT"
+    url: "https://mit-license.org/"
+host: "localhost:8888"
+basePath: "/api/v1"
+tags:
+  - name: "leagues"
+    description: "Listing the simulation leagues that we provide data for"
+  - name: "conferences"
+    description: "Conferences within a particular league"
+  - name: "divisions"
+    description: "Divisions within a particular league or conference"
+  - name: "team"
+    description: "Teams of fake internet hockey players"
+  - name: "players"
+    description: "A player within the SHL universe"
+  - name: "goalies"
+    description: "A goalie because they apparently don't count as players."
+  - name: "games"
+    description: "A game played"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /leagues:
+    get:
+      tags:
+        - "leagues"
+      summary: "List of Leagues"
+      description: "A listing of the leagues that our data provides, their ids, and their abbreviations."
+      operationId: "getAllLeagues"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/League"
+  /conferences:
+    get:
+      tags:
+        - "conferences"
+      summary: "List of Conferences"
+      description: "Returns the conferences within a given league"
+      operationId: "getConferencesByLeague"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Conference"
+  /conferences/{conferenceId}:
+    get:
+      tags:
+        - "conferences"
+      summary: "Single Conference"
+      description: "Returns a single Conference"
+      operationId: "getConferencesByID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "conferenceId"
+          in: "path"
+          required: true
+          type: "number"
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Conference"
+  /divisions:
+    get:
+      tags:
+        - "divisions"
+      summary: "List of Divisions"
+      description: "Returns all Divisions for a League and/or a Conference. NOTE: Leaving out conferenceId out returns all Divisions for given league"
+      operationId: "getDivisionsByLeague"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "conferenceId"
+          in: "query"
+          type: "number"
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Division"
+  /divisions/{divisionId}:
+    get:
+      tags:
+        - "divisions"
+      summary: "Single Division"
+      description: "Returns a single Division"
+      operationId: "getDivisionsByID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "divisionId"
+          in: "path"
+          required: true
+          type: "number"
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "conferenceId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Conference"
+  /goalies:
+    get:
+      tags:
+        - "goalies"
+      summary: "List of Goalie Stats"
+      description: "Returns all goalie stats for a league and season"
+      operationId: "getGoaliesByLeague"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonType"
+          in: "query"
+          type: "string"
+          enum: ["ps", "rs", "po"]
+          default: "rs"
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Goalie"
+  /goalies/{goalieId}:
+    get:
+      tags:
+        - "goalies"
+      summary: "List of single season Goalie Stats"
+      description: "Returns all of a particular goalie's stats for a league and season."
+      operationId: "getGoalieStatsByIdSeason"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "goalieId"
+          in: "path"
+          required: true
+          type: "number"
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonType"
+          in: "query"
+          type: "string"
+          enum: ["ps", "rs", "po"]
+          default: "rs"
+        - name: "seasonId"
+          in: "query"
+          type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Goalie"
+  /goalies/{goalieId}/career:
+    get:
+      deprecated: true
+      tags:
+        - "goalies"
+      summary: "List of Single Goalie Career"
+      description: "Returns all of a particular goalie's stats for a league and season."
+      operationId: "getGoalieStatsByIdCareer"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "goalieId"
+          in: "path"
+          required: true
+          type: "number"
+        - name: "leagueId"
+          in: "query"
+          type: "number"
+          default: 0
+        - name: "seasonType"
+          in: "query"
+          type: "string"
+          enum: ["ps", "rs", "po"]
+          default: "rs"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Goalie"
+definitions:
+  League:
+    type: "object"
+    properties:
+      LeagueID:
+        type: "number"
+      Name:
+        type: "string"
+        example: "Simulation Hockey League"
+      Abbr:
+        type: "string"
+        example: "SHL"
+  Conference:
+    type: "object"
+    properties:
+      LeagueID:
+        type: "number"
+      ConferenceID:
+        type: "number"
+      Name:
+        type: "string"
+        example: "Eastern Conference"
+      SeasonID:
+        type: "number"
+        example: 54
+  Division:
+    type: "object"
+    properties:
+      LeagueID:
+        type: "number"
+      ConferenceID:
+        type: "number"
+      DivisionID:
+        type: "number"
+      Name:
+        type: "string"
+        example: "Great Lakes Division"
+      SeasonID:
+        type: "number"
+        example: 54
+  Goalie:
+    type: "object"
+    properties:
+      PlayerId:
+        type: "number"
+      TeamId:
+        type: "number"
+      FranchiseId:
+        type: "number"
+      LeagueId:
+        type: "number"
+      SeasonID:
+        type: "number"
+        example: 54
+      GP:
+        type: "number"
+      Minutes:
+        type: "number"
+      Wins:
+        type: "number"
+      Losses:
+        type: "number"
+      OT:
+        type: "number"
+      ShotsAgainst:
+        type: "number"
+      Saves:
+        type: "number"
+      GoalsAgainst:
+        type: "number"
+      GAA:
+        type: "string"
+        example: "0.00"
+      Shutouts:
+        type: "number"
+      SavePct:
+        type: "string"
+        example: "1.000"
+      GameRating:
+        type: "number"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

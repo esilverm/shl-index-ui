@@ -2,27 +2,22 @@
 const withPlugins = require('next-compose-plugins');
 const optimizedImages = require('next-optimized-images');
 
-module.exports = withPlugins(
+module.exports = withPlugins([
   [
-    [
-      optimizedImages,
-      {
-        optimizeImagesInDev: true,
-        optipng: {
-          optimizationLevel: 3,
-        },
-        webp: {
-          preset: 'default',
-          quality: 80,
-        },
-        responsive: {
-          adapter: require('responsive-loader/sharp'),
-        },
+    optimizedImages,
+    {
+      optimizeImagesInDev: true,
+      optipng: {
+        optimizationLevel: 3,
       },
-    ],
-    // your other plugins here
+      webp: {
+        preset: 'default',
+        quality: 80,
+      },
+      responsive: {
+        adapter: require('responsive-loader/sharp'),
+      },
+    },
   ],
-  {
-    basePath: '/',
-  }
-);
+  // your other plugins here
+]);

@@ -382,7 +382,7 @@ const MenuItem = styled.div`
     width: 100%;
     height: 50px;
 
-    // Change look of active tab within menu on mobile devices
+    // Change look of active tab within menu on mobile device
     ${({ active, theme }) =>
       active
         ? `
