@@ -27,22 +27,22 @@ export default function Home() {
         <Action>Select a League</Action>
         <LeagueListContainer>
           <Link href="/[league]" as="/shl" passHref>
-            <LeagueLink role="link" tabIndex={0}>
+            <LeagueLink role="link" aria-label="SHL" tabIndex={0}>
               <SHLLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/smjhl" passHref>
-            <LeagueLink role="link" tabIndex={0}>
+            <LeagueLink role="link" aria-label="SMJHL" tabIndex={0}>
               <SMJHLLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/iihf" passHref>
-            <LeagueLink role="link" tabIndex={0}>
+            <LeagueLink role="link" aria-label="IIHF" tabIndex={0}>
               <IIHFLogo />
             </LeagueLink>
           </Link>
           <Link href="/[league]" as="/wjc" passHref>
-            <LeagueLink role="link" tabIndex={0}>
+            <LeagueLink role="link" aria-label="WJC" tabIndex={0}>
               <WJCLogo />
             </LeagueLink>
           </Link>
