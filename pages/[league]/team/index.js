@@ -1,19 +1,18 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 
-function Stats({ league }) {
+function index({ league }) {
   return (
     <>
-      <Header league={league} activePage="stats" />
+      <Header league={league} activePage="teams" />
       <div>This is a placeholder</div>
     </>
   );
 }
 
-Stats.propTypes = {
+index.propTypes = {
   league: PropTypes.string.isRequired,
 };
 
@@ -31,4 +30,4 @@ export async function getStaticProps(ctx) {
   return { props: { league: ctx.params.league } };
 }
 
-export default Stats;
+export default index;

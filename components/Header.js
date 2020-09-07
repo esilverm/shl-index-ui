@@ -221,6 +221,15 @@ function HeaderBar({ league, showScoreBar = true, activePage = '' }) {
                 Standings
               </MenuItem>
             </Link>
+            <Link href="/[league]/playoffs" as={`/${league}/playoffs`} passHref>
+              <MenuItem
+                active={activePage === 'playoffs'}
+                role="link"
+                tabIndex={0}
+              >
+                Playoffs
+              </MenuItem>
+            </Link>
             <Link href="/[league]/stats" as={`/${league}/stats`} passHref>
               <MenuItem
                 active={activePage === 'stats'}
@@ -292,7 +301,7 @@ const Container = styled.div`
     width: 90%;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 670px) {
     width: 100%;
     padding: 0 5%;
     position: relative;
@@ -315,7 +324,7 @@ const Logo = styled.div`
     cursor: pointer;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 670px) {
     order: 2;
     height: 100%;
     margin: 0;
@@ -334,7 +343,7 @@ const MenuDrawer = styled.div`
   height: 100%;
   width: auto;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 670px) {
     order: 0;
     flex-direction: column;
     position: absolute;
@@ -355,7 +364,11 @@ const MenuItem = styled.div`
   width: max-content;
   padding: 0 10px;
   ${({ active, theme }) =>
-    active ? `border-bottom: 5px solid ${theme.colors.grey100};` : ``}
+    active
+      ? `
+  border-bottom: 5px solid ${theme.colors.grey100};
+  padding-top: 5px;`
+      : ``}
   display: flex;
   justify-content: center;
   align-items: center;
@@ -365,14 +378,24 @@ const MenuItem = styled.div`
     background-color: #0183da;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 670px) {
     width: 100%;
     height: 50px;
+
+    // Change look of active tab within menu on mobile devices
+    ${({ active, theme }) =>
+      active
+        ? `
+    border-bottom: none; 
+    border-left: 5px solid ${theme.colors.grey100};
+    padding-top: 0;
+    padding-right: 15px;`
+        : ``}
   }
 `;
 
 const HamburgerIcon = styled(HamburgerCollapse)`
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 671px) {
     display: none !important;
   }
 `;
@@ -383,7 +406,7 @@ const SearchIcon = styled(ImSearch)`
   cursor: pointer;
   margin: 9px;
 
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 671px) {
     display: none;
   }
 `;
