@@ -25,33 +25,35 @@ export default async (req, res) => {
     ]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
-      FROM schedules
+      FROM team_data
       WHERE LeagueID=${league}
       ORDER BY SeasonID DESC
       LIMIT 1
-    `));
+  `));
 
-  const schedule = await query(SQL`
-    SELECT *
-    FROM schedules
-    WHERE LeagueID=${league}
-      AND SeasonID=${season.SeasonID}
-      AND (Home=${id} OR Away=${id})
-  `);
+  const [team] = await query(SQL`
+  SELECT *
+  FROM team_data
+  WHERE LeagueID=${league}
+    AND SeasonID=${season.SeasonID}
+    AND TeamID=${id}
+`);
 
-  const parsed = schedule.map((game) => ({
-    season: game.SeasonID,
-    league: game.LeagueID,
-    data: game.Data,
-    homeTeam: game.Home,
-    homeScore: game.HomeScore,
-    awayTeam: game.Away,
-    awayScore: game.AwayScore,
-    type: game.Type,
-    played: game.Played,
-    overtime: game.Overtime,
-    shootout: game.Shootout,
-  }));
+  const parsed = {
+    id: team.TeamID,
+    season: team.SeasonID,
+    league: team.LeagueID,
+    conference: team.ConferenceID,
+    division: team.DivisionID === -1 ? undefined : team.DivisionID, // If there is no division dont include it in our data
+    name: `${team.Name} ${team.Nickname}`,
+    abbreviation: team.Abbr,
+    location:
+      team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
+    colors: {
+      primary: team.PrimaryColor,
+      secondary: team.SecondaryColor,
+    },
+  };
 
   res.status(200).json(parsed);
 };

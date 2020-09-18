@@ -16,7 +16,7 @@ export default async (req, res) => {
     ]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
-      FROM divisions
+      FROM schedules
       WHERE LeagueID=${league}
       ORDER BY SeasonID DESC
       LIMIT 1
