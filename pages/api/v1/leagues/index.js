@@ -1,8 +1,8 @@
-const SQL = require('sql-template-strings');
-const db = require('../../../../lib/db');
+import SQL from 'sql-template-strings';
+import { query } from '../../../../lib/db';
 
 module.exports = async (req, res) => {
-  const leagues = await db.query(SQL`
+  const leagues = await query(SQL`
     SELECT *
     FROM league_data
   `);

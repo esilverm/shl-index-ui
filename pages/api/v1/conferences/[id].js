@@ -1,7 +1,7 @@
-const SQL = require('sql-template-strings');
-const db = require('../../../../lib/db');
+import SQL from 'sql-template-strings';
+import { query } from '../../../../lib/db';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const id = parseInt(req.query.id, 10);
 
   if (Number.isNaN(id)) {
@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
 
   const [season] =
     parseInt(req.query.season, 10) ||
-    (await db.query(SQL`
+    (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM conferences
       WHERE LeagueID=${league}
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
       LIMIT 1
     `));
 
-  const [conference] = await db.query(SQL`
+  const [conference] = await query(SQL`
     SELECT * 
     FROM conferences 
     WHERE ConferenceID=${parseInt(id, 10)}
