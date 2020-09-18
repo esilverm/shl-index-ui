@@ -39,16 +39,91 @@ export default async (req, res) => {
       AND TeamID=${id}
   `);
 
-  const parsed = roster.map((player) => ({
-    id: player.PlayerID,
-    team: player.TeamID,
-    league: player.LeagueID,
-    season: player.SeasonID,
-    name: player['Last Name'],
-    height: parseInt(player.Height, 10),
-    weight: parseInt(player.Weight, 10),
-    // nationality: player.Nationality_One   // Can't do this since not accurate to affiliated IIHF/WJC team. Need to connect later on.
-  }));
+  // gather queries for player ratings
+  const ratingsQueries = roster.map(({ PlayerID, LeagueID, SeasonID }) =>
+    query(SQL`
+      SELECT * 
+      FROM player_ratings
+      WHERE PlayerID=${PlayerID}
+        AND LeagueID=${LeagueID}
+        AND SeasonID=${SeasonID}
+    `)
+  );
+
+  const ratings = await Promise.all(ratingsQueries);
+
+  const parsed = roster.map((player, i) => {
+    // Find player within ratings.
+
+    const [rating] = ratings[i];
+
+    const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
+      [rating.G, rating.LD, rating.RD, rating.LW, rating.C, rating.RW].indexOf(
+        20
+      )
+    ];
+
+    const playerInfo = {
+      id: player.PlayerID,
+      team: player.TeamID,
+      league: player.LeagueID,
+      season: player.SeasonID,
+      name: player['Last Name'],
+      height: parseInt(player.Height, 10),
+      weight: parseInt(player.Weight, 10),
+      // nationality: player.Nationality_One   // Can't do this since not accurate to affiliated IIHF/WJC team. Need to connect later on.
+      position,
+    };
+
+    if (position === 'G') {
+      return {
+        ...playerInfo,
+        ratings: {
+          blocker: rating.Blocker,
+          glove: rating.Glove,
+          passing: rating.GPassing,
+          pokeCheck: rating.GPokecheck,
+          positioning: rating.GPositioning,
+          rebound: rating.Rebound,
+          recovery: rating.Recovery,
+          puckhandling: rating.GPuckhandling,
+          lowShots: rating.LowShots,
+          reflexes: rating.Reflexes,
+          skating: rating.GSkating,
+          mentalToughness: rating.MentalToughness,
+          goalieStamina: rating.GoalieStamina,
+        },
+      };
+    }
+    return {
+      ...playerInfo,
+      ratings: {
+        screening: rating.Screening,
+        gettingOpen: rating.GettingOpen,
+        passing: rating.Passing,
+        puckhandling: rating.Puckhandling,
+        shootingAccuracy: rating.ShootingAccuracy,
+        shootingRange: rating.ShootingRange,
+        offensiveRead: rating.OffensiveRead,
+        checking: rating.Checking,
+        hitting: rating.Hitting,
+        positioning: rating.Positioning,
+        stickchecking: rating.Stickchecking,
+        shotBlocking: rating.shotBlocking,
+        faceoffs: rating.Faceoffs,
+        defensiveRead: rating.DefensiveRead,
+        acceleration: rating.Accelerating,
+        agility: rating.Agility,
+        balance: rating.Balance,
+        speed: rating.Speed,
+        stamina: rating.Stamina,
+        strength: rating.Strength,
+        fighting: rating.Fighting,
+        aggression: rating.Aggression,
+        bravery: rating.Bravery,
+      },
+    };
+  });
 
   res.status(200).json(parsed);
 };
