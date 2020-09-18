@@ -1,7 +1,14 @@
 import SQL from 'sql-template-strings';
+import Cors from 'cors';
 import { query } from '../../../../lib/db';
+import use from '../../../../lib/middleware';
+
+const cors = Cors({
+  methods: ['GET', 'HEAD'],
+});
 
 export default async (req, res) => {
+  await use(req, res, cors);
   const id = parseInt(req.query.id, 10);
 
   if (Number.isNaN(id)) {
