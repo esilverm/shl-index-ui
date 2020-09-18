@@ -42,24 +42,19 @@ export default async (req, res) => {
   `);
 
   // gather queries for player ratings
-
   if (full) {
-    const ratingsQueries = roster.map(({ PlayerID, LeagueID, SeasonID }) =>
-      query(SQL`
-        SELECT * 
-        FROM player_ratings
-        WHERE PlayerID=${PlayerID}
-          AND LeagueID=${LeagueID}
-          AND SeasonID=${SeasonID}
-      `)
-    );
+    const playerIDs = roster.map(({ PlayerID }) => PlayerID);
 
-    const ratings = await Promise.all(ratingsQueries);
+    const ratings = await query(SQL`
+      SELECT * 
+      FROM player_ratings
+      WHERE LeagueID=${league}
+        AND SeasonID=${season.SeasonID}
+        AND PlayerID IN (${playerIDs})
+    `);
 
     const parsed = roster.map((player, i) => {
-      // Find player within ratings.
-
-      const [rating] = ratings[i];
+      const rating = ratings[i];
 
       const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
         [
@@ -134,6 +129,7 @@ export default async (req, res) => {
       };
     });
     res.status(200).json(parsed);
+    return;
   }
 
   const parsed = roster.map((player) => ({
