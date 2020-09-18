@@ -10,6 +10,7 @@ export default async (req, res) => {
   }
 
   const league = parseInt(req.query.league, 10) || 0;
+  const conference = parseInt(req.query.conference, 10) || 0;
 
   const [season] =
     (!Number.isNaN(parseInt(req.query.season, 10)) && [
@@ -17,25 +18,27 @@ export default async (req, res) => {
     ]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
-      FROM conferences
+      FROM divisions
       WHERE LeagueID=${league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
 
-  const [conference] = await query(SQL`
-    SELECT * 
-    FROM conferences 
-    WHERE ConferenceID=${parseInt(id, 10)}
-      AND LeagueID=${league}
-      AND SeasonID=${season.SeasonID}
-  `);
+  const [division] = await query(SQL`
+  SELECT * 
+  FROM divisions 
+  WHERE LeagueID=${league}
+    AND SeasonID=${season.SeasonID}
+    AND DivisionID=${id}
+    AND ConferenceID=${conference}
+`);
 
   const parsed = {
-    id: conference.ConferenceID,
-    leagueId: conference.LeagueID,
-    name: conference.Name,
-    season: conference.SeasonID,
+    id: division.DivisionID,
+    leagueId: division.LeagueID,
+    conferenceId: division.ConferenceID,
+    name: division.Name,
+    season: division.SeasonID,
   };
 
   res.status(200).json(parsed);

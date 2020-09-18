@@ -5,7 +5,9 @@ export default async (req, res) => {
   const league = parseInt(req.query.league, 10) || 0;
 
   const [season] =
-    parseInt(req.query.season, 10) ||
+    (!Number.isNaN(parseInt(req.query.season, 10)) && [
+      { SeasonID: parseInt(req.query.season, 10) },
+    ]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM conferences

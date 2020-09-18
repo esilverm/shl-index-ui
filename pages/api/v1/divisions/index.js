@@ -2,14 +2,8 @@ import SQL from 'sql-template-strings';
 import { query } from '../../../../lib/db';
 
 export default async (req, res) => {
-  const id = parseInt(req.query.id, 10);
-
-  if (Number.isNaN(id)) {
-    res.status(400).send('Error: id must be a number');
-    return;
-  }
-
   const league = parseInt(req.query.league, 10) || 0;
+  const conference = parseInt(req.query.conference, 10);
 
   const [season] =
     (!Number.isNaN(parseInt(req.query.season, 10)) && [
@@ -17,26 +11,32 @@ export default async (req, res) => {
     ]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
-      FROM conferences
+      FROM divisions
       WHERE LeagueID=${league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
 
-  const [conference] = await query(SQL`
+  const search = SQL`
     SELECT * 
-    FROM conferences 
-    WHERE ConferenceID=${parseInt(id, 10)}
-      AND LeagueID=${league}
+    FROM divisions 
+    WHERE LeagueID=${league}
       AND SeasonID=${season.SeasonID}
-  `);
+  `;
 
-  const parsed = {
-    id: conference.ConferenceID,
-    leagueId: conference.LeagueID,
-    name: conference.Name,
-    season: conference.SeasonID,
-  };
+  if (!Number.isNaN(conference)) {
+    search.append(SQL` AND ConferenceID=${conference}`);
+  }
+
+  const divisions = await query(search);
+
+  const parsed = divisions.map((division) => ({
+    id: division.DivisionID,
+    leagueId: division.LeagueID,
+    conferenceId: division.ConferenceID,
+    name: division.Name,
+    season: division.SeasonID,
+  }));
 
   res.status(200).json(parsed);
 };
