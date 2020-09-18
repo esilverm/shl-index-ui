@@ -13,7 +13,7 @@ export default async (req, res) => {
   const id = parseInt(req.query.id, 10);
 
   if (Number.isNaN(id)) {
-    res.status(400).send('Error: id must be a number');
+    res.status(400).send('Error: Team id must be a number');
     return;
   }
 
