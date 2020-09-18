@@ -1,7 +1,7 @@
 import SQL from 'sql-template-strings';
 import { query } from '../../../../lib/db';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const leagues = await query(SQL`
     SELECT *
     FROM league_data
