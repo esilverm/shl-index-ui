@@ -12,7 +12,7 @@
       "url": "https://mit-license.org/"
     }
   },
-  "host": "localhost:8888",
+  "host": "localhost:3000",
   "basePath": "/api/v1",
   "tags": [
     {
