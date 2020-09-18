@@ -30,6 +30,13 @@ export default async (req, res) => {
 
   const divisions = await query(search);
 
+  if (divisions.length === 0) {
+    res
+      .status(404)
+      .send('Error 404: Could not find divisions for given parameters.');
+    return;
+  }
+
   const parsed = divisions.map((division) => ({
     id: division.DivisionID,
     leagueId: division.LeagueID,

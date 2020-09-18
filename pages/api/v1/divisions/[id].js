@@ -33,8 +33,15 @@ export default async (req, res) => {
     AND ConferenceID=${conference}
 `);
 
+  if (!division) {
+    res
+      .status(404)
+      .send('Error 404: Could not find division for given parameters.');
+    return;
+  }
+
   const parsed = {
-    id: division.DivisionID,
+    id,
     leagueId: division.LeagueID,
     conferenceId: division.ConferenceID,
     name: division.Name,

@@ -31,6 +31,13 @@ export default async (req, res) => {
       AND SeasonID=${season.SeasonID}
   `);
 
+  if (!conference) {
+    res
+      .status(404)
+      .send('Error 404: Could not find conference for given parameters.');
+    return;
+  }
+
   const parsed = {
     id: conference.ConferenceID,
     leagueId: conference.LeagueID,
