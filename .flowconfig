@@ -1,11 +1,13 @@
 [ignore]
-node_modules/
+.*/node_modules/*
 
 [include]
 
 [libs]
-types/
+flow-typed/
 
 [lints]
 
 [options]
+
+[strict]
