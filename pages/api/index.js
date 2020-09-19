@@ -1,6 +1,6 @@
 // Serve API Documentation
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
 export default (req, res) => {
   const filePath = path.resolve('./public/docs.html');
