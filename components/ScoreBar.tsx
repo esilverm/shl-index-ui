@@ -6,9 +6,25 @@ import { SwishSpinner } from 'react-spinners-kit';
 
 import ScoreBarItem from './ScoreBarItem';
 
-function ScoreBar({ data, league }) {
-  const [loading, setLoading] = useState(true);
-  const [sprites, setSprites] = useState({});
+// Determine prop types when actually implementing in conjunction with backend
+interface Props {
+  data: Array<{
+    type: string;
+    season: string;
+    gameid: string;
+    homeScore?: number;
+    awayScore?: number;
+    ot?: number;
+    shootout?: number;
+  }>;
+  league: string;
+}
+
+function ScoreBar({ data, league }: Props): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [sprites, setSprites] = useState<{
+    [index: string]: React.ComponentClass<any>;
+  }>({});
 
   const teams = [
     'Buffalo',
@@ -46,21 +62,39 @@ function ScoreBar({ data, league }) {
         </SpinContainer>
       ) : (
         <ScrollMenu
-          data={data.map(({ type, gameid, ...stats }) => (
-            <ScoreBarItem
-              isDate={type === 'date'}
-              key={gameid}
-              data={{ ...stats }}
-              league={league}
-              gameid={gameid}
-              HomeIcon={
-                type === 'date' ? null : sprites[teams[+gameid.substr(5, 2)]]
-              }
-              AwayIcon={
-                type === 'date' ? null : sprites[teams[+gameid.substr(7, 2)]]
-              }
-            />
-          ))}
+          data={data.map(
+            ({
+              type,
+              gameid,
+              season,
+              homeScore,
+              awayScore,
+              ot,
+              shootout,
+            }: {
+              type: string;
+              gameid: string;
+              season: string;
+              homeScore: number;
+              awayScore: number;
+              ot: number;
+              shootout: number;
+            }) => (
+              <ScoreBarItem
+                isDate={type === 'date'}
+                key={gameid}
+                data={{ season, homeScore, awayScore, ot, shootout }}
+                league={league}
+                gameid={gameid}
+                HomeIcon={
+                  type === 'date' ? null : sprites[teams[+gameid.substr(5, 2)]]
+                }
+                AwayIcon={
+                  type === 'date' ? null : sprites[teams[+gameid.substr(7, 2)]]
+                }
+              />
+            )
+          )}
           translate={-189 * (data.length / 4)}
           wheel={false}
           arrowLeft={

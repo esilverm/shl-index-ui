@@ -8,7 +8,10 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> => {
   await use(req, res, cors);
 
   const { id, league = 0, season: seasonid, full: isfull } = req.query;

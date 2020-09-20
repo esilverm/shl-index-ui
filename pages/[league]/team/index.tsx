@@ -3,7 +3,11 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../../components/Header';
 
-function index({ league }) {
+interface Props {
+  league: string;
+}
+
+function index({ league }: Props): JSX.Element {
   return (
     <>
       <Header league={league} activePage="teams" />

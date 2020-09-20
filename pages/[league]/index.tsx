@@ -5,7 +5,11 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 
-function LeagueHome({ league }) {
+interface Props {
+  league: string;
+}
+
+function LeagueHome({ league }: Props): JSX.Element {
   return (
     <>
       <NextSeo
@@ -61,7 +65,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
   return { props: { league: ctx.params.league } };
 };
 

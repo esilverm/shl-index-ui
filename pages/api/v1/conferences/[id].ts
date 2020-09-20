@@ -8,7 +8,10 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> => {
   await use(req, res, cors);
 
   const { id, league = 0, season: seasonid } = req.query;
@@ -45,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const parsed = {
     id: conference.ConferenceID,
-    leagueId: conference.LeagueID,
+    league: conference.LeagueID,
     name: conference.Name,
     season: conference.SeasonID,
   };

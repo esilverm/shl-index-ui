@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 
-function TeamPage() {
+function TeamPage(): JSX.Element {
   return <div>This is a placeholder</div>;
 }
 

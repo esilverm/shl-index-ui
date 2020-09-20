@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PlayerPage() {
+function PlayerPage(): JSX.Element {
   return <div>Bruh</div>;
 }
 

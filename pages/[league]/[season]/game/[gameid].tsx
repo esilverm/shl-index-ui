@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 
-function GameResults() {
+function GameResults(): JSX.Element {
   return <div>This is the placeholder</div>;
 }
 

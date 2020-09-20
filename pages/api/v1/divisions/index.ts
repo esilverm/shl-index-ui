@@ -19,7 +19,7 @@ type Data = Array<{
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<Data | string>
-) => {
+): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, conference, season: seasonid } = req.query;

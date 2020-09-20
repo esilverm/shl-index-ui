@@ -1,10 +1,13 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 
-function Scores({ league }) {
+interface Props {
+  league: string;
+}
+
+function Scores({ league }: Props): JSX.Element {
   return (
     <>
       <Header league={league} showScoreBar={false} activePage="scores" />
@@ -12,10 +15,6 @@ function Scores({ league }) {
     </>
   );
 }
-
-// Scores.propTypes = {
-//   league: PropTypes.string.isRequired,
-// };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];

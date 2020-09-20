@@ -3,6 +3,23 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+// Determine prop types when actually implementing in conjunction with backend
+
+interface Props {
+  data: {
+    season: string;
+    homeScore: number;
+    awayScore: number;
+    ot: number;
+    shootout: number;
+  } | null;
+  gameid?: string;
+  isDate?: boolean;
+  league: string;
+  HomeIcon: React.ComponentClass<any> | null;
+  AwayIcon: React.ComponentClass<any> | null;
+}
+
 function ScoreBarItem({
   data,
   gameid = '',
@@ -10,7 +27,7 @@ function ScoreBarItem({
   league,
   HomeIcon,
   AwayIcon,
-}) {
+}: Props): JSX.Element {
   const months = [
     'Jan',
     'Feb',
@@ -94,21 +111,6 @@ function ScoreBarItem({
     </>
   );
 }
-
-// ScoreBarItem.propTypes = {
-//   data: PropTypes.shape({
-//     season: PropTypes.string.isRequired,
-//     homeScore: PropTypes.number,
-//     awayScore: PropTypes.number,
-//     ot: PropTypes.number,
-//     shootout: PropTypes.number,
-//   }).isRequired,
-//   gameid: PropTypes.string,
-//   isDate: PropTypes.bool,
-//   league: PropTypes.string.isRequired,
-//   HomeIcon: PropTypes.element,
-//   AwayIcon: PropTypes.element,
-// };
 
 const Date = styled.div`
   width: 46px;

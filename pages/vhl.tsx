@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function VHL() {
+export default function VHL(): JSX.Element {
   return (
     <>
       <BackgroundVideo autoPlay loop muted>

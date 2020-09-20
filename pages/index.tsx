@@ -9,7 +9,7 @@ const SMJHLLogo = require('../public/league_logos/SMJHL.svg?sprite');
 const IIHFLogo = require('../public/league_logos/IIHF.svg?sprite');
 const WJCLogo = require('../public/league_logos/WJC.svg?sprite');
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <>
       <NextSeo

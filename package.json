@@ -68,6 +68,9 @@
     ],
     "*.+(json|css|md)": [
       "prettier --write"
+    ],
+    "*.+(ts|tsx)": [
+      "tsc --pretty --noEmit"
     ]
   }
 }

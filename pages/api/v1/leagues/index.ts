@@ -8,9 +8,22 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+type Data = Array<{
+  id: number;
+  name: string;
+  abbreviation: string;
+}>;
+
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+): Promise<void> => {
   await use(req, res, cors);
-  const leagues = await query(SQL`
+  const leagues: Array<{
+    LeagueID: number;
+    Name: string;
+    Abbr: string;
+  }> = await query(SQL`
     SELECT *
     FROM league_data
   `);

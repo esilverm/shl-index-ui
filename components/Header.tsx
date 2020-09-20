@@ -7,17 +7,24 @@ import { HamburgerCollapse } from 'react-animated-burgers';
 import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
 
+interface Props {
+  league: string;
+  showScoreBar?: boolean;
+  activePage?: string;
+}
+
+const defaultProps = {
+  showScoreBar: true,
+  activePage: '',
+};
+
 function HeaderBar({
   league,
   showScoreBar = true,
   activePage = '',
-}: {
-  league: string;
-  showScoreBar: boolean;
-  activePage: string;
-}) {
-  const [scheduleVisible, setScheduleVisible] = useState(true);
-  const [drawerVisible, setDrawerVisible] = useState(false);
+}: Props & typeof defaultProps): JSX.Element {
+  const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
+  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
 
   const list = [
     { type: 'date', season: '55', gameid: '1010' },
@@ -259,6 +266,8 @@ function HeaderBar({
     </header>
   );
 }
+
+HeaderBar.defaultProps = defaultProps;
 
 const HeaderNav = styled.div<{ sticky: boolean }>`
   ${({ sticky }) =>

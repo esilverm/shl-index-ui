@@ -4,7 +4,11 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 
-function Schedule({ league }) {
+interface Props {
+  league: string;
+}
+
+function Schedule({ league }: Props): JSX.Element {
   return (
     <>
       <Header league={league} activePage="schedule" />
@@ -12,10 +16,6 @@ function Schedule({ league }) {
     </>
   );
 }
-
-// Schedule.propTypes = {
-//   league: PropTypes.string.isRequired,
-// };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
