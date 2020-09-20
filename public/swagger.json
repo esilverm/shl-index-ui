@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is the API documentation for the Simulation Hockey League API. You can find out more about the SHL at [simulationhockey.com](https://simulationhockey.com/index.php). This API is a work in progress so expect future changes.\n\nNOTE: Whenever left unspecified, the season defaults to the current one.",
+    "description": "This is the API documentation for the Simulation Hockey League API. You can find out more about the SHL at [simulationhockey.com](https://simulationhockey.com/index.php). This API is a work in progress so expect future changes.\nNOTE: Whenever left unspecified, the season defaults to the current one.",
     "version": "1.0.0",
     "title": "Simulation Hockey League",
     "contact": {
@@ -75,13 +75,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonId",
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -99,7 +99,7 @@
         }
       }
     },
-    "/conferences/{conferenceId}": {
+    "/conferences/{conference}": {
       "get": {
         "tags": ["conferences"],
         "summary": "Single Conference",
@@ -108,19 +108,19 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "conferenceId",
+            "name": "conference",
             "in": "path",
             "required": true,
             "type": "number"
           },
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonId",
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -144,18 +144,18 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "conferenceId",
+            "name": "conference",
             "in": "query",
             "type": "number"
           },
           {
-            "name": "seasonId",
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -173,7 +173,7 @@
         }
       }
     },
-    "/divisions/{divisionId}": {
+    "/divisions/{division}": {
       "get": {
         "tags": ["divisions"],
         "summary": "Single Division",
@@ -182,25 +182,25 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "divisionId",
+            "name": "division",
             "in": "path",
             "required": true,
             "type": "number"
           },
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "conferenceId",
+            "name": "conference",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonId",
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -215,29 +215,32 @@
         }
       }
     },
-    "/goalies": {
+    "/teams": {
       "get": {
-        "tags": ["goalies"],
-        "summary": "List of Goalie Stats",
-        "description": "Returns all goalie stats for a league and season",
-        "operationId": "getGoaliesByLeague",
+        "tags": ["team"],
+        "summary": "List of Teams",
+        "description": "Returns all teams for a League, Conference or Division. You cannot query a division without a conference",
+        "operationId": "getTeamsByLeague",
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonType",
+            "name": "conference",
             "in": "query",
-            "type": "string",
-            "enum": ["ps", "rs", "po"],
-            "default": "rs"
+            "type": "number"
           },
           {
-            "name": "seasonId",
+            "name": "division",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -248,42 +251,45 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Goalie"
+                "$ref": "#/definitions/Team"
               }
             }
           }
         }
       }
     },
-    "/goalies/{goalieId}": {
+    "/teams/{team}": {
       "get": {
-        "tags": ["goalies"],
-        "summary": "List of single season Goalie Stats",
-        "description": "Returns all of a particular goalie's stats for a league and season.",
-        "operationId": "getGoalieStatsByIdSeason",
+        "tags": ["team"],
+        "summary": "List of Teams",
+        "description": "Returns info about a specific team.",
+        "operationId": "getLeagueTeam",
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "goalieId",
+            "name": "team",
             "in": "path",
             "required": true,
             "type": "number"
           },
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonType",
+            "name": "conference",
             "in": "query",
-            "type": "string",
-            "enum": ["ps", "rs", "po"],
-            "default": "rs"
+            "type": "number"
           },
           {
-            "name": "seasonId",
+            "name": "division",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "season",
             "in": "query",
             "type": "number"
           }
@@ -292,46 +298,65 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Goalie"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
             }
           }
         }
       }
     },
-    "/goalies/{goalieId}/career": {
+    "/teams/{team}/roster": {
       "get": {
-        "deprecated": true,
-        "tags": ["goalies"],
-        "summary": "List of Single Goalie Career",
-        "description": "Returns all of a particular goalie's stats for a league and season.",
-        "operationId": "getGoalieStatsByIdCareer",
+        "tags": ["team"],
+        "summary": "Get a Team's Roster",
+        "description": "Return a list of players for a specific team at a given time. Use full to get player info with attributes",
+        "operationId": "getTeamRoster",
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "goalieId",
+            "name": "team",
             "in": "path",
             "required": true,
             "type": "number"
           },
           {
-            "name": "leagueId",
+            "name": "league",
             "in": "query",
             "type": "number",
             "default": 0
           },
           {
-            "name": "seasonType",
+            "name": "conference",
             "in": "query",
-            "type": "string",
-            "enum": ["ps", "rs", "po"],
-            "default": "rs"
+            "type": "number"
+          },
+          {
+            "name": "division",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "type": "boolean",
+            "default": false
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Goalie"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PlayerInfo"
+              }
             }
           }
         }
@@ -342,14 +367,14 @@
     "League": {
       "type": "object",
       "properties": {
-        "LeagueID": {
+        "id": {
           "type": "number"
         },
-        "Name": {
+        "name": {
           "type": "string",
           "example": "Simulation Hockey League"
         },
-        "Abbr": {
+        "abbreviation": {
           "type": "string",
           "example": "SHL"
         }
@@ -358,102 +383,122 @@
     "Conference": {
       "type": "object",
       "properties": {
-        "LeagueID": {
+        "id": {
           "type": "number"
         },
-        "ConferenceID": {
+        "league": {
           "type": "number"
         },
-        "Name": {
+        "name": {
           "type": "string",
           "example": "Eastern Conference"
         },
-        "SeasonID": {
+        "season": {
           "type": "number",
-          "example": 54
+          "example": 55
         }
       }
     },
     "Division": {
       "type": "object",
       "properties": {
-        "LeagueID": {
+        "id": {
           "type": "number"
         },
-        "ConferenceID": {
+        "league": {
           "type": "number"
         },
-        "DivisionID": {
+        "conference": {
           "type": "number"
         },
-        "Name": {
+        "name": {
           "type": "string",
           "example": "Great Lakes Division"
         },
-        "SeasonID": {
+        "season": {
           "type": "number",
-          "example": 54
+          "example": 55
         }
       }
     },
-    "Goalie": {
+    "Team": {
       "type": "object",
       "properties": {
-        "PlayerId": {
+        "id": {
           "type": "number"
         },
-        "TeamId": {
+        "season": {
           "type": "number"
         },
-        "FranchiseId": {
+        "league": {
           "type": "number"
         },
-        "LeagueId": {
+        "conference": {
           "type": "number"
         },
-        "SeasonID": {
+        "division": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string",
+          "example": "Buffalo Stampede"
+        },
+        "abbreviation": {
+          "type": "string",
+          "example": "BUF"
+        },
+        "location": {
+          "type": "string",
+          "example": "Buffalo"
+        },
+        "colors": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "string",
+              "example": "#164833"
+            },
+            "secondary": {
+              "type": "string",
+              "example": "#f6bf11"
+            }
+          }
+        }
+      }
+    },
+    "PlayerInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "team": {
+          "type": "number"
+        },
+        "league": {
+          "type": "number"
+        },
+        "season": {
           "type": "number",
-          "example": 54
+          "example": 55
         },
-        "GP": {
-          "type": "number"
-        },
-        "Minutes": {
-          "type": "number"
-        },
-        "Wins": {
-          "type": "number"
-        },
-        "Losses": {
-          "type": "number"
-        },
-        "OT": {
-          "type": "number"
-        },
-        "ShotsAgainst": {
-          "type": "number"
-        },
-        "Saves": {
-          "type": "number"
-        },
-        "GoalsAgainst": {
-          "type": "number"
-        },
-        "GAA": {
+        "name": {
           "type": "string",
-          "example": "0.00"
+          "example": "Eric Vanderberg"
         },
-        "Shutouts": {
-          "type": "number"
+        "height": {
+          "type": "number",
+          "example": 74
         },
-        "SavePct": {
-          "type": "string",
-          "example": "1.000"
-        },
-        "GameRating": {
-          "type": "number"
+        "weight": {
+          "type": "number",
+          "example": 210
         }
       }
     }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
   }
 }

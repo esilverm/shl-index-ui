@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
+import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 
@@ -50,7 +51,7 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
 
   const paths = leagues.map((league) => ({
@@ -60,7 +61,7 @@ export const getStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
   return { props: { league: ctx.params.league } };
 };
 

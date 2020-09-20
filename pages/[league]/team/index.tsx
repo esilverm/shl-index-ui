@@ -1,4 +1,5 @@
 import React from 'react';
+import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../../components/Header';
 
@@ -11,7 +12,7 @@ function index({ league }) {
   );
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
 
   const paths = leagues.map((league) => ({
@@ -21,7 +22,7 @@ export const getStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
   return { props: { league: ctx.params.league } };
 };
 
