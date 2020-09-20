@@ -16,7 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   `);
 
   const parsed = leagues.map((league) => ({
-    id: league.LeagueId,
+    id: league.LeagueID,
     name: league.Name,
     abbreviation: league.Abbr,
   }));

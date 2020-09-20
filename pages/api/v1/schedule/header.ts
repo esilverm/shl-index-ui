@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     `);
 
   const schedule = await query(SQL`
-    SELECT s.Slug, s.Date, t1.Abbr as 'Home', s.HomeScore, t2.Abbr as 'Away', s.AwayScore, s.Overtime, s.Shootout
+    SELECT s.Slug, s.Date, t1.Abbr as 'Home', s.HomeScore, t2.Abbr as 'Away', s.AwayScore, s.Overtime, s.Shootout, s.Played
     FROM slugviewer as s
     INNER JOIN team_data AS t1 
       ON t1.TeamID = s.Home 
@@ -38,6 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     awayScore: game.AwayScore,
     overtime: game.Overtime,
     shootout: game.Shootout,
+    played: game.Played,
   }));
 
   // Simulate a GROUP BY Date
@@ -57,7 +58,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const dateList = Object.keys(hash).map((date) => ({
     date,
-    played: 1, // hash[date][0].played  // can assume that if one game has been played all have been for said day.
+    played: hash[date][0].played, // can assume that if one game has been played all have been for said day.
     games: hash[date],
   }));
 
@@ -70,7 +71,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const playedGames = dateList.filter(({ played }) => played);
   const nextGameDay = dateList
     .filter(({ played }) => !played)
-    .slice(playedGames.length < days ? +days - playedGames.length : 1);
+    .slice(0, playedGames.length < days ? +days - playedGames.length : 1);
 
   const lastGames = playedGames.slice(
     Math.max(
