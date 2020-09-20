@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
 import { query } from '../../../../lib/db';
@@ -7,19 +8,28 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req, res) => {
+type Data = Array<{
+  id: number;
+  league: number;
+  conference: number;
+  name: string;
+  season: number;
+}>;
+
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data | string>
+) => {
   await use(req, res, cors);
-  const league = parseInt(req.query.league, 10) || 0;
-  const conference = parseInt(req.query.conference, 10);
+
+  const { league = 0, conference, season: seasonid } = req.query;
 
   const [season] =
-    (!Number.isNaN(parseInt(req.query.season, 10)) && [
-      { SeasonID: parseInt(req.query.season, 10) },
-    ]) ||
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM divisions
-      WHERE LeagueID=${league}
+      WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
@@ -27,15 +37,21 @@ export default async (req, res) => {
   const search = SQL`
     SELECT * 
     FROM divisions 
-    WHERE LeagueID=${league}
+    WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
   `;
 
-  if (!Number.isNaN(conference)) {
-    search.append(SQL` AND ConferenceID=${conference}`);
+  if (!Number.isNaN(+conference)) {
+    search.append(SQL` AND ConferenceID=${+conference}`);
   }
 
-  const divisions = await query(search);
+  const divisions: Array<{
+    DivisionID: number;
+    ConferenceID: number;
+    LeagueID: number;
+    Name: string;
+    SeasonID: number;
+  }> = await query(search);
 
   if (divisions.length === 0) {
     res
@@ -46,8 +62,8 @@ export default async (req, res) => {
 
   const parsed = divisions.map((division) => ({
     id: division.DivisionID,
-    leagueId: division.LeagueID,
-    conferenceId: division.ConferenceID,
+    league: division.LeagueID,
+    conference: division.ConferenceID,
     name: division.Name,
     season: division.SeasonID,
   }));

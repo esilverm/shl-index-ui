@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
 import { query } from '../../../../lib/db';
@@ -7,21 +8,17 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   await use(req, res, cors);
 
-  const league = parseInt(req.query.league, 10) || 0;
-  const conference = parseInt(req.query.conference, 10);
-  const division = parseInt(req.query.division, 10);
+  const { league = 0, conference, division, season: seasonid } = req.query;
 
   const [season] =
-    (!Number.isNaN(parseInt(req.query.season, 10)) && [
-      { SeasonID: parseInt(req.query.season, 10) },
-    ]) ||
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM team_data
-      WHERE LeagueID=${league}
+      WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
   `));
@@ -29,15 +26,15 @@ export default async (req, res) => {
   const search = SQL`
     SELECT *
     FROM team_data
-    WHERE LeagueID=${league}
+    WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
   `;
 
-  if (!Number.isNaN(conference)) {
-    search.append(SQL` AND ConferenceID=${conference}`);
+  if (!Number.isNaN(+conference)) {
+    search.append(SQL` AND ConferenceID=${+conference}`);
 
-    if (league !== 2 && league !== 3 && !Number.isNaN(division)) {
-      search.append(SQL` AND DivisionID=${division}`);
+    if (+league !== 2 && +league !== 3 && !Number.isNaN(+division)) {
+      search.append(SQL` AND DivisionID=${+division}`);
     }
   }
 

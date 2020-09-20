@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Header from '../../components/Header';
 
@@ -13,9 +12,9 @@ function Standings({ league }) {
   );
 }
 
-Standings.propTypes = {
-  league: PropTypes.string.isRequired,
-};
+// Standings.propTypes = {
+//   league: PropTypes.string.isRequired,
+// };
 
 export const getStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];

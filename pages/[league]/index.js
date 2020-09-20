@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
 
@@ -41,9 +40,9 @@ function LeagueHome({ league }) {
   );
 }
 
-LeagueHome.propTypes = {
-  league: PropTypes.string.isRequired,
-};
+// LeagueHome.propTypes = {
+//   league: PropTypes.string.isRequired,
+// };
 
 const Container = styled.div`
   height: 150vh;

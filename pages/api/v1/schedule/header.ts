@@ -1,14 +1,14 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import { query } from '../../../../lib/db';
 
-export default async (req, res) => {
-  const league = parseInt(req.query.league, 10) || 0;
-  const days = parseInt(req.query.days, 10) || 5; // give 5 days of data by default.
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { league = 0, days = 5 } = req.query;
 
   const [season] = await query(SQL`
       SELECT DISTINCT SeasonID
       FROM slugviewer
-      WHERE LeagueID=${league}
+      WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `);
@@ -24,7 +24,7 @@ export default async (req, res) => {
       ON t2.TeamID = s.Away 
         AND t2.LeagueID = s.LeagueID 
         AND t2.SeasonID = s.SeasonID
-    WHERE s.LeagueID=${league}
+    WHERE s.LeagueID=${+league}
       AND s.SeasonID=${season.SeasonID}
   `);
 
@@ -61,19 +61,22 @@ export default async (req, res) => {
     games: hash[date],
   }));
 
-  dateList.sort((a, b) => new Date(a.date) - new Date(b.date));
+  // Solution from here: https://stackoverflow.com/a/60688789/10382232
+  dateList.sort(
+    (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
+  );
 
   // get x amount of played game days and 1 game from the future.
   const playedGames = dateList.filter(({ played }) => played);
   const nextGameDay = dateList
     .filter(({ played }) => !played)
-    .slice(playedGames.length < days ? days - playedGames.length : 1);
+    .slice(playedGames.length < days ? +days - playedGames.length : 1);
 
   const lastGames = playedGames.slice(
     Math.max(
-      playedGames.length - days < 0
+      playedGames.length - +days < 0
         ? playedGames.length
-        : playedGames.length - days - nextGameDay.length,
+        : playedGames.length - +days - nextGameDay.length,
       1
     )
   );

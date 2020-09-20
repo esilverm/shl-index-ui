@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
 import { query } from '../../../../lib/db';
@@ -7,7 +8,7 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   await use(req, res, cors);
   const leagues = await query(SQL`
     SELECT *

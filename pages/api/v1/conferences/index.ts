@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
 import { query } from '../../../../lib/db';
@@ -7,27 +8,35 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req, res) => {
+type Data = Array<{ id: number; league: number; name: string; season: number }>;
+
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data | string>
+) => {
   await use(req, res, cors);
 
-  const league = parseInt(req.query.league, 10) || 0;
+  const { league = 0, season: seasonid } = req.query;
 
   const [season] =
-    (!Number.isNaN(parseInt(req.query.season, 10)) && [
-      { SeasonID: parseInt(req.query.season, 10) },
-    ]) ||
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM conferences
-      WHERE LeagueID=${league}
+      WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
 
-  const conferences = await query(SQL`
+  const conferences: Array<{
+    ConferenceID: number;
+    LeagueID: number;
+    Name: string;
+    SeasonID: number;
+  }> = await query(SQL`
     SELECT * 
     FROM conferences 
-    WHERE LeagueID=${league}
+    WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
   `);
 
@@ -38,9 +47,9 @@ export default async (req, res) => {
     return;
   }
 
-  const parsed = conferences.map((conference) => ({
+  const parsed: Data = conferences.map((conference) => ({
     id: conference.ConferenceID,
-    leagueId: conference.LeagueID,
+    league: conference.LeagueID,
     name: conference.Name,
     season: conference.SeasonID,
   }));

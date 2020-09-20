@@ -1,23 +1,29 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
-import { query } from '../../../../lib/db';
-import use from '../../../../lib/middleware';
+import { query } from '../../../../../lib/db';
+import use from '../../../../../lib/middleware';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   await use(req, res, cors);
-  const league = parseInt(req.query.league, 10) || 0;
+
+  const { id, league = 0, season: seasonid } = req.query;
+
+  if (Number.isNaN(+id)) {
+    res.status(400).send('Error: Team id must be a number');
+    return;
+  }
+
   const [season] =
-    (!Number.isNaN(parseInt(req.query.season, 10)) && [
-      { SeasonID: parseInt(req.query.season, 10) },
-    ]) ||
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
       FROM schedules
-      WHERE LeagueID=${league}
+      WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
@@ -25,8 +31,9 @@ export default async (req, res) => {
   const schedule = await query(SQL`
     SELECT *
     FROM schedules
-    WHERE LeagueID=${league}
+    WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
+      AND (Home=${+id} OR Away=${+id})
   `);
 
   const parsed = schedule.map((game) => ({
