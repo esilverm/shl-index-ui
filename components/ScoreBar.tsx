@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
@@ -8,7 +7,6 @@ import { SwishSpinner } from 'react-spinners-kit';
 import ScoreBarItem from './ScoreBarItem';
 
 function ScoreBar({ data, league }) {
-  const [selected, onSelect] = useState('item4');
   const [loading, setLoading] = useState(true);
   const [sprites, setSprites] = useState({});
 
@@ -44,7 +42,7 @@ function ScoreBar({ data, league }) {
     <Container>
       {loading ? (
         <SpinContainer>
-          <SwishSpinner color="#212529" size={45} />
+          <SwishSpinner backColor="#212529" frontColor="#212529" size={45} />
         </SpinContainer>
       ) : (
         <ScrollMenu
@@ -66,17 +64,15 @@ function ScoreBar({ data, league }) {
           translate={-189 * (data.length / 4)}
           wheel={false}
           arrowLeft={
-            <Arrow aria-label="Go Left">
+            <Arrow right={false} aria-label="Go Left">
               <BsChevronLeft size="30px" aria-label="Arrow Pointing Left" />
             </Arrow>
           }
           arrowRight={
-            <Arrow right aria-label="Go Right">
+            <Arrow right={true} aria-label="Go Right">
               <BsChevronRight size="30px" aria-label="Arrow Pointing Right" />
             </Arrow>
           }
-          selected={selected}
-          onSelect={onSelect}
           useButtonRole={false}
           menuStyle={{
             height: '100%',
@@ -90,11 +86,6 @@ function ScoreBar({ data, league }) {
     </Container>
   );
 }
-
-ScoreBar.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  league: PropTypes.string.isRequired,
-};
 
 const SpinContainer = styled.div`
   width: 100%;
@@ -127,7 +118,7 @@ const Container = styled.div`
   }
 `;
 
-const Arrow = styled.div`
+const Arrow = styled.div<{ right: boolean }>`
   position: relative;
   width: 45px;
   height: 100%;

@@ -7,7 +7,15 @@ import { HamburgerCollapse } from 'react-animated-burgers';
 import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
 
-function HeaderBar({ league, showScoreBar = true, activePage = '' }) {
+function HeaderBar({
+  league,
+  showScoreBar = true,
+  activePage = '',
+}: {
+  league: string;
+  showScoreBar: boolean;
+  activePage: string;
+}) {
   const [scheduleVisible, setScheduleVisible] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(false);
 
@@ -252,7 +260,7 @@ function HeaderBar({ league, showScoreBar = true, activePage = '' }) {
   );
 }
 
-const HeaderNav = styled.div`
+const HeaderNav = styled.div<{ sticky: boolean }>`
   ${({ sticky }) =>
     sticky
       ? ` 
@@ -290,7 +298,7 @@ const Container = styled.div`
   }
 `;
 
-const Logo = styled.div`
+const Logo = styled.div<{ scheduleNotVisible: boolean }>`
   transition: all 200ms;
   height: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `100%` : `150%`)};
   width: max-content;
@@ -318,7 +326,7 @@ const Logo = styled.div`
   }
 `;
 
-const MenuDrawer = styled.div`
+const MenuDrawer = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -338,7 +346,7 @@ const MenuDrawer = styled.div`
   }
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ active: boolean }>`
   color: ${({ theme }) => theme.colors.grey100};
   font-size: 14px;
   font-weight: 700;

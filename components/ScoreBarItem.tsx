@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 function ScoreBarItem({
@@ -96,27 +95,20 @@ function ScoreBarItem({
   );
 }
 
-ScoreBarItem.propTypes = {
-  data: PropTypes.shape({
-    season: PropTypes.string.isRequired,
-    homeScore: PropTypes.number,
-    awayScore: PropTypes.number,
-    ot: PropTypes.number,
-    shootout: PropTypes.number,
-  }).isRequired,
-  gameid: PropTypes.string,
-  isDate: PropTypes.bool,
-  league: PropTypes.string.isRequired,
-  HomeIcon: PropTypes.element,
-  AwayIcon: PropTypes.element,
-};
-
-ScoreBarItem.defaultProps = {
-  gameid: '',
-  isDate: false,
-  HomeIcon: null,
-  AwayIcon: null,
-};
+// ScoreBarItem.propTypes = {
+//   data: PropTypes.shape({
+//     season: PropTypes.string.isRequired,
+//     homeScore: PropTypes.number,
+//     awayScore: PropTypes.number,
+//     ot: PropTypes.number,
+//     shootout: PropTypes.number,
+//   }).isRequired,
+//   gameid: PropTypes.string,
+//   isDate: PropTypes.bool,
+//   league: PropTypes.string.isRequired,
+//   HomeIcon: PropTypes.element,
+//   AwayIcon: PropTypes.element,
+// };
 
 const Date = styled.div`
   width: 46px;
@@ -166,7 +158,7 @@ const Game = styled.div`
   }
 `;
 
-const TeamLine = styled.div`
+const TeamLine = styled.div<{ winner: boolean }>`
   width: 80%;
   margin: 5px auto;
   display: grid;
