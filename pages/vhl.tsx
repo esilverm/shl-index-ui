@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 export default function VHL(): JSX.Element {
   return (
-    <>
+    <React.Fragment>
       <BackgroundVideo autoPlay loop muted>
         <source src="/404.webm" type="video/webm" />
         <source src="/404.mp4" type="video/mp4" />
       </BackgroundVideo>
-    </>
+    </React.Fragment>
   );
 }
 

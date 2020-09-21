@@ -9,10 +9,10 @@ interface Props {
 
 function Playoffs({ league }: Props): JSX.Element {
   return (
-    <>
+    <React.Fragment>
       <Header league={league} showScoreBar={false} activePage="playoffs" />
       <div>This is a placeholder</div>
-    </>
+    </React.Fragment>
   );
 }
 

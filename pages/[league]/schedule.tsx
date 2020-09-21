@@ -10,10 +10,10 @@ interface Props {
 
 function Schedule({ league }: Props): JSX.Element {
   return (
-    <>
+    <React.Fragment>
       <Header league={league} activePage="schedule" />
       <div>This is a placeholder</div>
-    </>
+    </React.Fragment>
   );
 }
 
