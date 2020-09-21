@@ -13,12 +13,14 @@ export default function Home(): JSX.Element {
   return (
     <React.Fragment>
       <NextSeo
-        title="Home | SHL Index"
+        title="Home"
+        titleTemplate="%s | SHL Index"
         description="The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world."
         // canonical=""
         openGraph={{
           url: '',
-          title: 'Home | SHL Index',
+          site_name: 'Simulation Hockey League',
+          title: 'Home',
           description:
             'The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world.',
         }}

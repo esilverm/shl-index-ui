@@ -13,12 +13,14 @@ function LeagueHome({ league }: Props): JSX.Element {
   return (
     <React.Fragment>
       <NextSeo
-        title={`${league.toUpperCase()} Home | SHL Index`}
+        title={league.toUpperCase()}
+        titleTemplate="%s | SHL Index"
         description="The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world."
         // canonical=""
         openGraph={{
           url: '',
-          title: `${league.toUpperCase()} Home | SHL Index`,
+          site_name: 'Simulation Hockey League',
+          title: league.toUpperCase(),
           description:
             'The Simulation Hockey League is a free online forums based sim league where you create your own fantasy hockey player. Join today and create your player, get drafted, sign contracts, become a GM, make trades and compete against 1,800 players from around the world.',
         }}

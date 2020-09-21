@@ -166,7 +166,7 @@ const TeamLine = styled.div<{ winner: boolean }>`
   display: grid;
   grid-template-columns: 12% 65px 1fr;
   color: ${({ winner, theme }) =>
-    winner ? theme.colors.grey900 : theme.colors.grey650};
+    winner ? theme.colors.grey900 : theme.colors.grey600};
   & .sbi-shortname {
     font-weight: 700;
     margin-left: 10px;
