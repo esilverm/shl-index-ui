@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { SwishSpinner } from 'react-spinners-kit';
+import { PulseLoader } from 'react-spinners';
 
 import ScoreBarItem from './ScoreBarItem';
 
@@ -58,7 +58,7 @@ function ScoreBar({ data, league }: Props): JSX.Element {
     <Container>
       {loading ? (
         <SpinContainer>
-          <SwishSpinner backColor="#212529" frontColor="#212529" size={45} />
+          <PulseLoader color="#212529" size={15} />
         </SpinContainer>
       ) : (
         <ScrollMenu
