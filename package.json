@@ -15,13 +15,11 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "imagemin-optipng": "^8.0.0",
     "imagemin-svgo": "^8.0.0",
     "next": "^9.5.3",
     "next-compose-plugins": "^2.2.0",
     "next-optimized-images": "^2.6.2",
     "next-seo": "^4.7.3",
-    "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-animated-burgers": "^1.2.8",
     "react-dom": "16.13.1",
@@ -31,13 +29,10 @@
     "react-table": "^7.3.2",
     "react-visibility-sensor": "^5.1.1",
     "redoc": "^2.0.0-rc.40",
-    "responsive-loader": "^2.0.0",
     "serverless-mysql": "^1.5.4",
-    "sharp": "^0.25.4",
     "sql-template-strings": "^2.2.2",
     "styled-components": "^5.1.1",
-    "svg-sprite-loader": "^5.0.0",
-    "webp-loader": "^0.6.0"
+    "svg-sprite-loader": "^5.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.7",

@@ -7,16 +7,6 @@ module.exports = withPlugins([
     optimizedImages,
     {
       optimizeImagesInDev: true,
-      optipng: {
-        optimizationLevel: 3,
-      },
-      webp: {
-        preset: 'default',
-        quality: 80,
-      },
-      responsive: {
-        adapter: require('responsive-loader/sharp'),
-      },
     },
   ],
   // your other plugins here
