@@ -6,27 +6,29 @@ import styled from 'styled-components';
 // Determine prop types when actually implementing in conjunction with backend
 
 interface Props {
-  data: {
+  data?: {
     season: string;
+    homeTeam: string;
     homeScore: number;
+    awayTeam: string;
     awayScore: number;
-    ot: number;
+    overtime: number;
     shootout: number;
   } | null;
   gameid?: string;
   isDate?: boolean;
   league: string;
-  HomeIcon: React.ComponentClass<any> | null;
-  AwayIcon: React.ComponentClass<any> | null;
+  HomeIcon?: React.ComponentClass<any> | null;
+  AwayIcon?: React.ComponentClass<any> | null;
 }
 
 function ScoreBarItem({
-  data,
+  data = null,
   gameid = '',
   isDate = false,
   league,
-  HomeIcon,
-  AwayIcon,
+  HomeIcon = null,
+  AwayIcon = null,
 }: Props): JSX.Element {
   const months = [
     'Jan',
@@ -43,34 +45,12 @@ function ScoreBarItem({
     'Dec',
   ];
 
-  // eslint-disable-next-line camelcase
-  const teams_short = [
-    'BUF',
-    'CHI',
-    'HAM',
-    'TOR',
-    'MAN',
-    'NEW',
-    'TBB',
-    'BAL',
-    'CAL',
-    'EDM',
-    'MIN',
-    'WPG',
-    'SFP',
-    'LAP',
-    'NOLA',
-    'TEX',
-  ];
-
-  const winner = data.homeScore > data.awayScore;
-
   return (
     <>
       {isDate ? (
         <Date role="presentation" aria-label="Score Bar Date">
           <span aria-label="Date">
-            {months[+gameid.substr(0, 2) - 1]} {gameid.substr(2, 2)}
+            {months[+gameid.split('-')[1]]} {gameid.split('-')[2]}
           </span>
         </Date>
       ) : (
@@ -80,30 +60,30 @@ function ScoreBarItem({
           passHref
         >
           <Game role="link" aria-label="Game Result" tabIndex={0}>
-            <TeamLine winner={winner}>
+            <TeamLine winner={data.homeScore > data.awayScore}>
               <TeamIcon>
-                <HomeIcon aria-label={teams_short[+gameid.substr(5, 2)]} />
+                <HomeIcon aria-label={data.homeTeam} />
               </TeamIcon>
               <span className="sbi-shortname" aria-label="Home Team">
-                {teams_short[+gameid.substr(5, 2)]}
+                {data.homeTeam}
               </span>
               <span className="sbi-score" aria-label="Home Score">
                 {data.homeScore}
               </span>
             </TeamLine>
-            <TeamLine winner={!winner}>
+            <TeamLine winner={!(data.homeScore > data.awayScore)}>
               <TeamIcon>
-                <AwayIcon aria-label={teams_short[+gameid.substr(7, 2)]} />
+                <AwayIcon aria-label={data.awayTeam} />
               </TeamIcon>
               <span className="sbi-shortname" aria-label="Away Team">
-                {teams_short[+gameid.substr(7, 2)]}
+                {data.awayTeam}
               </span>
               <span className="sbi-score" aria-label="Away Score">
                 {data.awayScore}
               </span>
             </TeamLine>
             <GameResultText aria-label="Game Result">
-              FINAL{data.shootout ? '/SO' : data.ot ? '/OT' : ''}
+              FINAL{data.shootout ? '/SO' : data.overtime ? '/OT' : ''}
             </GameResultText>
           </Game>
         </Link>

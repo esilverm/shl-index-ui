@@ -1,29 +1,29 @@
-import Anaheim from './Anaheim.svg?sprite';
-import Anchorage from './Anchorage.svg?sprite';
-import Carolina from './Carolina.svg?sprite';
-import Colorado from './Colorado.svg?sprite';
-import Detroit from './Detroit.svg?sprite';
-import Kelowna from './Kelowna.svg?sprite';
-import Maine from './Maine.svg?sprite';
-import Nevada from './Nevada.svg?sprite';
-import Newfoundland from './Newfoundland.svg?sprite';
-import QuebecCity from './Quebec_City.svg?sprite';
-import StLouis from './St_Louis.svg?sprite';
-import StLouisOld from './St_LouisOld.svg?sprite';
-import Vancouver from './Vancouver.svg?sprite';
+import ANA from './Anaheim.svg?sprite';
+import ANC from './Anchorage.svg?sprite';
+import CAR from './Carolina.svg?sprite';
+import COL from './Colorado.svg?sprite';
+import DET from './Detroit.svg?sprite';
+import KEL from './Kelowna.svg?sprite';
+import MET from './Maine.svg?sprite';
+import NBB from './Nevada.svg?sprite';
+import NL from './Newfoundland.svg?sprite';
+import QCC from './Quebec_City.svg?sprite';
+import STL from './St_Louis.svg?sprite';
+import STLOld from './St_LouisOld.svg?sprite';
+import VAN from './Vancouver.svg?sprite';
 
 export default {
-  Anaheim,
-  Anchorage,
-  Carolina,
-  Colorado,
-  Detroit,
-  Kelowna,
-  Maine,
-  Nevada,
-  Newfoundland,
-  QuebecCity,
-  StLouis,
-  StLouisOld,
-  Vancouver,
+  ANA,
+  ANC,
+  CAR,
+  COL,
+  DET,
+  KEL,
+  MET,
+  NBB,
+  NL,
+  QCC,
+  STL,
+  STLOld,
+  VAN,
 };

@@ -1,31 +1,31 @@
-import Austria from './Austria.svg?sprite';
-import Canada from './Canada.svg?sprite';
-import Czechia from './Czechia.svg?sprite';
-import Finland from './Finland.svg?sprite';
-import Germany from './Germany.svg?sprite';
-import Ireland from './Ireland.svg?sprite';
-import Japan from './Japan.svg?sprite';
-import Latvia from './Latvia.svg?sprite';
-import Norway from './Norway.svg?sprite';
-import Russia from './Russia.svg?sprite';
-import Sweden from './Sweden.svg?sprite';
-import Switzerland from './Switzerland.svg?sprite';
-import GreatBritian from './United_Kingdom.svg?sprite';
-import UnitedStates from './USA.svg?sprite';
+import AUT from './Austria.svg?sprite';
+import CAN from './Canada.svg?sprite';
+import CZH from './Czechia.svg?sprite';
+import FIN from './Finland.svg?sprite';
+import GER from './Germany.svg?sprite';
+import IRL from './Ireland.svg?sprite';
+import JPN from './Japan.svg?sprite';
+import LTV from './Latvia.svg?sprite';
+import NOR from './Norway.svg?sprite';
+import RUS from './Russia.svg?sprite';
+import SWE from './Sweden.svg?sprite';
+import SWI from './Switzerland.svg?sprite';
+import GBR from './United_Kingdom.svg?sprite';
+import USA from './USA.svg?sprite';
 
 export default {
-  Austria,
-  Canada,
-  Czechia,
-  Finland,
-  Germany,
-  Ireland,
-  Japan,
-  Latvia,
-  Norway,
-  Russia,
-  Sweden,
-  Switzerland,
-  GreatBritian,
-  UnitedStates,
+  AUT,
+  CAN,
+  CZH,
+  FIN,
+  GER,
+  IRL,
+  JPN,
+  LTV,
+  NOR,
+  RUS,
+  SWE,
+  SWI,
+  GBR,
+  USA,
 };

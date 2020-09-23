@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // Helper method to wait for middleware to execute before continuing.
 // See https://nextjs.org/docs/api-routes/api-middlewares
 import { NextApiRequest, NextApiResponse } from 'next';

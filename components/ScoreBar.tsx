@@ -9,90 +9,93 @@ import ScoreBarItem from './ScoreBarItem';
 // Determine prop types when actually implementing in conjunction with backend
 interface Props {
   data: Array<{
-    type: string;
-    season: string;
-    gameid: string;
-    homeScore?: number;
-    awayScore?: number;
-    ot?: number;
-    shootout?: number;
+    date: string;
+    played: number;
+    games: Array<{
+      slug: string;
+      date: string;
+      homeTeam: string;
+      homeScore: number;
+      awayTeam: string;
+      awayScore: number;
+      overtime: number;
+      shootout: number;
+      played: number;
+    }>;
   }>;
+  loading: boolean;
   league: string;
 }
 
-function ScoreBar({ data, league }: Props): JSX.Element {
-  const [loading, setLoading] = useState<boolean>(true);
+function ScoreBar({ data, loading, league }: Props): JSX.Element {
+  const [isloadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
 
-  const teams = [
-    'Buffalo',
-    'Chicago',
-    'Hamilton',
-    'Toronto',
-    'Manhattan',
-    'NewEngland',
-    'TampaBay',
-    'Baltimore',
-    'Calgary',
-    'Edmonton',
-    'Minnesota',
-    'Winnipeg',
-    'SanFrancisco',
-    'LosAngeles',
-    'NewOrleans',
-    'Texas',
-  ];
+  // {
+  //   date: string;
+  //   games: Array<{slug: string; date: string; home: string; homeScore: number; away: string; awayScore: number; overtime: number; shootout: number;}>
+  // })
 
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
     (async () => {
-      const { default: s } = await import(`../public/team_logos/${'SHL'}/`); // league.toUpperCase();
+      const { default: s } = await import(
+        `../public/team_logos/${league.toUpperCase()}/`
+      );
       setSprites(() => s);
-      setLoading(() => false);
+      setLoadingAssets(() => false);
     })();
   }, [data]);
 
   return (
     <Container>
-      {loading ? (
+      {loading || isloadingAssets ? (
         <SpinContainer>
           <PulseLoader color="#212529" size={15} />
         </SpinContainer>
       ) : (
         <ScrollMenu
-          data={data.map(
-            ({
-              type,
-              gameid,
-              season,
-              homeScore,
-              awayScore,
-              ot,
-              shootout,
-            }: {
-              type: string;
-              gameid: string;
-              season: string;
-              homeScore: number;
-              awayScore: number;
-              ot: number;
-              shootout: number;
-            }) => (
-              <ScoreBarItem
-                isDate={type === 'date'}
-                key={gameid}
-                data={{ season, homeScore, awayScore, ot, shootout }}
-                league={league}
-                gameid={gameid}
-                HomeIcon={
-                  type === 'date' ? null : sprites[teams[+gameid.substr(5, 2)]]
-                }
-                AwayIcon={
-                  type === 'date' ? null : sprites[teams[+gameid.substr(7, 2)]]
-                }
-              />
+          data={[].concat(
+            ...data.map(({ date, games }) =>
+              [
+                <ScoreBarItem
+                  isDate
+                  key={date}
+                  gameid={date}
+                  league={league}
+                />,
+              ].concat(
+                games.map(
+                  ({
+                    slug,
+                    homeTeam,
+                    homeScore,
+                    awayTeam,
+                    awayScore,
+                    overtime,
+                    shootout,
+                  }) => (
+                    <ScoreBarItem
+                      key={slug}
+                      data={{
+                        season: slug.substr(0, 2),
+                        homeTeam,
+                        homeScore,
+                        awayTeam,
+                        awayScore,
+                        overtime,
+                        shootout,
+                      }}
+                      league={league}
+                      gameid={slug}
+                      HomeIcon={sprites[homeTeam]}
+                      AwayIcon={sprites[awayTeam]}
+                    />
+                  )
+                )
+              )
             )
           )}
           translate={-189 * (data.length / 4)}

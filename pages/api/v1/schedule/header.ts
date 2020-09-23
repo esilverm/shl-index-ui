@@ -2,7 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import { query } from '../../../../lib/db';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> => {
   const { league = 0, days = 5 } = req.query;
 
   const [season] = await query(SQL`

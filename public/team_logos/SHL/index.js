@@ -1,41 +1,41 @@
-import Atlanta from './Atlanta.svg?sprite';
-import Baltimore from './Baltimore.svg?sprite';
-import Buffalo from './Buffalo.svg?sprite';
-import Calgary from './Calgary.svg?sprite';
-import Chicago from './Chicago.svg?sprite';
-import Edmonton from './Edmonton.svg?sprite';
-import Hamilton from './Hamilton.svg?sprite';
-import LosAngeles from './Los_Angeles.svg?sprite';
-import Manhattan from './Manhattan.svg?sprite';
-import Minnesota from './Minnesota.svg?sprite';
-import NewEngland from './New_England.svg?sprite';
-import NewOrleans from './New_Orleans.svg?sprite';
-import SanFrancisco from './San_Francisco.svg?sprite';
-import Seattle from './Seattle.svg?sprite';
-import TampaBay from './Tampa.svg?sprite';
-import Texas from './Texas.svg?sprite';
-import Toronto from './Toronto.svg?sprite';
-import WestKendall from './West_Kendall.svg?sprite';
-import Winnipeg from './Winnipeg.svg?sprite';
+import ATL from './Atlanta.svg?sprite';
+import BAP from './Baltimore.svg?sprite';
+import BUF from './Buffalo.svg?sprite';
+import CAL from './Calgary.svg?sprite';
+import CHI from './Chicago.svg?sprite';
+import EDM from './Edmonton.svg?sprite';
+import HAM from './Hamilton.svg?sprite';
+import LAP from './Los_Angeles.svg?sprite';
+import MAN from './Manhattan.svg?sprite';
+import MIN from './Minnesota.svg?sprite';
+import NEW from './New_England.svg?sprite';
+import NOL from './New_Orleans.svg?sprite';
+import SFP from './San_Francisco.svg?sprite';
+import SEA from './Seattle.svg?sprite';
+import TBB from './Tampa.svg?sprite';
+import TEX from './Texas.svg?sprite';
+import TOR from './Toronto.svg?sprite';
+import WKP from './West_Kendall.svg?sprite';
+import WPG from './Winnipeg.svg?sprite';
 
 export default {
-  Atlanta,
-  Baltimore,
-  Buffalo,
-  Calgary,
-  Chicago,
-  Edmonton,
-  Hamilton,
-  LosAngeles,
-  Manhattan,
-  Minnesota,
-  NewEngland,
-  NewOrleans,
-  SanFrancisco,
-  Seattle,
-  TampaBay,
-  Texas,
-  Toronto,
-  WestKendall,
-  Winnipeg,
+  ATL,
+  BAP,
+  BUF,
+  CAL,
+  CHI,
+  EDM,
+  HAM,
+  LAP,
+  MAN,
+  MIN,
+  NEW,
+  NOL,
+  SFP,
+  SEA,
+  TBB,
+  TEX,
+  TOR,
+  WKP,
+  WPG,
 };

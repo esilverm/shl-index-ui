@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import useSWR from 'swr';
 import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
 import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
+import fetcher from '../lib/fetcher';
 
 interface Props {
   league: string;
@@ -25,138 +27,15 @@ function HeaderBar({
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
-
-  const list = [
-    { type: 'date', season: '55', gameid: '1010' },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210100005',
-      homeScore: 1,
-      awayScore: 0,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210100302',
-      homeScore: 0,
-      awayScore: 2,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210100607',
-      homeScore: 3,
-      awayScore: 9,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210100908',
-      homeScore: 6,
-      awayScore: 1,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210101413',
-      homeScore: 6,
-      awayScore: 3,
-      ot: 0,
-      shootout: 0,
-    },
-    { type: 'date', season: '55', gameid: '1011' },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210110401',
-      homeScore: 2,
-      awayScore: 5,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210110511',
-      homeScore: 5,
-      awayScore: 1,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210111312',
-      homeScore: 5,
-      awayScore: 1,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210111406',
-      homeScore: 6,
-      awayScore: 1,
-      ot: 0,
-      shootout: 0,
-    },
-    { type: 'date', season: '55', gameid: '1012' },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210120703',
-      homeScore: 1,
-      awayScore: 2,
-      ot: 1,
-      shootout: 1,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210120800',
-      homeScore: 1,
-      awayScore: 5,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210120911',
-      homeScore: 4,
-      awayScore: 0,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210121502',
-      homeScore: 4,
-      awayScore: 1,
-      ot: 0,
-      shootout: 0,
-    },
-    {
-      type: 'game',
-      season: '55',
-      gameid: '210120007',
-      homeScore: 1,
-      awayScore: 0,
-      ot: 1,
-      shootout: 0,
-    },
-  ];
+  const { data, error } = useSWR(
+    `http://localhost:3000/api/v1/schedule/header?league=${[
+      'shl',
+      'smjhl',
+      'iihf',
+      'wjc',
+    ].indexOf(league)}`,
+    fetcher
+  );
 
   return (
     <header>
@@ -166,7 +45,7 @@ function HeaderBar({
           onChange={(e) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <ScoreBar data={list} league={league} />
+          <ScoreBar data={data} loading={!data && !error} league={league} />
         </VisibilitySensor>
       )}
       <HeaderNav
