@@ -61,7 +61,10 @@ function ScoreBarItem({
           passHref
         >
           <Game role="link" aria-label="Game Result" tabIndex={0}>
-            <TeamLine winner={data.homeScore > data.awayScore}>
+            <TeamLine
+              played={data.played === 1}
+              winner={data.homeScore > data.awayScore}
+            >
               <TeamIcon>
                 <HomeIcon aria-label={data.homeTeam} />
               </TeamIcon>
@@ -74,7 +77,10 @@ function ScoreBarItem({
                 </span>
               )}
             </TeamLine>
-            <TeamLine winner={!(data.homeScore > data.awayScore)}>
+            <TeamLine
+              played={data.played === 1}
+              winner={!(data.homeScore > data.awayScore)}
+            >
               <TeamIcon>
                 <AwayIcon aria-label={data.awayTeam} />
               </TeamIcon>
@@ -146,13 +152,13 @@ const Game = styled.div`
   }
 `;
 
-const TeamLine = styled.div<{ winner: boolean }>`
+const TeamLine = styled.div<{ winner: boolean; played: boolean }>`
   width: 80%;
   margin: 5px auto;
   display: grid;
   grid-template-columns: 12% 65px 1fr;
-  color: ${({ winner, theme }) =>
-    winner ? theme.colors.grey900 : theme.colors.grey600};
+  color: ${({ winner, played, theme }) =>
+    winner || !played ? theme.colors.grey900 : theme.colors.grey600};
   & .sbi-shortname {
     font-weight: 700;
     margin-left: 10px;
