@@ -14,6 +14,7 @@ interface Props {
     awayScore: number;
     overtime: number;
     shootout: number;
+    played: number;
   } | null;
   gameid?: string;
   isDate?: boolean;
@@ -67,9 +68,11 @@ function ScoreBarItem({
               <span className="sbi-shortname" aria-label="Home Team">
                 {data.homeTeam}
               </span>
-              <span className="sbi-score" aria-label="Home Score">
-                {data.homeScore}
-              </span>
+              {data.played === 1 && (
+                <span className="sbi-score" aria-label="Home Score">
+                  {data.homeScore}
+                </span>
+              )}
             </TeamLine>
             <TeamLine winner={!(data.homeScore > data.awayScore)}>
               <TeamIcon>
@@ -78,12 +81,15 @@ function ScoreBarItem({
               <span className="sbi-shortname" aria-label="Away Team">
                 {data.awayTeam}
               </span>
-              <span className="sbi-score" aria-label="Away Score">
-                {data.awayScore}
-              </span>
+              {data.played === 1 && (
+                <span className="sbi-score" aria-label="Away Score">
+                  {data.awayScore}
+                </span>
+              )}
             </TeamLine>
-            <GameResultText aria-label="Game Result">
-              FINAL{data.shootout ? '/SO' : data.overtime ? '/OT' : ''}
+            <GameResultText aria-label="Game Result" played={data.played === 1}>
+              {data.played === 1 ? 'FINAL' : 'SCHEDULED'}
+              {data.shootout ? '/SO' : data.overtime ? '/OT' : ''}
             </GameResultText>
           </Game>
         </Link>
@@ -166,10 +172,10 @@ const TeamIcon = styled.div`
   display: inline-block;
 `;
 
-const GameResultText = styled.span`
+const GameResultText = styled.span<{ played: boolean }>`
   display: inline-block;
   position: absolute;
-  left: 121px;
+  left: ${({ played }) => (played ? '121px' : '95px')};
   width: 60px;
   text-align: center;
   top: 43px;

@@ -76,6 +76,7 @@ function ScoreBar({ data, loading, league }: Props): JSX.Element {
                     awayScore,
                     overtime,
                     shootout,
+                    played,
                   }) => (
                     <ScoreBarItem
                       key={slug}
@@ -87,6 +88,7 @@ function ScoreBar({ data, loading, league }: Props): JSX.Element {
                         awayScore,
                         overtime,
                         shootout,
+                        played,
                       }}
                       league={league}
                       gameid={slug}
