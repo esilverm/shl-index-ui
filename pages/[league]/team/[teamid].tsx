@@ -18,6 +18,17 @@ interface Props {
   abbreviation: string;
   location: string;
   colors: { primary: string; secondary: string; text: string };
+  stats: {
+    wins: number;
+    losses: number;
+    overtimeLosses: number;
+    shootoutWins: number;
+    shootoutLosses: number;
+    points: number;
+    goalsFor: number;
+    goalsAgainst: number;
+    winPercent: number;
+  };
 }
 
 function TeamPage({
@@ -27,6 +38,7 @@ function TeamPage({
   nameDetails,
   location,
   colors,
+  stats,
 }: Props): JSX.Element {
   if (!name) {
     return <Error statusCode={404} />;
@@ -54,6 +66,20 @@ function TeamPage({
             <span className="first">{nameDetails.first}</span>
             <span className="second">{nameDetails.second}</span>
           </TeamName>
+          <TeamHeaderStats
+            color={
+              ['Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+                ? '#FFFFFF'
+                : colors.text
+            }
+          >
+            <span>
+              {stats.wins} - {stats.losses} -{' '}
+              {stats.overtimeLosses + stats.shootoutLosses}
+            </span>{' '}
+            | <span>{stats.points} PTS</span> |{' '}
+            <span>{stats.winPercent.toFixed(3)}</span>
+          </TeamHeaderStats>
         </TeamInfoContainer>
       </TeamHero>
     </React.Fragment>
@@ -87,13 +113,20 @@ const TeamLogo = styled.img`
 `;
 
 const TeamInfoContainer = styled.div`
-  border: 1px solid white;
-  height: 40%;
-  width: 50%; // auto;
+  height: 30%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  @media screen and (max-width: 768px) {
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 const TeamName = styled.h1<{ color: string }>`
-  // color: ${({ theme }) => theme.colors.grey100};
   color: ${({ color }) => color};
   span {
     display: block;
@@ -108,6 +141,24 @@ const TeamName = styled.h1<{ color: string }>`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.15rem;
+  }
+`;
+
+const TeamHeaderStats = styled.h3<{ color: string }>`
+  color: ${({ color }) => color};
+  font-weight: 100;
+  font-size: 1.1rem;
+
+  span {
+    margin-right: 1rem;
+  }
+
+  * + span {
+    margin-left: 1rem;
+  }
+
+  span:last-child {
+    margin-right: 0;
   }
 `;
 
