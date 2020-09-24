@@ -119,7 +119,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
 
     const teamdata = await fetcher(
-      `http://localhost:3000/api/v1/teams/${teamid}?league=${leagueid}${
+      `${
+        process.env.NEXT_PUBLIC_API_ENDPOINT
+      }/api/v1/teams/${teamid}?league=${leagueid}${
         season ? `&season=${season}` : ``
       }`
     );

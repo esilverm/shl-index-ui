@@ -32,7 +32,7 @@ function HeaderBar({
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const { data, error } = useSWR(
-    `http://localhost:3000/api/v1/schedule/header?league=${[
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
       'shl',
       'smjhl',
       'iihf',
