@@ -14,6 +14,7 @@ interface Props {
   conference: number;
   division: number;
   name: string;
+  nameDetails: { first: string; second: string };
   abbreviation: string;
   location: string;
   colors: { primary: string; secondary: string };
@@ -26,6 +27,7 @@ function TeamPage({
   conference,
   division,
   name,
+  nameDetails,
   abbreviation,
   location,
   colors,
@@ -45,6 +47,12 @@ function TeamPage({
             .join('_')}.svg?inline`)}
           alt={`${name} logo`}
         />
+        <TeamInfoContainer>
+          <TeamName>
+            <span className="first">{nameDetails.first}</span>
+            <span className="second">{nameDetails.second}</span>
+          </TeamName>
+        </TeamInfoContainer>
       </TeamHero>
     </React.Fragment>
   );
@@ -58,7 +66,6 @@ const TeamHero = styled.div<{ primary: string; secondary: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 5%;
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -70,6 +77,31 @@ const TeamHero = styled.div<{ primary: string; secondary: string }>`
 const TeamLogo = styled.img`
   height: 60%;
   filter: drop-shadow(0 0 1.15rem rgba(0, 0, 0, 0.4));
+  margin: 0 5%;
+`;
+
+const TeamInfoContainer = styled.div`
+  border: 1px solid white;
+  height: 40%;
+  width: 50%; // auto;
+`;
+
+const TeamName = styled.h1`
+  color: ${({ theme }) => theme.colors.grey100};
+
+  span {
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  span.first {
+    font-weight: 300;
+  }
+
+  span.second {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

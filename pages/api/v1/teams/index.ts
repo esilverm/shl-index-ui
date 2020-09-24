@@ -53,6 +53,10 @@ export default async (
     abbreviation: team.Abbr,
     location:
       team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
+    nameDetails: {
+      first: team.Name,
+      second: team.Nickname,
+    },
     colors: {
       primary: team.PrimaryColor,
       secondary: team.SecondaryColor,
