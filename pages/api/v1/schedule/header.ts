@@ -32,7 +32,7 @@ export default async (
   `;
 
   if (!Number.isNaN(+team)) {
-    search.append(`AND(s.Home=${+team} OR s.Away=${+team})`);
+    search.append(SQL`AND (s.Home=${+team} OR s.Away=${+team})`);
   }
 
   const schedule = await query(search);

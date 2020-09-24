@@ -14,6 +14,7 @@ interface Props {
   showScoreBar?: boolean;
   activePage?: string;
   team?: number;
+  days?: number;
 }
 
 const defaultProps = {
@@ -26,6 +27,7 @@ function HeaderBar({
   showScoreBar = true,
   activePage = '',
   team = null,
+  days = null,
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -35,7 +37,9 @@ function HeaderBar({
       'smjhl',
       'iihf',
       'wjc',
-    ].indexOf(league)}${team ? `&team=${team}` : ``}`,
+    ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
+      days ? `&days=${days}` : ``
+    }`,
     fetcher
   );
 

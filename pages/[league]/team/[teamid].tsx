@@ -36,7 +36,7 @@ function TeamPage({
 
   return (
     <React.Fragment>
-      <Header league={leaguename} activePage="teams" team={id} />
+      <Header league={leaguename} activePage="teams" team={id} days={10} />
       <TeamHero {...colors}>
         <TeamLogo
           src={require(`../../../public/team_logos/${leaguename.toUpperCase()}/${location
