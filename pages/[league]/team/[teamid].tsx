@@ -17,18 +17,14 @@ interface Props {
   nameDetails: { first: string; second: string };
   abbreviation: string;
   location: string;
-  colors: { primary: string; secondary: string };
+  colors: { primary: string; secondary: string; text: string };
 }
 
 function TeamPage({
   leaguename,
   id,
-  season,
-  conference,
-  division,
   name,
   nameDetails,
-  abbreviation,
   location,
   colors,
 }: Props): JSX.Element {
@@ -48,7 +44,13 @@ function TeamPage({
           alt={`${name} logo`}
         />
         <TeamInfoContainer>
-          <TeamName>
+          <TeamName
+            color={
+              ['Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+                ? '#FFFFFF'
+                : colors.text
+            }
+          >
             <span className="first">{nameDetails.first}</span>
             <span className="second">{nameDetails.second}</span>
           </TeamName>
@@ -58,7 +60,11 @@ function TeamPage({
   );
 }
 
-const TeamHero = styled.div<{ primary: string; secondary: string }>`
+const TeamHero = styled.div<{
+  primary: string;
+  secondary: string;
+  text: string;
+}>`
   width: 100%;
   min-height: 300px;
   height: 40vh;
@@ -86,21 +92,22 @@ const TeamInfoContainer = styled.div`
   width: 50%; // auto;
 `;
 
-const TeamName = styled.h1`
-  color: ${({ theme }) => theme.colors.grey100};
-
+const TeamName = styled.h1<{ color: string }>`
+  // color: ${({ theme }) => theme.colors.grey100};
+  color: ${({ color }) => color};
   span {
     display: block;
-    margin-bottom: 3px;
   }
 
   span.first {
     font-weight: 300;
+    letter-spacing: 0.1rem;
   }
 
   span.second {
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.15rem;
   }
 `;
 

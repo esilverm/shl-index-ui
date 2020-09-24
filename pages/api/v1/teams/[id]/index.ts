@@ -32,12 +32,16 @@ export default async (
   `));
 
   const [team] = await query(SQL`
-  SELECT *
-  FROM team_data
-  WHERE LeagueID=${+league}
-    AND SeasonID=${season.SeasonID}
-    AND TeamID=${+id}
-`);
+    SELECT t.TeamID, t.LeagueID, t.SeasonID, t.Name, t.Nickname, t.Abbr, t.PrimaryColor, t.SecondaryColor, t.TextColor, t.ConferenceID, t.DivisionID, s.Wins, s.Losses, s.OTL, s.SOW, s.SOL, s.Points, s.GF, s.GA, s.PCT
+      FROM team_data AS t
+      INNER JOIN team_records AS s
+        ON t.TeamID = s.TeamID
+        AND t.SeasonID = s.SeasonID
+        AND t.LeagueID = s.LeagueID
+      WHERE t.LeagueID = ${+league}
+      AND t.SeasonID = ${season.SeasonID}
+      AND t.TeamID = ${+id}
+  `);
 
   if (!team) {
     res.status(404).json({ error: 'Team not found' });
@@ -61,6 +65,18 @@ export default async (
     colors: {
       primary: team.PrimaryColor,
       secondary: team.SecondaryColor,
+      text: team.TextColor,
+    },
+    stats: {
+      wins: team.Wins,
+      losses: team.Losses,
+      overtimeLosses: team.OTL,
+      shootoutWins: team.SOW,
+      shootoutLosses: team.SOL,
+      points: team.Points,
+      goalsFor: team.GF,
+      goalsAgainst: team.GA,
+      winPercent: team.PCT,
     },
   };
 

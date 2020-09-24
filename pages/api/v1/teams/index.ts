@@ -60,6 +60,7 @@ export default async (
     colors: {
       primary: team.PrimaryColor,
       secondary: team.SecondaryColor,
+      text: team.TextColor,
     },
   }));
 
