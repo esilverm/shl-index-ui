@@ -1,10 +1,10 @@
-import BRI from './BritishIsles.svg?sprite';
-import CAN from '../IIHF/Canada.svg?sprite';
-import DCH from './Dach.svg?sprite';
-import FIN from '../IIHF/Finland.svg?sprite';
+import BRI from './British_Isles.svg?sprite';
+import CAN from './Canada.svg?sprite';
+import DCH from './DACH.svg?sprite';
+import FIN from './Finland.svg?sprite';
 import RCL from './UCORCAL.svg?sprite';
-import SWE from '../IIHF/Sweden.svg?sprite';
-import USA from '../IIHF/USA.svg?sprite';
+import SWE from './Sweden.svg?sprite';
+import USA from './United_States.svg?sprite';
 import WOR from './World.svg?sprite';
 
 export default {

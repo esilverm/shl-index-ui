@@ -6,7 +6,7 @@ export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  const { league = 0, days = 5 } = req.query;
+  const { league = 0, days = 5, team } = req.query;
 
   const [season] = await query(SQL`
       SELECT DISTINCT SeasonID
@@ -16,7 +16,7 @@ export default async (
       LIMIT 1
     `);
 
-  const schedule = await query(SQL`
+  const search = SQL`
     SELECT s.Slug, s.Date, t1.Abbr as 'Home', s.HomeScore, t2.Abbr as 'Away', s.AwayScore, s.Overtime, s.Shootout, s.Played
     FROM slugviewer as s
     INNER JOIN team_data AS t1 
@@ -29,7 +29,13 @@ export default async (
         AND t2.SeasonID = s.SeasonID
     WHERE s.LeagueID=${+league}
       AND s.SeasonID=${season.SeasonID}
-  `);
+  `;
+
+  if (!Number.isNaN(+team)) {
+    search.append(`AND(s.Home=${+team} OR s.Away=${+team})`);
+  }
+
+  const schedule = await query(search);
 
   // Clean up response
   const parsed = schedule.map((game) => ({

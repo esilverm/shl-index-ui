@@ -10,8 +10,8 @@ import NOR from './Norway.svg?sprite';
 import RUS from './Russia.svg?sprite';
 import SWE from './Sweden.svg?sprite';
 import SWI from './Switzerland.svg?sprite';
-import GBR from './United_Kingdom.svg?sprite';
-import USA from './USA.svg?sprite';
+import GBR from './Great_Britain.svg?sprite';
+import USA from './United_States.svg?sprite';
 
 export default {
   AUT,

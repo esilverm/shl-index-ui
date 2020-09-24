@@ -39,6 +39,11 @@ export default async (
     AND TeamID=${+id}
 `);
 
+  if (!team) {
+    res.status(404).json({ error: 'Team not found' });
+    return;
+  }
+
   const parsed = {
     id: team.TeamID,
     season: team.SeasonID,

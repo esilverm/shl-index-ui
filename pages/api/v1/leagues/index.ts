@@ -19,6 +19,7 @@ export default async (
   res: NextApiResponse<Data>
 ): Promise<void> => {
   await use(req, res, cors);
+
   const leagues: Array<{
     LeagueID: number;
     Name: string;
