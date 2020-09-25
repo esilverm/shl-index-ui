@@ -52,7 +52,7 @@ function TeamPage({
           src={require(`../../../public/team_logos/${leaguename.toUpperCase()}/${location
             .replace('.', '')
             .split(' ')
-            .join('_')}.svg?inline`)}
+            .join('_')}.svg`)}
           alt={`${name} logo`}
         />
         <TeamInfoContainer>
