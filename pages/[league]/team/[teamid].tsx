@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { GetServerSideProps } from 'next';
+import Error from 'next/error';
 import styled from 'styled-components';
+import { NextSeo } from 'next-seo';
+
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
 import fetcher from '../../../lib/fetcher';
-import Error from 'next/error';
 
 interface Props {
   leaguename: string;
@@ -46,6 +48,15 @@ function TeamPage({
 
   return (
     <React.Fragment>
+      <NextSeo
+        title={name}
+        additionalMetaTags={[
+          { property: 'theme-color', content: colors.primary },
+        ]}
+        openGraph={{
+          title: name,
+        }}
+      />
       <Header league={leaguename} activePage="teams" team={id} days={10} />
       <TeamHero {...colors}>
         <TeamLogo

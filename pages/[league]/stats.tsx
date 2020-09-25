@@ -1,5 +1,6 @@
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
+import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
 
@@ -10,6 +11,12 @@ interface Props {
 function Stats({ league }: Props): JSX.Element {
   return (
     <React.Fragment>
+      <NextSeo
+        title="Stats"
+        openGraph={{
+          title: 'Stats',
+        }}
+      />
       <Header league={league} activePage="stats" />
       <div>This is a placeholder</div>
     </React.Fragment>

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
+import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
 
@@ -11,6 +12,12 @@ interface Props {
 function Schedule({ league }: Props): JSX.Element {
   return (
     <React.Fragment>
+      <NextSeo
+        title="Schedule"
+        openGraph={{
+          title: 'Schedule',
+        }}
+      />
       <Header league={league} activePage="schedule" />
       <div>This is a placeholder</div>
     </React.Fragment>

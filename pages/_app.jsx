@@ -1,6 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
+import { DefaultSeo } from 'next-seo';
+
+import SEO from '../next-seo.config';
 
 const theme = {
   colors: {
@@ -20,6 +23,7 @@ const theme = {
 export default function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
+      <DefaultSeo {...SEO} />
       <Head>
         <link
           rel="preconnect"
