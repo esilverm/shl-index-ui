@@ -237,6 +237,7 @@ const MenuDrawer = styled.div<{ active: boolean }>`
     top: 64px;
     left: 0;
     ${({ active }) => (active ? '' : 'display: none;')}
+    z-index: 999;
   }
 `;
 
@@ -273,7 +274,8 @@ const MenuItem = styled.div<{ active: boolean }>`
     border-bottom: none; 
     border-left: 5px solid ${theme.colors.grey100};
     padding-top: 0;
-    padding-right: 15px;`
+    padding-right: 15px;
+    `
         : ``}
   }
 `;
