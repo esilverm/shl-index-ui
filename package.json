@@ -19,7 +19,7 @@
     "next": "^9.5.3",
     "next-compose-plugins": "^2.2.0",
     "next-optimized-images": "^2.6.2",
-    "next-seo": "^4.7.3",
+    "next-seo": "^4.9.0",
     "react": "16.13.1",
     "react-animated-burgers": "^1.2.8",
     "react-dom": "16.13.1",
