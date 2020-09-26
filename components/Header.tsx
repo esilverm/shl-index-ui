@@ -170,6 +170,7 @@ const HeaderNav = styled.div<{ sticky: boolean }>`
   width: 100%;
   height: 64px;
   background-color: ${({ theme }) => theme.colors.grey900};
+  z-index: 999;
 `;
 
 const Container = styled.div`
