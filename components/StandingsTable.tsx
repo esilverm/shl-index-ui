@@ -353,6 +353,7 @@ const LogoWrapper = styled.div<{ abbr: string }>`
 
   @media screen and (max-width: 768px) {
     &::after {
+      color: #0183da;
       content: '${({ abbr }) => abbr}';
       position: relative;
       left: 40px;
