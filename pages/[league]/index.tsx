@@ -63,6 +63,12 @@ const Container = styled.div`
   height: 150vh;
   width: 75%;
   margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.grey100};
+
+  @media screen and (max-width: 768px) {
+    width: 95%;
+    padding: 2.5%;
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

@@ -72,23 +72,24 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         Cell: ({ value }) => {
           const Logo = sprites[value[1]];
           return (
-            <TeamWrapper>
-              <span className="position">{value[0]}</span>
-              <LogoWrapper>
-                {Logo ? (
-                  <Logo aria-label={`${value[3]} logo`} />
-                ) : (
-                  <React.Fragment />
-                )}
-              </LogoWrapper>
-              <Link
-                href="/[league]/team/[id]"
-                as={`/${league}/team/${value[4]}`}
-                passHref
-              >
+            <Link
+              href="/[league]/team/[id]"
+              as={`/${league}/team/${value[4]}`}
+              passHref
+            >
+              <TeamWrapper>
+                <span className="position">{value[0]}</span>
+                <LogoWrapper abbr={value[1]}>
+                  {Logo ? (
+                    <Logo aria-label={`${value[3]} logo`} />
+                  ) : (
+                    <React.Fragment />
+                  )}
+                </LogoWrapper>
+
                 <span className="name">{value[2]}</span>
-              </Link>
-            </TeamWrapper>
+              </TeamWrapper>
+            </Link>
           );
         },
       },
@@ -273,12 +274,19 @@ const TableHeader = styled.thead`
     display: table-row;
   }
 
+  th:first-child {
+    position: sticky;
+    left: 0px;
+    z-index: 2;
+  }
+
   th {
     height: 50px;
     font-weight: 400;
     background-color: ${({ theme }) => theme.colors.grey900};
     padding-left: 10px;
     text-align: left;
+    position: sticky;
   }
 
   th:not(:first-child) {
@@ -299,6 +307,8 @@ const TableBody = styled.tbody`
     text-align: left;
     font-weight: 400;
     background-color: ${({ theme }) => theme.colors.grey200};
+    position: sticky;
+    left: 0px;
   }
 
   td {
@@ -317,6 +327,7 @@ const TeamWrapper = styled.div`
   display: grid;
   grid-template-columns: 40px 40px 1fr;
   align-items: center;
+  cursor: pointer;
 
   .position {
     text-align: right;
@@ -325,14 +336,29 @@ const TeamWrapper = styled.div`
 
   .name {
     margin: 0 10px;
-    cursor: pointer;
     color: #0183da;
   }
+
+  @media screen and (max-width: 768px) {
+    padding-right: 50px;
+    .name {
+      display: none;
+    }
+
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.div<{ abbr: string }>`
   width: 30px;
   height: 30px;
+
+  @media screen and (max-width: 768px) {
+    &::after {
+      content: '${({ abbr }) => abbr}';
+      position: relative;
+      left: 40px;
+      top: -30px;
+    }
+  }
 `;
 
 const GoalDiff = styled.span<{ positive: boolean }>`
