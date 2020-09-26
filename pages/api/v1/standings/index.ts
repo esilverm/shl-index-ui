@@ -9,25 +9,6 @@ import use from '../../../../lib/middleware';
  *
  * ? Params for byConference, byDivision (if applicable) or do `display={league|conference|division}
  *
- * ! Data to provide
- * !  * Name inner join team_data on teamid
- * !  * Location inner join team_data on teamid
- * !  * Abbreviation inner join team_data on teamid
- * !  * Games Played (wins + losses + otl + sol)
- * !  * Wins
- * !  * Losses
- * !  * OT losses (OTL + SOL)
- * !  * Points
- * !  * Win% .toFixed(3)
- * !  * Regulation/Overtime Wins (wins - sow)
- * !  * Goals For
- * !  * Goals Against
- * !  * Goal Differential (gf - ga) if positive add + before and color green otherwise color red
- * !  * Home W-L-O use schedule endpoint and calculate with inner join on teamID = home
- * !  * Away W-L-O use schedule endpoint and calculate with inner join on teamID = away
- * !  * Shootout Record (sow, sol)
- * !  * L10 W-L-O use slug endpoint (probably) and calculate with inner join on teamID = home or teamID = away where played order by slug desc limit 10 not sure how to do this
- * !  * Streak (may be too complicated)
  * 
  *  SELECT Home as TeamID,
     SeasonID,
@@ -54,6 +35,13 @@ export default async (
 
   const { league = 0, season: seasonid } = req.query;
 
+  // let display: string;
+  // if (displayname === 'po' || displayname === 'ps' || displayname === 'rs') {
+  //   display = displayname;
+  // } else {
+  //   display = 'league';
+  // }
+
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
@@ -65,7 +53,8 @@ export default async (
   `));
 
   const standings = await query(SQL`
-    SELECT td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.ConferenceID, tr.DivisionID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
+    SELECT ROW_NUMBER() OVER (
+      ORDER BY tr.PCT DESC, tr.Wins DESC, tr.SOW ASC ) as Position, td.LeagueID, td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.ConferenceID, tr.DivisionID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
     FROM team_records AS tr
     INNER JOIN team_data AS td
       ON tr.TeamID = td.TeamID
@@ -97,5 +86,38 @@ export default async (
       AND tr.SeasonID=${season.SeasonID}
   `);
 
-  res.status(200).json(standings);
+  const parsed = standings.map((team) => ({
+    position: team.Position,
+    id: team.TeamID,
+    name: `${team.Name} ${team.Nickname}`,
+    location:
+      team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
+    abbreviation: team.Abbr,
+    gp: team.Wins + team.Losses + team.OTL + team.SOL,
+    wins: team.Wins,
+    losses: team.Losses,
+    OTL: team.OTL + team.SOL,
+    points: team.Points,
+    winPercent: team.PCT.toFixed(3),
+    ROW: team.Wins - team.SOW,
+    goalsFor: team.GF,
+    goalsAgainst: team.GA,
+    goalDiff: team.GF - team.GA,
+    home: {
+      wins: team.HomeWins,
+      losses: team.HomeLosses,
+      OTL: team.HomeOTL,
+    },
+    away: {
+      wins: team.AwayWins,
+      losses: team.AwayLosses,
+      OTL: team.AwayOTL,
+    },
+    shootout: {
+      wins: team.SOW,
+      losses: team.SOL,
+    },
+  }));
+
+  res.status(200).json(parsed);
 };

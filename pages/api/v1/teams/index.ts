@@ -75,7 +75,7 @@ export default async (
       points: team.Points,
       goalsFor: team.GF,
       goalsAgainst: team.GA,
-      winPercent: team.PCT,
+      winPercent: team.PCT.toFixed(3),
     },
   }));
 

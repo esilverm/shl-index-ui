@@ -26,7 +26,7 @@
     "react-horizontal-scrolling-menu": "^0.7.8",
     "react-icons": "^3.11.0",
     "react-spinners": "^0.9.0",
-    "react-table": "^7.3.2",
+    "react-table": "^7.5.1",
     "react-visibility-sensor": "^5.1.1",
     "redoc": "^2.0.0-rc.40",
     "serverless-mysql": "^1.5.4",
