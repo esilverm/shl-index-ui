@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useTable } from 'react-table';
+import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
 
 interface Props {
@@ -92,6 +92,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
             </Link>
           );
         },
+        disableSortBy: true,
       },
       {
         Header: 'GP',
@@ -143,6 +144,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
           </GoalDiff>
         ),
         title: 'Goal Differential',
+        sortType: 'basic',
       },
       {
         Header: 'HOME',
@@ -178,7 +180,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable({ columns, data }, useSortBy);
 
   return (
     // apply the table props
@@ -195,9 +197,16 @@ function StandingsTable({ league, data }: Props): JSX.Element {
                   headerGroup.headers.map((column, i) => (
                     // Apply the header cell props
                     <th
-                      {...column.getHeaderProps()}
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
                       title={column.title}
                       key={`${i}_${column.id}`}
+                      className={
+                        column.isSorted
+                          ? column.isSortedDesc
+                            ? 'sorted--desc'
+                            : 'sorted--asc'
+                          : ''
+                      }
                     >
                       {
                         // Render the header
@@ -231,9 +240,12 @@ function StandingsTable({ league, data }: Props): JSX.Element {
                     // Loop over the rows cells
                     row.cells.map((cell, i) => {
                       // Apply the cell props
-
                       return (
-                        <td {...cell.getCellProps()} key={i}>
+                        <td
+                          {...cell.getCellProps()}
+                          key={i}
+                          className={cell.column.isSorted ? 'sorted' : ''}
+                        >
                           {
                             // Render the cell contents
                             cell.render('Cell')
@@ -284,14 +296,29 @@ const TableHeader = styled.thead`
     left: 0px;
     z-index: 2;
     text-align: left;
+    padding-left: 10px;
   }
 
   th {
     height: 50px;
     font-weight: 400;
     background-color: ${({ theme }) => theme.colors.grey900};
-    padding-left: 10px;
-    position: sticky;
+    position: relative;
+
+    &.sorted--asc::before {
+      content: '^';
+      position: absolute;
+      top: 3px;
+      left: calc(100% / 2 - 4px);
+    }
+
+    &.sorted--desc::after {
+      content: 'v';
+      font-size: 14px;
+      position: absolute;
+      bottom: 3px;
+      left: calc(100% / 2 - 4px);
+    }
   }
 
   th:not(:first-child) {
@@ -321,6 +348,10 @@ const TableBody = styled.tbody`
     border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
     padding: 10px;
     text-align: center;
+
+    &.sorted {
+      background-color: rgba(1, 131, 218, 0.1);
+    }
   }
 
   tr {
