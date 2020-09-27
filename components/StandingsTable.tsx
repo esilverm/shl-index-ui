@@ -125,6 +125,11 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         title: 'Points Percentage',
       },
       {
+        Header: 'ROW',
+        accessor: 'ROW',
+        title: 'Regulation plus Overtime Wins',
+      },
+      {
         Header: 'GF',
         accessor: 'goalsFor',
         title: 'Goals For',
