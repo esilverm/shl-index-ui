@@ -34,21 +34,6 @@ function LeagueHome({ league }: Props): JSX.Element {
       />
       <Header league={league} />
       <Container className="content">
-        <h1>
-          <em>{league}</em>
-        </h1>
-        <h1>
-          <em>{league}</em>
-        </h1>
-        <h1>
-          <em>{league}</em>
-        </h1>
-        <h1>
-          <em>{league}</em>
-        </h1>
-        <h1>
-          <em>{league}</em>
-        </h1>
         {data && !error && <StandingsTable league={league} data={standings} />}
       </Container>
     </React.Fragment>
@@ -62,6 +47,7 @@ function LeagueHome({ league }: Props): JSX.Element {
 const Container = styled.div`
   height: 150vh;
   width: 75%;
+  padding: 80px 2.5%;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
 

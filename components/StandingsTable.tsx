@@ -119,6 +119,11 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         title: 'Points',
       },
       {
+        Header: 'P%',
+        accessor: 'winPercent',
+        title: 'Points Percentage',
+      },
+      {
         Header: 'GF',
         accessor: 'goalsFor',
         title: 'Goals For',
@@ -248,7 +253,6 @@ function StandingsTable({ league, data }: Props): JSX.Element {
 }
 
 const TableContainer = styled.div`
-  border-left: 1px solid ${({ theme }) => theme.colors.grey500};
   border-right: 1px solid ${({ theme }) => theme.colors.grey500};
   overflow-x: auto;
   overflow-y: hidden;
@@ -263,6 +267,7 @@ const Table = styled.table`
   // border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
+  border-left: 1px solid ${({ theme }) => theme.colors.grey500};
 `;
 
 const TableHeader = styled.thead`
@@ -278,6 +283,7 @@ const TableHeader = styled.thead`
     position: sticky;
     left: 0px;
     z-index: 2;
+    text-align: left;
   }
 
   th {
@@ -285,12 +291,12 @@ const TableHeader = styled.thead`
     font-weight: 400;
     background-color: ${({ theme }) => theme.colors.grey900};
     padding-left: 10px;
-    text-align: left;
     position: sticky;
   }
 
   th:not(:first-child) {
     cursor: help;
+    text-align: center;
   }
 `;
 
@@ -314,6 +320,7 @@ const TableBody = styled.tbody`
   td {
     border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
     padding: 10px;
+    text-align: center;
   }
 
   tr {
