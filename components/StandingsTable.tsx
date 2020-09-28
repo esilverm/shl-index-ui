@@ -308,6 +308,7 @@ const TableContainer = styled.div`
   border-right: 1px solid ${({ theme }) => theme.colors.grey500};
   overflow-x: auto;
   overflow-y: hidden;
+  border-radius: 10px;
 
   th,
   td {
@@ -320,6 +321,7 @@ const Table = styled.table`
   border-spacing: 0;
   width: 100%;
   border-left: 1px solid ${({ theme }) => theme.colors.grey500};
+  border-radius: inherit;
 `;
 
 const TableHeader = styled.thead`
