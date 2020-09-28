@@ -382,6 +382,7 @@ const TeamWrapper = styled.div`
 
   .name {
     margin: 0 10px;
+    min-width: max-content;
     color: #0183da;
   }
 
