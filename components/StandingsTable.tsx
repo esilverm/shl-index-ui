@@ -158,6 +158,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         },
         id: 'homerecord',
         title: 'Home Record',
+        Cell: ({ value }) => <HomeAwayRecords>{value}</HomeAwayRecords>,
       },
       {
         Header: 'AWAY',
@@ -166,6 +167,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         },
         id: 'awayrecord',
         title: 'Away Record',
+        Cell: ({ value }) => <HomeAwayRecords>{value}</HomeAwayRecords>,
       },
       {
         Header: 'S/O',
@@ -174,6 +176,7 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         },
         id: 'shootout',
         title: 'Record in games decided by Shootout',
+        Cell: ({ value }) => <ShootoutRecords>{value}</ShootoutRecords>,
       },
     ],
     [sprites]
@@ -408,4 +411,15 @@ const LogoWrapper = styled.div<{ abbr: string }>`
 const GoalDiff = styled.span<{ positive: boolean }>`
   color: ${({ positive }) => (positive ? '#48b400' : '#d60000')};
 `;
+
+const HomeAwayRecords = styled.div`
+  width: 100%;
+  min-width: 55px;
+`;
+
+const ShootoutRecords = styled.div`
+  width: 100%;
+  min-width: 30px;
+`;
+
 export default StandingsTable;
