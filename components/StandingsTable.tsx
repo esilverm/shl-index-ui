@@ -159,6 +159,22 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         id: 'homerecord',
         title: 'Home Record',
         Cell: ({ value }) => <HomeAwayRecords>{value}</HomeAwayRecords>,
+        sortType: (a, b) => {
+          const aPoints = a.values.homerecord
+            .split('-')
+            .reduce((sum, val, i) => {
+              return sum + +val * (i === 0 ? 2 : i === 2 ? 1 : 0);
+            }, 0);
+          const bPoints = b.values.homerecord
+            .split('-')
+            .reduce((sum, val, i) => {
+              return sum + +val * (i === 0 ? 2 : i === 2 ? 1 : 0);
+            }, 0);
+
+          if (aPoints > bPoints) return -1;
+          else if (aPoints < bPoints) return 1;
+          return 0;
+        },
       },
       {
         Header: 'AWAY',
@@ -168,6 +184,22 @@ function StandingsTable({ league, data }: Props): JSX.Element {
         id: 'awayrecord',
         title: 'Away Record',
         Cell: ({ value }) => <HomeAwayRecords>{value}</HomeAwayRecords>,
+        sortType: (a, b) => {
+          const aPoints = a.values.awayrecord
+            .split('-')
+            .reduce((sum, val, i) => {
+              return sum + +val * (i === 0 ? 2 : i === 2 ? 1 : 0);
+            }, 0);
+          const bPoints = b.values.awayrecord
+            .split('-')
+            .reduce((sum, val, i) => {
+              return sum + +val * (i === 0 ? 2 : i === 2 ? 1 : 0);
+            }, 0);
+
+          if (aPoints > bPoints) return -1;
+          else if (aPoints < bPoints) return 1;
+          return 0;
+        },
       },
       {
         Header: 'S/O',
