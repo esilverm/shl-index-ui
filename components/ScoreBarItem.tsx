@@ -60,7 +60,12 @@ function ScoreBarItem({
           as={`/${league}/${data.season}/game/${gameid}`}
           passHref
         >
-          <Game role="link" aria-label="Game Result" tabIndex={0}>
+          <Game
+            role="link"
+            aria-label="Game Result"
+            tabIndex={0}
+            played={data.played === 1}
+          >
             <TeamLine
               played={data.played === 1}
               winner={data.homeScore > data.awayScore}
@@ -126,7 +131,7 @@ const Date = styled.div`
   }
 `;
 
-const Game = styled.div`
+const Game = styled.div<{ played: boolean }>`
   width: 189px;
   height: 100%;
   padding-top: 23px;
@@ -136,7 +141,8 @@ const Game = styled.div`
 
   &:hover ::after {
     cursor: pointer;
-    content: 'See Game Results';
+    content: '${({ played }) =>
+      played ? 'See Game Results' : 'See Game Preview'}';
     position: absolute;
     top: 0;
     left: 0;
