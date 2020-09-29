@@ -307,4 +307,6 @@ HeaderBar.defaultProps = {
   activePage: '',
 };
 
+HeaderBar.whyDidYouRender = true;
+
 export default HeaderBar;

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
-import useStandings from '../../hooks/useStandings';
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
 
@@ -13,8 +12,6 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-
-  const { standings, isLoading } = useStandings(league, display);
 
   return (
     <React.Fragment>
@@ -37,7 +34,7 @@ function Standings({ league }: Props): JSX.Element {
             Division
           </DisplaySelectItem>
         </DisplaySelectContainer>
-        {!isLoading && <StandingsTable league={league} data={standings} />}
+        <StandingsTable league={league} display={display} />
       </Container>
     </React.Fragment>
   );

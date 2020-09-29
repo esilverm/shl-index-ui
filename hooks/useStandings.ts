@@ -1,5 +1,4 @@
 import useSWR from 'swr';
-import { useMemo } from 'react';
 
 const useStandings = (
   league: string,
@@ -45,10 +44,8 @@ const useStandings = (
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${leagueid}&display=${display}`
   );
 
-  const standings = useMemo(() => data, [data]);
-
   return {
-    standings,
+    standings: data,
     isLoading: !error && !data,
     isError: error,
   };
