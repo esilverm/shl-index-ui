@@ -305,14 +305,17 @@ function StandingsTable({ league, data }: Props): JSX.Element {
 }
 
 const TableContainer = styled.div`
-  border-right: 1px solid ${({ theme }) => theme.colors.grey500};
+  border: 1px solid ${({ theme }) => theme.colors.grey500};
+  border-top: none;
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: 10px;
+  max-width: 1000px;
+  margin: auto;
 
-  th,
-  td {
-    border-bottom: 1px solid #ddd;
+  tr:not(:last-child) th,
+  tr:not(:last-child) td {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
   }
 `;
 
@@ -320,7 +323,7 @@ const Table = styled.table`
   // border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
-  border-left: 1px solid ${({ theme }) => theme.colors.grey500};
+
   border-radius: inherit;
 `;
 
@@ -347,14 +350,14 @@ const TableHeader = styled.thead`
     background-color: ${({ theme }) => theme.colors.grey900};
     position: relative;
 
-    &.sorted--asc::before {
+    &.sorted--desc::before {
       content: '^';
       position: absolute;
       top: 3px;
       left: calc(100% / 2 - 4px);
     }
 
-    &.sorted--desc::after {
+    &.sorted--asc::after {
       content: 'v';
       font-size: 14px;
       position: absolute;
@@ -377,7 +380,6 @@ const TableBody = styled.tbody`
   position: relative;
 
   th {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
     display: table-cell;
     text-align: left;
     font-weight: 400;
@@ -387,7 +389,6 @@ const TableBody = styled.tbody`
   }
 
   td {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
     padding: 10px;
     text-align: center;
 
