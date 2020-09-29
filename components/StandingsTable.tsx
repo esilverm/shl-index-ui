@@ -206,7 +206,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
             shootout: { wins: 0, losses: 0 },
           })
         : standings,
-    [isLoading, isLoadingAssets, standings]
+    [isLoading, isLoadingAssets]
   );
 
   const columns = useMemo(
@@ -474,7 +474,5 @@ const ShootoutRecords = styled.div`
   width: 100%;
   min-width: 30px;
 `;
-
-StandingsTable.whyDidYouRender = true;
 
 export default StandingsTable;
