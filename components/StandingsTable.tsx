@@ -310,8 +310,6 @@ const TableContainer = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: 10px;
-  max-width: 1000px;
-  margin: auto;
 
   tr:not(:last-child) th,
   tr:not(:last-child) td {

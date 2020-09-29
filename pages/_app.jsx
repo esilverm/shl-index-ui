@@ -3,6 +3,7 @@ import React from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
 import { DefaultSeo } from 'next-seo';
+import { SWRConfig } from 'swr';
 
 import SEO from '../next-seo.config';
 
@@ -23,46 +24,53 @@ const theme = {
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
-      <DefaultSeo {...SEO} />
-      <Head>
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com/"
-          crossOrigin="true"
-        />
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          as="style"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          media="print"
-          onLoad="this.media='all'"
-        />
-        <noscript>
+    <SWRConfig
+      value={{
+        fetcher: (resource, init) =>
+          fetch(resource, init).then((res) => res.json()),
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <DefaultSeo {...SEO} />
+        <Head>
           <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet"
-            type="text/css"
+            rel="preconnect"
+            href="https://fonts.gstatic.com/"
+            crossOrigin="true"
           />
-        </noscript>
-      </Head>
-      <Component {...pageProps} />
-      <style global jsx>{`
-        body {
-          font-family: 'Raleway', sans-serif;
-          background-color: ${theme.colors.grey200};
-        }
+          <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            as="style"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            media="print"
+            onLoad="this.media='all'"
+          />
+          <noscript>
+            <link
+              href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+              rel="stylesheet"
+              type="text/css"
+            />
+          </noscript>
+        </Head>
+        <Component {...pageProps} />
+        <style global jsx>{`
+          body {
+            font-family: 'Raleway', sans-serif;
+            background-color: ${theme.colors.grey200};
+          }
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-      `}</style>
-    </ThemeProvider>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+        `}</style>
+      </ThemeProvider>
+    </SWRConfig>
   );
 }

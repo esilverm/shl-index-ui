@@ -6,7 +6,6 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
-import fetcher from '../../lib/fetcher';
 
 interface Props {
   league: string;
@@ -19,8 +18,7 @@ function LeagueHome({ league }: Props): JSX.Element {
       'smjhl',
       'iihf',
       'wjc',
-    ].indexOf(league)}`,
-    fetcher
+    ].indexOf(league)}`
   );
   const standings = React.useMemo(() => data, [data]);
 

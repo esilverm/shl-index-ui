@@ -7,7 +7,6 @@ import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
 import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
-import fetcher from '../lib/fetcher';
 
 interface Props {
   league: string;
@@ -39,8 +38,7 @@ function HeaderBar({
       'wjc',
     ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
       days ? `&days=${days}` : ``
-    }`,
-    fetcher
+    }`
   );
 
   return (
