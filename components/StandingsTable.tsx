@@ -13,7 +13,7 @@ interface Props {
 
 function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
   const { standings, isLoading } = useStandings(league, display);
-  const [, setLoadingAssets] = useState<boolean>(true);
+  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
@@ -206,7 +206,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
             shootout: { wins: 0, losses: 0 },
           })
         : standings,
-    [isLoading, standings]
+    [isLoading, isLoadingAssets, standings]
   );
 
   const columns = useMemo(
@@ -222,7 +222,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
               ),
           }))
         : columnData,
-    [isLoading]
+    [isLoading, isLoadingAssets]
   );
 
   const {
