@@ -66,7 +66,7 @@ export default function MyApp({ Component, pageProps }) {
         <style global jsx>{`
           body {
             font-family: 'Raleway', sans-serif;
-            background-color: ${theme.colors.grey100};
+            background-color: ${theme.colors.grey200};
           }
 
           * {
