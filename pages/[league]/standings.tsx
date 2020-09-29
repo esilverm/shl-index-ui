@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import useSWR from 'swr';
 
+import useStandings from '../../hooks/useStandings';
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
 
@@ -12,16 +12,10 @@ interface Props {
 }
 
 function Standings({ league }: Props): JSX.Element {
-  const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${[
-      'shl',
-      'smjhl',
-      'iihf',
-      'wjc',
-    ].indexOf(league)}`
-  );
+  const [display, setDisplay] = useState('league');
 
-  const standings = React.useMemo(() => data, [data]);
+  const { standings, isLoading } = useStandings(league, display);
+
   return (
     <React.Fragment>
       <NextSeo
@@ -32,8 +26,18 @@ function Standings({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="standings" />
       <Container>
-        <DisplaySelectContainer />
-        {data && !error && <StandingsTable league={league} data={standings} />}
+        <DisplaySelectContainer>
+          <DisplaySelectItem onClick={() => setDisplay(() => 'league')}>
+            League
+          </DisplaySelectItem>
+          <DisplaySelectItem onClick={() => setDisplay(() => 'conference')}>
+            Conference
+          </DisplaySelectItem>
+          <DisplaySelectItem onClick={() => setDisplay(() => 'division')}>
+            Division
+          </DisplaySelectItem>
+        </DisplaySelectContainer>
+        {!isLoading && <StandingsTable league={league} data={standings} />}
       </Container>
     </React.Fragment>
   );
@@ -56,6 +60,11 @@ const DisplaySelectContainer = styled.div`
   width: 100%;
   height: 80px;
   border: 1px solid black;
+`;
+
+const DisplaySelectItem = styled.div`
+  color: blue;
+  text-decoration: underline;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

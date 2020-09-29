@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
-import useSWR from 'swr';
 import { GetStaticProps, GetStaticPaths } from 'next';
 
+import useStandings from '../../hooks/useStandings';
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
 
@@ -12,15 +12,7 @@ interface Props {
 }
 
 function LeagueHome({ league }: Props): JSX.Element {
-  const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${[
-      'shl',
-      'smjhl',
-      'iihf',
-      'wjc',
-    ].indexOf(league)}`
-  );
-  const standings = React.useMemo(() => data, [data]);
+  const { standings, isLoading } = useStandings(league);
 
   return (
     <React.Fragment>
@@ -32,7 +24,7 @@ function LeagueHome({ league }: Props): JSX.Element {
       />
       <Header league={league} />
       <Container className="content">
-        {data && !error && <StandingsTable league={league} data={standings} />}
+        {!isLoading && <StandingsTable league={league} data={standings} />}
       </Container>
     </React.Fragment>
   );
