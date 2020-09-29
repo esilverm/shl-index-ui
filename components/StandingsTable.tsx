@@ -13,7 +13,7 @@ interface Props {
 
 function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
   const { standings, isLoading } = useStandings(league, display);
-  const [isloadingAssets, setLoadingAssets] = useState<boolean>(true);
+  const [, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
@@ -54,7 +54,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
                 {Logo ? (
                   <Logo aria-label={`${value[3]} logo`} />
                 ) : (
-                  <React.Fragment />
+                  <Skeleton circle width={30} height={30} />
                 )}
               </LogoWrapper>
 
@@ -184,7 +184,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
 
   const data = useMemo(
     () =>
-      isLoading || isloadingAssets
+      isLoading
         ? Array(fakeRows[league]).fill({
             position: 0,
             id: 0,
@@ -206,12 +206,12 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
             shootout: { wins: 0, losses: 0 },
           })
         : standings,
-    [isLoading, isloadingAssets, standings]
+    [isLoading, standings]
   );
 
   const columns = useMemo(
     () =>
-      isLoading || isloadingAssets
+      isLoading
         ? columnData.map((column, i) => ({
             ...column,
             Cell:
@@ -222,7 +222,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
               ),
           }))
         : columnData,
-    [isLoading, isloadingAssets]
+    [isLoading]
   );
 
   const {
