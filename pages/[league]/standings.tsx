@@ -42,9 +42,9 @@ function Standings({ league }: Props): JSX.Element {
 
 const Container = styled.div`
   width: 65%;
+  height: 200vh;
   padding: 1px 2.5% 40px 2.5%;
   margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
     width: 95%;

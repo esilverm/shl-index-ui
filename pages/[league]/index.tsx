@@ -20,27 +20,20 @@ function LeagueHome({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} />
-      <Container className="content">
+      <Container>
         <StandingsTable league={league} />
       </Container>
     </React.Fragment>
   );
 }
 
-// LeagueHome.propTypes = {
-//   league: PropTypes.string.isRequired,
-// };
-
 const Container = styled.div`
   height: 150vh;
   width: 75%;
-  padding: 80px 2.5%;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
+  margin: 60px auto;
   @media screen and (max-width: 768px) {
     width: 95%;
-    padding: 2.5%;
+    padding: 0 2.5%;
   }
 `;
 

@@ -42,7 +42,7 @@ function HeaderBar({
   );
 
   return (
-    <header>
+    <HeaderWrapper sticky={!scheduleVisible || !showScoreBar}>
       {showScoreBar && (
         <VisibilitySensor
           partialVisibility
@@ -146,22 +146,28 @@ function HeaderBar({
           <SearchIcon size={24} />
         </Container>
       </HeaderNav>
-    </header>
+    </HeaderWrapper>
   );
 }
 
 HeaderBar.defaultProps = defaultProps;
+
+const HeaderWrapper = styled.header<{ sticky: boolean }>`
+  ${({ sticky }) =>
+    sticky
+      ? `
+  & + div {
+    padding-top: 64px;
+  }`
+      : ''}
+`;
 
 const HeaderNav = styled.div<{ sticky: boolean }>`
   ${({ sticky }) =>
     sticky
       ? ` 
   position: fixed;
-  top: 0px;
-
-  & + .content {
-    padding-top: 64px;
-  }
+  top: 0;
   `
       : ''}
 
@@ -306,7 +312,5 @@ HeaderBar.defaultProps = {
   showScoreBar: true,
   activePage: '',
 };
-
-HeaderBar.whyDidYouRender = true;
 
 export default HeaderBar;
