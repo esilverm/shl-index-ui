@@ -7,7 +7,6 @@ import { NextSeo } from 'next-seo';
 
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
-import fetcher from '../../../lib/fetcher';
 
 interface Props {
   leaguename: string;
@@ -180,13 +179,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       typeof leaguename === 'string' ? leaguename : 'shl'
     );
 
-    const teamdata = await fetcher(
+    const teamdata = await fetch(
       `${
         process.env.NEXT_PUBLIC_API_ENDPOINT
       }/api/v1/teams/${teamid}?league=${leagueid}${
         season ? `&season=${season}` : ``
       }`
-    );
+    ).then((res) => res.json());
 
     return { props: { leaguename, ...teamdata } };
   } catch (error) {
