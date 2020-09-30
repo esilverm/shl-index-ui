@@ -56,12 +56,19 @@ const DisplaySelectContainer = styled.div`
   margin: 40px 0;
   width: 100%;
   height: 80px;
-  border: 1px solid black;
+  // border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 `;
 
 const DisplaySelectItem = styled.div`
-  color: blue;
-  text-decoration: underline;
+  padding: 8px 32px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
