@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
@@ -13,6 +13,21 @@ interface Props {
 
 function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
   const { standings, isLoading } = useStandings(league, display);
+  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
+  const [sprites, setSprites] = useState<{
+    [index: string]: React.ComponentClass<any>;
+  }>({});
+
+  useEffect(() => {
+    // Dynamically import svg icons based on the league chosen
+    (async () => {
+      const { default: s } = await import(
+        `../public/team_logos/${league.toUpperCase()}/`
+      );
+      setSprites(() => s);
+      setLoadingAssets(() => false);
+    })();
+  }, [standings]);
 
   const columnData = [
     {
@@ -26,6 +41,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
       ],
       id: 'team',
       Cell: ({ value }) => {
+        const Logo = sprites[value[1]];
         return (
           <Link
             href="/[league]/team/[id]"
@@ -35,12 +51,11 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
             <TeamWrapper>
               <span className="position">{value[0]}</span>
               <LogoWrapper abbr={value[1]}>
-                <img
-                  src={`/team_logos/${league.toUpperCase()}/${value[2]
-                    .replace('.', '')
-                    .replace(' ', '_')}.svg`}
-                  alt={`${value[3]} logo`}
-                />
+                {Logo ? (
+                  <Logo aria-label={`${value[3]} logo`} />
+                ) : (
+                  <Skeleton circle width={30} height={30} />
+                )}
               </LogoWrapper>
 
               <span className="name">{value[2]}</span>
@@ -191,7 +206,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
             shootout: { wins: 0, losses: 0 },
           })
         : standings,
-    [isLoading]
+    [isLoading, isLoadingAssets]
   );
 
   const columns = useMemo(
@@ -207,7 +222,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
               ),
           }))
         : columnData,
-    [isLoading]
+    [isLoading, isLoadingAssets]
   );
 
   const {
