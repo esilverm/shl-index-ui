@@ -21,11 +21,5 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules", ".next", "out"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "pages/_app.jsx"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
 }
