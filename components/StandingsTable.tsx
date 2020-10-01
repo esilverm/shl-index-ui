@@ -24,6 +24,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
       const { default: s } = await import(
         `../public/team_logos/${league.toUpperCase()}/`
       );
+
       setSprites(() => s);
       setLoadingAssets(() => false);
     })();

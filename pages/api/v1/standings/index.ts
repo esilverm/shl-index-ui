@@ -4,23 +4,6 @@ import Cors from 'cors';
 import { query } from '../../../../lib/db';
 import use from '../../../../lib/middleware';
 
-/**
- * * Ideas for this:
- *
- * ? Params for byConference, byDivision (if applicable) or do `display={league|conference|division}
- *
- * 
- *  SELECT Home as TeamID,
-    SeasonID,
-    LeagueID,
-    SUM(case when HomeScore > AwayScore then 1 else 0 end) as HomeWins,
-    SUM(case when HomeScore < AwayScore and Overtime = 0 then 1 else 0 end) as HomeLosses,
-    SUM(case when HomeScore < AwayScore and Overtime = 1 then 1 else 0 end) as HomeOTL
-    FROM schedules 
-    WHERE Played=1
-    GROUP BY Home, LeagueID, SeasonID
- */
-
 const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
@@ -33,14 +16,18 @@ export default async (
 
   // display = 'league'
 
-  const { league = 0, season: seasonid } = req.query;
+  const { league = 0, season: seasonid, display: displayname } = req.query;
 
-  // let display: string;
-  // if (displayname === 'po' || displayname === 'ps' || displayname === 'rs') {
-  //   display = displayname;
-  // } else {
-  //   display = 'league';
-  // }
+  let display: string;
+  if (
+    displayname === 'league' ||
+    displayname === 'conference' ||
+    displayname === 'division'
+  ) {
+    display = displayname;
+  } else {
+    display = 'league';
+  }
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -52,43 +39,66 @@ export default async (
       LIMIT 1
   `));
 
-  const standings = await query(SQL`
-    SELECT ROW_NUMBER() OVER (
-      ORDER BY tr.PCT DESC, tr.Wins DESC, tr.SOW ASC ) as Position, td.LeagueID, td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.ConferenceID, tr.DivisionID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
-    FROM team_records AS tr
-    INNER JOIN team_data AS td
-      ON tr.TeamID = td.TeamID
-      AND tr.LeagueID = td.LeagueID
-      AND tr.SeasonID = td.SeasonID
-    INNER JOIN (
-      SELECT Home AS TeamID, SeasonID, LeagueID, 
-        SUM(CASE WHEN HomeScore > AwayScore THEN 1 ELSE 0 END) AS HomeWins, 
-        SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 0 THEN 1 ELSE 0 END) AS HomeLosses,
-        SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 1 THEN 1 ELSE 0 END) AS HomeOTL
-      FROM schedules WHERE Played=1 AND type='Regular Season'
-      GROUP BY Home, LeagueID, SeasonID
-    ) AS h
-      ON tr.TeamID = h.TeamID
-      AND tr.LeagueID = h.LeagueID
-      AND tr.SeasonID = h.SeasonID
-    INNER JOIN (
-      SELECT Away AS TeamID, SeasonID, LeagueID, 
-        SUM(CASE WHEN AwayScore > HomeScore THEN 1 ELSE 0 END) AS AwayWins, 
-          SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 0 THEN 1 ELSE 0 END) AS AwayLosses,
-          SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 1 THEN 1 ELSE 0 END) AS AwayOTL
+  // let standin/gs, parsed;SQL` PARTITION BY tr.ConferenceID`
+
+  const standings = await query(
+    SQL`
+    SELECT ROW_NUMBER() OVER (`
+      .append(
+        display === 'conference'
+          ? SQL` PARTITION BY tr.ConferenceID`
+          : display === 'divison'
+          ? SQL` PARTITION BY tr.ConferenceID, tr.DivisionID`
+          : ''
+      )
+      .append(
+        SQL` ORDER BY tr.PCT DESC, tr.Wins DESC, tr.SOW ASC ) as Position, td.LeagueID,`
+      )
+      .append(
+        display === 'conference'
+          ? SQL`tr.ConferenceID, `
+          : display === 'divison'
+          ? SQL`tr.ConferenceID, tr.DivisionID`
+          : ''
+      )
+      .append(`td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.ConferenceID, tr.DivisionID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
+      FROM team_records AS tr
+      INNER JOIN team_data AS td
+        ON tr.TeamID = td.TeamID
+        AND tr.LeagueID = td.LeagueID
+        AND tr.SeasonID = td.SeasonID
+      INNER JOIN (
+        SELECT Home AS TeamID, SeasonID, LeagueID, 
+          SUM(CASE WHEN HomeScore > AwayScore THEN 1 ELSE 0 END) AS HomeWins, 
+          SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 0 THEN 1 ELSE 0 END) AS HomeLosses,
+          SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 1 THEN 1 ELSE 0 END) AS HomeOTL
         FROM schedules WHERE Played=1 AND type='Regular Season'
-        GROUP BY Away, LeagueID, SeasonID
-      ) AS a
-        ON tr.TeamID = a.TeamID
-        AND tr.LeagueID = a.LeagueID
-        AND tr.SeasonID = a.SeasonID
-    WHERE tr.LeagueID=${+league}
-      AND tr.SeasonID=${season.SeasonID}
-  `);
+        GROUP BY Home, LeagueID, SeasonID
+      ) AS h
+        ON tr.TeamID = h.TeamID
+        AND tr.LeagueID = h.LeagueID
+        AND tr.SeasonID = h.SeasonID
+      INNER JOIN (
+        SELECT Away AS TeamID, SeasonID, LeagueID, 
+          SUM(CASE WHEN AwayScore > HomeScore THEN 1 ELSE 0 END) AS AwayWins, 
+            SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 0 THEN 1 ELSE 0 END) AS AwayLosses,
+            SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 1 THEN 1 ELSE 0 END) AS AwayOTL
+          FROM schedules WHERE Played=1 AND type='Regular Season'
+          GROUP BY Away, LeagueID, SeasonID
+        ) AS a
+          ON tr.TeamID = a.TeamID
+          AND tr.LeagueID = a.LeagueID
+          AND tr.SeasonID = a.SeasonID
+      WHERE tr.LeagueID=${+league}
+        AND tr.SeasonID=${season.SeasonID}
+  `)
+  );
 
   const parsed = standings.map((team) => ({
     position: team.Position,
     id: team.TeamID,
+    conference: team.ConferenceID,
+    divison: team.DivisionID,
     name: `${team.Name} ${team.Nickname}`,
     location:
       team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
