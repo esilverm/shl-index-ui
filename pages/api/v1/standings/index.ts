@@ -70,12 +70,16 @@ export default async (
           ? SQL`
           INNER JOIN conferences AS c
           ON tr.ConferenceID = c.ConferenceID
+          AND tr.LeagueID = c.LeagueID
+          AND tr.SeasonID = c.SeasonID
           `
           : (+league !== 2 || +league !== 3) && display === 'division'
           ? SQL`
           INNER JOIN divisions AS d
           ON tr.ConferenceID = d.ConferenceID
           AND tr.DivisionID = d.DivisionID 
+          AND tr.LeagueID = d.LeagueID
+          AND tr.SeasonID = d.SeasonID
           `
           : ''
       ).append(SQL`
@@ -109,12 +113,12 @@ export default async (
   const parsed = standings.map((team) => ({
     position: team.Position,
     id: team.TeamID,
-    conference: team.Conference,
-    divison: team.Division,
     name: `${team.Name} ${team.Nickname}`,
     location:
       team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
     abbreviation: team.Abbr,
+    conference: team.Conference,
+    division: team.Division,
     gp: team.Wins + team.Losses + team.OTL + team.SOL,
     wins: team.Wins,
     losses: team.Losses,
@@ -140,6 +144,54 @@ export default async (
       losses: team.SOL,
     },
   }));
+
+  // group by the division or conference
+
+  if (display === 'conference') {
+    const hash = parsed.reduce((persist, team) => {
+      if (!persist[team.conference]) {
+        return {
+          [team.conference]: [team],
+          ...persist,
+        };
+      }
+
+      return {
+        [team.conference]: persist[team.conference].push(team),
+        ...persist,
+      };
+    }, {});
+
+    const conferenceList = Object.keys(hash).map((conference) => ({
+      conference,
+      teams: hash[conference],
+    }));
+
+    res.status(200).json(conferenceList);
+    return;
+  } else if ((+league !== 2 || +league !== 3) && display === 'division') {
+    const hash = parsed.reduce((persist, team) => {
+      if (!persist[team.division]) {
+        return {
+          [team.division]: [team],
+          ...persist,
+        };
+      }
+
+      return {
+        [team.division]: persist[team.division].push(team),
+        ...persist,
+      };
+    }, {});
+
+    const divisionList = Object.keys(hash).map((division) => ({
+      division,
+      teams: hash[division],
+    }));
+
+    res.status(200).json(divisionList);
+    return;
+  }
 
   res.status(200).json(parsed);
 };
