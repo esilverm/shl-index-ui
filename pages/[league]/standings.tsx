@@ -40,13 +40,14 @@ function Standings({ league }: Props): JSX.Element {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           standings.map((group, i) => (
-            <StandingsTable
-              key={i}
-              data={group.teams}
-              league={league}
-              title={group.name}
-              isLoading={isLoading}
-            />
+            <StandingsTableContainer key={i}>
+              <StandingsTable
+                data={group.teams}
+                league={league}
+                title={group.name}
+                isLoading={isLoading}
+              />
+            </StandingsTableContainer>
           ))
         ) : (
           <StandingsTable
@@ -62,7 +63,6 @@ function Standings({ league }: Props): JSX.Element {
 
 const Container = styled.div`
   width: 65%;
-  height: 200vh;
   padding: 1px 2.5% 40px 2.5%;
   margin: 0 auto;
 
@@ -73,10 +73,9 @@ const Container = styled.div`
 `;
 
 const DisplaySelectContainer = styled.div`
-  margin: 40px 0;
+  margin: 25px 0;
   width: 100%;
   height: 80px;
-  // border: 1px solid black;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -86,9 +85,14 @@ const DisplaySelectContainer = styled.div`
 
 const DisplaySelectItem = styled.div`
   padding: 8px 32px;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.grey500};
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const StandingsTableContainer = styled.div`
+  width: 100%;
+  margin: 30px 0;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

@@ -495,6 +495,8 @@ const TeamWrapper = styled.div`
   grid-template-columns: 40px 40px 1fr;
   align-items: center;
   cursor: pointer;
+  min-width: 200px;
+  max-width: 240px;
 
   .position {
     text-align: right;
@@ -509,6 +511,7 @@ const TeamWrapper = styled.div`
 
   @media screen and (max-width: 768px) {
     padding-right: 50px;
+    min-width: 0;
     .name {
       display: none;
     }
