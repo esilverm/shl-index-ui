@@ -115,7 +115,7 @@ export default async (
     id: team.TeamID,
     name: `${team.Name} ${team.Nickname}`,
     location:
-      team.LeagueID === 2 && team.LeagueID === 3 ? team.Nickname : team.Name,
+      team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
     abbreviation: team.Abbr,
     conference: team.Conference,
     division: team.Division,
