@@ -278,7 +278,7 @@ function StandingsTable({
             shootout: { wins: 0, losses: 0 },
           })
         : standings,
-    [isLoading, isLoadingAssets]
+    [isLoading, isLoadingAssets, standings]
   );
 
   const columns = useMemo(

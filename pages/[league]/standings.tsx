@@ -15,6 +15,7 @@ function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
   const { standings, isLoading } = useStandings(league, display);
 
+  console.log(display, standings);
   return (
     <React.Fragment>
       <NextSeo
