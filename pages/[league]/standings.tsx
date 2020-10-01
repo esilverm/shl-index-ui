@@ -32,9 +32,11 @@ function Standings({ league }: Props): JSX.Element {
           <DisplaySelectItem onClick={() => setDisplay(() => 'conference')}>
             Conference
           </DisplaySelectItem>
-          <DisplaySelectItem onClick={() => setDisplay(() => 'division')}>
-            Division
-          </DisplaySelectItem>
+          {league !== 'iihf' && league !== 'wjc' && (
+            <DisplaySelectItem onClick={() => setDisplay(() => 'division')}>
+              Division
+            </DisplaySelectItem>
+          )}
         </DisplaySelectContainer>
         {Array.isArray(standings) && 'teams' in standings[0] && !isLoading ? (
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment

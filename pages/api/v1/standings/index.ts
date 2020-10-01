@@ -43,7 +43,7 @@ export default async (
       .append(
         display === 'conference'
           ? SQL` PARTITION BY tr.ConferenceID`
-          : (+league !== 2 || +league !== 3) && display === 'division'
+          : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` PARTITION BY tr.ConferenceID, tr.DivisionID`
           : ''
       )
@@ -53,7 +53,7 @@ export default async (
       .append(
         display === 'conference'
           ? SQL` c.Name AS Conference, `
-          : (+league !== 2 || +league !== 3) && display === 'division'
+          : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` d.Name AS Division, `
           : ''
       )
@@ -73,7 +73,7 @@ export default async (
           AND tr.LeagueID = c.LeagueID
           AND tr.SeasonID = c.SeasonID
           `
-          : (+league !== 2 || +league !== 3) && display === 'division'
+          : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL`
           INNER JOIN divisions AS d
           ON tr.ConferenceID = d.ConferenceID
@@ -115,7 +115,7 @@ export default async (
     id: team.TeamID,
     name: `${team.Name} ${team.Nickname}`,
     location:
-      team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
+      team.LeagueID === 2 && team.LeagueID === 3 ? team.Nickname : team.Name,
     abbreviation: team.Abbr,
     conference: team.Conference,
     division: team.Division,
@@ -169,7 +169,7 @@ export default async (
 
     res.status(200).json(conferenceList);
     return;
-  } else if ((+league !== 2 || +league !== 3) && display === 'division') {
+  } else if (+league !== 2 && +league !== 3 && display === 'division') {
     const hash = parsed.reduce((persist, team) => {
       if (!persist[team.division]) {
         return {
