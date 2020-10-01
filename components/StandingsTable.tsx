@@ -89,7 +89,6 @@ function StandingsTable({
     [index: string]: React.ComponentClass<any>;
   }>({});
 
-  console.log(standings);
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
     (async () => {
@@ -406,7 +405,7 @@ const TableContainer = styled.div`
 `;
 
 const Table = styled.table`
-  // border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
   width: 100%;
 
