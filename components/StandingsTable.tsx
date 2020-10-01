@@ -4,20 +4,92 @@ import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
-import useStandings from '../hooks/useStandings';
-
 interface Props {
   league: string;
-  display?: string;
+  data:
+    | {
+        position: number;
+        id: number;
+        name: string;
+        location: string;
+        abbreviation: string;
+        division?: string;
+        conference?: string;
+        gp: number;
+        wins: number;
+        losses: number;
+        OTL: number;
+        points: number;
+        winPercent: string;
+        ROW: number;
+        goalsFor: number;
+        goalsAgainst: number;
+        goalDiff: number;
+        home: {
+          wins: number;
+          losses: number;
+          OTL: number;
+        };
+        away: {
+          wins: number;
+          losses: number;
+          OTL: number;
+        };
+        shootout: {
+          wins: number;
+          losses: number;
+        };
+      }
+    | Array<{
+        name: string;
+        teams: {
+          position: number;
+          id: number;
+          name: string;
+          location: string;
+          abbreviation: string;
+          gp: number;
+          wins: number;
+          losses: number;
+          OTL: number;
+          points: number;
+          winPercent: string;
+          ROW: number;
+          goalsFor: number;
+          goalsAgainst: number;
+          goalDiff: number;
+          home: {
+            wins: number;
+            losses: number;
+            OTL: number;
+          };
+          away: {
+            wins: number;
+            losses: number;
+            OTL: number;
+          };
+          shootout: {
+            wins: number;
+            losses: number;
+          };
+        };
+      }>;
+  isLoading: boolean;
+  title?: string;
 }
 
-function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
-  const { standings, isLoading } = useStandings(league, display);
+function StandingsTable({
+  league,
+  data: standings,
+  isLoading,
+  title = 'Team',
+}: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
 
+  console.log(standings);
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
     (async () => {
@@ -32,7 +104,7 @@ function StandingsTable({ league, display = 'league' }: Props): JSX.Element {
 
   const columnData = [
     {
-      Header: 'Team',
+      Header: title,
       accessor: ({ position, abbreviation, location, name, id }) => [
         position,
         abbreviation,

@@ -5,12 +5,15 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
+import useStandings from '../../hooks/useStandings';
 
 interface Props {
   league: string;
 }
 
 function LeagueHome({ league }: Props): JSX.Element {
+  const { standings, isLoading } = useStandings(league);
+
   return (
     <React.Fragment>
       <NextSeo
@@ -21,7 +24,11 @@ function LeagueHome({ league }: Props): JSX.Element {
       />
       <Header league={league} />
       <Container>
-        <StandingsTable league={league} />
+        <StandingsTable
+          data={standings}
+          league={league}
+          isLoading={isLoading}
+        />
       </Container>
     </React.Fragment>
   );

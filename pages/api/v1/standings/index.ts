@@ -163,7 +163,7 @@ export default async (
     }, {});
 
     const conferenceList = Object.keys(hash).map((conference) => ({
-      conference,
+      name: conference,
       teams: hash[conference],
     }));
 
@@ -185,7 +185,7 @@ export default async (
     }, {});
 
     const divisionList = Object.keys(hash).map((division) => ({
-      division,
+      name: division,
       teams: hash[division],
     }));
 

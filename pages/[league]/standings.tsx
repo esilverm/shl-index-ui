@@ -5,6 +5,7 @@ import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
+import useStandings from '../../hooks/useStandings';
 
 interface Props {
   league: string;
@@ -12,6 +13,7 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
+  const { standings, isLoading } = useStandings(league, display);
 
   return (
     <React.Fragment>
@@ -34,7 +36,25 @@ function Standings({ league }: Props): JSX.Element {
             Division
           </DisplaySelectItem>
         </DisplaySelectContainer>
-        <StandingsTable league={league} display={display} />
+        {Array.isArray(standings) && 'teams' in standings[0] && !isLoading ? (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          standings.map((group, i) => (
+            <StandingsTable
+              key={i}
+              data={group.teams}
+              league={league}
+              title={group.name}
+              isLoading={isLoading}
+            />
+          ))
+        ) : (
+          <StandingsTable
+            data={standings}
+            league={league}
+            isLoading={isLoading}
+          />
+        )}
       </Container>
     </React.Fragment>
   );
