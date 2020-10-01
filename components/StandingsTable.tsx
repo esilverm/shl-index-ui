@@ -294,7 +294,7 @@ function StandingsTable({
               ),
           }))
         : columnData,
-    [isLoading, isLoadingAssets]
+    [isLoading, isLoadingAssets, title]
   );
 
   const {
