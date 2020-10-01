@@ -14,8 +14,6 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  // display = 'league'
-
   const { league = 0, season: seasonid, display: displayname } = req.query;
 
   let display: string;
@@ -39,15 +37,13 @@ export default async (
       LIMIT 1
   `));
 
-  // let standin/gs, parsed;SQL` PARTITION BY tr.ConferenceID`
-
   const standings = await query(
     SQL`
     SELECT ROW_NUMBER() OVER (`
       .append(
         display === 'conference'
           ? SQL` PARTITION BY tr.ConferenceID`
-          : display === 'divison'
+          : (+league !== 2 || +league !== 3) && display === 'division'
           ? SQL` PARTITION BY tr.ConferenceID, tr.DivisionID`
           : ''
       )
@@ -56,17 +52,33 @@ export default async (
       )
       .append(
         display === 'conference'
-          ? SQL`tr.ConferenceID, `
-          : display === 'divison'
-          ? SQL`tr.ConferenceID, tr.DivisionID`
+          ? SQL` c.Name AS Conference, `
+          : (+league !== 2 || +league !== 3) && display === 'division'
+          ? SQL` d.Name AS Division, `
           : ''
       )
-      .append(`td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.ConferenceID, tr.DivisionID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
+      .append(
+        SQL`td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
       FROM team_records AS tr
       INNER JOIN team_data AS td
         ON tr.TeamID = td.TeamID
         AND tr.LeagueID = td.LeagueID
-        AND tr.SeasonID = td.SeasonID
+        AND tr.SeasonID = td.SeasonID`
+      )
+      .append(
+        display === 'conference'
+          ? SQL`
+          INNER JOIN conferences AS c
+          ON tr.ConferenceID = c.ConferenceID
+          `
+          : (+league !== 2 || +league !== 3) && display === 'division'
+          ? SQL`
+          INNER JOIN divisions AS d
+          ON tr.ConferenceID = d.ConferenceID
+          AND tr.DivisionID = d.DivisionID 
+          `
+          : ''
+      ).append(SQL`
       INNER JOIN (
         SELECT Home AS TeamID, SeasonID, LeagueID, 
           SUM(CASE WHEN HomeScore > AwayScore THEN 1 ELSE 0 END) AS HomeWins, 
@@ -97,8 +109,8 @@ export default async (
   const parsed = standings.map((team) => ({
     position: team.Position,
     id: team.TeamID,
-    conference: team.ConferenceID,
-    divison: team.DivisionID,
+    conference: team.Conference,
+    divison: team.Division,
     name: `${team.Name} ${team.Nickname}`,
     location:
       team.LeagueID === 2 || team.LeagueID === 3 ? team.Nickname : team.Name,
