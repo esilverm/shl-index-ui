@@ -28,7 +28,7 @@
     "react-icons": "^3.11.0",
     "react-loading-skeleton": "^2.1.1",
     "react-spinners": "^0.9.0",
-    "react-table": "^7.5.1",
+    "react-table": "^7.5.2",
     "react-visibility-sensor": "^5.1.1",
     "react-window": "^1.8.5",
     "redoc": "^2.0.0-rc.40",
