@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
-
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
@@ -28,32 +27,32 @@ function Standings({ league }: Props): JSX.Element {
       <Header league={league} activePage="standings" />
       <Container>
         <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem 
-            onClick={() => setDisplay(() => 'league')} 
-            active={display === 'league'} 
-            tabIndex={0} 
+          <DisplaySelectItem
+            onClick={() => setDisplay(() => 'league')}
+            active={display === 'league'}
+            tabIndex={0}
             role="tab"
             aria-selected={display === 'league'}
-            >
+          >
             League
           </DisplaySelectItem>
-          <DisplaySelectItem 
-          onClick={() => setDisplay(() => 'conference')} 
-          active={display === 'conference'} 
-          tabIndex={0} 
-          role="tab" 
-          aria-selected={display === 'conference'}
+          <DisplaySelectItem
+            onClick={() => setDisplay(() => 'conference')}
+            active={display === 'conference'}
+            tabIndex={0}
+            role="tab"
+            aria-selected={display === 'conference'}
           >
             Conference
           </DisplaySelectItem>
           {league !== 'iihf' && league !== 'wjc' && (
-            <DisplaySelectItem 
-              onClick={() => setDisplay(() => 'division')} 
-              active={display === 'division'} 
-              tabIndex={0} 
-              role="tab" 
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'division')}
+              active={display === 'division'}
+              tabIndex={0}
+              role="tab"
               aria-selected={display === 'division'}
-              >
+            >
               Division
             </DisplaySelectItem>
           )}
@@ -103,11 +102,13 @@ const DisplaySelectContainer = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
 `;
 
-const DisplaySelectItem = styled.div<{active: boolean;}>`
+const DisplaySelectItem = styled.div<{ active: boolean }>`
   display: inline-block;
   padding: 8px 32px;
-  border: 1px solid ${({ theme, active }) => active ? theme.colors.grey500 : "transparent"};
-  background-color: ${({ theme, active }) => active ? theme.colors.grey100 : "transparent"};
+  border: 1px solid
+    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.grey100 : 'transparent'};
   border-radius: 5px 5px 0 0;
   cursor: pointer;
   position: relative;
