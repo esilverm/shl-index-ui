@@ -101,9 +101,6 @@ const DisplaySelectContainer = styled.div`
   margin: 40px auto;
   width: 95%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
-  overflow-y: hidden;
-  overflow-x: auto;
-  white-space: nowrap;
 `;
 
 const DisplaySelectItem = styled.div<{active: boolean;}>`
