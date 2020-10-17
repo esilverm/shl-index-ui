@@ -21,7 +21,7 @@
     "next-compose-plugins": "^2.2.0",
     "next-optimized-images": "^2.6.2",
     "next-seo": "^4.13.0",
-    "react": "16.13.1",
+    "react": "16.14.0",
     "react-animated-burgers": "^1.2.8",
     "react-dom": "16.13.1",
     "react-horizontal-scrolling-menu": "^0.7.8",
