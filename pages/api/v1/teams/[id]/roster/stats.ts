@@ -33,8 +33,9 @@ export default async (
     type = 'rs';
   }
 
+
   const [season] =
-    (!Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
+    (seasonid !== undefined && !Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
     (await query(
       SQL`
       SELECT DISTINCT SeasonID
@@ -45,30 +46,47 @@ export default async (
   `)
     ));
 
+
   const playerStats = await query(
     SQL`
-    SELECT *
-    FROM `.append(`player_skater_stats_${type}`).append(SQL`
-    WHERE LeagueID=${+league}
-      AND SeasonID=${season.SeasonID}
-      AND TeamID=${+id}
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.G, s.A, s.PlusMinus, s.PIM, s.PPG, s.PPA, s.SHG, s.SHA, s.Fights, s.Fights_Won, s.HIT, s.GvA, s.TkA, s.SB, s.GR, s.OGR, s.DGR, s.SOG, s.TOI, s.PPTOI, s.SHTOI, s.PDO, s.GF60, s.GA60, s.SF60, s.SA60, s.CF, s.CA, s.CFPct, s.CFPctRel, s.FF, s.FA, s.FFPct, s.FFPctRel, r.LD, r.RD, r.LW, r.C, r.RW
+    FROM `.append(`player_skater_stats_${type} AS s`).append(SQL`
+    INNER JOIN player_master as p
+    ON s.SeasonID = p.SeasonID 
+    AND s.LeagueID = p.LeagueID
+    AND s.PlayerID = p.PlayerID
+    INNER JOIN player_ratings as r
+    ON s.SeasonID = r.SeasonID 
+    AND s.LeagueID = r.LeagueID
+    AND s.PlayerID = r.PlayerID
+    WHERE s.LeagueID=${+league}
+      AND s.SeasonID=${season.SeasonID}
+      AND s.TeamID=${+id}
   `)
   );
+
   const goalieStats = await query(
     SQL`
-    SELECT *
-    FROM `.append(`player_goalie_stats_${type}`).append(SQL`
-    WHERE LeagueID=${+league}
-      AND SeasonID=${season.SeasonID}
-      AND TeamID=${+id}
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.Minutes, s.Wins, s.Losses, s.OT, s.ShotsAgainst, s.Saves, s.GoalsAgainst, s.GAA, s.Shutouts, s.SavePct, s.GameRating
+    FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
+    INNER JOIN player_master as p
+    ON s.SeasonID = p.SeasonID 
+    AND s.LeagueID = p.LeagueID
+    AND s.PlayerID = p.PlayerID
+    WHERE s.LeagueID=${+league}
+      AND s.SeasonID=${season.SeasonID}
+      AND s.TeamID=${+id}
   `)
   );
+
 
   const parsed = [...playerStats, ...goalieStats].map((player) => {
     if ('Wins' in player) {
       // is Goalie
       return {
         id: player.PlayerID,
+        name: player.Name,
+        position: 'G',
         league: player.LeagueID,
         team: player.TeamID,
         season: player.SeasonID,
@@ -87,8 +105,12 @@ export default async (
       };
     }
 
+    const position = ['LD', 'RD', 'LW', 'C', 'RW'][[+player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(20)];
+
     return {
       id: player.PlayerID,
+      name: player.Name,
+      position,
       league: player.LeagueID,
       team: player.TeamID,
       season: player.SeasonID,
