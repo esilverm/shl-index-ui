@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 import Cors from 'cors';
-import { query } from '../../../../../lib/db';
-import use from '../../../../../lib/middleware';
+import { query } from '../../../../../../lib/db';
+import use from '../../../../../../lib/middleware';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],

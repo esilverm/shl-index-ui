@@ -62,7 +62,7 @@ function index({ league, teamlist }: Props): JSX.Element {
                   alt={`${team.name} logo`}
                 />
                 <TeamName color={
-                  ['Kelowna', 'Maine', 'Anaheim'].indexOf(team.location) != -1
+                  ['Kelowna', 'Maine', 'Anaheim', 'Anchorage'].indexOf(team.location) != -1
                     ? '#FFFFFF'
                     : team.colors.text
                 }>
