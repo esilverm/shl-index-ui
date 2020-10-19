@@ -74,7 +74,7 @@ function TeamPage({
         <TeamInfoContainer>
           <TeamName
             color={
-              ['Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
                 ? '#FFFFFF'
                 : colors.text
             }

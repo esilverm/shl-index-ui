@@ -169,7 +169,7 @@ function PlayerScoreTable({
       ]
     },
     {
-      Header: 'GA/TA',
+      Header: '',
       id: 'player-table-giveaway-takeaway',
       columns: [
         {
