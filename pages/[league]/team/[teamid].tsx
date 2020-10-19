@@ -78,7 +78,7 @@ function TeamPage({
           </TeamName>
           <TeamHeaderStats
             color={
-              ['Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
                 ? '#FFFFFF'
                 : colors.text
             }
@@ -190,7 +190,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { props: { leaguename, ...teamdata } };
   } catch (error) {
     ctx.res.statusCode = 404;
-    
+
     return { props: { error } };
   }
 };
