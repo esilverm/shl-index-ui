@@ -47,7 +47,7 @@ function TeamPage({
     return <Error statusCode={404} />;
   }
 
-  const { roster, isLoading, isError } = useTeamRosterStats(leaguename, id);
+  const { roster, isLoading } = useTeamRosterStats(leaguename, id);
 
   if (!isLoading) console.log(roster);
 
