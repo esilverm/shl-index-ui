@@ -7,6 +7,7 @@ import { NextSeo } from 'next-seo';
 
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
+import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
 
 interface Props {
   leaguename: string;
@@ -44,6 +45,10 @@ function TeamPage({
   if (!name) {
     return <Error statusCode={404} />;
   }
+
+  const { roster, isLoading, isError } = useTeamRosterStats(leaguename, id);
+
+  if (!isLoading) console.log(roster)
 
   return (
     <React.Fragment>
@@ -92,6 +97,9 @@ function TeamPage({
           </TeamHeaderStats>
         </TeamInfoContainer>
       </TeamHero>
+      {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
+      <div>Team Skater Stats</div>
+      <div>Team Goalie Stats</div>
     </React.Fragment>
   );
 }

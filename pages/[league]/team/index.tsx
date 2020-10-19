@@ -4,34 +4,14 @@ import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 
+import { Team } from "../../..";
+
 import Header from '../../../components/Header';
 
 
 interface Props {
   league: string;
-  teamlist: Array<{
-    id: number;
-    season: number;
-    league: number;
-    conference: number;
-    division: number;
-    name: string;
-    nameDetails: { first: string; second: string };
-    abbreviation: string;
-    location: string;
-    colors: { primary: string; secondary: string; text: string };
-    stats: {
-      wins: number;
-      losses: number;
-      overtimeLosses: number;
-      shootoutWins: number;
-      shootoutLosses: number;
-      points: number;
-      goalsFor: number;
-      goalsAgainst: number;
-      winPercent: number;
-    };
-  }>
+  teamlist: Array<Team>
 }
 
 function index({ league, teamlist }: Props): JSX.Element {

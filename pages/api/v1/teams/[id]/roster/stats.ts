@@ -158,8 +158,5 @@ export default async (
     };
   });
 
-  // sort for prettier output (also for consistency)
-  parsed.sort((a, b) => a.id - b.id);
-
   res.status(200).json(parsed);
 };
