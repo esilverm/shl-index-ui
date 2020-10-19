@@ -190,7 +190,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { props: { leaguename, ...teamdata } };
   } catch (error) {
     ctx.res.statusCode = 404;
-    console.log(error);
+    
     return { props: { error } };
   }
 };
