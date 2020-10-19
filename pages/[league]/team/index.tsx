@@ -4,14 +4,13 @@ import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 
-import { Team } from "../../..";
+import { Team } from '../../..';
 
 import Header from '../../../components/Header';
 
-
 interface Props {
   league: string;
-  teamlist: Array<Team>
+  teamlist: Array<Team>;
 }
 
 function index({ league, teamlist }: Props): JSX.Element {
@@ -26,26 +25,30 @@ function index({ league, teamlist }: Props): JSX.Element {
       <Header league={league} activePage="teams" />
       <Container>
         <TeamListContainer>
-          {teamlist.map(team => (
-            <Link 
+          {teamlist.map((team) => (
+            <Link
               href="/[league]/team/[id]"
               as={`/${league}/team/${team.id}`}
               passHref
               key={team.id}
-              >
+            >
               <TeamLink {...team.colors}>
-              <TeamLogo
+                <TeamLogo
                   src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
                     .replace('.', '')
                     .split(' ')
                     .join('_')}.svg`)}
                   alt={`${team.name} logo`}
                 />
-                <TeamName color={
-                  ['Kelowna', 'Maine', 'Anaheim', 'Anchorage'].indexOf(team.location) != -1
-                    ? '#FFFFFF'
-                    : team.colors.text
-                }>
+                <TeamName
+                  color={
+                    ['Kelowna', 'Maine', 'Anaheim', 'Anchorage'].indexOf(
+                      team.location
+                    ) != -1
+                      ? '#FFFFFF'
+                      : team.colors.text
+                  }
+                >
                   <span className="first">{team.nameDetails.first}</span>
                   <span className="second">{team.nameDetails.second}</span>
                 </TeamName>
@@ -77,7 +80,11 @@ const TeamListContainer = styled.div`
   margin-top: 50px;
 `;
 
-const TeamLink = styled.div<{primary: string; secondary: string; text: string;}>`
+const TeamLink = styled.div<{
+  primary: string;
+  secondary: string;
+  text: string;
+}>`
   width: 90%;
   height: 90%;
   background-color: ${({ primary }) => primary};
@@ -95,8 +102,8 @@ const TeamLogo = styled.img`
   margin: 0 5%;
 `;
 
-const TeamName = styled.h2<{color: string}>`
-  color: ${({ color }) => color}; 
+const TeamName = styled.h2<{ color: string }>`
+  color: ${({ color }) => color};
 
   span {
     display: block;
@@ -112,7 +119,7 @@ const TeamName = styled.h2<{color: string}>`
     text-transform: uppercase;
     letter-spacing: 0.15rem;
   }
-`
+`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
@@ -131,9 +138,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   );
 
   const teamlist = await fetch(
-    `${
-       process.env.NEXT_PUBLIC_API_ENDPOINT
-    }/api/v1/teams?league=${leagueid}`
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}`
   ).then((res) => res.json());
 
   return { props: { league: leaguename, teamlist } };

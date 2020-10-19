@@ -474,6 +474,7 @@ const TableBody = styled.tbody`
   }
 
   td {
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
     padding: 10px;
     text-align: center;
 

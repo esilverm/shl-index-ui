@@ -8,6 +8,7 @@ import { NextSeo } from 'next-seo';
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
+import PlayerScoreTable from '../../../components/PlayerScoreTable';
 
 interface Props {
   leaguename: string;
@@ -48,7 +49,7 @@ function TeamPage({
 
   const { roster, isLoading, isError } = useTeamRosterStats(leaguename, id);
 
-  if (!isLoading) console.log(roster)
+  if (!isLoading) console.log(roster);
 
   return (
     <React.Fragment>
@@ -83,7 +84,8 @@ function TeamPage({
           </TeamName>
           <TeamHeaderStats
             color={
-              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) !=
+              -1
                 ? '#FFFFFF'
                 : colors.text
             }
@@ -97,12 +99,32 @@ function TeamPage({
           </TeamHeaderStats>
         </TeamInfoContainer>
       </TeamHero>
-      {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
-      <div>Team Skater Stats</div>
-      <div>Team Goalie Stats</div>
+      <Container>
+        {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
+        <div>Team Skater Stats</div>
+        <TableWrapper>
+          {
+            !isLoading &&  <TableContainer><PlayerScoreTable data={roster.filter((player) => player.position !== 'G')} /> </TableContainer>
+          }
+        </TableWrapper>
+        <div>Team Goalie Stats</div>
+      </Container>
     </React.Fragment>
   );
 }
+
+// TODO Add better styling
+const Container = styled.div`
+  width: 75%;
+  padding: 1px 0 40px 0;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.grey100};
+
+  @media screen and (max-width: 1024px) {
+    width: 95%;
+    padding: 2.5%;
+  }
+`;
 
 const TeamHero = styled.div<{
   primary: string;
@@ -110,6 +132,7 @@ const TeamHero = styled.div<{
   text: string;
 }>`
   width: 100%;
+  padding: 0 12.5%;
   min-height: 300px;
   height: 40vh;
   background-color: ${({ primary }) => primary};
@@ -178,6 +201,16 @@ const TeamHeaderStats = styled.h3<{ color: string }>`
   span:last-child {
     margin-right: 0;
   }
+`;
+
+const TableWrapper = styled.div`
+  width: 95%;
+  margin: auto;
+`;
+
+const TableContainer = styled.div`
+  width: 100%;
+  margin: 30px 0;
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

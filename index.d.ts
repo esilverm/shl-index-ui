@@ -27,6 +27,7 @@ export interface Player {
   giveaways: number;
   takeaways: number;
   shotsBlocked: number;
+  shotsOnGoal: number;
   gameRating: number;
   offensiveGameRating: number;
   defensiveGameRating: number;

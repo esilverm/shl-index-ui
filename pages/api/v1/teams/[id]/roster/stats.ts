@@ -33,9 +33,9 @@ export default async (
     type = 'rs';
   }
 
-
   const [season] =
-    (seasonid !== undefined && !Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
+    (seasonid !== undefined &&
+      !Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
     (await query(
       SQL`
       SELECT DISTINCT SeasonID
@@ -45,7 +45,6 @@ export default async (
       LIMIT 1
   `)
     ));
-
 
   const playerStats = await query(
     SQL`
@@ -79,7 +78,6 @@ export default async (
   `)
   );
 
-
   const parsed = [...playerStats, ...goalieStats].map((player) => {
     if ('Wins' in player) {
       // is Goalie
@@ -105,7 +103,9 @@ export default async (
       };
     }
 
-    const position = ['LD', 'RD', 'LW', 'C', 'RW'][[+player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(20)];
+    const position = ['LD', 'RD', 'LW', 'C', 'RW'][
+      [+player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(20)
+    ];
 
     return {
       id: player.PlayerID,
@@ -136,6 +136,7 @@ export default async (
       giveaways: player.GvA,
       takeaways: player.TkA,
       shotsBlocked: player.SB,
+      shotsOnGoal: player.SOG,
       gameRating: player.GR,
       offensiveGameRating: player.OGR,
       devensiveGameRating: player.DGR,
