@@ -1621,8 +1621,9 @@
     "@xtuc/long" "4.2.2"
 
 "@welldone-software/why-did-you-render@welldone-software/why-did-you-render":
-  version "4.3.2"
-  resolved "https://codeload.github.com/welldone-software/why-did-you-render/tar.gz/aa2c0dcffbebc0023d69c2797e5918fa0cdc2441"
+  version "6.0.0-rc.1"
+  uid "4e3975edb7b982f890a05ab6a8e127785be5b963"
+  resolved "https://codeload.github.com/welldone-software/why-did-you-render/tar.gz/4e3975edb7b982f890a05ab6a8e127785be5b963"
   dependencies:
     lodash "^4"
 
