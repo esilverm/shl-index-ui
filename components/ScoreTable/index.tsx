@@ -15,12 +15,12 @@ interface Columns {
 interface ColumnData {
   Header: string;
   id?: string;
-  columns: Columns[];
+  columns: Array<Columns>;
 }
 
 interface Props {
   data: Array<Player | Goalie>;
-  columnData: ColumnData[];
+  columnData: Array<ColumnData>;
   // isLoading: boolean;
 }
 
