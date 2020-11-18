@@ -8,7 +8,9 @@ import { NextSeo } from 'next-seo';
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
-import PlayerScoreTable from '../../../components/PlayerScoreTable';
+import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
+import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
+import { Goalie, Player } from '../../..';
 
 interface Props {
   leaguename: string;
@@ -50,6 +52,9 @@ function TeamPage({
   const { roster, isLoading } = useTeamRosterStats(leaguename, id);
 
   if (!isLoading) console.log(roster);
+
+  const getSkaters = () => roster ? roster.filter((player) => player.position !== 'G') as Array<Player> : [];
+  const getGoalies = () => roster ? roster.filter((player) => player.position === 'G') as Array<Goalie> : [];
 
   return (
     <React.Fragment>
@@ -104,10 +109,15 @@ function TeamPage({
         <div>Team Skater Stats</div>
         <TableWrapper>
           {
-            !isLoading &&  <TableContainer><PlayerScoreTable data={roster.filter((player) => player.position !== 'G')} /> </TableContainer>
+            !isLoading && <TableContainer><SkaterScoreTable data={getSkaters()} /></TableContainer>
           }
         </TableWrapper>
         <div>Team Goalie Stats</div>
+        <TableWrapper>
+          {
+            !isLoading && <TableContainer><GoalieScoreTable data={getGoalies()} /></TableContainer>
+          }
+        </TableWrapper>
       </Container>
     </React.Fragment>
   );

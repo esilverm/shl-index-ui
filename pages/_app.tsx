@@ -4,8 +4,6 @@ import { ThemeProvider } from 'styled-components';
 import { DefaultSeo } from 'next-seo';
 import { SWRConfig } from 'swr';
 
-import whyDidYouRender from '@welldone-software/why-did-you-render';
-
 import SEO from '../next-seo.config';
 
 const theme = {
@@ -24,6 +22,7 @@ const theme = {
 };
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
   whyDidYouRender(React);
 }
 

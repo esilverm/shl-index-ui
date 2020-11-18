@@ -14,7 +14,6 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {
-    "@welldone-software/why-did-you-render": "welldone-software/why-did-you-render",
     "cors": "^2.8.5",
     "imagemin-svgo": "^8.0.0",
     "next": "^9.5.5",
@@ -46,6 +45,7 @@
     "@types/styled-components": "^5.1.4",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.8.0",
+    "@welldone-software/why-did-you-render": "^6.0.0-rc.1",
     "babel-plugin-styled-components": "^1.10.7",
     "eslint": "^7.13.0",
     "eslint-config-prettier": "^6.13.0",
