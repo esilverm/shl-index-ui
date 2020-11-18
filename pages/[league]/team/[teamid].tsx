@@ -53,19 +53,8 @@ function TeamPage({
 
   if (!isLoading) console.log(roster);
 
-  const getSkaters = () => {
-    if (roster) {
-      return roster.filter((player) => player.position !== 'G') as Player[];
-    }
-    return [];
-  }
-
-  const getGoalies = () => {
-    if (roster) {
-      return roster.filter((player) => player.position === 'G') as Goalie[];
-    }
-    return [];
-  }
+  const getSkaters = () => roster ? roster.filter((player) => player.position !== 'G') as Array<Player> : [];
+  const getGoalies = () => roster ? roster.filter((player) => player.position === 'G') as Array<Goalie> : [];
 
   return (
     <React.Fragment>
