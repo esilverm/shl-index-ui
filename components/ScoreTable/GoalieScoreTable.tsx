@@ -7,9 +7,7 @@ interface Props {
   data: Array<Goalie>;
 }
 
-function GoalieScoreTable({
-  data: players
-} : Props): JSX.Element {
+function GoalieScoreTable({ data: players }: Props): JSX.Element {
   const columnData = [
     {
       Header: '',

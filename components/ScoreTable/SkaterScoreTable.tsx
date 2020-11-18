@@ -7,9 +7,7 @@ interface Props {
   data: Array<Player>;
 }
 
-function SkaterScoreTable({
-  data: players
-} : Props): JSX.Element {
+function SkaterScoreTable({ data: players }: Props): JSX.Element {
   const calculateTimeOnIce = (toi: number, gamesPlayed: number) =>
     `${toi / gamesPlayed / 60 >> 0 }:${(toi / 50 % 60 >> 0) < 10 ? '0' : ''}${toi / 50 % 60 >> 0}`;
 
@@ -162,7 +160,7 @@ function SkaterScoreTable({
           // ! Will want to make this column sortable by time rather than string
           Header: 'SHTOI',
           id: 'player-table-shtoi',
-          accessor: ({ shTimeOnIce, gamesPlayed }) =>  calculateTimeOnIce(shTimeOnIce, gamesPlayed),
+          accessor: ({ shTimeOnIce, gamesPlayed }) => calculateTimeOnIce(shTimeOnIce, gamesPlayed),
           title: 'Average Short-Handed Time on Ice'
         }
       ]
