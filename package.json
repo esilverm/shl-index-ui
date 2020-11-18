@@ -31,7 +31,7 @@
     "react-table": "^7.6.0",
     "react-visibility-sensor": "^5.1.1",
     "react-window": "^1.8.5",
-    "redoc": "^2.0.0-rc.40",
+    "redoc": "^2.0.0-rc.45",
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2",
     "styled-components": "^5.1.1",
