@@ -1627,10 +1627,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@welldone-software/why-did-you-render@welldone-software/why-did-you-render":
+"@welldone-software/why-did-you-render@^6.0.0-rc.1":
   version "6.0.0-rc.1"
-  uid "4e3975edb7b982f890a05ab6a8e127785be5b963"
-  resolved "https://codeload.github.com/welldone-software/why-did-you-render/tar.gz/4e3975edb7b982f890a05ab6a8e127785be5b963"
+  resolved "https://registry.yarnpkg.com/@welldone-software/why-did-you-render/-/why-did-you-render-6.0.0-rc.1.tgz#b0e92edb2e34e7af695cca1822844f02018d9814"
+  integrity sha512-qQe5w89tYnYtwRqlhdF33ivWjsQlGXkan5lFzNwpAoMEUFIbDuwvFiBUAbE76Lfz63GabSaf1vyuCusgJ7Rtqg==
   dependencies:
     lodash "^4"
 
