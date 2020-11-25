@@ -8,6 +8,17 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export interface Game {
+  season: string;
+  homeTeam: string;
+  homeScore: number;
+  awayTeam: string;
+  awayScore: number;
+  overtime: number;
+  shootout: number;
+  played: number;
+}
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -33,7 +44,7 @@ export default async (
       AND SeasonID=${season.SeasonID}
   `);
 
-  const parsed = schedule.map((game) => ({
+  const parsed: Game[] = schedule.map((game) => ({
     season: game.SeasonID,
     league: game.LeagueID,
     data: game.Data,

@@ -2,14 +2,25 @@
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import useSWR from 'swr';
 
 import Header from '../../components/Header';
+import ScheduleTable from '../../components/ScheduleTable';
 
 interface Props {
   league: string;
 }
 
 function Schedule({ league }: Props): JSX.Element {
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule?league=${[
+      'shl',
+      'smjhl',
+      'iihf',
+      'wjc',
+    ].indexOf(league)}`
+  );
+
   return (
     <React.Fragment>
       <NextSeo
@@ -19,7 +30,8 @@ function Schedule({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} activePage="schedule" />
-      <div>This is a placeholder</div>
+      {error && <span>{error}</span>}
+      {data && <ScheduleTable games={data} />}
     </React.Fragment>
   );
 }
