@@ -10,7 +10,7 @@ interface Columns {
   Header: string;
   id?: string;
   title?: string;
-  accessor: string | ((mathup) => string);
+  accessor: string | ((matchupData) => string) | ((matchupData) => JSX.Element);
 }
 
 interface ColumnData {
@@ -30,10 +30,18 @@ function ScheduleTable({
   // isLoading
 } : Props): JSX.Element {
   console.log(teamlist);
-  const getMatchup = (awayTeamId, homeTeamId) => {
+  const getMatchup = (awayScore, homeScore, awayTeamId, homeTeamId) => {
+    const awayTeamWon = awayScore > homeScore;
     const awayTeamName = teamlist.find(team => team.id === awayTeamId)['name'];
     const homeTeamName = teamlist.find(team => team.id === homeTeamId)['name'];
-    return `${awayTeamName} @ ${homeTeamName}`;
+
+    return (
+      <>
+        {awayTeamWon ? <strong>{awayTeamName}</strong> : awayTeamName}
+        {' @ '}
+        {!awayTeamWon ? <strong>{homeTeamName}</strong> : homeTeamName}
+      </>
+    )
   };
   
   const getResult = (awayScore, homeScore, played, shootout, overtime) => {
@@ -51,7 +59,7 @@ function ScheduleTable({
         {
           Header: 'Matchup',
           id: 'matchup',
-          accessor: ({ awayTeam, homeTeam }) => getMatchup(awayTeam, homeTeam)
+          accessor: ({ awayScore, homeScore, awayTeam, homeTeam }) => getMatchup(awayScore, homeScore, awayTeam, homeTeam)
         },
         {
           Header: 'Result',
@@ -185,6 +193,7 @@ th {
   position: relative;
   text-align: left;
   padding-left: 10px;
+  padding-right: 10px;
 
   &.sorted--desc::before {
     content: '^';

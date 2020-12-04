@@ -8,6 +8,8 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export const matchTypes = ["Pre-Season", "Regular Season", "Playoffs"];
+
 export interface Game {
   season: string;
   homeTeam: string;
@@ -17,6 +19,7 @@ export interface Game {
   overtime: number;
   shootout: number;
   played: number;
+  type: typeof matchTypes;
 }
 
 export default async (

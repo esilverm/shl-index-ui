@@ -53,14 +53,18 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
-    width: 95%;
+    width: 100%;
     padding: 2.5%;
   }
 `;
 
 const TableWrapper = styled.div`
-  width: 50%;
+  width: 60%;
   margin: auto;
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
