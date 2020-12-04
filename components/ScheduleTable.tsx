@@ -22,6 +22,13 @@ interface Props {
   games: Game[];
 }
 
+const getResult = (awayScore, homeScore, played, shootout, overtime) => {
+  if (!played) return "TBD";
+
+  const endedIn = shootout ? " (SO)" : overtime ? " (OT)" : "";
+  return `${awayScore} - ${homeScore}${endedIn}`;
+};
+
 function ScheduleTable({
   games,
   // isLoading
@@ -39,7 +46,7 @@ function ScheduleTable({
         {
           Header: 'Result',
           id: 'result',
-          accessor: ({ awayScore, homeScore }) => `${awayScore} - ${homeScore}`
+          accessor: ({ awayScore, homeScore, played, shootout, overtime }) => getResult(awayScore, homeScore, played, shootout, overtime)
         }
       ]
     }
@@ -73,7 +80,7 @@ function ScheduleTable({
             headerGroups.map((headerGroup, i) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
                 {
-                  headerGroup.headers.map((column, i) => (
+                  headerGroup.headers.map((column, i) => column.Header && (
                       <th
                         {
                           ...column.getHeaderProps(column.getSortByToggleProps())
@@ -159,14 +166,6 @@ position: relative;
 
 tr {
   display: table-row;
-}
-
-th:first-child {
-  position: sticky;
-  left: 0px;
-  z-index: 2;
-  text-align: left;
-  padding-left: 10px;
 }
 
 th {
