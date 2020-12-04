@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
 import { Game } from '../pages/api/v1/schedule';
+import { Team } from '..';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 interface Columns {
@@ -19,20 +20,29 @@ interface ColumnData {
 }
 
 interface Props {
-  games: Game[];
+  games: Array<Game>;
+  teamlist: Array<Team>;
 }
-
-const getResult = (awayScore, homeScore, played, shootout, overtime) => {
-  if (!played) return "TBD";
-
-  const endedIn = shootout ? " (SO)" : overtime ? " (OT)" : "";
-  return `${awayScore} - ${homeScore}${endedIn}`;
-};
 
 function ScheduleTable({
   games,
+  teamlist,
   // isLoading
 } : Props): JSX.Element {
+  console.log(teamlist);
+  const getMatchup = (awayTeamId, homeTeamId) => {
+    const awayTeamName = teamlist.find(team => team.id === awayTeamId)['name'];
+    const homeTeamName = teamlist.find(team => team.id === homeTeamId)['name'];
+    return `${awayTeamName} @ ${homeTeamName}`;
+  };
+  
+  const getResult = (awayScore, homeScore, played, shootout, overtime) => {
+    if (!played) return "TBD";
+  
+    const endedIn = shootout ? " (SO)" : overtime ? " (OT)" : "";
+    return `${awayScore} - ${homeScore}${endedIn}`;
+  };
+
   const columnData: ColumnData[] = [
     {
       Header: '',
@@ -41,7 +51,7 @@ function ScheduleTable({
         {
           Header: 'Matchup',
           id: 'matchup',
-          accessor: ({ awayTeam, homeTeam }) => `${awayTeam} @ ${homeTeam}`
+          accessor: ({ awayTeam, homeTeam }) => getMatchup(awayTeam, homeTeam)
         },
         {
           Header: 'Result',
@@ -173,6 +183,8 @@ th {
   font-weight: 400;
   background-color: ${({ theme }) => theme.colors.grey900};
   position: relative;
+  text-align: left;
+  padding-left: 10px;
 
   &.sorted--desc::before {
     content: '^';
@@ -188,11 +200,6 @@ th {
     bottom: 3px;
     left: calc(100% / 2 - 4px);
   }
-}
-
-th:not(:first-child) {
-  cursor: help;
-  text-align: center;
 }
 `;
 
@@ -215,7 +222,7 @@ th {
 td {
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   padding: 10px;
-  text-align: center;
+  text-align: left;
 
   &.sorted {
     background-color: rgba(1, 131, 218, 0.1);
