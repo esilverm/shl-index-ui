@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 // import Link from 'next/link';
-import { useTable } from 'react-table';
+import { useTable, usePagination } from 'react-table';
 import styled from 'styled-components';
 import { Game } from '../pages/api/v1/schedule';
 import { Team } from '..';
@@ -105,14 +105,48 @@ function ScheduleTable({
     getTableProps,
     getTableBodyProps,
     headerGroups, 
-    rows,
-    prepareRow
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize }
   } = useTable({ columns, data, initialState: {
-    hiddenColumns: ['type']
-  }});
+    hiddenColumns: ['type'],
+    pageSize: 25
+  }}, usePagination);
 
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
+      <div>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[25, 50, 100].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
       <TableContainer>
         <Table {...getTableProps()}>
           <TableHeader>
@@ -141,7 +175,7 @@ function ScheduleTable({
           </TableHeader>
           <TableBody {...getTableBodyProps()}>
             {
-              rows.map((row, i) => {
+              page.map((row, i) => {
                 prepareRow(row);
 
                 return (

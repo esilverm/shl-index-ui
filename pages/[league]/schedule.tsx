@@ -81,7 +81,7 @@ const Container = styled.div`
 `;
 
 const SeasonTypeSelectContainer = styled.div`
-  margin: 40px auto;
+  margin: 0 auto 40px;
   width: 95%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
 `;

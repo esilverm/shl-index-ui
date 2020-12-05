@@ -35,7 +35,8 @@
       {
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "jsx-a11y/no-onchange": 0
     // "no-console": [
     //   2,
     //   {
