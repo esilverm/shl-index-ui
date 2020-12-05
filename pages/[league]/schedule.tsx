@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import useSWR from 'swr';
-
 import Header from '../../components/Header';
 import ScheduleTable from '../../components/ScheduleTable';
 import { Team } from '../..';
 import styled from 'styled-components';
+import useSchedule from '../../hooks/useSchedule';
 
 interface Props {
   league: string;
@@ -15,14 +14,8 @@ interface Props {
 }
 
 function Schedule({ league, teamlist }: Props): JSX.Element {
-  const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule?league=${[
-      'shl',
-      'smjhl',
-      'iihf',
-      'wjc',
-    ].indexOf(league)}`
-  );
+  const [seasonType, setSeasonType] = useState('Regular Season');
+  const { games, isLoading } = useSchedule(league, seasonType);
 
   return (
     <React.Fragment>
@@ -34,12 +27,41 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       />
       <Header league={league} activePage="schedule" />
       <Container>
-        {error && <span>{error}</span>}
-        {data &&
-            <TableWrapper>
-              <ScheduleTable games={data} teamlist={teamlist} />
-            </TableWrapper>
-        }
+        <SeasonTypeSelectContainer role="tablist">
+          <SeasonTypeSelectItem
+            key={"Pre-Season"}
+            onClick={() => setSeasonType(() => "Pre-Season")}
+            active={seasonType === "Pre-Season"}
+            tabIndex={0}
+            role="tab"
+            aria-selected={seasonType === "Pre-Season"}
+          >
+            {"Pre-Season"}
+          </SeasonTypeSelectItem>
+          <SeasonTypeSelectItem
+            key={"Regular Season"}
+            onClick={() => setSeasonType(() => "Regular Season")}
+            active={seasonType === "Regular Season"}
+            tabIndex={0}
+            role="tab"
+            aria-selected={seasonType === "Regular Season"}
+          >
+            {"Regular Season"}
+          </SeasonTypeSelectItem>
+          <SeasonTypeSelectItem
+            key={"Playoffs"}
+            onClick={() => setSeasonType(() => "Playoffs")}
+            active={seasonType === "Playoffs"}
+            tabIndex={0}
+            role="tab"
+            aria-selected={seasonType === "Playoffs"}
+          >
+            {"Playoffs"}
+          </SeasonTypeSelectItem>
+        </SeasonTypeSelectContainer>
+        <TableWrapper>
+          <ScheduleTable games={games} teamlist={teamlist} isLoading={isLoading} />
+        </TableWrapper>
       </Container>
     </React.Fragment>
   );
@@ -56,6 +78,26 @@ const Container = styled.div`
     width: 100%;
     padding: 2.5%;
   }
+`;
+
+const SeasonTypeSelectContainer = styled.div`
+  margin: 40px auto;
+  width: 95%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
+`;
+
+const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
+  display: inline-block;
+  padding: 8px 32px;
+  border: 1px solid
+    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.grey100 : 'transparent'};
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  border-bottom: none;
+  bottom: -1px;
 `;
 
 const TableWrapper = styled.div`
