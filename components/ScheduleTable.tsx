@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Game } from '../pages/api/v1/schedule';
 import { Team } from '..';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 interface Columns {
   Header: string;
@@ -121,18 +122,18 @@ function ScheduleTable({
 
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
-      <div>
+      <Pagination>
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
+          <BsChevronLeft size="20px" aria-label="Arrow Pointing Left" />
+        </button>
         <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
+          <BsChevronRight size="20px" aria-label="Arrow Pointing Right" />
+        </button>
         <span>
-          Page{' '}
+          {'Page '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
+          </strong>
         </span>
         <select
           value={pageSize}
@@ -146,7 +147,7 @@ function ScheduleTable({
             </option>
           ))}
         </select>
-      </div>
+      </Pagination>
       <TableContainer>
         <Table {...getTableProps()}>
           <TableHeader>
@@ -272,6 +273,37 @@ const TableBody = styled.tbody`
     &:hover {
       background-color: rgba(1, 131, 218, 0.1);
     }
+  }
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+
+  button {
+    background-color: ${({ theme }) => theme.colors.grey100};
+    border: 1px solid ${({ theme }) => theme.colors.grey500};
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  select {
+    background-color: ${({ theme }) => theme.colors.grey100};
+    border: 1px solid ${({ theme }) => theme.colors.grey500};
+    height: 30px;
+    margin-left: 5px;
   }
 `;
 
