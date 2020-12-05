@@ -88,7 +88,7 @@ const SeasonTypeSelectContainer = styled.div`
 
 const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
   display: inline-block;
-  padding: 8px 32px;
+  padding: 8px 20px;
   border: 1px solid
     ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
   background-color: ${({ theme, active }) =>
