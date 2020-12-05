@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 // import Link from 'next/link';
-import { useTable, useSortBy } from 'react-table';
+import { useTable } from 'react-table';
 import styled from 'styled-components';
 import { Game } from '../pages/api/v1/schedule';
 import { Team } from '..';
@@ -109,7 +109,7 @@ function ScheduleTable({
     prepareRow
   } = useTable({ columns, data, initialState: {
     hiddenColumns: ['type']
-  }}, useSortBy);
+  }});
 
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
@@ -123,17 +123,10 @@ function ScheduleTable({
                     headerGroup.headers.map((column, i) => column.Header !== 'schedule' && (
                         <th
                           {
-                            ...column.getHeaderProps(column.getSortByToggleProps())
+                            ...column.getHeaderProps()
                           }
                           title={column.title}
                           key={`${i}_${column.id}`}
-                          className={
-                            column.isSorted
-                              ? column.isSortedDesc
-                                ? 'sorted--desc'
-                                : 'sorted--asc'
-                              : ''
-                          }
                           >
                             {
                               column.render('Header')
@@ -159,7 +152,6 @@ function ScheduleTable({
                           <td
                             {...cell.getCellProps()}
                             key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
                           >
                             {
                               cell.render('Cell')
@@ -240,10 +232,6 @@ const TableBody = styled.tbody`
     font-family: Montserrat, Arial, Helvetica, sans-serif;
     padding: 10px;
     text-align: left;
-
-    &.sorted {
-      background-color: rgba(1, 131, 218, 0.1);
-    }
   }
 
   tr {
