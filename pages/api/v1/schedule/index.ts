@@ -8,7 +8,7 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export const matchTypes = ["Pre-Season", "Regular Season", "Playoffs"];
+type SeasonType = "Pre-Season" | "Regular Season" | "Playoffs";
 
 export interface Game {
   season: string;
@@ -19,7 +19,7 @@ export interface Game {
   overtime: number;
   shootout: number;
   played: number;
-  type: typeof matchTypes;
+  type: SeasonType
 }
 
 export default async (
@@ -28,7 +28,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid } = req.query;
+  const { league = 0, season: seasonid, type} = req.query;
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -45,6 +45,7 @@ export default async (
     FROM schedules
     WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
+      ${type ? `AND Type='${type}'` : ''}
   `);
 
   const parsed: Game[] = schedule.map((game) => ({
