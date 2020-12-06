@@ -20,43 +20,43 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   return (
     <React.Fragment>
       <NextSeo
-        title="Schedule"
+        title='Schedule'
         openGraph={{
           title: 'Schedule',
         }}
       />
-      <Header league={league} activePage="schedule" />
+      <Header league={league} activePage='schedule' />
       <Container>
-        <SeasonTypeSelectContainer role="tablist">
+        <SeasonTypeSelectContainer role='tablist'>
           <SeasonTypeSelectItem
-            key={"Pre-Season"}
-            onClick={() => setSeasonType(() => "Pre-Season")}
-            active={seasonType === "Pre-Season"}
+            key='Pre-Season'
+            onClick={() => setSeasonType(() => 'Pre-Season')}
+            active={seasonType === 'Pre-Season'}
             tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === "Pre-Season"}
+            role='tab'
+            aria-selected={seasonType === 'Pre-Season'}
           >
-            {"Pre-Season"}
+            Pre-Season
           </SeasonTypeSelectItem>
           <SeasonTypeSelectItem
-            key={"Regular Season"}
-            onClick={() => setSeasonType(() => "Regular Season")}
-            active={seasonType === "Regular Season"}
+            key='Regular Season'
+            onClick={() => setSeasonType(() => 'Regular Season')}
+            active={seasonType === 'Regular Season'}
             tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === "Regular Season"}
+            role='tab'
+            aria-selected={seasonType === 'Regular Season'}
           >
-            {"Regular Season"}
+            Regular Season
           </SeasonTypeSelectItem>
           <SeasonTypeSelectItem
-            key={"Playoffs"}
-            onClick={() => setSeasonType(() => "Playoffs")}
-            active={seasonType === "Playoffs"}
+            key='Playoffs'
+            onClick={() => setSeasonType(() => 'Playoffs')}
+            active={seasonType === 'Playoffs'}
             tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === "Playoffs"}
+            role='tab'
+            aria-selected={seasonType === 'Playoffs'}
           >
-            {"Playoffs"}
+            Playoffs
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
         <TableWrapper>
