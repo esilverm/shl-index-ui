@@ -32,14 +32,12 @@ interface GameDayScheduleProps {
 }
 
 function GameDaySchedule({ date, games, teamlist }: GameDayScheduleProps): JSX.Element {
-  const renderGameDayMatchups = () => games.map((game, i) => (
-    <GameDayMatchup key={i} game={game} teamlist={teamlist} />
-  ));
-
   return (
     <>
       <GameDayHeader date={date} />
-      {renderGameDayMatchups()}
+      {games.map((game, i) => (
+        <GameDayMatchup key={i} game={game} teamlist={teamlist} />
+      ))}
     </>
   );
 }

@@ -43,12 +43,12 @@ export default async (
       LIMIT 1
     `));
 
-  const search = await query(SQL`
+  const search = SQL`
     SELECT *
     FROM schedules
     WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
-  `);
+  `;
 
   if (seasonTypes.includes(type as SeasonType)) {
     search.append(SQL`AND Type='${type}'`);
