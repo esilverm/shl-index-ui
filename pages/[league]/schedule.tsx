@@ -4,7 +4,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 import Header from '../../components/Header';
-import ScheduleTable from '../../components/ScheduleTable';
+import GameDaySchedule from '../../components/GameDaySchedule';
 import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
 
@@ -16,6 +16,36 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
+
+  const sortGamesByDate = () => {
+    const unsortedGames = [...games];
+    return unsortedGames.sort((gameA, gameB) => {
+      const [yearA, monthA, dateA] = gameA.date.split('-');
+      const [yearB, monthB, dateB] = gameB.date.split('-');
+
+      if (parseInt(yearA) > parseInt(yearB)) return -1;
+      if (parseInt(monthA) > parseInt(monthB)) return -1;
+      if (parseInt(dateA) > parseInt(dateB)) return -1;
+
+      return 1;
+    });
+  };
+
+  const renderGameDays = () => {
+    if (isLoading) return null;
+
+    const gameDaySchedules = [];
+    const datedGames = sortGamesByDate();
+    const gameDates = [];
+    datedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
+
+    gameDates.forEach(date => {
+      const gamesOnDate = datedGames.filter(game => game.date === date);
+      gameDaySchedules.push(<GameDaySchedule key={date} date={date} games={gamesOnDate} teamlist={teamlist} />);
+    });
+
+    return gameDaySchedules;
+  }
 
   return (
     <React.Fragment>
@@ -59,9 +89,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
             Playoffs
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
-        <TableWrapper>
-          <ScheduleTable games={games} teamlist={teamlist} isLoading={isLoading} />
-        </TableWrapper>
+        {renderGameDays()}
       </Container>
     </React.Fragment>
   );
@@ -100,14 +128,14 @@ const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
   bottom: -1px;
 `;
 
-const TableWrapper = styled.div`
-  width: 60%;
-  margin: auto;
+// const TableWrapper = styled.div`
+//   width: 60%;
+//   margin: auto;
 
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-  }
-`;
+//   @media screen and (max-width: 1024px) {
+//     width: 100%;
+//   }
+// `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];

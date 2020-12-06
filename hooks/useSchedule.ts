@@ -12,7 +12,7 @@ const useSchedule = (
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule?league=${leagueid}&type=${seasonType}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${leagueid}&type=${seasonType}` // TODO: Revert to index endpoint
   );
 
   return {
