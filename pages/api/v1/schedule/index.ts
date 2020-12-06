@@ -8,10 +8,13 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-type SeasonType = "Pre-Season" | "Regular Season" | "Playoffs";
+const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
+type SeasonType = typeof seasonTypes[number];
 
 export interface Game {
   season: string;
+  league: string;
+  date: string;
   homeTeam: string;
   homeScore: number;
   awayTeam: string;
@@ -19,7 +22,7 @@ export interface Game {
   overtime: number;
   shootout: number;
   played: number;
-  type: SeasonType
+  type: SeasonType;
 }
 
 export default async (
@@ -28,7 +31,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type} = req.query;
+  const { league = 0, season: seasonid, type = 'Regular Season'} = req.query;
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -40,18 +43,23 @@ export default async (
       LIMIT 1
     `));
 
-  const schedule = await query(SQL`
+  const search = await query(SQL`
     SELECT *
     FROM schedules
     WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
-      ${type ? `AND Type='${type}'` : ''}
   `);
+
+  if (seasonTypes.includes(type as SeasonType)) {
+    search.append(SQL`AND Type='${type}'`);
+  }
+
+  const schedule = await query(search);
 
   const parsed: Game[] = schedule.map((game) => ({
     season: game.SeasonID,
     league: game.LeagueID,
-    data: game.Data,
+    date: game.Date,
     homeTeam: game.Home,
     homeScore: game.HomeScore,
     awayTeam: game.Away,
