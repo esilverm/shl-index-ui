@@ -15,9 +15,9 @@ export interface Game {
   season: string;
   league: string;
   date: string;
-  homeTeam: string;
+  homeTeam: number;
   homeScore: number;
-  awayTeam: string;
+  awayTeam: number;
   awayScore: number;
   overtime: number;
   shootout: number;

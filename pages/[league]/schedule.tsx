@@ -19,28 +19,19 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
 
   const sortGamesByDate = () => {
     const unsortedGames = [...games];
-    return unsortedGames.sort((gameA, gameB) => {
-      const [yearA, monthA, dateA] = gameA.date.split('-');
-      const [yearB, monthB, dateB] = gameB.date.split('-');
-
-      if (parseInt(yearA) > parseInt(yearB)) return -1;
-      if (parseInt(monthA) > parseInt(monthB)) return -1;
-      if (parseInt(dateA) > parseInt(dateB)) return -1;
-
-      return 1;
-    });
+    return unsortedGames.sort((gameA, gameB) => new Date(gameB.date).valueOf() - new Date(gameA.date).valueOf());
   };
 
   const renderGameDays = () => {
     if (isLoading) return null;
 
     const gameDaySchedules = [];
-    const datedGames = sortGamesByDate();
+    const sortedGames = sortGamesByDate();
     const gameDates = [];
-    datedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
 
+    sortedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
     gameDates.forEach(date => {
-      const gamesOnDate = datedGames.filter(game => game.date === date);
+      const gamesOnDate = sortedGames.filter(game => game.date === date);
       gameDaySchedules.push(<GameDaySchedule key={date} date={date} games={gamesOnDate} teamlist={teamlist} />);
     });
 
