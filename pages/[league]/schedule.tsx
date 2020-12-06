@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import styled from 'styled-components';
 import Header from '../../components/Header';
 import ScheduleTable from '../../components/ScheduleTable';
 import { Team } from '../..';
-import styled from 'styled-components';
 import useSchedule from '../../hooks/useSchedule';
 
 interface Props {

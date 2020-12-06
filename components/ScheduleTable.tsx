@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
-// import Link from 'next/link';
 import { useTable, usePagination } from 'react-table';
 import styled from 'styled-components';
-import { Game } from '../pages/api/v1/schedule';
-import { Team } from '..';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { Game } from '../pages/api/v1/schedule';
+import { Team } from '..';
 
 interface Columns {
   Header: string;
@@ -52,7 +51,7 @@ function ScheduleTable({
   const getResult = (awayScore, homeScore, played, shootout, overtime) => {
     if (isLoading) return <Skeleton height={18} />;
     if (!played) return <span>TBD</span>;
-  
+
     const endedIn = shootout ? " (SO)" : overtime ? " (OT)" : "";
     return <span>{`${awayScore} - ${homeScore}${endedIn}`}</span>;
   };
