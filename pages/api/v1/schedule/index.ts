@@ -34,7 +34,7 @@ export default async (
   const {
     league = 0,
     season: seasonid,
-    // type = 'Regular Season'
+    type = 'Regular Season'
   } = req.query;
 
   const [season] =
@@ -54,11 +54,12 @@ export default async (
       AND SeasonID=${season.SeasonID}
   `;
 
-  // if (seasonTypes.includes(type as SeasonType)) {
-  //   search.append(SQL`AND Type='${type}'`);
-  // }
+  if (seasonTypes.includes(type as SeasonType)) {
+    search.append(SQL`AND Type=${type}`);
+  }
 
   const schedule = await query(search);
+
 
   const parsed: Game[] = schedule.map((game) => ({
     season: game.SeasonID,

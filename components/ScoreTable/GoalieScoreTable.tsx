@@ -20,11 +20,6 @@ function GoalieScoreTable({ data: players }: Props): JSX.Element {
           // Create cell which contains link to player
         },
         {
-          Header: 'Pos',
-          id: 'player-table-position',
-          accessor: 'position'
-        },
-        {
           Header: 'GP',
           accessor: 'gamesPlayed',
           title: 'Games Played'
