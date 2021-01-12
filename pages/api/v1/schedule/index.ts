@@ -31,7 +31,11 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type = 'Regular Season'} = req.query;
+  const {
+    league = 0,
+    season: seasonid,
+    // type = 'Regular Season'
+  } = req.query;
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -50,9 +54,9 @@ export default async (
       AND SeasonID=${season.SeasonID}
   `;
 
-  if (seasonTypes.includes(type as SeasonType)) {
-    search.append(SQL`AND Type='${type}'`);
-  }
+  // if (seasonTypes.includes(type as SeasonType)) {
+  //   search.append(SQL`AND Type='${type}'`);
+  // }
 
   const schedule = await query(search);
 
@@ -67,7 +71,7 @@ export default async (
     type: game.Type,
     played: game.Played,
     overtime: game.Overtime,
-    shootout: game.Shootout,
+    shootout: game.Shootout
   }));
 
   res.status(200).json(parsed);
