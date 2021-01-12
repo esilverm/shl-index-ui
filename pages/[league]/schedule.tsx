@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
@@ -16,6 +16,22 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
+  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
+  const [sprites, setSprites] = useState<{
+    [index: string]: React.ComponentClass<any>;
+  }>({});
+
+  useEffect(() => {
+    // Dynamically import svg icons based on the league chosen
+    (async () => {
+      const { default: s } = await import(
+        `../../public/team_logos/${league.toUpperCase()}/`
+      );
+
+      setSprites(() => s);
+      setLoadingAssets(() => false);
+    })();
+  });
 
   const sortGamesByDate = () => {
     const unsortedGames = [...games];
@@ -23,7 +39,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   };
 
   const renderGameDays = () => {
-    if (isLoading) return null;
+    if (isLoading || isLoadingAssets) return null;
 
     const gameDaySchedules = [];
     const sortedGames = sortGamesByDate();
@@ -32,7 +48,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     sortedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
     gameDates.forEach(date => {
       const gamesOnDate = sortedGames.filter(game => game.date === date);
-      gameDaySchedules.push(<GameDaySchedule key={date} date={date} games={gamesOnDate} teamlist={teamlist} />);
+      gameDaySchedules.push(<GameDaySchedule key={date} date={date} games={gamesOnDate} teamlist={teamlist} sprites={sprites} />);
     });
 
     return gameDaySchedules;
@@ -80,7 +96,9 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
             Playoffs
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
-        {renderGameDays()}
+        <ScheduleContainer>
+          {renderGameDays()}
+        </ScheduleContainer>
       </Container>
     </React.Fragment>
   );
@@ -119,14 +137,14 @@ const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
   bottom: -1px;
 `;
 
-// const TableWrapper = styled.div`
-//   width: 60%;
-//   margin: auto;
-
-//   @media screen and (max-width: 1024px) {
-//     width: 100%;
-//   }
-// `;
+const ScheduleContainer = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+  width: 95%;
+  margin: 0 auto 40px;
+  flex-wrap: wrap;
+`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
