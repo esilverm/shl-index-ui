@@ -69,15 +69,6 @@ function HeaderBar({
             />
           </Link>
           <MenuDrawer active={drawerVisible}>
-            <Link href="/[league]/scores" as={`/${league}/scores`} passHref>
-              <MenuItem
-                active={activePage === 'scores'}
-                role="link"
-                tabIndex={0}
-              >
-                Scores
-              </MenuItem>
-            </Link>
             <Link href="/[league]/team" as={`/${league}/team`} passHref>
               <MenuItem
                 active={activePage === 'teams'}
