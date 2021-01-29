@@ -108,13 +108,13 @@ function TeamPage({
       </TeamHero>
       <Container>
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
-        <div>Team Skater Stats</div>
+        <TableHeading>Skaters</TableHeading>
         <TableWrapper>
           {
             !isLoading && <TableContainer><SkaterScoreTable data={getSkaters()} /></TableContainer>
           }
         </TableWrapper>
-        <div>Team Goalie Stats</div>
+        <TableHeading>Goalies</TableHeading>
         <TableWrapper>
           {
             !isLoading && <TableContainer><GoalieScoreTable data={getGoalies()} /></TableContainer>
@@ -223,6 +223,14 @@ const TableWrapper = styled.div`
 const TableContainer = styled.div`
   width: 100%;
   margin: 30px 0;
+`;
+
+const TableHeading = styled.h2`
+  width: 95%;
+  margin: 30px auto;
+  font-size: 2.2rem;
+  padding: 5px 0;
+  border-bottom: 1px solid black;
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

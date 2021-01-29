@@ -35,7 +35,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
 
   const sortGamesByDate = () => {
     const unsortedGames = [...games];
-    return unsortedGames.sort((gameA, gameB) => new Date(gameB.date).valueOf() - new Date(gameA.date).valueOf());
+    return unsortedGames.sort((gameA, gameB) => new Date(gameA.date).valueOf() - new Date(gameB.date).valueOf());
   };
 
   const renderGameDays = () => {
@@ -44,6 +44,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     const gameDaySchedules = [];
     const sortedGames = sortGamesByDate();
     const gameDates = [];
+
 
     sortedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
     gameDates.forEach(date => {
@@ -139,7 +140,7 @@ const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
 
 const ScheduleContainer = styled.div`
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   justify-content: space-evenly;
   width: 95%;
   margin: 0 auto 40px;

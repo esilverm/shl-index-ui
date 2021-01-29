@@ -28,10 +28,10 @@ const GameDayMatchup = ({ game, teamlist, sprites }: GameDayMatchupProps): JSX.E
   const winNote = shootout ? '(SO)' : (overtime ? '(OT)' : '');
   const awayTeamObject = teamlist.find(team => team.id === awayTeam);
   const awayTeamAbbr = awayTeamObject && awayTeamObject.abbreviation ? awayTeamObject.abbreviation : 'AYT';
-  const awayTeamName = awayTeamObject && awayTeamObject.name ? awayTeamObject.name : 'Away Team';
+  const awayTeamName = awayTeamObject && awayTeamObject.location ? awayTeamObject.location : 'Away Team';
   const homeTeamObject = teamlist.find(team => team.id === homeTeam);
   const homeTeamAbbr = homeTeamObject && homeTeamObject.abbreviation ? homeTeamObject.abbreviation : 'HET';
-  const homeTeamName = homeTeamObject && homeTeamObject.name ? homeTeamObject.name : 'Home Team';
+  const homeTeamName = homeTeamObject && homeTeamObject.location ? homeTeamObject.location : 'Home Team';
   const AwayLogo = sprites[awayTeamAbbr];
   const HomeLogo = sprites[homeTeamAbbr];
 
@@ -90,6 +90,7 @@ const Matchups = styled.div`
   flex-direction: column;
   width: 300px;
   padding: 0 5px;
+  margin: 15px;
 `;
 
 const GameHeader = styled.div`
@@ -100,8 +101,12 @@ const GameHeader = styled.div`
 const GameRow = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 5px 0;
+  padding: 5px 10px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey500};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.grey300};
+  }
 `;
 
 const TeamRow = styled.div<{ played: number, won: boolean, winNote: string }>`
@@ -121,7 +126,7 @@ const TeamRow = styled.div<{ played: number, won: boolean, winNote: string }>`
 
   .team:after {
     content: "${({ won, winNote }) => won ? winNote : ''}";
-    margin-left: 5px;
+    margin: 0 5px;
   }
 
   .score {
