@@ -72,7 +72,7 @@ function TeamPage({
         <TeamLogo
           src={require(`../../../public/team_logos/${leaguename.toUpperCase()}/${location
             .replace('.', '')
-            .replace(/red|white|blue/i, '')
+            .replace(/white|blue/i, '')
             .trim()
             .split(' ')
             .join('_')}.svg`)}
