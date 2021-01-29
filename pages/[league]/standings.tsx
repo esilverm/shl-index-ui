@@ -15,7 +15,6 @@ function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
   const { standings, isLoading } = useStandings(league, display);
 
-  console.log(standings[0])
   return (
     <React.Fragment>
       <NextSeo
@@ -58,7 +57,7 @@ function Standings({ league }: Props): JSX.Element {
           )}
         </DisplaySelectContainer>
         <StandingsTableWrapper>
-          {Array.isArray(standings) && 'teams' in standings[0] && !isLoading ? (
+          {Array.isArray(standings) && standings.length > 0 && 'teams' in standings[0] && !isLoading ? (
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             standings.map((group, i) => (
