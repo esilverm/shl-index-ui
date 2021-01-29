@@ -14,6 +14,7 @@ interface Props {
 }
 
 function index({ league, teamlist }: Props): JSX.Element {
+  console.log(teamlist)
   return (
     <React.Fragment>
       <NextSeo
@@ -36,6 +37,8 @@ function index({ league, teamlist }: Props): JSX.Element {
                 <TeamLogo
                   src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
                     .replace('.', '')
+                    .replace(/red|white|blue/i, '')
+                    .trim()
                     .split(' ')
                     .join('_')}.svg`)}
                   alt={`${team.name} logo`}
