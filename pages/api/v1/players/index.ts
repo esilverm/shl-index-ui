@@ -30,13 +30,13 @@ interface MasterPlayer {
 
 const getBasePlayerData = async (league, season) => await query(SQL`
   SELECT *
-  FROM player_ratings
+  FROM corrected_player_ratings
   WHERE LeagueID=${+league}
     AND SeasonID=${season.SeasonID}
   INNER JOIN player_master
-  ON player_ratings.PlayerID = player_master.PlayerID
-  AND player_ratings.SeasonID = player_master.SeasonID 
-  AND player_ratings.LeagueID = player_master.LeagueID;
+  ON corrected_player_ratings.PlayerID = player_master.PlayerID
+  AND corrected_player_ratings.SeasonID = player_master.SeasonID
+  AND corrected_player_ratings.LeagueID = player_master.LeagueID;
 `);
 
 const getSkaterStats = async (league, season) => await query(SQL`
@@ -68,7 +68,13 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid } = req.query;
+  const { league = 0, season: seasonid, type = "full" } = req.query;
+  const containsStats = type === "full" || type === "stats";
+  const containsAdvStats = type === "full" || type === "advanced";
+  const containsRatings = type === "full" || type === "ratings";
+  let basePlayerData = [];
+  let skaterStats = [];
+  let goalieStats = [];
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -80,9 +86,21 @@ export default async (
       LIMIT 1
   `));
 
-  const basePlayerData = await getBasePlayerData(league, season);
-  const skaterStats = await getSkaterStats(league, season);
-  const goalieStats = await getGoalieStats(league, season);
+  const queries = [getBasePlayerData];
+  if (containsStats) {
+    queries.concat([getSkaterStats, getGoalieStats]);
+  } else if (containsAdvStats) {
+    queries.push(getSkaterStats);
+  }
+
+  await Promise.all(queries.map(fn => fn(league, season))).then(values => {
+    basePlayerData = values[0];
+    if (containsStats || containsAdvStats) {
+      skaterStats = values[1];
+      goalieStats = values[2];
+    }
+  });
+
   const combinedPlayerData = basePlayerData.map(player => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
       [
@@ -113,110 +131,117 @@ export default async (
     const playerInfo = getPlayerInfo(player.baseData);
 
     if (player.position === 'G') {
+      const stats = {
+        gamesPlayed: player.stats.GP,
+        minutes: player.stats.Minutes,
+        wins: player.stats.Wins,
+        losses: player.stats.Losses,
+        ot: player.stats.OT,
+        shotsAgainst: player.stats.ShotsAgainst,
+        saves: player.stats.Saves,
+        goalsAgainst: player.stats.GoalsAgainst,
+        gaa: player.stats.GAA,
+        shutouts: player.stats.Shutouts,
+        savePct: player.stats.SavePct,
+        gameRating: player.stats.GameRating
+      };
+      const ratings = {
+        blocker: player.baseData.Blocker,
+        glove: player.baseData.Glove,
+        passing: player.baseData.GPassing,
+        pokeCheck: player.baseData.GPokecheck,
+        positioning: player.baseData.GPositioning,
+        rebound: player.baseData.Rebound,
+        recovery: player.baseData.Recovery,
+        puckhandling: player.baseData.GPuckhandling,
+        lowShots: player.baseData.LowShots,
+        reflexes: player.baseData.Reflexes,
+        skating: player.baseData.GSkating,
+        mentalToughness: player.baseData.MentalToughness,
+        goalieStamina: player.baseData.GoalieStamina
+      };
+
       return {
         ...playerInfo,
-        stats: {
-          gamesPlayed: player.stats.GP,
-          minutes: player.stats.Minutes,
-          wins: player.stats.Wins,
-          losses: player.stats.Losses,
-          ot: player.stats.OT,
-          shotsAgainst: player.stats.ShotsAgainst,
-          saves: player.stats.Saves,
-          goalsAgainst: player.stats.GoalsAgainst,
-          gaa: player.stats.GAA,
-          shutouts: player.stats.Shutouts,
-          savePct: player.stats.SavePct,
-          gameRating: player.stats.GameRating
-        },
-        ratings: {
-          blocker: player.Blocker,
-          glove: player.Glove,
-          passing: player.GPassing,
-          pokeCheck: player.GPokecheck,
-          positioning: player.GPositioning,
-          rebound: player.Rebound,
-          recovery: player.Recovery,
-          puckhandling: player.GPuckhandling,
-          lowShots: player.LowShots,
-          reflexes: player.Reflexes,
-          skating: player.GSkating,
-          mentalToughness: player.MentalToughness,
-          goalieStamina: player.GoalieStamina
-        }
+        ...(containsStats && { stats }),
+        ...(containsRatings && { ratings })
       };
     }
 
+    const stats = {
+      gamesPlayed: player.stats.GP,
+      timeOnIce: player.stats.TOI + player.stats.PPTOI + player.stats.SHTOI, // in seconds
+      goals: player.stats.G,
+      assists: player.stats.A,
+      points: player.stats.G + player.stats.A,
+      plusMinus: player.stats.PlusMinus,
+      pim: player.stats.PIM,
+      ppGoals: player.stats.PPG,
+      ppAssists: player.stats.PPA,
+      ppPoints: player.stats.PPG + player.stats.PPA,
+      ppTimeOnIce: player.stats.PPTOI,
+      shGoals: player.stats.SHG,
+      shAssists: player.stats.SHA,
+      shPoints: player.stats.SHG + player.stats.SHA,
+      shTimeOnIce: player.stats.SHTOI,
+      fights: player.stats.Fights,
+      fightWins: player.stats.Fights_Won,
+      fightLosses: player.stats.Fights - player.stats.Fights_Won,
+      hits: player.stats.HIT,
+      giveaways: player.stats.GvA,
+      takeaways: player.stats.TkA,
+      shotsBlocked: player.stats.SB,
+      shotsOnGoal: player.stats.SOG,
+      gameRating: player.stats.GR,
+      offensiveGameRating: player.stats.OGR,
+      devensiveGameRating: player.stats.DGR
+    };
+    const advancedStats = {
+      PDO: player.stats.PDO,
+      GF60: player.stats.GF60,
+      GA60: player.stats.GA60,
+      SF60: player.stats.SF60,
+      SA60: player.stats.SA60,
+      CF: player.stats.CF,
+      CA: player.stats.CA,
+      CFPct: player.stats.CFPct,
+      CFPctRel: player.stats.CFPctRel,
+      FF: player.stats.FF,
+      FA: player.stats.FA,
+      FFPct: player.stats.FFPct,
+      FFPctRel: player.stats.FFPctRel
+    };
+    const ratings = {
+      screening: player.baseData.Screening,
+      gettingOpen: player.baseData.GettingOpen,
+      passing: player.baseData.Passing,
+      puckhandling: player.baseData.Puckhandling,
+      shootingAccuracy: player.baseData.ShootingAccuracy,
+      shootingRange: player.baseData.ShootingRange,
+      offensiveRead: player.baseData.OffensiveRead,
+      checking: player.baseData.Checking,
+      hitting: player.baseData.Hitting,
+      positioning: player.baseData.Positioning,
+      stickchecking: player.baseData.Stickchecking,
+      shotBlocking: player.baseData.shotBlocking,
+      faceoffs: player.baseData.Faceoffs,
+      defensiveRead: player.baseData.DefensiveRead,
+      acceleration: player.baseData.Accelerating,
+      agility: player.baseData.Agility,
+      balance: player.baseData.Balance,
+      speed: player.baseData.Speed,
+      stamina: player.baseData.Stamina,
+      strength: player.baseData.Strength,
+      fighting: player.baseData.Fighting,
+      aggression: player.baseData.Aggression,
+      bravery: player.baseData.Bravery
+    };
+
     return {
       ...playerInfo,
-      stats: {
-        gamesPlayed: player.stats.GP,
-        timeOnIce: player.stats.TOI + player.stats.PPTOI + player.stats.SHTOI, // in seconds
-        goals: player.stats.G,
-        assists: player.stats.A,
-        points: player.stats.G + player.stats.A,
-        plusMinus: player.stats.PlusMinus,
-        pim: player.stats.PIM,
-        ppGoals: player.stats.PPG,
-        ppAssists: player.stats.PPA,
-        ppPoints: player.stats.PPG + player.stats.PPA,
-        ppTimeOnIce: player.stats.PPTOI,
-        shGoals: player.stats.SHG,
-        shAssists: player.stats.SHA,
-        shPoints: player.stats.SHG + player.stats.SHA,
-        shTimeOnIce: player.stats.SHTOI,
-        fights: player.stats.Fights,
-        fightWins: player.stats.Fights_Won,
-        fightLosses: player.stats.Fights - player.stats.Fights_Won,
-        hits: player.stats.HIT,
-        giveaways: player.stats.GvA,
-        takeaways: player.stats.TkA,
-        shotsBlocked: player.stats.SB,
-        shotsOnGoal: player.stats.SOG,
-        gameRating: player.stats.GR,
-        offensiveGameRating: player.stats.OGR,
-        devensiveGameRating: player.stats.DGR
-      },
-      advancedStats: {
-        PDO: player.stats.PDO,
-        GF60: player.stats.GF60,
-        GA60: player.stats.GA60,
-        SF60: player.stats.SF60,
-        SA60: player.stats.SA60,
-        CF: player.stats.CF,
-        CA: player.stats.CA,
-        CFPct: player.stats.CFPct,
-        CFPctRel: player.stats.CFPctRel,
-        FF: player.stats.FF,
-        FA: player.stats.FA,
-        FFPct: player.stats.FFPct,
-        FFPctRel: player.stats.FFPctRel
-      },
-      ratings: {
-        screening: player.Screening,
-        gettingOpen: player.GettingOpen,
-        passing: player.Passing,
-        puckhandling: player.Puckhandling,
-        shootingAccuracy: player.ShootingAccuracy,
-        shootingRange: player.ShootingRange,
-        offensiveRead: player.OffensiveRead,
-        checking: player.Checking,
-        hitting: player.Hitting,
-        positioning: player.Positioning,
-        stickchecking: player.Stickchecking,
-        shotBlocking: player.shotBlocking,
-        faceoffs: player.Faceoffs,
-        defensiveRead: player.DefensiveRead,
-        acceleration: player.Accelerating,
-        agility: player.Agility,
-        balance: player.Balance,
-        speed: player.Speed,
-        stamina: player.Stamina,
-        strength: player.Strength,
-        fighting: player.Fighting,
-        aggression: player.Aggression,
-        bravery: player.Bravery
-      }
+      ...(containsStats && { stats }),
+      ...(containsAdvStats && { advancedStats }),
+      ...(containsRatings && { ratings })
     };
   });
 
