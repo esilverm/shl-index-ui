@@ -131,7 +131,7 @@ export default async (
     const playerInfo = getPlayerInfo(player.baseData);
 
     if (player.position === 'G') {
-      const stats = {
+      const stats = player.stats ? {
         gamesPlayed: player.stats.GP,
         minutes: player.stats.Minutes,
         wins: player.stats.Wins,
@@ -144,7 +144,7 @@ export default async (
         shutouts: player.stats.Shutouts,
         savePct: player.stats.SavePct,
         gameRating: player.stats.GameRating
-      };
+      } : {};
       const ratings = {
         blocker: player.baseData.Blocker,
         glove: player.baseData.Glove,
@@ -168,7 +168,7 @@ export default async (
       };
     }
 
-    const stats = {
+    const stats = player.stats ? {
       gamesPlayed: player.stats.GP,
       timeOnIce: player.stats.TOI + player.stats.PPTOI + player.stats.SHTOI, // in seconds
       goals: player.stats.G,
@@ -195,8 +195,8 @@ export default async (
       gameRating: player.stats.GR,
       offensiveGameRating: player.stats.OGR,
       devensiveGameRating: player.stats.DGR
-    };
-    const advancedStats = {
+    } : {};
+    const advancedStats = player.stats ? {
       PDO: player.stats.PDO,
       GF60: player.stats.GF60,
       GA60: player.stats.GA60,
@@ -210,7 +210,7 @@ export default async (
       FA: player.stats.FA,
       FFPct: player.stats.FFPct,
       FFPctRel: player.stats.FFPctRel
-    };
+    } : {};
     const ratings = {
       screening: player.baseData.Screening,
       gettingOpen: player.baseData.GettingOpen,
