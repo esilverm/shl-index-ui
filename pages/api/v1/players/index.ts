@@ -157,8 +157,13 @@ export default async (
         lowShots: player.baseData.LowShots,
         reflexes: player.baseData.Reflexes,
         skating: player.baseData.GSkating,
+		aggression: player.baseData.Aggression,
         mentalToughness: player.baseData.MentalToughness,
-        goalieStamina: player.baseData.GoalieStamina
+		determination: player.baseData.Determination,
+		teamPlayer: player.baseData.TeamPlayer,
+		leadership: player.baseData.Leadership,
+        goalieStamina: player.baseData.GoalieStamina,
+		professionalism: player.baseData.Professionalism
       };
 
       return {
@@ -234,7 +239,12 @@ export default async (
       strength: player.baseData.Strength,
       fighting: player.baseData.Fighting,
       aggression: player.baseData.Aggression,
-      bravery: player.baseData.Bravery
+      bravery: player.baseData.Bravery,
+	  determination: player.baseData.Determination,
+	  teamPlayer: player.baseData.TeamPlayer,
+	  leadership: player.baseData.Leadership,
+	  temperament: player.baseData.Temperament,
+	  professionalism: player.baseData.Professionalism
     };
 
     return {
