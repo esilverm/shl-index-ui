@@ -36,9 +36,16 @@ const getBasePlayerData = async (league, season) => await query(SQL`
   AND corrected_player_ratings.SeasonID = player_master.SeasonID
   AND corrected_player_ratings.LeagueID = player_master.LeagueID
   WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.SeasonID=${season.SeasonID}
-  AND corrected_player_ratings.G<19
+  AND corrected_player_ratings.SeasonID=${season.SeasonID} 
+  AND corrected_player_ratings.G=20
   AND player_master.TeamID>=0;
+`);
+
+const getGoalieStats = async (league, season) => await query(SQL`
+  SELECT *
+  FROM player_goalie_stats_rs
+  WHERE LeagueID=${+league}
+    AND SeasonID=${season.SeasonID};
 `);
 
 const getPlayerInfo = (player: MasterPlayer) => ({
@@ -58,7 +65,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type = 'rs' } = req.query;
+  const { league = 0, season: seasonid, type = "full" } = req.query;
   let basePlayerData = [];
 
   const [season] =
@@ -90,17 +97,18 @@ export default async (
     ];
 
     return {
-      baseData: player,
-      position
-    };
+        baseData: player,
+        position
+      };
   });
 
   const parsed = combinedPlayerData.map(player => {
     const playerInfo = getPlayerInfo(player.baseData);
 
-    return {
-      ...playerInfo
-    };
+      return {
+        ...playerInfo
+      };
+
   });
 
   res.status(200).json(parsed);
