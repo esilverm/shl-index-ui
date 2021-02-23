@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is the API documentation for the Simulation Hockey League API. You can find out more about the SHL at [simulationhockey.com](https://simulationhockey.com/index.php). This API is a work in progress so expect future changes.\nNOTE: Whenever left unspecified, the season defaults to the current one.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "Simulation Hockey League",
     "contact": {
       "email": "apiteam@swagger.io"
@@ -361,7 +361,217 @@
           }
         }
       }
-    }
+    },
+	"/players": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List of Players",
+        "description": "Returns all Players for a League",
+        "operationId": "getPlayerByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/players"
+              }
+            }
+          }
+        }
+      }
+    },
+	"/players/stats": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List all Player Stats",
+        "description": "Returns all Player's Stats for a League, NOTE: type options are rs, ps, po",
+        "operationId": "getPlayerStatsByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+		  {
+			"name": "type",
+			"in": "query",
+			"type": "string",
+			"default": rs
+		  }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/playerstats"
+              }
+            }
+          }
+        }
+      }
+    },
+	"/players/ratings": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List all Player Ratings",
+        "description": "Returns all Player's Ratings for a League",
+        "operationId": "getPlayerRatingsByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/playerratings"
+              }
+            }
+          }
+        }
+      }
+    },
+	"/goalies": {
+	  "get": {
+        "tags": ["goalies"],
+        "summary": "List all Goalies",
+        "description": "Returns all Goalies by League",
+        "operationId": "getGoaliesByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goalies"
+              }
+            }
+          }
+        }
+      }
+    },
+	"/goalies/stats": {
+      "get": {
+        "tags": ["goalies"],
+        "summary": "List all Goalie Stats",
+        "description": "Returns all Goalie's Stats for a League, NOTE: type options are rs, ps, po",
+        "operationId": "getGoalieStatsByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+		  {
+			"name": "type",
+			"in": "query",
+			"type": "string",
+			"default": rs
+		  }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goaliestats"
+              }
+            }
+          }
+        }
+      }
+    },
+	"/goalies/ratings": {
+      "get": {
+        "tags": ["goalies"],
+        "summary": "List all Goalie Ratings",
+        "description": "Returns all Goalie's Ratings for a League",
+        "operationId": "getGoalieRatingsByLeague",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goalieratings"
+              }
+            }
+          }
+        }
+      }
+    },
   },
   "definitions": {
     "League": {
@@ -495,7 +705,550 @@
           "example": 210
         }
       }
-    }
+    },
+	"players": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 6
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Poopity Scoop"
+		},
+		"team": {
+		  "type": "number",
+		  "example": 13
+		},
+		"height": {
+		  "type": "number",
+		  "example": 79
+		},
+		"weight": {
+		  "type": "number",
+		  "example": 280
+		}
+	  }
+	},
+	"playerstats": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 10
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Casius Darrow"
+		},
+		"position": {
+		  "type": "string",
+		  "example": "RD"
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"team": {
+		  "type": "number",
+		  "example": 19
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"gamesPlayed": {
+		  "type": "number",
+		  "example": 25
+		},
+		"timeOnIce": {
+		  "type": "number",
+		  "example": 37687
+		},
+		"goals": {
+		  "type": "number",
+		  "example": 3
+		},
+		"assists": {
+		  "type": "number",
+		  "example": 8
+		},
+		"points": {
+		  "type": "number",
+		  "example": 11
+		},
+		"plusMinus": {
+		  "type": "number",
+		  "example": -12
+		},
+		"pim": {
+		  "type": "number",
+		  "example": 6
+		},
+		"ppGoals": {
+		  "type": "number",
+		  "example": 0
+		},
+		"ppAssists": {
+		  "type": "number",
+		  "example": 1
+		},
+		"ppPoints": {
+		  "type": "number",
+		  "example": 1
+		},
+		"ppTimeOnIce": {
+		  "type": "number",
+		  "example": 4013
+		},
+		"shGoals": {
+		  "type": "number",
+		  "example": 0
+		},
+		"shAssists": {
+		  "type": "number",
+		  "example": 0
+		},
+		"shPoints": {
+		  "type": "number",
+		  "example": 0
+		},
+		"shTimeOnIce": {
+		  "type": "number",
+		  "example": 1817
+		},
+		"fights": {
+		  "type": "number",
+		  "example": 0
+		},
+		"fightWins": {
+		  "type": "number",
+		  "example": 0
+		},
+		"fightLosses": {
+		  "type": "number",
+		  "example": 0
+		},
+		"hits": {
+		  "type": "number",
+		  "example": 67
+		 },
+		 "giveaways": {
+		  "type": "number",
+		  "example": 5
+		},
+		"takeaways": {
+		  "type": "number",
+		  "example": 18
+		},
+		"shotsBlocked": {
+		  "type": "number",
+		  "example": 84
+		},
+		"shotsOnGoal": {
+		  "type": "number",
+		  "example": 78
+		},
+		"gameRating": {
+		  "type": "number",
+		  "example": 69
+		},
+		"offensiveGameRating": {
+		  "type": "number",
+		  "example": 63
+		},
+		"devensiveGameRating": {
+		  "type": "number",
+		  "example": 72
+		},
+		  "PDO": {
+		    "type": "number",
+		    "example": 95.2
+		  },
+		  "GF60": {
+		    "type": "number",
+		    "example": 2.6
+		  },
+		  "GA60": {
+		    "type": "number",
+		    "example": 3.8
+		  },
+		  "SF60": {
+		    "type": "number",
+		    "example": 31.9
+		  },
+		  "SA60": {
+		    "type": "number",
+		    "example": 29.7
+		  },
+		  "CF": {
+		    "type": "number",
+		    "example": 512
+		  },
+		  "CA": {
+		    "type": "number",
+		    "example": 506
+		  },
+		  "CFPct": {
+		    "type": "number",
+		    "example": 50.3
+		  },
+		  "CFPctRel": {
+		    "type": "number",
+		    "example": 6.1
+		  },
+		  "FF": {
+		    "type": "number",
+		    "example": 385
+		  },
+		  "FA": {
+		    "type": "number",
+		    "example": 365
+		  },
+		  "FFPct": {
+		    "type": "number",
+		    "example": 51.3
+		  },
+		  "FFPctRel": {
+		    "type": "number",
+		    "example": 7.5
+		  }
+		}
+	  
+	},
+	"playerratings": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 9
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Tatu Makela"
+		},
+		"team": {
+		  "type": "number",
+		  "example": 15
+		},
+		"screening": {
+		  "type": "number",
+		  "example": 5
+		},
+		"gettingOpen": {
+		  "type": "number",
+		  "example": 9
+		},
+		"passing": {
+		  "type": "number",
+		  "example": 12
+		},
+		"shootingAccuracy": {
+		  "type": "number",
+		  "example": 9
+		},
+		"shootingRange": {
+		  "type": "number",
+		  "example": 12
+		},
+		"offensiveRead": {
+		  "type": "number",
+		  "example": 12
+		},
+		"checking": {
+		  "type": "number",
+		  "example": 15
+		},
+		"hitting": {
+		  "type": "number",
+		  "example": 9
+		},
+		"positioning": {
+		  "type": "number",
+		  "example": 17
+		},
+		"stickchecking": {
+		  "type": "number",
+		  "example": 17
+		},
+		"faceoffs": {
+		  "type": "number",
+		  "example": 5
+		},
+		"defensiveRead": {
+		  "type": "number",
+		  "example": 15
+		},
+		"agility": {
+		  "type": "number",
+		  "example": 17
+		},
+		"balance": {
+		  "type": "number",
+		  "example": 17
+		},
+		"speed": {
+		  "type": "number",
+		  "example": 17
+		},
+		"stamina": {
+		  "type": "number",
+		  "example": 15
+		},
+		"strength": {
+		  "type": "number",
+		  "example": 11
+		},
+		"fighting": {
+		  "type": "number",
+		  "example": 5
+		},
+		"aggression": {
+		  "type": "number",
+		  "example": 5 
+		},
+		"bravery": {
+		  "type": "number",
+		  "example": 10
+		},
+		"determination": {
+		  "type": "number",
+		  "example": 15
+		},
+		"leadership": {
+		  "type": "number",
+		  "example": 15
+		},
+		"temperament": {
+		  "type": "number",
+		  "example": 15
+		},
+		"professionalism": {
+		  "type": "number",
+		  "example": 15
+		}
+	  }
+	},
+	"goalies": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 33
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Tibuk Soonika"
+		},
+		"team": {
+		  "type": "number",
+		  "example": 1
+		},
+		"height": {
+		  "type": "number",
+		  "example": 76
+		},
+		"weight": {
+		  "type": "number",
+		  "example": 210
+		}
+	  }
+	},
+	"goaliestats": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 36
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Name Redacted"
+		},
+		"position": {
+		  "type": "string",
+		  "example": "G"
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"team": {
+		  "type": "number",
+		  "example": 4
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"gamesPlayed": {
+		  "type": "number",
+		  "example": 8
+		},
+		"minutes": {
+		  "type": "number",
+		  "example": 443
+		},
+		"wins": {
+		  "type": "number",
+		  "example": 4
+		},
+		"losses": {
+		  "type": "number",
+		  "example": 1
+		},
+		"ot": {
+		  "type": "number",
+		  "example": 2
+		},
+		"shotsAgainst": {
+		  "type": "number",
+		  "example": 167
+		},
+		"saves": {
+		  "type": "number",
+		  "example": 145
+		},
+		"goalsAgainst": {
+		  "type": "number",
+		  "example": 22
+		},
+		"gaa": {
+		  "type": "number",
+		  "example": 2.98
+		},
+		"shutouts": {
+		  "type": "number",
+		  "example": 0
+		},
+		"savePct": {
+		  "type": "number",
+		  "example": 0.868
+		},
+		"gameRating": {
+		  "type": "number",
+		  "example": 54
+		}
+	  }
+	},
+	"goalieratings": {
+	  "type": "object",
+	  "properties": {
+	    "id": {
+		  "type": "number",
+		  "example": 35
+		},
+		"league": {
+		  "type": "number",
+		  "example": 0
+		},
+		"season": {
+		  "type": "number",
+		  "example": 58
+		},
+		"name": {
+		  "type": "string",
+		  "example": "Billy Sorokin"
+		},
+		"team": {
+		  "type": "number",
+		  "example": 11
+		},
+		"blocker": {
+		  "type": "number",
+		  "example": 14
+		},
+		"glove": {
+		  "type": "number",
+		  "example": 14
+		},
+		"passing": {
+		  "type": "number",
+		  "example": 7
+		},
+		"pokeCheck": {
+		  "type": "number",
+		  "example": 7
+		},
+		"positioning": {
+		  "type": "number",
+		  "example": 15
+		},
+		"rebound": {
+		  "type": "number",
+		  "example": 13
+		},
+		"recovery": {
+		  "type": "number",
+		  "example": 14
+		},
+		"puckhandling": {
+		  "type": "number",
+		  "example": 7
+		},
+		"lowShots": {
+		  "type": "number",
+		  "example": 13
+		},
+		"reflexes": {
+		  "type": "number",
+		  "example": 15
+		},
+		"skating": {
+		  "type": "number",
+		  "example": 7
+		},
+		"aggression": {
+		  "type": "number",
+		  "example": 8 
+		},
+		"mentalToughness": {
+		  "type": "number",
+		  "example": 13
+		},
+		"determination": {
+		  "type": "number",
+		  "example": 15
+		},
+		"leadership": {
+		  "type": "number",
+		  "example": 15
+		},
+		"goalieStamina": {
+		  "type": "number",
+		  "example": 9
+		},
+		"professionalism": {
+		  "type": "number",
+		  "example": 15
+		}
+	  }
+	},
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
