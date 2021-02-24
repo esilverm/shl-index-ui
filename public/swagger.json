@@ -12,7 +12,7 @@
       "url": "https://mit-license.org/"
     }
   },
-  "host": "localhost:3000",
+  "host": "index.simulationhockey.com",
   "basePath": "/api/v1",
   "tags": [
     {
