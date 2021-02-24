@@ -41,12 +41,12 @@ const getBasePlayerData = async (league, season) => await query(SQL`
   AND player_master.TeamID>=0;
 `);
 
-const getGoalieStats = async (league, season) => await query(SQL`
+/*const getGoalieStats = async (league, season) => await query(SQL`
   SELECT *
   FROM player_goalie_stats_rs
   WHERE LeagueID=${+league}
     AND SeasonID=${season.SeasonID};
-`);
+`);*/
 
 const getPlayerInfo = (player: MasterPlayer) => ({
   id: player.PlayerID,
