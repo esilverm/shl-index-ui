@@ -61,7 +61,7 @@ export default async (
 
   const parsed = [...goalieStats].map((player) => {
 
-	  return {
+	return {
 		id: player.PlayerID,
 		name: player.Name,
 		position: 'G',
@@ -80,7 +80,7 @@ export default async (
 		shutouts: player.Shutouts,
 		savePct: player.SavePct,
 		gameRating: player.GameRating,
-	  };
+	};
   });
 
   res.status(200).json(parsed);
