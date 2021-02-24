@@ -36,8 +36,8 @@ const getBasePlayerData = async (league, season) => await query(SQL`
   AND corrected_player_ratings.SeasonID = player_master.SeasonID
   AND corrected_player_ratings.LeagueID = player_master.LeagueID
   WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.SeasonID=${season.SeasonID}
-  AND corrected_player_ratings.G<19
+  AND corrected_player_ratings.SeasonID=${season.SeasonID} 
+  AND corrected_player_ratings.G=20
   AND player_master.TeamID>=0;
 `);
 
@@ -47,9 +47,7 @@ const getPlayerInfo = (player: MasterPlayer) => ({
   season: player.SeasonID,
   name: player['Last Name'],
   team: player.TeamID,
-  position: player.position,
-  height: player.Height,
-  weight: player.Weight
+  position: player.position
 });
 
 export default async (
@@ -58,7 +56,8 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type = 'rs' } = req.query;
+  const { league = 0, season: seasonid, type = "full" } = req.query;
+  const containsRatings = type === "full" || type === "ratings";
   let basePlayerData = [];
 
   const [season] =
@@ -90,17 +89,40 @@ export default async (
     ];
 
     return {
-      baseData: player,
-      position
-    };
+        baseData: player,
+        position
+      };
   });
 
   const parsed = combinedPlayerData.map(player => {
     const playerInfo = getPlayerInfo(player.baseData);
 
-    return {
-      ...playerInfo
-    };
+      const ratings = {
+        blocker: player.baseData.Blocker,
+        glove: player.baseData.Glove,
+        passing: player.baseData.GPassing,
+        pokeCheck: player.baseData.GPokecheck,
+        positioning: player.baseData.GPositioning,
+        rebound: player.baseData.Rebound,
+        recovery: player.baseData.Recovery,
+        puckhandling: player.baseData.GPuckhandling,
+        lowShots: player.baseData.LowShots,
+        reflexes: player.baseData.Reflexes,
+        skating: player.baseData.GSkating,
+        aggression: player.baseData.Aggression,
+        mentalToughness: player.baseData.MentalToughness,
+        determination: player.baseData.Determination,
+        teamPlayer: player.baseData.TeamPlayer,
+        leadership: player.baseData.Leadership,
+        goalieStamina: player.baseData.GoalieStamina,
+        professionalism: player.baseData.Professionalism
+      };
+
+      return {
+        ...playerInfo,
+        ...ratings
+      };
+
   });
 
   res.status(200).json(parsed);
