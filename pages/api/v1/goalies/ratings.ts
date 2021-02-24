@@ -56,8 +56,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type = "full" } = req.query;
-  const containsRatings = type === "full" || type === "ratings";
+  const { league = 0, season: seasonid } = req.query;
   let basePlayerData = [];
 
   const [season] =
