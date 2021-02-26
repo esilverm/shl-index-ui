@@ -106,7 +106,7 @@ function HeaderBar({
                 role="link"
                 tabIndex={0}
               >
-                Stats
+                Leaders
               </MenuItem>
             </Link>
             <Link href="/[league]/schedule" as={`/${league}/schedule`} passHref>

@@ -12,6 +12,7 @@ const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
 type SeasonType = typeof seasonTypes[number];
 
 export interface Game {
+  slug: string | undefined;
   season: string;
   league: string;
   date: string;
@@ -34,7 +35,7 @@ export default async (
   const {
     league = 0,
     season: seasonid,
-    type = 'Regular Season'
+    type = 'Regular Season',
   } = req.query;
 
   const [season] =
