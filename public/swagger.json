@@ -981,57 +981,62 @@
           "type": "number",
           "example": 72
         },
-        "PDO": {
-          "type": "number",
-          "example": 95.2
-        },
-        "GF60": {
-          "type": "number",
-          "example": 2.6
-        },
-        "GA60": {
-          "type": "number",
-          "example": 3.8
-        },
-        "SF60": {
-          "type": "number",
-          "example": 31.9
-        },
-        "SA60": {
-          "type": "number",
-          "example": 29.7
-        },
-        "CF": {
-          "type": "number",
-          "example": 512
-        },
-        "CA": {
-          "type": "number",
-          "example": 506
-        },
-        "CFPct": {
-          "type": "number",
-          "example": 50.3
-        },
-        "CFPctRel": {
-          "type": "number",
-          "example": 6.1
-        },
-        "FF": {
-          "type": "number",
-          "example": 385
-        },
-        "FA": {
-          "type": "number",
-          "example": 365
-        },
-        "FFPct": {
-          "type": "number",
-          "example": 51.3
-        },
-        "FFPctRel": {
-          "type": "number",
-          "example": 7.5
+        "advancedStats": {
+          "type": "object",
+          "properties": {
+            "PDO": {
+              "type": "number",
+              "example": 95.2
+            },
+            "GF60": {
+              "type": "number",
+              "example": 2.6
+            },
+            "GA60": {
+              "type": "number",
+              "example": 3.8
+            },
+            "SF60": {
+              "type": "number",
+              "example": 31.9
+            },
+            "SA60": {
+              "type": "number",
+              "example": 29.7
+            },
+            "CF": {
+              "type": "number",
+              "example": 512
+            },
+            "CA": {
+              "type": "number",
+              "example": 506
+            },
+            "CFPct": {
+              "type": "number",
+              "example": 50.3
+            },
+            "CFPctRel": {
+              "type": "number",
+              "example": 6.1
+            },
+            "FF": {
+              "type": "number",
+              "example": 385
+            },
+            "FA": {
+              "type": "number",
+              "example": 365
+            },
+            "FFPct": {
+              "type": "number",
+              "example": 51.3
+            },
+            "FFPctRel": {
+              "type": "number",
+              "example": 7.5
+            }
+          }
         }
       }
     },

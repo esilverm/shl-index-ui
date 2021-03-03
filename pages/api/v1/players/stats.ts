@@ -98,6 +98,8 @@ export default async (
       gameRating: player.GR,
       offensiveGameRating: player.OGR,
       devensiveGameRating: player.DGR,
+
+      advancedStats: {
         PDO: player.PDO,
         GF60: player.GF60,
         GA60: player.GA60,
@@ -110,7 +112,8 @@ export default async (
         FF: player.FF,
         FA: player.FA,
         FFPct: player.FFPct,
-        FFPctRel: player.FFPctRel
+        FFPctRel: player.FFPctRel,
+      },
     };
   });
 
