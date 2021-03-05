@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
-import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
+import SeasonSelector from './SeasonSelector';
 
 interface Props {
   league: string;
@@ -134,7 +134,9 @@ function HeaderBar({
             barColor="#F8F9FA"
             buttonWidth={24}
           />
-          <SearchIcon size={24} />
+          <SelectorWrapper>
+            <SeasonSelector />
+          </SelectorWrapper>
         </Container>
       </HeaderNav>
     </HeaderWrapper>
@@ -256,7 +258,7 @@ const MenuItem = styled.div<{ active: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: #0183da;
+    background-color: ${({ theme }) => theme.colors.blue600};
   }
 
   @media screen and (max-width: 670px) {
@@ -282,14 +284,9 @@ const HamburgerIcon = styled(HamburgerCollapse)`
   }
 `;
 
-const SearchIcon = styled(ImSearch)`
-  order: 3;
-  color: ${({ theme }) => theme.colors.grey100};
-  cursor: pointer;
-  margin: 9px;
-
-  @media screen and (min-width: 671px) {
-    display: none;
+const SelectorWrapper = styled.div`
+  @media screen and (max-width: 670px) {
+    order: 3;
   }
 `;
 

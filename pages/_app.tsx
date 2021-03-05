@@ -8,6 +8,8 @@ import SEO from '../next-seo.config';
 
 const theme = {
   colors: {
+    blue600: '#1E88E5',
+    blue700: '#1976D2',
     grey900: '#212529',
     grey800: '#343A40',
     grey700: '#495057',
