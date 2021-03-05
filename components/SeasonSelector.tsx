@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
@@ -11,35 +11,43 @@ const seasons = Array.from(Array(currentSeason - firstSeason + 1), (e, i) => i +
 function SeasonSelector(): JSX.Element {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const selectorRef = useRef(null);
 
-  const getSeasonOptions = () => seasons.sort((a, b) => b - a).map(season => <option key={season} value={season}>{season}</option>);
-
-  const onButtonClick = () => setIsExpanded(!isExpanded);
-  const onSeasonSelect = (event) => {
-    const season = event.target.value;
-    router.push(`${window.location.pathname}?season=${season}`);
-    setIsExpanded(false);
-  };
+  useEffect(() => {
+    if (isExpanded && selectorRef.current) {
+      selectorRef.current.addEventListener("mouseleave", () => setIsExpanded(false));
+    }
+  }, [selectorRef, isExpanded]);
 
   const getQuerySeason = () => {
     if (!router.query.season) return '';
     const querySeason = router.query.season as string;
-    return querySeason.match(/\d/) ? querySeason : '';
+    return querySeason.match(/\d+/) ? querySeason : '';
   };
 
-  const renderDropdownItems = () => getSeasonOptions().map(season => (
+  const onButtonClick = () => setIsExpanded(!isExpanded);
+  const onSeasonSelect = (event) => {
+    const season = event.target.dataset.season;
+
+    if (season && season.match(/\d+/)) {
+      router.push(`${window.location.pathname}?season=${season}`);
+      setIsExpanded(false);
+    }
+  };
+
+  const renderDropdownItems = () => seasons.sort((a, b) => b - a).map(season => (
     <DropdownItem
-      key={season.key}
-      value={season.key}
+      key={season}
+      data-season={season}
       onClick={onSeasonSelect}
     >
-      <SeasonText />
-      {season.key}
+      <SeasonText data-season={season} />
+      {season}
     </DropdownItem>
   ));
 
   return (
-    <Container>
+    <Container ref={selectorRef}>
       <DropdownButton onClick={onButtonClick}>
         <ButtonContent>
           <SeasonText />
@@ -80,6 +88,10 @@ const DropdownButton = styled.button`
   &:active {
     background-color: ${({ theme }) => theme.colors.blue700};
   }
+
+  @media screen and (max-width: 670px) {
+    padding: 6px 8px;
+  }
 `;
 
 const SeasonText = styled.span`
@@ -91,6 +103,7 @@ const SeasonText = styled.span`
   @media screen and (max-width: 670px) {
     &::after {
       content: 'S';
+      margin-right: 0;
     }
   }
 `;

@@ -285,6 +285,10 @@ const HamburgerIcon = styled(HamburgerCollapse)`
 `;
 
 const SelectorWrapper = styled.div`
+  @media screen and (min-width: 671px) {
+    margin: 0 2% 0 auto;
+  }
+
   @media screen and (max-width: 670px) {
     order: 3;
   }
