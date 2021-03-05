@@ -33,13 +33,16 @@ function SeasonSelector(): JSX.Element {
       selectorRef.current.addEventListener("mouseleave", onMouseLeave);
     }
   }, [selectorRef, isExpanded]);
+  useEffect(() => setSelectedSeason(getQuerySeason()), [router.query.season]);
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonSelect = (event) => {
     const season = event.target.dataset.season;
 
     if (season && season.match(/\d+/)) {
-      router.push(`${window.location.pathname}?season=${season}`);
+      const updatedSearch = window.location.search.replace(/([?|&])season=\d+/, `$1season=${season}`);
+      const newPath = `${window.location.pathname}${updatedSearch}`
+      router.push(newPath);
       setSelectedSeason(season);
       setIsExpanded(false);
     }
@@ -138,12 +141,14 @@ const Caret = styled.span`
 
 const DropdownList = styled.ul`
   position: absolute;
+  max-height: 300px;
   width: 100%;
   list-style-type: none;
   background-color: ${({ theme }) => theme.colors.grey100};
   border: 1px solid ${({ theme }) => theme.colors.grey300};
   border-top: none;
   z-index: 1000;
+  overflow-y: auto;
 `;
 
 const DropdownItem = styled.li`
