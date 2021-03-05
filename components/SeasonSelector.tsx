@@ -10,20 +10,29 @@ const seasons = Array.from(Array(currentSeason - firstSeason + 1), (e, i) => i +
 
 function SeasonSelector(): JSX.Element {
   const router = useRouter();
+
+  const getQuerySeason = () => {
+    const querySeason = router.query.season as string;
+    if (!querySeason) return currentSeason;
+    return querySeason.match(/\d+/) ? querySeason : currentSeason;
+  };
+
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedSeason, setSelectedSeason] = useState(getQuerySeason());
   const selectorRef = useRef(null);
+
+  const onMouseLeave = () => {
+    setIsExpanded(false);
+    if (selectorRef.current) {
+      selectorRef.current.removeEventListener("mouseleave", onMouseLeave);
+    }
+  };
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {
-      selectorRef.current.addEventListener("mouseleave", () => setIsExpanded(false));
+      selectorRef.current.addEventListener("mouseleave", onMouseLeave);
     }
   }, [selectorRef, isExpanded]);
-
-  const getQuerySeason = () => {
-    if (!router.query.season) return '';
-    const querySeason = router.query.season as string;
-    return querySeason.match(/\d+/) ? querySeason : '';
-  };
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonSelect = (event) => {
@@ -31,6 +40,7 @@ function SeasonSelector(): JSX.Element {
 
     if (season && season.match(/\d+/)) {
       router.push(`${window.location.pathname}?season=${season}`);
+      setSelectedSeason(season);
       setIsExpanded(false);
     }
   };
@@ -51,7 +61,7 @@ function SeasonSelector(): JSX.Element {
       <DropdownButton onClick={onButtonClick}>
         <ButtonContent>
           <SeasonText />
-          {getQuerySeason()}
+          {selectedSeason}
           <Caret className={isExpanded ? 'up' : 'down'} />
         </ButtonContent>
       </DropdownButton>
