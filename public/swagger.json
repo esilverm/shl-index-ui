@@ -66,6 +66,34 @@
         }
       }
     },
+    "/leagues/seasons": {
+      "get": {
+        "tags": ["leagues"],
+        "summary": "List of Seasons in the Index by League",
+        "description": "A listing of all seasons in the index by league.",
+        "operationId": "getSeasons",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Seasons"
+              }
+            }
+          }
+        }
+      }
+    },
     "/conferences": {
       "get": {
         "tags": ["conferences"],
@@ -698,6 +726,26 @@
         "abbreviation": {
           "type": "string",
           "example": "SHL"
+        }
+      }
+    },
+    "Seasons": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string",
+          "example": "Simulation Hockey League"
+        },
+        "abbreviation": {
+          "type": "string",
+          "example": "SHL"
+        },
+        "season": {
+          "type": "number",
+          "example": 58
         }
       }
     },
