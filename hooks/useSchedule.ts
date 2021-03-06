@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { Game } from '../pages/api/v1/schedule';
+import { getQuerySeason } from '../utils/querySeason';
 
 const useSchedule = (
   league: string,
@@ -10,9 +11,12 @@ const useSchedule = (
   isError: boolean;
 } => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
+  const season = getQuerySeason();
+  const seasonParam = season ? `&season=${season}` : '';
+
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule?league=${leagueid}&type=${seasonType}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule?league=${leagueid}&type=${seasonType}${seasonParam}`
   );
 
   return {
