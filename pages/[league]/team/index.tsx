@@ -14,7 +14,6 @@ interface Props {
 }
 
 function index({ league, teamlist }: Props): JSX.Element {
-
   return (
     <React.Fragment>
       <NextSeo

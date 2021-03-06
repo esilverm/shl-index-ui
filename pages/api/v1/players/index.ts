@@ -28,7 +28,8 @@ interface MasterPlayer {
   position: string;
 }
 
-const getBasePlayerData = async (league, season) => await query(SQL`
+const getBasePlayerData = async (league, season) =>
+  await query(SQL`
   SELECT *
   FROM corrected_player_ratings
   INNER JOIN player_master
@@ -49,7 +50,7 @@ const getPlayerInfo = (player: MasterPlayer) => ({
   team: player.TeamID,
   position: player.position,
   height: player.Height,
-  weight: player.Weight
+  weight: player.Weight,
 });
 
 export default async (
@@ -73,33 +74,28 @@ export default async (
 
   const queries = [getBasePlayerData];
 
-  await Promise.all(queries.map(fn => fn(league, season))).then(values => {
+  await Promise.all(queries.map((fn) => fn(league, season))).then((values) => {
     basePlayerData = values[0];
   });
 
-  const combinedPlayerData = basePlayerData.map(player => {
+  const combinedPlayerData = basePlayerData.map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [
-        player.G,
-        player.LD,
-        player.RD,
-        player.LW,
-        player.C,
-        player.RW,
-      ].indexOf(20)
+      [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
+        20
+      )
     ];
 
     return {
       baseData: player,
-      position
+      position,
     };
   });
 
-  const parsed = combinedPlayerData.map(player => {
+  const parsed = combinedPlayerData.map((player) => {
     const playerInfo = getPlayerInfo(player.baseData);
 
     return {
-      ...playerInfo
+      ...playerInfo,
     };
   });
 

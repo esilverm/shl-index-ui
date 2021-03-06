@@ -19,49 +19,69 @@ interface GameDayMatchupProps {
   teamlist: Array<Team>;
   sprites: {
     [index: string]: React.ComponentClass<any>;
-  }
+  };
 }
 
-const GameDayMatchup = ({ game, teamlist, sprites }: GameDayMatchupProps): JSX.Element => {
-  const { awayTeam, awayScore, homeTeam, homeScore, played, overtime, shootout } = game;
+const GameDayMatchup = ({
+  game,
+  teamlist,
+  sprites,
+}: GameDayMatchupProps): JSX.Element => {
+  const {
+    awayTeam,
+    awayScore,
+    homeTeam,
+    homeScore,
+    played,
+    overtime,
+    shootout,
+  } = game;
   const awayTeamWon = awayScore > homeScore;
-  const winNote = shootout ? '(SO)' : (overtime ? '(OT)' : '');
-  const awayTeamObject = teamlist.find(team => team.id === awayTeam);
-  const awayTeamAbbr = awayTeamObject && awayTeamObject.abbreviation ? awayTeamObject.abbreviation : 'AYT';
-  const awayTeamName = awayTeamObject && awayTeamObject.location ? awayTeamObject.location : 'Away Team';
-  const homeTeamObject = teamlist.find(team => team.id === homeTeam);
-  const homeTeamAbbr = homeTeamObject && homeTeamObject.abbreviation ? homeTeamObject.abbreviation : 'HET';
-  const homeTeamName = homeTeamObject && homeTeamObject.location ? homeTeamObject.location : 'Home Team';
+  const winNote = shootout ? '(SO)' : overtime ? '(OT)' : '';
+  const awayTeamObject = teamlist.find((team) => team.id === awayTeam);
+  const awayTeamAbbr =
+    awayTeamObject && awayTeamObject.abbreviation
+      ? awayTeamObject.abbreviation
+      : 'AYT';
+  const awayTeamName =
+    awayTeamObject && awayTeamObject.location
+      ? awayTeamObject.location
+      : 'Away Team';
+  const homeTeamObject = teamlist.find((team) => team.id === homeTeam);
+  const homeTeamAbbr =
+    homeTeamObject && homeTeamObject.abbreviation
+      ? homeTeamObject.abbreviation
+      : 'HET';
+  const homeTeamName =
+    homeTeamObject && homeTeamObject.location
+      ? homeTeamObject.location
+      : 'Home Team';
   const AwayLogo = sprites[awayTeamAbbr];
   const HomeLogo = sprites[homeTeamAbbr];
 
   return (
     <GameRow>
       <TeamRow played={played} won={awayTeamWon} winNote={winNote}>
-        <span className='team'>
-         <LogoWrapper abbr={awayTeamAbbr}>
+        <span className="team">
+          <LogoWrapper abbr={awayTeamAbbr}>
             <AwayLogo aria-label={`${awayTeamName} logo`} />
           </LogoWrapper>
           {awayTeamName}
         </span>
-        <span className='score'>
-          {played ? awayScore : '*'}
-        </span>
+        <span className="score">{played ? awayScore : '*'}</span>
       </TeamRow>
       <TeamRow played={played} won={!awayTeamWon} winNote={winNote}>
-        <span className='team'>
+        <span className="team">
           <LogoWrapper abbr={homeTeamAbbr}>
             <HomeLogo aria-label={`${homeTeamName} logo`} />
           </LogoWrapper>
           {homeTeamName}
         </span>
-        <span className='score'>
-          {played ? homeScore : '*'}
-        </span>
+        <span className="score">{played ? homeScore : '*'}</span>
       </TeamRow>
     </GameRow>
   );
-}
+};
 
 interface GameDayScheduleProps {
   date: string;
@@ -69,15 +89,25 @@ interface GameDayScheduleProps {
   teamlist: Array<Team>;
   sprites: {
     [index: string]: React.ComponentClass<any>;
-  }
+  };
 }
 
-function GameDaySchedule({ date, games, teamlist, sprites }: GameDayScheduleProps): JSX.Element {
+function GameDaySchedule({
+  date,
+  games,
+  teamlist,
+  sprites,
+}: GameDayScheduleProps): JSX.Element {
   return (
     <Matchups>
       <GameDayHeader date={date} />
       {games.map((game, i) => (
-        <GameDayMatchup key={i} game={game} teamlist={teamlist} sprites={sprites} />
+        <GameDayMatchup
+          key={i}
+          game={game}
+          teamlist={teamlist}
+          sprites={sprites}
+        />
       ))}
     </Matchups>
   );
@@ -109,13 +139,14 @@ const GameRow = styled.div`
   }
 `;
 
-const TeamRow = styled.div<{ played: number, won: boolean, winNote: string }>`
+const TeamRow = styled.div<{ played: number; won: boolean; winNote: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   font-weight: 500;
-  color: ${({ theme, played, won }) => !!played && !won ? theme.colors.grey500 : theme.colors.grey900};
+  color: ${({ theme, played, won }) =>
+    !!played && !won ? theme.colors.grey500 : theme.colors.grey900};
 
   .team {
     font-size: 18px;
@@ -125,7 +156,7 @@ const TeamRow = styled.div<{ played: number, won: boolean, winNote: string }>`
   }
 
   .team:after {
-    content: "${({ won, winNote }) => won ? winNote : ''}";
+    content: '${({ won, winNote }) => (won ? winNote : '')}';
     margin: 0 5px;
   }
 

@@ -28,7 +28,8 @@ interface MasterPlayer {
   position: string;
 }
 
-const getBasePlayerData = async (league, season) => await query(SQL`
+const getBasePlayerData = async (league, season) =>
+  await query(SQL`
   SELECT *
   FROM corrected_player_ratings
   INNER JOIN player_master
@@ -47,7 +48,7 @@ const getPlayerInfo = (player: MasterPlayer) => ({
   season: player.SeasonID,
   name: player['Last Name'],
   team: player.TeamID,
-  position: player.position
+  position: player.position,
 });
 
 export default async (
@@ -71,57 +72,51 @@ export default async (
 
   const queries = [getBasePlayerData];
 
-  await Promise.all(queries.map(fn => fn(league, season))).then(values => {
+  await Promise.all(queries.map((fn) => fn(league, season))).then((values) => {
     basePlayerData = values[0];
   });
 
-  const combinedPlayerData = basePlayerData.map(player => {
+  const combinedPlayerData = basePlayerData.map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [
-        player.G,
-        player.LD,
-        player.RD,
-        player.LW,
-        player.C,
-        player.RW,
-      ].indexOf(20)
+      [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
+        20
+      )
     ];
 
     return {
-        baseData: player,
-        position
-      };
+      baseData: player,
+      position,
+    };
   });
 
-  const parsed = combinedPlayerData.map(player => {
+  const parsed = combinedPlayerData.map((player) => {
     const playerInfo = getPlayerInfo(player.baseData);
 
-      const ratings = {
-        blocker: player.baseData.Blocker,
-        glove: player.baseData.Glove,
-        passing: player.baseData.GPassing,
-        pokeCheck: player.baseData.GPokecheck,
-        positioning: player.baseData.GPositioning,
-        rebound: player.baseData.Rebound,
-        recovery: player.baseData.Recovery,
-        puckhandling: player.baseData.GPuckhandling,
-        lowShots: player.baseData.LowShots,
-        reflexes: player.baseData.Reflexes,
-        skating: player.baseData.GSkating,
-        aggression: player.baseData.Aggression,
-        mentalToughness: player.baseData.MentalToughness,
-        determination: player.baseData.Determination,
-        teamPlayer: player.baseData.TeamPlayer,
-        leadership: player.baseData.Leadership,
-        goalieStamina: player.baseData.GoalieStamina,
-        professionalism: player.baseData.Professionalism
-      };
+    const ratings = {
+      blocker: player.baseData.Blocker,
+      glove: player.baseData.Glove,
+      passing: player.baseData.GPassing,
+      pokeCheck: player.baseData.GPokecheck,
+      positioning: player.baseData.GPositioning,
+      rebound: player.baseData.Rebound,
+      recovery: player.baseData.Recovery,
+      puckhandling: player.baseData.GPuckhandling,
+      lowShots: player.baseData.LowShots,
+      reflexes: player.baseData.Reflexes,
+      skating: player.baseData.GSkating,
+      aggression: player.baseData.Aggression,
+      mentalToughness: player.baseData.MentalToughness,
+      determination: player.baseData.Determination,
+      teamPlayer: player.baseData.TeamPlayer,
+      leadership: player.baseData.Leadership,
+      goalieStamina: player.baseData.GoalieStamina,
+      professionalism: player.baseData.Professionalism,
+    };
 
-      return {
-        ...playerInfo,
-        ...ratings
-      };
-
+    return {
+      ...playerInfo,
+      ...ratings,
+    };
   });
 
   res.status(200).json(parsed);

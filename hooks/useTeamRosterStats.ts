@@ -3,9 +3,9 @@ import { Player, Goalie } from '../';
 
 const useStandings = (
   league: string,
-  team: number,
+  team: number
 ): {
-  roster : Array<Player | Goalie>;
+  roster: Array<Player | Goalie>;
   isLoading: boolean;
   isError: boolean;
 } => {

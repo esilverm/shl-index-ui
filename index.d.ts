@@ -45,7 +45,7 @@ export interface Player {
     FA: number;
     FFPct: number;
     FFPctRel: number;
-  }
+  };
 }
 
 export interface Goalie {
