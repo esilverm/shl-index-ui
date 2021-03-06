@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useRouter } from 'next/router';
+import { getQuerySeason } from '../utils/querySeason';
 
 const useStandings = (
   league: string,
@@ -74,13 +74,13 @@ const useStandings = (
   isLoading: boolean;
   isError: boolean;
 } => {
-  const router = useRouter();
-  const { query: { season } } = router;
+  const season = getQuerySeason();
+  const seasonParam = season ? `&season=${season}` : '';
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${leagueid}&display=${display}&season=${season}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${leagueid}&display=${display}${seasonParam}`
   );
 
   return {

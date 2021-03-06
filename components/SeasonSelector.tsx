@@ -1,24 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { getQuerySeason } from '../utils/querySeason';
 
+// TODO: Remove when proper season getter is created
 const firstSeason = 54;
 const currentSeason = 58;
-const seasons = Array.from(Array(currentSeason - firstSeason + 1), (e, i) => i + firstSeason);
+const seasons = Array.from(Array(currentSeason - firstSeason + 1), (_, i) => i + firstSeason);
 
-// interface Props {}
+// TODO: Re-add when proper season getter is created
+// interface Props {
+//   seasons: string[];
+// }
 
 function SeasonSelector(): JSX.Element {
   const router = useRouter();
 
-  const getQuerySeason = () => {
-    const querySeason = router.query.season as string;
-    if (!querySeason) return currentSeason;
-    return querySeason.match(/\d+/) ? querySeason : currentSeason;
-  };
-
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedSeason, setSelectedSeason] = useState(getQuerySeason());
+  const [selectedSeason, setSelectedSeason] = useState('');
   const selectorRef = useRef(null);
 
   const onMouseLeave = () => {
@@ -33,14 +32,17 @@ function SeasonSelector(): JSX.Element {
       selectorRef.current.addEventListener("mouseleave", onMouseLeave);
     }
   }, [selectorRef, isExpanded]);
-  useEffect(() => setSelectedSeason(getQuerySeason()), [router.query.season]);
+  useEffect(() => setSelectedSeason(getQuerySeason()), []);
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonSelect = (event) => {
     const season = event.target.dataset.season;
+    const seasonInSearch = window.location.search.match(/([?|&])season=\d+/);
 
     if (season && season.match(/\d+/)) {
-      const updatedSearch = window.location.search.replace(/([?|&])season=\d+/, `$1season=${season}`);
+      const updatedSearch = seasonInSearch
+        ? window.location.search.replace(seasonInSearch[0], `${seasonInSearch[1]}season=${season}`)
+        : `?season=${season}`;
       const newPath = `${window.location.pathname}${updatedSearch}`
       router.push(newPath);
       setSelectedSeason(season);
@@ -64,7 +66,7 @@ function SeasonSelector(): JSX.Element {
       <DropdownButton onClick={onButtonClick}>
         <ButtonContent>
           <SeasonText />
-          {selectedSeason}
+            {selectedSeason}
           <Caret className={isExpanded ? 'up' : 'down'} />
         </ButtonContent>
       </DropdownButton>
