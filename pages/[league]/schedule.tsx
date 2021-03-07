@@ -35,7 +35,10 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
 
   const sortGamesByDate = () => {
     const unsortedGames = [...games];
-    return unsortedGames.sort((gameA, gameB) => new Date(gameA.date).valueOf() - new Date(gameB.date).valueOf());
+    return unsortedGames.sort(
+      (gameA, gameB) =>
+        new Date(gameA.date).valueOf() - new Date(gameB.date).valueOf()
+    );
   };
 
   const renderGameDays = () => {
@@ -45,61 +48,68 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     const sortedGames = sortGamesByDate();
     const gameDates = [];
 
-
-    sortedGames.forEach(game => !gameDates.includes(game.date) && gameDates.push(game.date));
-    gameDates.forEach(date => {
-      const gamesOnDate = sortedGames.filter(game => game.date === date);
-      gameDaySchedules.push(<GameDaySchedule key={date} date={date} games={gamesOnDate} teamlist={teamlist} sprites={sprites} />);
+    sortedGames.forEach(
+      (game) => !gameDates.includes(game.date) && gameDates.push(game.date)
+    );
+    gameDates.forEach((date) => {
+      const gamesOnDate = sortedGames.filter((game) => game.date === date);
+      gameDaySchedules.push(
+        <GameDaySchedule
+          key={date}
+          date={date}
+          games={gamesOnDate}
+          teamlist={teamlist}
+          sprites={sprites}
+        />
+      );
     });
 
     return gameDaySchedules;
-  }
+  };
 
   return (
     <React.Fragment>
       <NextSeo
-        title='Schedule'
+        title="Schedule"
         openGraph={{
           title: 'Schedule',
         }}
       />
-      <Header league={league} activePage='schedule' />
+      <Header league={league} activePage="schedule" />
       <Container>
-        <SeasonTypeSelectContainer role='tablist'>
+        <SeasonTypeSelectContainer role="tablist">
           <SeasonTypeSelectItem
-            key='Pre-Season'
+            key="Pre-Season"
             onClick={() => setSeasonType(() => 'Pre-Season')}
             active={seasonType === 'Pre-Season'}
             tabIndex={0}
-            role='tab'
+            role="tab"
             aria-selected={seasonType === 'Pre-Season'}
           >
             Pre-Season
           </SeasonTypeSelectItem>
           <SeasonTypeSelectItem
-            key='Regular Season'
+            key="Regular Season"
             onClick={() => setSeasonType(() => 'Regular Season')}
             active={seasonType === 'Regular Season'}
             tabIndex={0}
-            role='tab'
+            role="tab"
             aria-selected={seasonType === 'Regular Season'}
           >
             Regular Season
           </SeasonTypeSelectItem>
           <SeasonTypeSelectItem
-            key='Playoffs'
+            key="Playoffs"
             onClick={() => setSeasonType(() => 'Playoffs')}
             active={seasonType === 'Playoffs'}
             tabIndex={0}
-            role='tab'
+            role="tab"
             aria-selected={seasonType === 'Playoffs'}
           >
             Playoffs
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
-        <ScheduleContainer>
-          {renderGameDays()}
-        </ScheduleContainer>
+        <ScheduleContainer>{renderGameDays()}</ScheduleContainer>
       </Container>
     </React.Fragment>
   );

@@ -25,19 +25,17 @@ interface Props {
   isLoading: boolean;
 }
 
-function ScheduleTable({
-  games,
-  teamlist,
-  isLoading
-} : Props): JSX.Element {
+function ScheduleTable({ games, teamlist, isLoading }: Props): JSX.Element {
   const getMatchup = (awayScore, homeScore, awayTeamId, homeTeamId) => {
     if (isLoading) return <Skeleton height={18} />;
 
     const awayTeamWon = awayScore > homeScore;
-    const awayTeam = teamlist.find(team => team.id === awayTeamId);
-    const awayTeamName = awayTeam && awayTeam.name ? awayTeam.name : 'Away Team';
-    const homeTeam = teamlist.find(team => team.id === homeTeamId);
-    const homeTeamName = homeTeam && homeTeam.name ? homeTeam.name : 'Home Team';
+    const awayTeam = teamlist.find((team) => team.id === awayTeamId);
+    const awayTeamName =
+      awayTeam && awayTeam.name ? awayTeam.name : 'Away Team';
+    const homeTeam = teamlist.find((team) => team.id === homeTeamId);
+    const homeTeamName =
+      homeTeam && homeTeam.name ? homeTeam.name : 'Home Team';
 
     return (
       <>
@@ -45,14 +43,14 @@ function ScheduleTable({
         {' @ '}
         {!awayTeamWon ? <strong>{homeTeamName}</strong> : homeTeamName}
       </>
-    )
+    );
   };
-  
+
   const getResult = (awayScore, homeScore, played, shootout, overtime) => {
     if (isLoading) return <Skeleton height={18} />;
     if (!played) return <span>TBD</span>;
 
-    const endedIn = shootout ? " (SO)" : overtime ? " (OT)" : "";
+    const endedIn = shootout ? ' (SO)' : overtime ? ' (OT)' : '';
     return <span>{`${awayScore} - ${homeScore}${endedIn}`}</span>;
   };
 
@@ -64,47 +62,47 @@ function ScheduleTable({
         {
           Header: 'type',
           id: 'type',
-          accessor: 'type'
+          accessor: 'type',
         },
         {
           Header: 'Matchup',
           id: 'matchup',
-          accessor: ({ awayScore, homeScore, awayTeam, homeTeam }) => getMatchup(awayScore, homeScore, awayTeam, homeTeam)
+          accessor: ({ awayScore, homeScore, awayTeam, homeTeam }) =>
+            getMatchup(awayScore, homeScore, awayTeam, homeTeam),
         },
         {
           Header: 'Result',
           id: 'result',
-          accessor: ({ awayScore, homeScore, played, shootout, overtime }) => getResult(awayScore, homeScore, played, shootout, overtime)
-        }
-      ]
-    }
+          accessor: ({ awayScore, homeScore, played, shootout, overtime }) =>
+            getResult(awayScore, homeScore, played, shootout, overtime),
+        },
+      ],
+    },
   ];
 
   const data = useMemo(
-    () => isLoading
-      ? new Array(25).fill({
-        awayScore: 0,
-        homeScore: 0,
-        awayTeam: '',
-        homeTeam: '',
-        played: 0,
-        overtime: 0,
-        shootout: 0,
-        type: ''
-      })
-    : games,
+    () =>
+      isLoading
+        ? new Array(25).fill({
+            awayScore: 0,
+            homeScore: 0,
+            awayTeam: '',
+            homeTeam: '',
+            played: 0,
+            overtime: 0,
+            shootout: 0,
+            type: '',
+          })
+        : games,
     [isLoading, games]
   );
 
-  const columns = useMemo(
-    () => columnData,
-    [isLoading]
-  );
+  const columns = useMemo(() => columnData, [isLoading]);
 
   const {
     getTableProps,
     getTableBodyProps,
-    headerGroups, 
+    headerGroups,
     page,
     prepareRow,
     canPreviousPage,
@@ -113,11 +111,18 @@ function ScheduleTable({
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize }
-  } = useTable({ columns, data, initialState: {
-    hiddenColumns: ['type'],
-    pageSize: 25
-  }}, usePagination);
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        hiddenColumns: ['type'],
+        pageSize: 25,
+      },
+    },
+    usePagination
+  );
 
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
@@ -136,11 +141,11 @@ function ScheduleTable({
         </span>
         <select
           value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
           }}
         >
-          {[25, 50, 100].map(pageSize => (
+          {[25, 50, 100].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
@@ -150,59 +155,44 @@ function ScheduleTable({
       <TableContainer>
         <Table {...getTableProps()}>
           <TableHeader>
-            {
-              headerGroups.map((headerGroup, i) => (
-                <tr {...headerGroup.getHeaderGroupProps()} key={i}>
-                  {
-                    headerGroup.headers.map((column, i) => column.Header !== 'schedule' && (
-                        <th
-                          {
-                            ...column.getHeaderProps()
-                          }
-                          title={column.title}
-                          key={`${i}_${column.id}`}
-                          >
-                            {
-                              column.render('Header')
-                            }
-                          </th>
-                      )
+            {headerGroups.map((headerGroup, i) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                {headerGroup.headers.map(
+                  (column, i) =>
+                    column.Header !== 'schedule' && (
+                      <th
+                        {...column.getHeaderProps()}
+                        title={column.title}
+                        key={`${i}_${column.id}`}
+                      >
+                        {column.render('Header')}
+                      </th>
                     )
-                  }
-                </tr>
-              ))
-            }
+                )}
+              </tr>
+            ))}
           </TableHeader>
           <TableBody {...getTableBodyProps()}>
-            {
-              page.map((row, i) => {
-                prepareRow(row);
+            {page.map((row, i) => {
+              prepareRow(row);
 
-                return (
-                  <tr {...row.getRowProps()} key={i}>
-                    {
-                      row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                          >
-                            {
-                              cell.render('Cell')
-                            }
-                          </td>
-                        )
-                      })
-                    }
-                  </tr>
-                )
-              })
-            }
+              return (
+                <tr {...row.getRowProps()} key={i}>
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td {...cell.getCellProps()} key={i}>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
     </SkeletonTheme>
-  )
+  );
 }
 
 const TableContainer = styled.div`

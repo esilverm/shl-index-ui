@@ -47,6 +47,27 @@ paths:
             type: array
             items:
               $ref: '#/definitions/League'
+  /leagues/seasons:
+    get:
+      tags:
+        - leagues
+      summary: List of Seasons in the Index by League
+      description: 'A listing of all seasons in the index by league.'
+      operationId: getSeasons
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: null
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Seasons'
   /conferences:
     get:
       tags:
@@ -500,6 +521,20 @@ definitions:
       abbreviation:
         type: string
         example: SHL
+  Seasons:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+        example: Simulation Hockey League
+      abbreviation:
+        type: string
+        example: SHL
+      season:
+        type: number
+        example: 58
   Conference:
     type: object
     properties:
@@ -703,45 +738,48 @@ definitions:
       devensiveGameRating:
         type: number
         example: 72
-      PDO:
-        type: number
-        example: 95.2
-      GF60:
-        type: number
-        example: 2.6
-      GA60:
-        type: number
-        example: 3.8
-      SF60:
-        type: number
-        example: 31.9
-      SA60:
-        type: number
-        example: 29.7
-      CF:
-        type: number
-        example: 512
-      CA:
-        type: number
-        example: 506
-      CFPct:
-        type: number
-        example: 50.3
-      CFPctRel:
-        type: number
-        example: 6.1
-      FF:
-        type: number
-        example: 385
-      FA:
-        type: number
-        example: 365
-      FFPct:
-        type: number
-        example: 51.3
-      FFPctRel:
-        type: number
-        example: 7.5
+      advancedStats:
+        type: object
+        properties:
+          PDO:
+            type: number
+            example: 95.2
+          GF60:
+            type: number
+            example: 2.6
+          GA60:
+            type: number
+            example: 3.8
+          SF60:
+            type: number
+            example: 31.9
+          SA60:
+            type: number
+            example: 29.7
+          CF:
+            type: number
+            example: 512
+          CA:
+            type: number
+            example: 506
+          CFPct:
+            type: number
+            example: 50.3
+          CFPctRel:
+            type: number
+            example: 6.1
+          FF:
+            type: number
+            example: 385
+          FA:
+            type: number
+            example: 365
+          FFPct:
+            type: number
+            example: 51.3
+          FFPctRel:
+            type: number
+            example: 7.5
   rosterstats:
     type: object
     properties:

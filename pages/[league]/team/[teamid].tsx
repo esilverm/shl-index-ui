@@ -53,8 +53,14 @@ function TeamPage({
 
   if (!isLoading) console.log(roster);
 
-  const getSkaters = () => roster ? roster.filter((player) => player.position !== 'G') as Array<Player> : [];
-  const getGoalies = () => roster ? roster.filter((player) => player.position === 'G') as Array<Goalie> : [];
+  const getSkaters = () =>
+    roster
+      ? (roster.filter((player) => player.position !== 'G') as Array<Player>)
+      : [];
+  const getGoalies = () =>
+    roster
+      ? (roster.filter((player) => player.position === 'G') as Array<Goalie>)
+      : [];
 
   return (
     <React.Fragment>
@@ -81,7 +87,8 @@ function TeamPage({
         <TeamInfoContainer>
           <TeamName
             color={
-              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) != -1
+              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) !=
+              -1
                 ? '#FFFFFF'
                 : colors.text
             }
@@ -110,15 +117,19 @@ function TeamPage({
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
         <TableHeading>Skaters</TableHeading>
         <TableWrapper>
-          {
-            !isLoading && <TableContainer><SkaterScoreTable data={getSkaters()} /></TableContainer>
-          }
+          {!isLoading && (
+            <TableContainer>
+              <SkaterScoreTable data={getSkaters()} />
+            </TableContainer>
+          )}
         </TableWrapper>
         <TableHeading>Goalies</TableHeading>
         <TableWrapper>
-          {
-            !isLoading && <TableContainer><GoalieScoreTable data={getGoalies()} /></TableContainer>
-          }
+          {!isLoading && (
+            <TableContainer>
+              <GoalieScoreTable data={getGoalies()} />
+            </TableContainer>
+          )}
         </TableWrapper>
       </Container>
     </React.Fragment>

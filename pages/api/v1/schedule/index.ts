@@ -61,7 +61,6 @@ export default async (
 
   const schedule = await query(search);
 
-
   const parsed: Game[] = schedule.map((game) => ({
     season: game.SeasonID,
     league: game.LeagueID,
@@ -73,7 +72,7 @@ export default async (
     type: game.Type,
     played: game.Played,
     overtime: game.Overtime,
-    shootout: game.Shootout
+    shootout: game.Shootout,
   }));
 
   res.status(200).json(parsed);

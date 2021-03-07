@@ -14,11 +14,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const {
-    league = 0,
-    type: shorttype = 'rs',
-    season: seasonid,
-  } = req.query;
+  const { league = 0, type: shorttype = 'rs', season: seasonid } = req.query;
 
   let type: string;
   if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
@@ -60,7 +56,6 @@ export default async (
   );
 
   const parsed = [...playerStats].map((player) => {
-
     const position = ['LD', 'RD', 'LW', 'C', 'RW'][
       [+player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(20)
     ];
@@ -98,6 +93,8 @@ export default async (
       gameRating: player.GR,
       offensiveGameRating: player.OGR,
       devensiveGameRating: player.DGR,
+
+      advancedStats: {
         PDO: player.PDO,
         GF60: player.GF60,
         GA60: player.GA60,
@@ -110,7 +107,8 @@ export default async (
         FF: player.FF,
         FA: player.FA,
         FFPct: player.FFPct,
-        FFPctRel: player.FFPctRel
+        FFPctRel: player.FFPctRel,
+      },
     };
   });
 

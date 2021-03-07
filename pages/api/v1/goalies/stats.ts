@@ -14,11 +14,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const {
-    league = 0,
-    type: shorttype = 'rs',
-    season: seasonid,
-  } = req.query;
+  const { league = 0, type: shorttype = 'rs', season: seasonid } = req.query;
 
   let type: string;
   if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
@@ -60,27 +56,26 @@ export default async (
   );
 
   const parsed = [...goalieStats].map((player) => {
-
-	return {
-		id: player.PlayerID,
-		name: player.Name,
-		position: 'G',
-		league: player.LeagueID,
-		team: player.TeamID,
-		season: player.SeasonID,
-		gamesPlayed: player.GP,
-		minutes: player.Minutes,
-		wins: player.Wins,
-		losses: player.Losses,
-		ot: player.OT,
-		shotsAgainst: player.ShotsAgainst,
-		saves: player.Saves,
-		goalsAgainst: player.GoalsAgainst,
-		gaa: player.GAA,
-		shutouts: player.Shutouts,
-		savePct: player.SavePct,
-		gameRating: player.GameRating,
-	};
+    return {
+      id: player.PlayerID,
+      name: player.Name,
+      position: 'G',
+      league: player.LeagueID,
+      team: player.TeamID,
+      season: player.SeasonID,
+      gamesPlayed: player.GP,
+      minutes: player.Minutes,
+      wins: player.Wins,
+      losses: player.Losses,
+      ot: player.OT,
+      shotsAgainst: player.ShotsAgainst,
+      saves: player.Saves,
+      goalsAgainst: player.GoalsAgainst,
+      gaa: player.GAA,
+      shutouts: player.Shutouts,
+      savePct: player.SavePct,
+      gameRating: player.GameRating,
+    };
   });
 
   res.status(200).json(parsed);
