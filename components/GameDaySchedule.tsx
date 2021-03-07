@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { Team } from '..';
 
@@ -22,20 +23,10 @@ interface GameDayMatchupProps {
   };
 }
 
-const GameDayMatchup = ({
-  game,
-  teamlist,
-  sprites,
-}: GameDayMatchupProps): JSX.Element => {
-  const {
-    awayTeam,
-    awayScore,
-    homeTeam,
-    homeScore,
-    played,
-    overtime,
-    shootout,
-  } = game;
+
+const GameDayMatchup = ({ game, teamlist, sprites }: GameDayMatchupProps): JSX.Element => {
+  const { awayTeam, awayScore, homeTeam, homeScore, played, overtime, shootout, league: leagueid, season } = game;
+  const league = ['shl', 'smjhl', 'iihf', 'wjc'][leagueid];
   const awayTeamWon = awayScore > homeScore;
   const winNote = shootout ? '(SO)' : overtime ? '(OT)' : '';
   const awayTeamObject = teamlist.find((team) => team.id === awayTeam);
@@ -59,8 +50,14 @@ const GameDayMatchup = ({
   const AwayLogo = sprites[awayTeamAbbr];
   const HomeLogo = sprites[homeTeamAbbr];
 
+  console.log(game);
   return (
-    <GameRow>
+    <Link  
+      href="/[league]/[season]/game/[gameid]"
+      as={`/${league}/${season}/game/${'5'}`}
+      passHref
+      >
+        <GameRow>
       <TeamRow played={played} won={awayTeamWon} winNote={winNote}>
         <span className="team">
           <LogoWrapper abbr={awayTeamAbbr}>
@@ -79,7 +76,8 @@ const GameDayMatchup = ({
         </span>
         <span className="score">{played ? homeScore : '*'}</span>
       </TeamRow>
-    </GameRow>
+      </GameRow>
+    </Link>
   );
 };
 
@@ -133,6 +131,7 @@ const GameRow = styled.div`
   flex-direction: column;
   padding: 5px 10px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey500};
+  cursor: pointer;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.grey300};

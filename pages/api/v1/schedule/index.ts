@@ -12,6 +12,7 @@ const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
 type SeasonType = typeof seasonTypes[number];
 
 export interface Game {
+  slug: string | undefined;
   season: string;
   league: string;
   date: string;
@@ -31,7 +32,11 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type = 'Regular Season' } = req.query;
+  const {
+    league = 0,
+    season: seasonid,
+    type = 'Regular Season',
+  } = req.query;
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
