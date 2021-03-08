@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Team } from '../../..';
 
 import Header from '../../../components/Header';
+import { getQuerySeason } from '../../../utils/querySeason';
 
 interface Props {
   league: string;
@@ -139,9 +140,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );
+  const season = getQuerySeason();
+  const seasonParam = season ? `&season=${season}` : '';
 
   const teamlist = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}`
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}${seasonParam}`
   ).then((res) => res.json());
 
   return { props: { league: leaguename, teamlist } };
