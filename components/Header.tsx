@@ -30,7 +30,7 @@ function HeaderBar({
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
-  const { data, error } = useSWR(
+  const { data: scheduleData, error: scheduleError } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
       'shl',
       'smjhl',
@@ -40,6 +40,18 @@ function HeaderBar({
       days ? `&days=${days}` : ``
     }`
   );
+  const { data: seasonsData, error: seasonsError } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leagues/seasons?league=${[
+      'shl',
+      'smjhl',
+      'iihf',
+      'wjc',
+    ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
+      days ? `&days=${days}` : ``
+    }`
+  );
+
+  const getSeasonsList = () => seasonsData ? seasonsData.map(leagueEntry => leagueEntry.season) : [];
 
   return (
     <HeaderWrapper sticky={!scheduleVisible || !showScoreBar}>
@@ -49,7 +61,7 @@ function HeaderBar({
           onChange={(e) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <ScoreBar data={data} loading={!data && !error} league={league} />
+          <ScoreBar data={scheduleData} loading={!scheduleData && !scheduleError} league={league} />
         </VisibilitySensor>
       )}
       <HeaderNav
@@ -135,7 +147,7 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            <SeasonSelector />
+            <SeasonSelector seasons={getSeasonsList()} loading={!seasonsData && !seasonsError} />
           </SelectorWrapper>
         </Container>
       </HeaderNav>

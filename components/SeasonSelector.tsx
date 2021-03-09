@@ -1,19 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { DotLoader } from 'react-spinners';
+
 import { getQuerySeason } from '../utils/querySeason';
 
-// TODO: Remove when proper season getter is created
-const firstSeason = 54;
-const currentSeason = 58;
-const seasons = Array.from(Array(currentSeason - firstSeason + 1), (_, i) => i + firstSeason);
+interface Props {
+  seasons: string[];
+  loading: boolean;
+}
 
-// TODO: Re-add when proper season getter is created
-// interface Props {
-//   seasons: string[];
-// }
-
-function SeasonSelector(): JSX.Element {
+function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const router = useRouter();
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -32,7 +29,17 @@ function SeasonSelector(): JSX.Element {
       selectorRef.current.addEventListener("mouseleave", onMouseLeave);
     }
   }, [selectorRef, isExpanded]);
-  useEffect(() => setSelectedSeason(getQuerySeason()), []);
+  useEffect(() => {
+    let nextSeason = getQuerySeason();
+
+    if (!nextSeason && seasons) {
+      const numericSeasons = seasons.map(season => parseInt(season));
+      const currentSeason = seasons.length > 0 ? Math.max(...numericSeasons) : '';
+      nextSeason = currentSeason.toString();
+    }
+
+    setSelectedSeason(nextSeason);
+  }, [seasons]);
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonSelect = (event) => {
@@ -50,7 +57,7 @@ function SeasonSelector(): JSX.Element {
     }
   };
 
-  const renderDropdownItems = () => seasons.sort((a, b) => b - a).map(season => (
+  const renderDropdownItems = () => seasons.sort((a, b) => parseInt(b) - parseInt(a)).map(season => (
     <DropdownItem
       key={season}
       data-season={season}
@@ -66,7 +73,8 @@ function SeasonSelector(): JSX.Element {
       <DropdownButton onClick={onButtonClick}>
         <ButtonContent>
           <SeasonText />
-            {selectedSeason}
+          {selectedSeason}
+          {loading && !selectedSeason && <DotLoader size={15} color="white" />}
           <Caret className={isExpanded ? 'up' : 'down'} />
         </ButtonContent>
       </DropdownButton>
