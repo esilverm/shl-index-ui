@@ -506,7 +506,7 @@ const TeamWrapper = styled.div`
   .name {
     margin: 0 10px;
     min-width: max-content;
-    color: #0183da;
+    color: ${({ theme }) => theme.colors.blue600};
   }
 
   @media screen and (max-width: 768px) {
@@ -528,7 +528,7 @@ const LogoWrapper = styled.div<{ abbr: string }>`
 
   @media screen and (max-width: 768px) {
     &::after {
-      color: #0183da;
+      color: ${({ theme }) => theme.colors.blue600};
       content: '${({ abbr }) => abbr}';
       position: relative;
       left: 40px;

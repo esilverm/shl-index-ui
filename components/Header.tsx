@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
-import { ImSearch } from 'react-icons/im';
 import ScoreBar from './ScoreBar';
+import SeasonSelector from './SeasonSelector';
 
 interface Props {
   league: string;
@@ -30,7 +30,7 @@ function HeaderBar({
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
-  const { data, error } = useSWR(
+  const { data: scheduleData, error: scheduleError } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
       'shl',
       'smjhl',
@@ -40,6 +40,18 @@ function HeaderBar({
       days ? `&days=${days}` : ``
     }`
   );
+  const { data: seasonsData, error: seasonsError } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leagues/seasons?league=${[
+      'shl',
+      'smjhl',
+      'iihf',
+      'wjc',
+    ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
+      days ? `&days=${days}` : ``
+    }`
+  );
+
+  const getSeasonsList = () => seasonsData ? seasonsData.map(leagueEntry => leagueEntry.season) : [];
 
   return (
     <HeaderWrapper sticky={!scheduleVisible || !showScoreBar}>
@@ -49,7 +61,7 @@ function HeaderBar({
           onChange={(e) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <ScoreBar data={data} loading={!data && !error} league={league} />
+          <ScoreBar data={scheduleData} loading={!scheduleData && !scheduleError} league={league} />
         </VisibilitySensor>
       )}
       <HeaderNav
@@ -134,7 +146,9 @@ function HeaderBar({
             barColor="#F8F9FA"
             buttonWidth={24}
           />
-          <SearchIcon size={24} />
+          <SelectorWrapper>
+            <SeasonSelector seasons={getSeasonsList()} loading={!seasonsData && !seasonsError} />
+          </SelectorWrapper>
         </Container>
       </HeaderNav>
     </HeaderWrapper>
@@ -256,7 +270,7 @@ const MenuItem = styled.div<{ active: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: #0183da;
+    background-color: ${({ theme }) => theme.colors.blue600};
   }
 
   @media screen and (max-width: 670px) {
@@ -282,14 +296,13 @@ const HamburgerIcon = styled(HamburgerCollapse)`
   }
 `;
 
-const SearchIcon = styled(ImSearch)`
-  order: 3;
-  color: ${({ theme }) => theme.colors.grey100};
-  cursor: pointer;
-  margin: 9px;
-
+const SelectorWrapper = styled.div`
   @media screen and (min-width: 671px) {
-    display: none;
+    margin: 0 2% 0 auto;
+  }
+
+  @media screen and (max-width: 670px) {
+    order: 3;
   }
 `;
 
