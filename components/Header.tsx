@@ -70,6 +70,15 @@ function HeaderBar({
         aria-label="Main"
       >
         <Container>
+        <Link href="/" as={`/`} passHref>
+            <Back
+              role="link"
+              tabIndex={0}
+              dangerouslySetInnerHTML={{
+                __html: require(`../public/back.svg?include`),
+              }}
+            />
+          </Link>
           <Link href="/[league]" as={`/${league}`} passHref>
             <Logo
               scheduleNotVisible={!scheduleVisible || !showScoreBar}
@@ -226,6 +235,28 @@ const Logo = styled.div<{ scheduleNotVisible: boolean }>`
     & svg {
       top: 5%;
       margin: 0;
+    }
+  }
+`;
+
+const Back = styled.div<{ scheduleNotVisible: boolean }>`
+  transition: all 200ms;
+  height: 40%;
+  width: max-content;
+  margin: 0 0.2% 0 0.2%;
+
+  & svg {
+    position: relative;
+    height: 90%;
+    top: 5%;
+    object-fit: contain;
+    border-radius: 5px;
+    transition: all 200ms ease-out;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 670px) {
+    display: none;
     }
   }
 `;
