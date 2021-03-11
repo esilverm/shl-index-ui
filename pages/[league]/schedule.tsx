@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import GameDaySchedule from '../../components/GameDaySchedule';
 import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
-import { getQuerySeason } from '../../utils/querySeason';
+import { getQuerySeason } from '../../utils/season';
 
 interface Props {
   league: string;

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getQuerySeason } from '../utils/querySeason';
+import { getQuerySeason } from '../utils/season';
 
 const useStandings = (
   league: string,

@@ -1,5 +1,5 @@
 import React from 'react';
-// import Link from 'next/link';
+// import Link from '../../components/LinkWithSeason';
 import ScoreTable from '.';
 import { Player } from '../..';
 

@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { DotLoader } from 'react-spinners';
-
-import { getQuerySeason } from '../utils/querySeason';
+import { getLatestSeason, getQuerySeason } from '../utils/season';
 
 interface Props {
   seasons: string[];
@@ -33,9 +32,7 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
     let nextSeason = getQuerySeason();
 
     if (!nextSeason && seasons) {
-      const numericSeasons = seasons.map(season => parseInt(season));
-      const currentSeason = seasons.length > 0 ? Math.max(...numericSeasons) : '';
-      nextSeason = currentSeason.toString();
+      nextSeason = getLatestSeason(seasons);
     }
 
     setSelectedSeason(nextSeason);

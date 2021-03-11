@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { Player, Goalie } from '../';
-import { getQuerySeason } from '../utils/querySeason';
+import { getQuerySeason } from '../utils/season';
 
 const useStandings = (
   league: string,
