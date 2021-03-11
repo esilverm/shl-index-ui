@@ -71,7 +71,7 @@ function HeaderBar({
       >
         <Container>
         <Link href="/" as={`/`} passHref>
-            <Back
+            <GoBack
               role="link"
               tabIndex={0}
               dangerouslySetInnerHTML={{
@@ -248,7 +248,7 @@ const Logo = styled.div<{ scheduleNotVisible: boolean }>`
   }
 `;
 
-const Back = styled.div<{ scheduleNotVisible: boolean }>`
+const GoBack = styled.div`
   transition: all 200ms;
   height: 40%;
   width: max-content;
