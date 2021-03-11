@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-// import Link from 'next/link';
 import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+// import Link from '../../components/LinkWithSeason';
 import { Player, Goalie } from '../..';
 
 interface Columns {

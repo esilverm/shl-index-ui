@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { DotLoader } from 'react-spinners';
-
 import { getLatestSeason, getQuerySeason } from '../utils/season';
 
 interface Props {
