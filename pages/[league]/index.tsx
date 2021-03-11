@@ -119,7 +119,7 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const StandingsTableWrapper = styled.div`
-  width: 80%;
+  width: 92%;
   margin: auto;
 `;
 
