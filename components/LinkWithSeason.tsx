@@ -8,7 +8,7 @@ function LinkWithSeason(props: React.PropsWithChildren<LinkProps>): JSX.Element 
   const updatedProps = {
     ...props,
     as: `${props.as}${seasonParam}`
-  }
+  };
 
   return (
     <Link {...updatedProps}>

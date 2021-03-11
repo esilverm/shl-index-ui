@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
+import Link from './LinkWithSeason';
 import ScoreBar from './ScoreBar';
 import SeasonSelector from './SeasonSelector';
 
