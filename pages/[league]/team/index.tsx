@@ -1,13 +1,11 @@
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
-
 import { Team } from '../../..';
-
 import Header from '../../../components/Header';
-import { getQuerySeason } from '../../../utils/querySeason';
+import Link from '../../../components/LinkWithSeason';
+import { getQuerySeason } from '../../../utils/season';
 
 interface Props {
   league: string;

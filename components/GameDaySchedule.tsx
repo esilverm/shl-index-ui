@@ -1,8 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import styled from 'styled-components';
+import Link from '../components/LinkWithSeason';
 import { Team } from '..';
-
 import { Game } from '../pages/api/v1/schedule';
 
 interface GameDayHeaderProps {
