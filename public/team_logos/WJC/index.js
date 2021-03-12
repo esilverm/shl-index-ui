@@ -14,6 +14,7 @@ export default {
   CAN,
   CNR: CAN,
   CNW: CANR,
+  DACH: DCH,
   DCH,
   FIN,
   RCL,
