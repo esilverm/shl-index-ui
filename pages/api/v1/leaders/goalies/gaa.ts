@@ -37,7 +37,13 @@ export default async (
   `)
     ));
 
-  // ? Using Minutes > 60 to remove goalies that have only played part of a game.
+
+  const cutoffGames = await query(SQL`
+  SELECT MAX(GP) as games
+  FROM `.append(`player_goalie_stats_${type}`).append(SQL`
+  WHERE LeagueID=${+league}
+    AND SeasonID=${season.SeasonID}`));
+
   const gaaLeaders = await query(SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GAA
     FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
@@ -47,7 +53,7 @@ export default async (
       AND s.PlayerID = p.PlayerID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
-    AND s.Minutes > 60
+    AND s.GP >= `).append(Math.floor(cutoffGames[0].games * 0.20)).append(`
     ORDER BY s.GAA `).append(desc ? `DESC` : `ASC`).append(`
     LIMIT ${limit}
     `));
