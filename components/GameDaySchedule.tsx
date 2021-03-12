@@ -22,9 +22,22 @@ interface GameDayMatchupProps {
   };
 }
 
-
-const GameDayMatchup = ({ game, teamlist, sprites }: GameDayMatchupProps): JSX.Element => {
-  const { awayTeam, awayScore, homeTeam, homeScore, played, overtime, shootout, league: leagueid, season } = game;
+const GameDayMatchup = ({
+  game,
+  teamlist,
+  sprites,
+}: GameDayMatchupProps): JSX.Element => {
+  const {
+    awayTeam,
+    awayScore,
+    homeTeam,
+    homeScore,
+    played,
+    overtime,
+    shootout,
+    league: leagueid,
+    season,
+  } = game;
   const league = ['shl', 'smjhl', 'iihf', 'wjc'][leagueid];
   const awayTeamWon = awayScore > homeScore;
   const winNote = shootout ? '(SO)' : overtime ? '(OT)' : '';
@@ -51,30 +64,30 @@ const GameDayMatchup = ({ game, teamlist, sprites }: GameDayMatchupProps): JSX.E
 
   console.log(game);
   return (
-    <Link  
+    <Link
       href="/[league]/[season]/game/[gameid]"
       as={`/${league}/${season}/game/${'5'}`}
       passHref
-      >
-        <GameRow>
-      <TeamRow played={played} won={awayTeamWon} winNote={winNote}>
-        <span className="team">
-          <LogoWrapper abbr={awayTeamAbbr}>
-            <AwayLogo aria-label={`${awayTeamName} logo`} />
-          </LogoWrapper>
-          {awayTeamName}
-        </span>
-        <span className="score">{played ? awayScore : '*'}</span>
-      </TeamRow>
-      <TeamRow played={played} won={!awayTeamWon} winNote={winNote}>
-        <span className="team">
-          <LogoWrapper abbr={homeTeamAbbr}>
-            <HomeLogo aria-label={`${homeTeamName} logo`} />
-          </LogoWrapper>
-          {homeTeamName}
-        </span>
-        <span className="score">{played ? homeScore : '*'}</span>
-      </TeamRow>
+    >
+      <GameRow>
+        <TeamRow played={played} won={awayTeamWon} winNote={winNote}>
+          <span className="team">
+            <LogoWrapper abbr={awayTeamAbbr}>
+              <AwayLogo aria-label={`${awayTeamName} logo`} />
+            </LogoWrapper>
+            {awayTeamName}
+          </span>
+          <span className="score">{played ? awayScore : '*'}</span>
+        </TeamRow>
+        <TeamRow played={played} won={!awayTeamWon} winNote={winNote}>
+          <span className="team">
+            <LogoWrapper abbr={homeTeamAbbr}>
+              <HomeLogo aria-label={`${homeTeamName} logo`} />
+            </LogoWrapper>
+            {homeTeamName}
+          </span>
+          <span className="score">{played ? homeScore : '*'}</span>
+        </TeamRow>
       </GameRow>
     </Link>
   );

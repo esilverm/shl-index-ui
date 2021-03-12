@@ -19,13 +19,13 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const onMouseLeave = () => {
     setIsExpanded(false);
     if (selectorRef.current) {
-      selectorRef.current.removeEventListener("mouseleave", onMouseLeave);
+      selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
     }
   };
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {
-      selectorRef.current.addEventListener("mouseleave", onMouseLeave);
+      selectorRef.current.addEventListener('mouseleave', onMouseLeave);
     }
   }, [selectorRef, isExpanded]);
   useEffect(() => {
@@ -45,25 +45,17 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
 
     if (season && season.match(/\d+/)) {
       const updatedSearch = seasonInSearch
-        ? window.location.search.replace(seasonInSearch[0], `${seasonInSearch[1]}season=${season}`)
+        ? window.location.search.replace(
+            seasonInSearch[0],
+            `${seasonInSearch[1]}season=${season}`
+          )
         : `?season=${season}`;
-      const newPath = `${window.location.pathname}${updatedSearch}`
+      const newPath = `${window.location.pathname}${updatedSearch}`;
       router.push(newPath);
       setSelectedSeason(season);
       setIsExpanded(false);
     }
   };
-
-  const renderDropdownItems = () => seasons.sort((a, b) => parseInt(b) - parseInt(a)).map(season => (
-    <DropdownItem
-      key={season}
-      data-season={season}
-      onClick={onSeasonSelect}
-    >
-      <SeasonText data-season={season} />
-      {season}
-    </DropdownItem>
-  ));
 
   return (
     <Container ref={selectorRef}>
@@ -75,9 +67,22 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
           <Caret className={isExpanded ? 'up' : 'down'} />
         </ButtonContent>
       </DropdownButton>
-      {isExpanded && <DropdownList>
-        {renderDropdownItems()}
-      </DropdownList>}
+      {isExpanded && (
+        <DropdownList>
+          {seasons
+            .sort((a, b) => parseInt(b) - parseInt(a))
+            .map((season) => (
+              <DropdownItem
+                key={season}
+                data-season={season}
+                onClick={onSeasonSelect}
+              >
+                <SeasonText data-season={season} />
+                {season}
+              </DropdownItem>
+            ))}
+        </DropdownList>
+      )}
     </Container>
   );
 }
@@ -100,6 +105,7 @@ const DropdownButton = styled.button`
   border: 1px solid white;
   color: white;
   cursor: pointer;
+  border-radius: 5px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue600};
@@ -109,7 +115,7 @@ const DropdownButton = styled.button`
     background-color: ${({ theme }) => theme.colors.blue700};
   }
 
-  @media screen and (max-width: 670px) {
+  @media screen and (max-width: 700px) {
     padding: 6px 8px;
   }
 `;
@@ -120,7 +126,7 @@ const SeasonText = styled.span`
     margin-right: 4px;
   }
 
-  @media screen and (max-width: 670px) {
+  @media screen and (max-width: 700px) {
     &::after {
       content: 'S';
       margin-right: 0;
@@ -130,7 +136,7 @@ const SeasonText = styled.span`
 
 const Caret = styled.span`
   width: 0;
-  height: 0;  
+  height: 0;
   display: inline-block;
   border: 5px solid transparent;
   margin-left: 5px;
