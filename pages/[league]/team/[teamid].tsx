@@ -144,7 +144,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
-    width: 95%;
+    width: 100%;
     padding: 2.5%;
   }
 `;

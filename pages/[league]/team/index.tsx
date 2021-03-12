@@ -69,16 +69,16 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
-    width: 95%;
-    padding: 2.5%;
+    width: 100%;
+    padding: 0%;
   }
 `;
 
 const TeamListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(425px, 1fr));
   grid-auto-rows: 100px;
-  margin-top: 50px;
+  margin-top: 20px;
 `;
 
 const TeamLink = styled.div<{

@@ -93,20 +93,20 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
-    width: 95%;
+    width: 100%;
     padding: 2.5%;
   }
 `;
 
 const DisplaySelectContainer = styled.div`
-  margin: 40px auto;
+  margin: 28px auto;
   width: 95%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
 `;
 
 const DisplaySelectItem = styled.div<{ active: boolean }>`
   display: inline-block;
-  padding: 8px 32px;
+  padding: 8px 24px;
   border: 1px solid
     ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
   background-color: ${({ theme, active }) =>
@@ -119,7 +119,7 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const StandingsTableWrapper = styled.div`
-  width: 80%;
+  width: 95%;
   margin: auto;
 `;
 

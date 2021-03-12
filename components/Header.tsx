@@ -92,6 +92,7 @@ function HeaderBar({
           <MenuDrawer active={drawerVisible}>
             <Link href="/" as={`/`} passHref>
               <MenuItem
+                className='HomeButton'
                 active={activePage === 'home'}
                 role="link"
                 tabIndex={0}
@@ -312,11 +313,14 @@ const MenuItem = styled.div<{ active: boolean }>`
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue600};
   }
-
+  &.HomeButton {
+    @media screen and (min-width: 670px) { display: none !important; }
+    @media screen and (max-width: 670px) { display: flex; }
+  }
   @media screen and (max-width: 670px) {
     width: 100%;
     height: 50px;
-
+    
     // Change look of active tab within menu on mobile device
     ${({ active, theme }) =>
       active
