@@ -32,7 +32,7 @@ function Livestream({ isSHL = true }: { isSHL?: boolean }): JSX.Element {
       <Title>{isLive ? 'Current' : 'Most Recent'} Livestream</Title>
       <Container>
         <LivestreamIFrame
-          src={`https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1&color=white&rel=0`}
+          src={`https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=1&color=white&rel=0`}
           frameBorder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

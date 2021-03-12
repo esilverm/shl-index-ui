@@ -35,13 +35,20 @@ Props): JSX.Element {
   // ! add loading state
   const columns = useMemo(() => columnData, []);
 
+  const initialState = useMemo(() => {
+    if ("wins" in players[0]) {
+      return { sortBy: [{id: "wins", desc: true}] };
+    }
+    return { sortBy: [{id: "points", desc: true}] };
+  }, [])
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data }, useSortBy);
+  } = useTable({ columns, data, initialState}, useSortBy);
 
   return (
     <TableContainer>
