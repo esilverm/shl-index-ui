@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import { Game } from '../pages/api/v1/schedule';
 import { getQuerySeason } from '../utils/season';
 

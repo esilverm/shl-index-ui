@@ -13,3 +13,5 @@ logs
 
 # NPM files
 package.json
+
+.next

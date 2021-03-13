@@ -190,6 +190,7 @@ const TeamHero = styled.div<{
     flex-direction: column;
     padding: 0;
     padding-top: 5%;
+    padding-bottom: 5%;
   }
 `;
 

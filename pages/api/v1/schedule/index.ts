@@ -32,11 +32,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const {
-    league = 0,
-    season: seasonid,
-    type = 'Regular Season',
-  } = req.query;
+  const { league = 0, season: seasonid, type = 'Regular Season' } = req.query;
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||

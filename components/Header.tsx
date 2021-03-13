@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import VisibilitySensor from 'react-visibility-sensor';
 import { HamburgerCollapse } from 'react-animated-burgers';
+
 import Link from './LinkWithSeason';
 import ScoreBar from './ScoreBar';
 import SeasonSelector from './SeasonSelector';
@@ -30,6 +31,7 @@ function HeaderBar({
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+
   const { data: scheduleData, error: scheduleError } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
       'shl',
@@ -40,6 +42,7 @@ function HeaderBar({
       days ? `&days=${days}` : ``
     }`
   );
+
   const { data: seasonsData, error: seasonsError } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leagues/seasons?league=${[
       'shl',
@@ -51,7 +54,8 @@ function HeaderBar({
     }`
   );
 
-  const getSeasonsList = () => seasonsData ? seasonsData.map(leagueEntry => leagueEntry.season) : [];
+  const getSeasonsList = () =>
+    seasonsData ? seasonsData.map((leagueEntry) => leagueEntry.season) : [];
 
   return (
     <HeaderWrapper sticky={!scheduleVisible || !showScoreBar}>
@@ -61,7 +65,11 @@ function HeaderBar({
           onChange={(e) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <ScoreBar data={scheduleData} loading={!scheduleData && !scheduleError} league={league} />
+          <ScoreBar
+            data={scheduleData}
+            loading={!scheduleData && !scheduleError}
+            league={league}
+          />
         </VisibilitySensor>
       )}
       <HeaderNav
@@ -70,7 +78,7 @@ function HeaderBar({
         aria-label="Main"
       >
         <Container>
-        <Link href="/" as={`/`} passHref>
+          <Link href="/" as={`/`} passHref>
             <GoBack
               role="link"
               tabIndex={0}
@@ -92,7 +100,7 @@ function HeaderBar({
           <MenuDrawer active={drawerVisible}>
             <Link href="/" as={`/`} passHref>
               <MenuItem
-                className='HomeButton'
+                className="HomeButton"
                 active={activePage === 'home'}
                 role="link"
                 tabIndex={0}
@@ -166,7 +174,10 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            <SeasonSelector seasons={getSeasonsList()} loading={!seasonsData && !seasonsError} />
+            <SeasonSelector
+              seasons={getSeasonsList()}
+              loading={!seasonsData && !seasonsError}
+            />
           </SelectorWrapper>
         </Container>
       </HeaderNav>
@@ -314,13 +325,17 @@ const MenuItem = styled.div<{ active: boolean }>`
     background-color: ${({ theme }) => theme.colors.blue600};
   }
   &.HomeButton {
-    @media screen and (min-width: 670px) { display: none !important; }
-    @media screen and (max-width: 670px) { display: flex; }
+    @media screen and (min-width: 670px) {
+      display: none !important;
+    }
+    @media screen and (max-width: 670px) {
+      display: flex;
+    }
   }
   @media screen and (max-width: 670px) {
     width: 100%;
     height: 50px;
-    
+
     // Change look of active tab within menu on mobile device
     ${({ active, theme }) =>
       active

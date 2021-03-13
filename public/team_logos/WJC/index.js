@@ -1,7 +1,7 @@
 import BRI from './British_Isles.svg?sprite';
 import CAN from './Canada.svg?sprite';
 import CANR from './Canada_Red.svg?sprite';
-import DCH from './Dach.svg?sprite';
+import DCH from './DACH.svg?sprite';
 import FIN from './Finland.svg?sprite';
 import RCL from './UCORCAL.svg?sprite';
 import SWE from './Sweden.svg?sprite';
@@ -14,6 +14,7 @@ export default {
   CAN,
   CNR: CAN,
   CNW: CANR,
+  DACH: DCH,
   DCH,
   FIN,
   RCL,

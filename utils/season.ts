@@ -1,5 +1,5 @@
 export const getQuerySeason = (): string => {
-  if (typeof window === "undefined") return '';
+  if (typeof window === 'undefined') return '';
 
   const urlParams = new URLSearchParams(window.location.search);
   const season = urlParams.get('season') || '';
@@ -8,7 +8,7 @@ export const getQuerySeason = (): string => {
 
 export const getLatestSeason = (seasons: string[]): string => {
   if (seasons) {
-    const numericSeasons = seasons.map(season => parseInt(season));
+    const numericSeasons = seasons.map((season) => parseInt(season));
     const currentSeason = seasons.length > 0 ? Math.max(...numericSeasons) : '';
     return currentSeason.toString();
   }
