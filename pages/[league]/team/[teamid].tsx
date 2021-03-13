@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Error from 'next/error';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import { NextSeo } from 'next-seo';
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
+import SkaterAdvStatsTable from '../../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
 import { Goalie, Player } from '../../..';
@@ -52,6 +53,7 @@ function TeamPage({
   const { roster, isLoading } = useTeamRosterStats(leaguename, id);
 
   if (!isLoading) console.log(roster);
+  const [display, setDisplay] = useState('stats');
 
   const getSkaters = () =>
     roster
@@ -116,10 +118,31 @@ function TeamPage({
       <Container>
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
         <TableHeading>Skaters</TableHeading>
+        <DisplaySelectContainer role="tablist">
+          <DisplaySelectItem
+            onClick={() => setDisplay(() => 'stats')}
+            active={display === 'stats'}
+            tabIndex={0}
+            role="tab"
+            aria-selected={display === 'stats'}
+          >
+            Stats
+          </DisplaySelectItem>
+          <DisplaySelectItem
+            onClick={() => setDisplay(() => '')}
+            active={display === ''}
+            tabIndex={0}
+            role="tab"
+            aria-selected={display === ''}
+          >
+            Advanced Stats
+          </DisplaySelectItem>
+        </DisplaySelectContainer>
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              <SkaterScoreTable data={getSkaters()} />
+              {display && (<SkaterScoreTable data={getSkaters()} />)}
+              {!display && (<SkaterAdvStatsTable data={getSkaters()} />)}
             </TableContainer>
           )}
         </TableWrapper>
@@ -224,6 +247,26 @@ const TeamHeaderStats = styled.h3<{ color: string }>`
   span:last-child {
     margin-right: 0;
   }
+`;
+
+const DisplaySelectContainer = styled.div`
+  margin: 28px auto;
+  width: 95%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
+`;
+
+const DisplaySelectItem = styled.div<{ active: boolean }>`
+  display: inline-block;
+  padding: 8px 24px;
+  border: 1px solid
+    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.grey100 : 'transparent'};
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  border-bottom: none;
+  bottom: -1px;
 `;
 
 const TableWrapper = styled.div`
