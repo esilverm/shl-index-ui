@@ -17,6 +17,10 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
+  const [filterNumDays, setFilterNumDays] = useState(4);
+  // const [filterTeam, setFilterTeam] = useState('');
+  // const [pages, setPages] = useState(0);
+  const [page, setPage] = useState(1);
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
@@ -42,16 +46,23 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     );
   };
 
+  const prepareDatesForRendering = (sortedGames) => {
+    const gameDates = [];
+    sortedGames.forEach(
+      (game) => !gameDates.includes(game.date) && gameDates.push(game.date)
+    );
+    const filteredDates = gameDates.slice(page * filterNumDays - filterNumDays, page * filterNumDays);
+
+    return filteredDates;
+  };
+
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
 
     const gameDaySchedules = [];
     const sortedGames = sortGamesByDate();
-    const gameDates = [];
+    const gameDates = prepareDatesForRendering(sortedGames);
 
-    sortedGames.forEach(
-      (game) => !gameDates.includes(game.date) && gameDates.push(game.date)
-    );
     gameDates.forEach((date) => {
       const gamesOnDate = sortedGames.filter((game) => game.date === date);
       gameDaySchedules.push(
@@ -78,45 +89,59 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       />
       <Header league={league} activePage="schedule" />
       <Container>
-        <SeasonTypeSelectContainer role="tablist">
-          <SeasonTypeSelectItem
-            key="Pre-Season"
-            onClick={() => setSeasonType(() => 'Pre-Season')}
-            active={seasonType === 'Pre-Season'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Pre-Season'}
-          >
-            Pre-Season
-          </SeasonTypeSelectItem>
-          <SeasonTypeSelectItem
-            key="Regular Season"
-            onClick={() => setSeasonType(() => 'Regular Season')}
-            active={seasonType === 'Regular Season'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Regular Season'}
-          >
-            Regular Season
-          </SeasonTypeSelectItem>
-          <SeasonTypeSelectItem
-            key="Playoffs"
-            onClick={() => setSeasonType(() => 'Playoffs')}
-            active={seasonType === 'Playoffs'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Playoffs'}
-          >
-            Playoffs
-          </SeasonTypeSelectItem>
-        </SeasonTypeSelectContainer>
+        <ScheduleHeader>
+          <SeasonTypeSelectContainer role="tablist">
+            <SeasonTypeSelectItem
+              key="Pre-Season"
+              onClick={() => setSeasonType(() => 'Pre-Season')}
+              active={seasonType === 'Pre-Season'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={seasonType === 'Pre-Season'}
+            >
+              Pre-Season
+            </SeasonTypeSelectItem>
+            <SeasonTypeSelectItem
+              key="Regular Season"
+              onClick={() => setSeasonType(() => 'Regular Season')}
+              active={seasonType === 'Regular Season'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={seasonType === 'Regular Season'}
+            >
+              Regular Season
+            </SeasonTypeSelectItem>
+            <SeasonTypeSelectItem
+              key="Playoffs"
+              onClick={() => setSeasonType(() => 'Playoffs')}
+              active={seasonType === 'Playoffs'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={seasonType === 'Playoffs'}
+            >
+              Playoffs
+            </SeasonTypeSelectItem>
+          </SeasonTypeSelectContainer>
+          <Filters>
+            <select onChange={(value) => setPage(parseInt(value.target.value))}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+            <select onChange={(value) => setFilterNumDays(parseInt(value.target.value))}>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+            </select>
+          </Filters>
+        </ScheduleHeader>
         <ScheduleContainer>{renderGameDays()}</ScheduleContainer>
       </Container>
     </React.Fragment>
   );
 }
 
-// TODO Add better styling
 const Container = styled.div`
   width: 75%;
   padding: 41px 0 40px 0;
@@ -127,6 +152,11 @@ const Container = styled.div`
     width: 100%;
     padding: 2.5%;
   }
+`;
+
+const ScheduleHeader = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const SeasonTypeSelectContainer = styled.div`
@@ -147,6 +177,10 @@ const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
   position: relative;
   border-bottom: none;
   bottom: -1px;
+`;
+
+const Filters = styled.div`
+
 `;
 
 const ScheduleContainer = styled.div`
