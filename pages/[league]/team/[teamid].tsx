@@ -141,8 +141,7 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              {display && (<SkaterScoreTable data={getSkaters()} />)}
-              {!display && (<SkaterAdvStatsTable data={getSkaters()} />)}
+              { display ? <SkaterScoreTable data={getSkaters()} /> : <SkaterAdvStatsTable data={getSkaters()} /> }
             </TableContainer>
           )}
         </TableWrapper>
