@@ -76,7 +76,7 @@ const Container = styled.div`
 
 const TeamListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(425px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   grid-auto-rows: 100px;
   margin-top: 20px;
 `;
