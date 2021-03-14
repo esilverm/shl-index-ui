@@ -17,15 +17,15 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
-  const [filterNumDays, setFilterNumDays] = useState(4);
-  const [filterTeam, setFilterTeam] = useState('');
-  const [pages, setPages] = useState(0);
+  const [filterNumDates, setFilterNumDates] = useState(4);
+  const [filterTeam, setFilterTeam] = useState<number>();
+  const [pages, setPages] = useState(1);
   const [page, setPage] = useState(1);
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
-  console.log(filterTeam)
+
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
     (async () => {
@@ -49,11 +49,15 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const prepareDatesForRendering = (sortedGames) => {
     const gameDates = [];
     sortedGames.forEach(
-      (game) => !gameDates.includes(game.date) && gameDates.push(game.date)
+      (game) => !gameDates.includes(game.date)
+        && (filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam))
+        && gameDates.push(game.date)
     );
 
-    const filteredDates = gameDates.slice(page * filterNumDays - filterNumDays, page * filterNumDays);
-    const totalPagesWithFilter = Math.floor(gameDates.length / filterNumDays);
+    if (!filterNumDates) return gameDates;
+
+    const filteredDates = gameDates.slice(page * filterNumDates - filterNumDates, page * filterNumDates);
+    const totalPagesWithFilter = Math.ceil(gameDates.length / filterNumDates);
     if (pages !== totalPagesWithFilter){
       setPages(totalPagesWithFilter);
     }
@@ -69,12 +73,14 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     const gameDates = prepareDatesForRendering(sortedGames);
 
     gameDates.forEach((date) => {
-      const gamesOnDate = sortedGames.filter((game) => game.date === date);
+      const gamesOnDate = sortedGames.filter(game => game.date === date);
+      const filteredGamesOnDate = gamesOnDate.filter(game => filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam));
+
       gameDaySchedules.push(
         <GameDaySchedule
           key={date}
           date={date}
-          games={gamesOnDate}
+          games={filteredGamesOnDate}
           teamlist={teamlist}
           sprites={sprites}
         />
@@ -138,18 +144,29 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
         <Filters>
-          <select onChange={(value) => setPage(parseInt(value.target.value))}>
-            {renderPageOptions()}
-          </select>
-          <select onChange={(value) => setFilterNumDays(parseInt(value.target.value))}>
+          Number of Dates
+          <select onChange={(value) => {
+            setPage(1);
+            setFilterNumDates(parseInt(value.target.value) || undefined);
+          }} value={filterNumDates || "all"}>
             <option value="4">4</option>
             <option value="8">8</option>
             <option value="16">16</option>
+            <option value="32">32</option>
+            <option value="all">All</option>
           </select>
-          <select onChange={(value) => setFilterTeam(value.target.value)}>
-            <option value="NEW">NEW</option>
-            <option value="BUF">BUF</option>
-            <option value="LAP">LAP</option>
+          <br />
+          Page
+          <select onChange={(value) => setPage(parseInt(value.target.value))} value={page}>
+            {renderPageOptions()}
+          </select>
+          <br />
+          Team
+          <select onChange={(value) => setFilterTeam(parseInt(value.target.value) || undefined)} value={filterTeam || "all"}>
+            <option value="all">All</option>
+            <option value="5">NEW</option>
+            <option value="0">BUF</option>
+            <option value="10">MIN</option>
           </select>
         </Filters>
         <ScheduleContainer>{renderGameDays()}</ScheduleContainer>
