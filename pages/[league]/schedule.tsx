@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
@@ -17,14 +17,14 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
-  const [filterNumDates, setFilterNumDates] = useState(4);
+  const [isScheduleRendered, setIsScheduleRendered] = useState(false);
+  const [showAllDates, setShowAllDates] = useState(false);
   const [filterTeam, setFilterTeam] = useState<number>();
-  const [pages, setPages] = useState(1);
-  const [page, setPage] = useState(1);
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
+  const scheduleContainerRef = useRef();
 
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
@@ -36,6 +36,13 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       setSprites(() => s);
       setLoadingAssets(() => false);
     })();
+  }, []);
+
+  useEffect(() => {
+    if (scheduleContainerRef.current) {
+      const containerElem = scheduleContainerRef.current as HTMLElement;
+      setIsScheduleRendered(containerElem.clientHeight > 0);
+    }
   });
 
   const sortGamesByDate = () => {
@@ -46,23 +53,19 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     );
   };
 
-  const prepareDatesForRendering = (sortedGames) => {
+  const hasFilteredTeam = game => filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam);
+
+  const getDatesForRendering = (sortedGames) => {
     const gameDates = [];
-    sortedGames.forEach(
-      (game) => !gameDates.includes(game.date)
-        && (filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam))
-        && gameDates.push(game.date)
-    );
+    sortedGames.some(game => {
+      if (!gameDates.includes(game.date) && hasFilteredTeam(game)) {
+        gameDates.push(game.date);
+      }
 
-    if (!filterNumDates) return gameDates;
+      return !showAllDates && gameDates.length >= 32;
+    });
 
-    const filteredDates = gameDates.slice(page * filterNumDates - filterNumDates, page * filterNumDates);
-    const totalPagesWithFilter = Math.ceil(gameDates.length / filterNumDates);
-    if (pages !== totalPagesWithFilter){
-      setPages(totalPagesWithFilter);
-    }
-    
-    return filteredDates;
+    return gameDates;
   };
 
   const renderGameDays = () => {
@@ -70,11 +73,11 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
 
     const gameDaySchedules = [];
     const sortedGames = sortGamesByDate();
-    const gameDates = prepareDatesForRendering(sortedGames);
+    const gameDates = getDatesForRendering(sortedGames);
 
     gameDates.forEach((date) => {
       const gamesOnDate = sortedGames.filter(game => game.date === date);
-      const filteredGamesOnDate = gamesOnDate.filter(game => filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam));
+      const filteredGamesOnDate = gamesOnDate.filter(game => hasFilteredTeam(game));
 
       gameDaySchedules.push(
         <GameDaySchedule
@@ -88,17 +91,6 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     });
 
     return gameDaySchedules;
-  };
-
-  const renderPageOptions = () => {
-    const pageOptions = [];
-    for (let n = 1; n <= pages; n++) {
-      pageOptions.push(
-        <option key={n} value={n}>{n}</option>
-      );
-    }
-
-    return pageOptions;
   };
 
   return (
@@ -144,23 +136,6 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
           </SeasonTypeSelectItem>
         </SeasonTypeSelectContainer>
         <Filters>
-          Number of Dates
-          <select onChange={(value) => {
-            setPage(1);
-            setFilterNumDates(parseInt(value.target.value) || undefined);
-          }} value={filterNumDates || "all"}>
-            <option value="4">4</option>
-            <option value="8">8</option>
-            <option value="16">16</option>
-            <option value="32">32</option>
-            <option value="all">All</option>
-          </select>
-          <br />
-          Page
-          <select onChange={(value) => setPage(parseInt(value.target.value))} value={page}>
-            {renderPageOptions()}
-          </select>
-          <br />
           Team
           <select onChange={(value) => setFilterTeam(parseInt(value.target.value) || undefined)} value={filterTeam || "all"}>
             <option value="all">All</option>
@@ -169,7 +144,8 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
             <option value="10">MIN</option>
           </select>
         </Filters>
-        <ScheduleContainer>{renderGameDays()}</ScheduleContainer>
+        <ScheduleContainer ref={scheduleContainerRef}>{renderGameDays()}</ScheduleContainer>
+        {isScheduleRendered && !showAllDates && <button onClick={() => setShowAllDates(true)}>Load all games</button>}
       </Container>
     </React.Fragment>
   );
