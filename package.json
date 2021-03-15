@@ -34,7 +34,7 @@
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2",
     "styled-components": "^5.1.1",
-    "svg-sprite-loader": "^5.0.0",
+    "svg-sprite-loader": "^6.0.0",
     "swr": "^0.3.6"
   },
   "devDependencies": {
