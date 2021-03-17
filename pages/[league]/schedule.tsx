@@ -3,11 +3,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
+import { PulseLoader } from 'react-spinners';
 import Header from '../../components/Header';
 import GameDaySchedule from '../../components/GameDaySchedule';
 import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
 import { getQuerySeason } from '../../utils/season';
+
+enum SCHEDULE_STATES {
+  INITIAL_LOADING = 'INITIAL_LOADING',
+  INITIAL_LOADED = 'INITIAL_LOADED',
+  FULL_LOADING = 'FULL_LOADING',
+  FULL_LOADED = 'FULL_LOADED'
+}
+type ScheduleState = keyof typeof SCHEDULE_STATES;
 
 interface Props {
   league: string;
@@ -17,8 +26,9 @@ interface Props {
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState('Regular Season');
   const { games, isLoading } = useSchedule(league, seasonType);
-  const [isScheduleRendered, setIsScheduleRendered] = useState(false);
-  const [showAllDates, setShowAllDates] = useState(false);
+  const [scheduleHeight, setScheduleHeight] = useState(0);
+  const [scheduleState, setScheduleState] = useState<ScheduleState>('INITIAL_LOADING');
+  const [showFullSchedule, setShowFullSchedule] = useState(false);
   const [filterTeam, setFilterTeam] = useState<number>();
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
@@ -41,9 +51,26 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   useEffect(() => {
     if (scheduleContainerRef.current) {
       const containerElem = scheduleContainerRef.current as HTMLElement;
-      setIsScheduleRendered(containerElem.clientHeight > 0);
+      if (containerElem.clientHeight > scheduleHeight) {
+        const newState = (
+          scheduleState === SCHEDULE_STATES.INITIAL_LOADING
+            ? SCHEDULE_STATES.INITIAL_LOADED
+            : SCHEDULE_STATES.FULL_LOADED
+        );
+
+        setScheduleState(newState);
+        setScheduleHeight(containerElem.clientHeight);
+      }
     }
   });
+
+  useEffect(() => {
+    if (scheduleState === SCHEDULE_STATES.FULL_LOADING) {
+      setShowFullSchedule(true);
+    }
+  }, [scheduleState])
+
+  const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
   const sortGamesByDate = () => {
     const unsortedGames = [...games];
@@ -62,7 +89,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
         gameDates.push(game.date);
       }
 
-      return !showAllDates && gameDates.length >= 32;
+      return !showFullSchedule && gameDates.length >= 32;
     });
 
     return gameDates;
@@ -92,6 +119,8 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
 
     return gameDaySchedules;
   };
+
+  const isScheduleLoading = scheduleState === SCHEDULE_STATES.INITIAL_LOADING || scheduleState === SCHEDULE_STATES.FULL_LOADING;
 
   return (
     <React.Fragment>
@@ -145,7 +174,10 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
           </select>
         </Filters>
         <ScheduleContainer ref={scheduleContainerRef}>{renderGameDays()}</ScheduleContainer>
-        {isScheduleRendered && !showAllDates && <button onClick={() => setShowAllDates(true)}>Load all games</button>}
+        <LoadingWrapper>
+          {isScheduleLoading && <PulseLoader size={15} />}
+          {!isScheduleLoading && !showFullSchedule && <LoadAllButton onClick={onLoadAllGames}>Load all games</LoadAllButton>}
+        </LoadingWrapper>
       </Container>
     </React.Fragment>
   );
@@ -194,6 +226,29 @@ const ScheduleContainer = styled.div`
   width: 95%;
   margin: 0 auto 40px;
   flex-wrap: wrap;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LoadAllButton = styled.button`
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid ${({ theme }) => theme.colors.grey500};
+  background-color: ${({ theme }) => theme.colors.grey100};
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.grey300};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.colors.grey200};
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
