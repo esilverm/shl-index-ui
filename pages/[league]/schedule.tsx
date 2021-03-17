@@ -18,6 +18,8 @@ enum SCHEDULE_STATES {
 }
 type ScheduleState = keyof typeof SCHEDULE_STATES;
 
+const initialNumberOfGames = 32;
+
 interface Props {
   league: string;
   teamlist: Array<Team>;
@@ -83,14 +85,18 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const hasFilteredTeam = game => filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam);
 
   const getDatesForRendering = (sortedGames) => {
-    const gameDates = [];
-    sortedGames.some(game => {
+    let gameDates = [];
+    sortedGames.forEach(game => {
       if (!gameDates.includes(game.date) && hasFilteredTeam(game)) {
         gameDates.push(game.date);
       }
-
-      return !showFullSchedule && gameDates.length >= 32;
     });
+
+    if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
+      setShowFullSchedule(true);
+    } else if (!showFullSchedule) {
+      gameDates = gameDates.slice(0, initialNumberOfGames);
+    }
 
     return gameDates;
   };
