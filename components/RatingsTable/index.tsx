@@ -50,7 +50,7 @@ Props): JSX.Element {
     previousPage,
     gotoPage,
     state: { pageIndex },
-  } = useTable({ columns, data }, useSortBy, usePagination);
+  } = useTable({ columns, data, initialState: { pageSize: 20, } }, useSortBy, usePagination);
 
   return (
     <>
@@ -119,18 +119,6 @@ Props): JSX.Element {
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </span>
-        <span>
-          | Go to page:{' '}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              gotoPage(page)
-            }}
-            style={{ width: '100px' }}
-          />
         </span>
       </div>
       </>
