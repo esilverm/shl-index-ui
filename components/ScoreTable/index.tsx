@@ -36,11 +36,11 @@ Props): JSX.Element {
   const columns = useMemo(() => columnData, []);
 
   const initialState = useMemo(() => {
-    if ("wins" in players[0]) {
-      return { sortBy: [{id: "wins", desc: true}] };
+    if ('wins' in players[0]) {
+      return { sortBy: [{ id: 'wins', desc: true }] };
     }
-    return { sortBy: [{id: "points", desc: true}] };
-  }, [])
+    return { sortBy: [{ id: 'points', desc: true }] };
+  }, []);
 
   const {
     getTableProps,
@@ -48,7 +48,7 @@ Props): JSX.Element {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data, initialState}, useSortBy);
+  } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
     <TableContainer>

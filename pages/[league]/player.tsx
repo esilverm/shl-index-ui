@@ -7,7 +7,7 @@ import { NextSeo } from 'next-seo';
 // import useSWR from 'swr';
 import Header from '../../components/Header';
 import useRatings from '../../hooks/useRatings';
-import useGoalieRatings from '../../hooks/useGoalieRatings'
+import useGoalieRatings from '../../hooks/useGoalieRatings';
 import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
 import GoalieRatingsTable from '../../components/RatingsTable/GoalieRatingsTable';
 import { PlayerRatings, GoalieRatings } from '../..';
@@ -18,24 +18,27 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-
   const { skaterratings, isLoading } = useRatings(league);
   const { goalieratingdata } = useGoalieRatings(league);
-  if (!isLoading) console.log(skaterratings,goalieratingdata);
+  if (!isLoading) console.log(skaterratings, goalieratingdata);
 
   const getSkaters = () =>
-  skaterratings
-    ? (skaterratings.filter((player) => player.position !== 'G') as Array<PlayerRatings>)
-    : [];
-  const getGoalies = () =>
-  goalieratingdata
-      ? (goalieratingdata.filter((player) => player.position === 'G') as Array<GoalieRatings>)
+    skaterratings
+      ? (skaterratings.filter((player) => player.position !== 'G') as Array<
+          PlayerRatings
+        >)
       : [];
-    
+  const getGoalies = () =>
+    goalieratingdata
+      ? (goalieratingdata.filter((player) => player.position === 'G') as Array<
+          GoalieRatings
+        >)
+      : [];
+
   return (
     <React.Fragment>
       <NextSeo
-        title='Players'
+        title="Players"
         openGraph={{
           title: 'Players',
         }}

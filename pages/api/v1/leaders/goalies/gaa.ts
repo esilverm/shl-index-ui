@@ -8,14 +8,19 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type: shorttype = 'rs', limit = 10, desc = false } = req.query;
+  const {
+    league = 0,
+    season: seasonid,
+    type: shorttype = 'rs',
+    limit = 10,
+    desc = false,
+  } = req.query;
 
   let type: string;
   if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
@@ -37,27 +42,39 @@ export default async (
   `)
     ));
 
-
-  const cutoffGames = await query(SQL`
+  const cutoffGames = await query(
+    SQL`
   SELECT MAX(GP) as games
   FROM `.append(`player_goalie_stats_${type}`).append(SQL`
   WHERE LeagueID=${+league}
-    AND SeasonID=${season.SeasonID}`));
+    AND SeasonID=${season.SeasonID}`)
+  );
 
-  const gaaLeaders = await query(SQL`
+  const gaaLeaders = await query(
+    SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GAA
-    FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
+    FROM `
+      .append(`player_goalie_stats_${type} AS s`)
+      .append(
+        SQL`
     INNER JOIN player_master as p
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
-    AND s.GP >= `).append(Math.floor(cutoffGames[0].games * 0.20)).append(`
-    ORDER BY s.GAA `).append(desc ? `DESC` : `ASC`).append(`
+    AND s.GP >= `
+      )
+      .append(Math.floor(cutoffGames[0].games * 0.2))
+      .append(
+        `
+    ORDER BY s.GAA `
+      )
+      .append(desc ? `DESC` : `ASC`).append(`
     LIMIT ${limit}
-    `));
- 
+    `)
+  );
+
   const parsed = [...gaaLeaders].map((player) => ({
     id: player.PlayerID,
     name: player.Name,
@@ -65,8 +82,7 @@ export default async (
     team: player.TeamID,
     season: player.SeasonID,
     gaa: player.GAA,
-  }))
-
+  }));
 
   res.status(200).json(parsed);
 };
