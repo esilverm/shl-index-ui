@@ -91,3 +91,65 @@ export interface Team {
     winPercent: number;
   };
 }
+
+export interface PlayerRatings {
+  id: number;
+  name: string;
+  position: string;
+  league: number;
+  team: number;
+  season: number;
+  height: number;
+  weight: number;
+  ratings: {
+    screening: number;
+    gettingOpen: number;
+    passing: number;
+    puckhandling: number;
+    shootingAccuracy: number;
+    shootingRange: number;
+    offensiveRead: number;
+    checking: number;
+    hitting: number;
+    positioning: number;
+    stickchecking: number;
+    shotBlocking: number;
+    faceoffs: number;
+    defensiveRead: number;
+    acceleration: number;
+    agility: number;
+    balance: number;
+    speed: number;
+    stamina: number;
+    strength: number;
+    fighting: number;
+    aggression: number;
+    bravery: number;
+  }
+}
+
+export interface GoalieRatings {
+  id: number;
+  name: string;
+  position: string;
+  league: number;
+  team: number;
+  season: number;
+  height: number;
+  weight: number;
+  ratings: {
+    blocker: number;
+    glove: number;
+    passing: number;
+    pokeCheck: number;
+    positioning: number;
+    rebound: number;
+    recovery: number;
+    puckhandling: number;
+    lowShots: number;
+    reflexes: number;
+    skating: number;
+    mentalToughness: number;
+    goalieStamina: number;
+  }
+}
