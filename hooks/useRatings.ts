@@ -5,20 +5,21 @@ import { getQuerySeason } from '../utils/season';
 const useRatings = (
   league: string
 ): {
-  skaterratings: Array<PlayerRatings>;
+  ratings: Array<PlayerRatings>;
   isLoading: boolean;
   isError: boolean;
 } => {
+  const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/players/ratings?league=${league}${seasonParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/players/ratings?league=${leagueid}${seasonParam}`
   );
 
   return {
-    skaterratings: data,
+    ratings: data,
     isLoading: !error && !data,
     isError: error,
   };

@@ -39,9 +39,9 @@ export default async (
   } AND corrected_player_ratings.G<19 AND player_master.TeamID>=0;
   `);
 
-  const combinedPlayerData = [...basePlayerData].map((player) => {
+  const combinedPlayerData = basePlayerData.map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
+      [+player.G, +player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(
         20
       )
     ];
@@ -63,7 +63,7 @@ export default async (
       screening: player.Screening,
       gettingOpen: player.GettingOpen,
       passing: player.Passing,
-      puckHandling: player.Puckhandling,
+      puckHandling: player.PuckHandling,
       shootingAccuracy: player.ShootingAccuracy,
       shootingRange: player.ShootingRange,
       offensiveRead: player.OffensiveRead,
@@ -71,10 +71,10 @@ export default async (
       hitting: player.Hitting,
       positioning: player.Positioning,
       stickChecking: player.Stickchecking,
-      shotBlocking: player.shotBlocking,
+      shotBlocking: player.ShotBlocking,
       faceoffs: player.Faceoffs,
       defensiveRead: player.DefensiveRead,
-      acceleration: player.Accelerating,
+      acceleration: player.Acceleration,
       agility: player.Agility,
       balance: player.Balance,
       speed: player.Speed,

@@ -18,9 +18,9 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const { skaterratings, isLoading } = useRatings(league);
-  const { goalieratingdata } = useGoalieRatings(league);
-  if (!isLoading) console.log(skaterratings, goalieratingdata);
+  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings(league);
+  const { ratings: goalieratingdata, isLoading: isLoadingGoalies } = useGoalieRatings(league);
+  if (!isLoadingPlayers && !isLoadingGoalies) console.log(skaterratings, goalieratingdata);
 
   const getSkaters = () =>
     skaterratings
@@ -28,6 +28,7 @@ function PlayerPage({ league }: Props): JSX.Element {
           PlayerRatings
         >)
       : [];
+
   const getGoalies = () =>
     goalieratingdata
       ? (goalieratingdata.filter((player) => player.position === 'G') as Array<
@@ -48,7 +49,7 @@ function PlayerPage({ league }: Props): JSX.Element {
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
         <TableHeading>Skaters</TableHeading>
         <TableWrapper>
-          {!isLoading && (
+          {!isLoadingPlayers && (
             <TableContainer>
               <SkaterRatingsTable data={getSkaters()} />
             </TableContainer>
@@ -56,7 +57,7 @@ function PlayerPage({ league }: Props): JSX.Element {
         </TableWrapper>
         <TableHeading>Goalies</TableHeading>
         <TableWrapper>
-          {!isLoading && (
+          {!isLoadingGoalies && (
             <TableContainer>
               <GoalieRatingsTable data={getGoalies()} />
             </TableContainer>

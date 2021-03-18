@@ -51,7 +51,7 @@ function PlayerRatingsTable({ data: players }: Props): JSX.Element {
         },
         {
           Header: 'PHA',
-          accessor: 'puckhandling',
+          accessor: 'puckHandling',
           title: 'Puckhandling',
         },
         {
@@ -91,8 +91,8 @@ function PlayerRatingsTable({ data: players }: Props): JSX.Element {
         },
         {
           Header: 'SCH',
-          accessor: 'stickchecking',
-          title: 'Stickchecking',
+          accessor: 'stickChecking',
+          title: 'Stick Checking',
         },
         {
           Header: 'SBL',
