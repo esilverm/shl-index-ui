@@ -8,35 +8,6 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-interface MasterPlayer {
-  PlayerID: number;
-  TeamID: number;
-  FranchiseID: number;
-  LeagueID: number;
-  SeasonID: number;
-  'First Name': string;
-  'Last Name': string;
-  'Nick Name': string;
-  Height: string;
-  Weight: string;
-  DOB: string;
-  Birthcity: string;
-  Birthstate: string;
-  Nationality_One: string;
-  Nationality_Two: string;
-  Nationality_Three: string;
-  position: string;
-}
-
-const getPlayerInfo = (player: MasterPlayer) => ({
-  id: player.PlayerID,
-  league: player.LeagueID,
-  season: player.SeasonID,
-  name: player['Last Name'],
-  team: player.TeamID,
-  position: player.position,
-});
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -67,8 +38,8 @@ export default async (
     season.SeasonID
   } AND corrected_player_ratings.G<19 AND player_master.TeamID>=0;
   `);
-  
-  const combinedPlayerData = basePlayerData.map((player) => {
+
+  const combinedPlayerData = [...basePlayerData].map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
       [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
         20
@@ -76,48 +47,47 @@ export default async (
     ];
 
     return {
-      baseData: player,
+      ...player,
       position,
     };
   });
 
   const parsed = combinedPlayerData.map((player) => {
-    const playerInfo = getPlayerInfo(player.baseData);
-
-    const ratings = {
-      screening: player.baseData.Screening,
-      gettingOpen: player.baseData.GettingOpen,
-      passing: player.baseData.Passing,
-      puckhandling: player.baseData.Puckhandling,
-      shootingAccuracy: player.baseData.ShootingAccuracy,
-      shootingRange: player.baseData.ShootingRange,
-      offensiveRead: player.baseData.OffensiveRead,
-      checking: player.baseData.Checking,
-      hitting: player.baseData.Hitting,
-      positioning: player.baseData.Positioning,
-      stickchecking: player.baseData.Stickchecking,
-      shotBlocking: player.baseData.shotBlocking,
-      faceoffs: player.baseData.Faceoffs,
-      defensiveRead: player.baseData.DefensiveRead,
-      acceleration: player.baseData.Accelerating,
-      agility: player.baseData.Agility,
-      balance: player.baseData.Balance,
-      speed: player.baseData.Speed,
-      stamina: player.baseData.Stamina,
-      strength: player.baseData.Strength,
-      fighting: player.baseData.Fighting,
-      aggression: player.baseData.Aggression,
-      bravery: player.baseData.Bravery,
-      determination: player.baseData.Determination,
-      teamPlayer: player.baseData.TeamPlayer,
-      leadership: player.baseData.Leadership,
-      temperament: player.baseData.Temperament,
-      professionalism: player.baseData.Professionalism,
-    };
-
     return {
-      ...playerInfo,
-      ...ratings,
+      id: player.PlayerID,
+      league: player.LeagueID,
+      season: player.SeasonID,
+      name: player['Last Name'],
+      team: player.TeamID,
+      position: player.position,
+      screening: player.Screening,
+      gettingOpen: player.GettingOpen,
+      passing: player.Passing,
+      puckHandling: player.Puckhandling,
+      shootingAccuracy: player.ShootingAccuracy,
+      shootingRange: player.ShootingRange,
+      offensiveRead: player.OffensiveRead,
+      checking: player.Checking,
+      hitting: player.Hitting,
+      positioning: player.Positioning,
+      stickChecking: player.Stickchecking,
+      shotBlocking: player.shotBlocking,
+      faceoffs: player.Faceoffs,
+      defensiveRead: player.DefensiveRead,
+      acceleration: player.Accelerating,
+      agility: player.Agility,
+      balance: player.Balance,
+      speed: player.Speed,
+      stamina: player.Stamina,
+      strength: player.Strength,
+      fighting: player.Fighting,
+      aggression: player.Aggression,
+      bravery: player.Bravery,
+      determination: player.Determination,
+      teamPlayer: player.TeamPlayer,
+      leadership: player.Leadership,
+      temperament: player.Temperament,
+      professionalism: player.Professionalism,
     };
   });
 

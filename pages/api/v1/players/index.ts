@@ -8,28 +8,24 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-interface MasterPlayer {
-  PlayerID: number;
-  TeamID: number;
-  FranchiseID: number;
-  LeagueID: number;
-  SeasonID: number;
-  'First Name': string;
-  'Last Name': string;
-  'Nick Name': string;
-  Height: number;
-  Weight: number;
-  DOB: string;
-  Birthcity: string;
-  Birthstate: string;
-  Nationality_One: string;
-  Nationality_Two: string;
-  Nationality_Three: string;
-  position: string;
-}
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> => {
+  await use(req, res, cors);
 
-const getBasePlayerData = async (league, season) =>
-  await query(SQL`
+  const { league = 0, season: seasonid } = req.query;
+  const [season] =
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
+    (await query(SQL`
+      SELECT DISTINCT SeasonID
+      FROM player_master
+      WHERE LeagueID=${+league}
+      ORDER BY SeasonID DESC
+      LIMIT 1
+  `));
+
+  const basePlayerData = await query(SQL`
   SELECT *
   FROM corrected_player_ratings
   INNER JOIN player_master
@@ -42,43 +38,7 @@ const getBasePlayerData = async (league, season) =>
   AND player_master.TeamID>=0;
 `);
 
-const getPlayerInfo = (player: MasterPlayer) => ({
-  id: player.PlayerID,
-  league: player.LeagueID,
-  season: player.SeasonID,
-  name: player['Last Name'],
-  team: player.TeamID,
-  position: player.position,
-  height: player.Height,
-  weight: player.Weight,
-});
-
-export default async (
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<void> => {
-  await use(req, res, cors);
-
-  const { league = 0, season: seasonid } = req.query;
-  let basePlayerData = [];
-
-  const [season] =
-    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
-    (await query(SQL`
-      SELECT DISTINCT SeasonID
-      FROM player_master
-      WHERE LeagueID=${+league}
-      ORDER BY SeasonID DESC
-      LIMIT 1
-  `));
-
-  const queries = [getBasePlayerData];
-
-  await Promise.all(queries.map((fn) => fn(league, season))).then((values) => {
-    basePlayerData = values[0];
-  });
-
-  const combinedPlayerData = basePlayerData.map((player) => {
+  const combinedPlayerData = [...basePlayerData].map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
       [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
         20
@@ -86,16 +46,21 @@ export default async (
     ];
 
     return {
-      baseData: player,
+      ...player,
       position,
     };
   });
 
   const parsed = combinedPlayerData.map((player) => {
-    const playerInfo = getPlayerInfo(player.baseData);
-
     return {
-      ...playerInfo,
+      id: player.PlayerID,
+      league: player.LeagueID,
+      season: player.SeasonID,
+      name: player['Last Name'],
+      team: player.TeamID,
+      position: player.position,
+      height: player.Height,
+      weight: player.Weight,
     };
   });
 

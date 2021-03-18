@@ -8,14 +8,19 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type: shorttype = 'rs', limit = 10, desc = true } = req.query;
+  const {
+    league = 0,
+    season: seasonid,
+    type: shorttype = 'rs',
+    limit = 10,
+    desc = true,
+  } = req.query;
 
   let type: string;
   if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
@@ -36,30 +41,42 @@ export default async (
       LIMIT 1
   `)
     ));
-    
-  const averageSavePct = await query(SQL`
+
+  const averageSavePct = await query(
+    SQL`
     SELECT AVG(SavePct) as avg
     FROM `.append(`player_goalie_stats_${type}`).append(SQL`
     WHERE LeagueID=${+league}
     AND SeasonID=${season.SeasonID}
-  `));
+  `)
+  );
 
-
-  const gsaaLeaders = await query(SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, ((s.ShotsAgainst * (1 - `.append(averageSavePct[0].avg).append(`)) - s.GoalsAgainst) as GSAA
-    FROM `).append(`player_goalie_stats_${type} AS s`).append(SQL`
+  const gsaaLeaders = await query(
+    SQL`
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, ((s.ShotsAgainst * (1 - `
+      .append(averageSavePct[0].avg)
+      .append(
+        `)) - s.GoalsAgainst) as GSAA
+    FROM `
+      )
+      .append(`player_goalie_stats_${type} AS s`)
+      .append(
+        SQL`
     INNER JOIN player_master as p
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
-    ORDER BY GSAA `).append(desc ? `DESC` : `ASC`).append(`
+    ORDER BY GSAA `
+      )
+      .append(desc ? `DESC` : `ASC`).append(`
     LIMIT ${limit}
-    `));
+    `)
+  );
 
-  console.log(gsaaLeaders)
- 
+  console.log(gsaaLeaders);
+
   const parsed = [...gsaaLeaders].map((player) => ({
     id: player.PlayerID,
     name: player.Name,
@@ -67,8 +84,7 @@ export default async (
     team: player.TeamID,
     season: player.SeasonID,
     gsaa: player.GSAA,
-  }))
-
+  }));
 
   res.status(200).json(parsed);
 };

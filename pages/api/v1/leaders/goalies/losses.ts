@@ -8,14 +8,19 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, type: shorttype = 'rs', limit = 10, desc = true } = req.query;
+  const {
+    league = 0,
+    season: seasonid,
+    type: shorttype = 'rs',
+    limit = 10,
+    desc = true,
+  } = req.query;
 
   let type: string;
   if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
@@ -37,19 +42,26 @@ export default async (
   `)
     ));
 
-  const lossLeaders = await query(SQL`
+  const lossLeaders = await query(
+    SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.Losses
-    FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
+    FROM `
+      .append(`player_goalie_stats_${type} AS s`)
+      .append(
+        SQL`
     INNER JOIN player_master as p
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
-    ORDER BY s.Losses `).append(desc ? `DESC` : `ASC`).append(`
+    ORDER BY s.Losses `
+      )
+      .append(desc ? `DESC` : `ASC`).append(`
     LIMIT ${limit}
-    `));
- 
+    `)
+  );
+
   const parsed = [...lossLeaders].map((player) => ({
     id: player.PlayerID,
     name: player.Name,
@@ -57,8 +69,7 @@ export default async (
     team: player.TeamID,
     season: player.SeasonID,
     losses: player.Losses,
-  }))
-
+  }));
 
   res.status(200).json(parsed);
 };

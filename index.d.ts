@@ -125,7 +125,7 @@ export interface PlayerRatings {
     fighting: number;
     aggression: number;
     bravery: number;
-  }
+  };
 }
 
 export interface GoalieRatings {
@@ -151,5 +151,5 @@ export interface GoalieRatings {
     skating: number;
     mentalToughness: number;
     goalieStamina: number;
-  }
+  };
 }

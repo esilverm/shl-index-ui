@@ -75,9 +75,9 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           title: 'Skating',
         },
         {
-            Header: 'MTO',
-            accessor: 'mentalToughness',
-            title: 'Mental Toughness',
+          Header: 'MTO',
+          accessor: 'mentalToughness',
+          title: 'Mental Toughness',
         },
         {
           Header: 'GST',
