@@ -9,6 +9,7 @@ import GameDaySchedule from '../../components/GameDaySchedule';
 import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
 import { getQuerySeason } from '../../utils/season';
+import TeamSelector, { MinimalTeam } from '../../components/Selector/TeamSelector';
 
 enum SCHEDULE_STATES {
   INITIAL_LOADING = 'INITIAL_LOADING',
@@ -31,7 +32,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const [scheduleHeight, setScheduleHeight] = useState(0);
   const [scheduleState, setScheduleState] = useState<ScheduleState>('INITIAL_LOADING');
   const [showFullSchedule, setShowFullSchedule] = useState(false);
-  const [filterTeam, setFilterTeam] = useState<number>();
+  const [filterTeam, setFilterTeam] = useState<number>(-1);
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
@@ -72,6 +73,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     }
   }, [scheduleState])
 
+  const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
   const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
   const sortGamesByDate = () => {
@@ -82,7 +84,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     );
   };
 
-  const hasFilteredTeam = game => filterTeam === undefined || (game.awayTeam === filterTeam || game.homeTeam === filterTeam);
+  const hasFilteredTeam = game => filterTeam === -1 || (game.awayTeam === filterTeam || game.homeTeam === filterTeam);
 
   const getDatesForRendering = (sortedGames) => {
     let gameDates = [];
@@ -172,12 +174,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
         </SeasonTypeSelectContainer>
         <Filters>
           Team
-          <select onChange={(value) => setFilterTeam(parseInt(value.target.value) || undefined)} value={filterTeam || "all"}>
-            <option value="all">All</option>
-            <option value="5">NEW</option>
-            <option value="0">BUF</option>
-            <option value="10">MIN</option>
-          </select>
+          <TeamSelector teams={teamlist} onChange={onTeamSelect} />
         </Filters>
         <ScheduleContainer ref={scheduleContainerRef}>{renderGameDays()}</ScheduleContainer>
         <LoadingWrapper>
@@ -222,7 +219,7 @@ const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
 `;
 
 const Filters = styled.div`
-
+  max-width: 250px;
 `;
 
 const ScheduleContainer = styled.div`

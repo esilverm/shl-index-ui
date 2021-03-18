@@ -7,7 +7,7 @@ import { HamburgerCollapse } from 'react-animated-burgers';
 
 import Link from './LinkWithSeason';
 import ScoreBar from './ScoreBar';
-import SeasonSelector from './SeasonSelector';
+import SeasonSelector from './Selector/SeasonSelector';
 
 interface Props {
   league: string;
