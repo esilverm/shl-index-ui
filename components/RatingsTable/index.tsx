@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useTable, useSortBy } from 'react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
 import styled from 'styled-components';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
@@ -39,11 +39,21 @@ Props): JSX.Element {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
-  } = useTable({ columns, data }, useSortBy);
+
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    nextPage,
+    previousPage,
+    gotoPage,
+    state: { pageIndex },
+  } = useTable({ columns, data }, useSortBy, usePagination);
 
   return (
+    <>
     <TableContainer>
       <Table {...getTableProps()}>
         <TableHeader>
@@ -69,7 +79,7 @@ Props): JSX.Element {
           ))}
         </TableHeader>
         <TableBody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {page.map((row, i) => {
             prepareRow(row);
 
             return (
@@ -91,6 +101,39 @@ Props): JSX.Element {
         </TableBody>
       </Table>
     </TableContainer>
+    <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <span>
+          | Go to page:{' '}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              gotoPage(page)
+            }}
+            style={{ width: '100px' }}
+          />
+        </span>
+      </div>
+      </>
   );
 }
 

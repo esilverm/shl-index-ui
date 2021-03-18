@@ -1,5 +1,4 @@
 import React from 'react';
-// import Link from '../../components/LinkWithSeason';
 import RatingsTable from '.';
 import { GoalieRatings } from '../..';
 
@@ -8,6 +7,7 @@ interface Props {
 }
 
 function GoalieRatingsTable({ data: players }: Props): JSX.Element {
+
   const columnData = [
     {
       Header: 'Ratings',
@@ -18,6 +18,11 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           id: 'player-table-player',
           accessor: 'name',
           // Create cell which contains link to player
+        },
+        {
+          Header: 'Team',
+          accessor: 'team',
+          title: 'Team',
         },
         {
           Header: 'BLO',
@@ -88,7 +93,7 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData} />;
+  return <RatingsTable data={players} columnData={columnData}/>;
 }
 
 export default GoalieRatingsTable;
