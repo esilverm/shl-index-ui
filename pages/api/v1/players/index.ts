@@ -32,6 +32,10 @@ export default async (
   ON corrected_player_ratings.PlayerID = player_master.PlayerID
   AND corrected_player_ratings.SeasonID = player_master.SeasonID
   AND corrected_player_ratings.LeagueID = player_master.LeagueID
+  INNER JOIN team_data
+  ON player_master.TeamID = team_data.TeamID
+  AND corrected_player_ratings.SeasonID = team_data.SeasonID
+  AND corrected_player_ratings.LeagueID = team_data.LeagueID
   WHERE corrected_player_ratings.LeagueID=${+league}
   AND corrected_player_ratings.SeasonID=${season.SeasonID}
   AND corrected_player_ratings.G<19
@@ -57,7 +61,7 @@ export default async (
       league: player.LeagueID,
       season: player.SeasonID,
       name: player['Last Name'],
-      team: player.TeamID,
+      team: player.Abbr,
       position: player.position,
       height: player.Height,
       weight: player.Weight,

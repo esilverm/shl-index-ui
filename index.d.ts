@@ -97,7 +97,7 @@ export interface PlayerRatings {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   height: number;
   weight: number;
@@ -133,7 +133,7 @@ export interface GoalieRatings {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   height: number;
   weight: number;

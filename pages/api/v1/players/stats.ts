@@ -38,7 +38,7 @@ export default async (
 
   const playerStats = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.G, s.A, s.PlusMinus, s.PIM, s.PPG, s.PPA, s.SHG, s.SHA, s.Fights, s.Fights_Won, s.HIT, s.GvA, s.TkA, s.SB, s.GR, s.OGR, s.DGR, s.SOG, s.TOI, s.PPTOI, s.SHTOI, s.PDO, s.GF60, s.GA60, s.SF60, s.SA60, s.CF, s.CA, s.CFPct, s.CFPctRel, s.FF, s.FA, s.FFPct, s.FFPctRel, r.LD, r.RD, r.LW, r.C, r.RW
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.G, s.A, s.PlusMinus, s.PIM, s.PPG, s.PPA, s.SHG, s.SHA, s.Fights, s.Fights_Won, s.HIT, s.GvA, s.TkA, s.SB, s.GR, s.OGR, s.DGR, s.SOG, s.TOI, s.PPTOI, s.SHTOI, s.PDO, s.GF60, s.GA60, s.SF60, s.SA60, s.CF, s.CA, s.CFPct, s.CFPctRel, s.FF, s.FA, s.FFPct, s.FFPctRel, r.LD, r.RD, r.LW, r.C, r.RW, team_data.Abbr, team_data.LeagueID, team_data.TeamID, team_data.SeasonID
     FROM `.append(`player_skater_stats_${type} AS s`).append(SQL`
     INNER JOIN player_master as p
     ON s.SeasonID = p.SeasonID 
@@ -48,6 +48,10 @@ export default async (
     ON s.SeasonID = r.SeasonID 
     AND s.LeagueID = r.LeagueID
     AND s.PlayerID = r.PlayerID
+    INNER JOIN team_data
+    ON p.TeamID = team_data.TeamID
+    AND s.SeasonID = team_data.SeasonID
+    AND s.LeagueID = team_data.LeagueID  
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
 	AND r.G<19
@@ -65,7 +69,7 @@ export default async (
       name: player.Name,
       position,
       league: player.LeagueID,
-      team: player.TeamID,
+      team: player.Abbr,
       season: player.SeasonID,
       gamesPlayed: player.GP,
       timeOnIce: player.TOI + player.PPTOI + player.SHTOI, // in seconds

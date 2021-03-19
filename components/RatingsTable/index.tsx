@@ -41,7 +41,7 @@ Props): JSX.Element {
     headerGroups,
     page,
     prepareRow,
-
+    
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -50,7 +50,13 @@ Props): JSX.Element {
     previousPage,
     gotoPage,
     state: { pageIndex },
-  } = useTable({ columns, data }, useSortBy, usePagination);
+  } = useTable(
+    { columns, data,
+      initialState: { pageIndex: 0, pageSize: 15 },
+    }, 
+    useSortBy, 
+    usePagination
+    );
 
   return (
     <>
@@ -101,26 +107,20 @@ Props): JSX.Element {
         </TableBody>
       </Table>
     </TableContainer>
-    <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+    <Pagination>
+        <button className="-next" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
         </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button className="-next" onClick={() => previousPage()} disabled={!canPreviousPage}>
           {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
-        <span>
+        </button>
+        <div className = 'pagenav'><span>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </span>
-        <span>
+        <span className = 'mediahide'>
           | Go to page:{' '}
           <input
             type="number"
@@ -129,11 +129,17 @@ Props): JSX.Element {
               const page = e.target.value ? Number(e.target.value) - 1 : 0
               gotoPage(page)
             }}
-            style={{ width: '100px' }}
+            style={{ width: '40px' }}
           />
-        </span>
-      </div>
-      </>
+        </span></div>
+        <button className="-next" onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button className="-next" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+    </Pagination>
+    </>
   );
 }
 
@@ -235,5 +241,65 @@ const TableBody = styled.tbody`
     }
   }
 `;
+
+const Pagination = styled.div`
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  flex: 1.5;
+  flex-direction: row;
+  align-items: center;
+  padding: 3px;
+  box-shadow: 0 0 15px 0 rgb(0 0 0 / 10%);
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ADB5BD;
+  border-top: none;
+
+  button {
+    -webkit-writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    display: block;
+    color: #fff;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    margin: 0.1em;
+    font-size: 24px;
+    padding: 1px 8px;
+    background-color: #0183da;
+    width: 50%;
+    height: 100%;
+    border-width: 1.5px;
+    border-style: outset;
+    border-image: initial;
+    border-radius: 3px;
+  }
+
+  button:disabled,
+  button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  }
+
+  .pagenav {
+    width: 100%;
+    margin-left: 3px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mediahide {
+    @media screen and (max-width: 1024px) {
+     display: none; 
+    }
+  }
+`
 
 export default RatingsTable;
