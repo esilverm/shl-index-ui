@@ -279,6 +279,7 @@ const Pagination = styled.div`
     border-style: outset;
     border-image: initial;
     border-radius: 3px;
+    cursor: pointer;
   }
 
   button:disabled,
