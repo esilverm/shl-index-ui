@@ -10,7 +10,7 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
 
   const columnData = [
     {
-      Header: 'Ratings',
+      Header: 'Player Info',
       id: 'player-table-basic-info',
       columns: [
         {
@@ -24,6 +24,12 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           accessor: 'team',
           title: 'Team',
         },
+      ],
+    },
+    {
+      Header: 'Goalie',
+      id: 'goalie-ratings',
+      columns: [
         {
           Header: 'BLO',
           accessor: 'blocker',
@@ -79,6 +85,12 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           accessor: 'skating',
           title: 'Skating',
         },
+      ],
+    },
+    {
+      Header: 'Mental',
+      id: 'goalie-mental',
+      columns: [
         {
           Header: 'MTO',
           accessor: 'mentalToughness',
