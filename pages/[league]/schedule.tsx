@@ -70,12 +70,23 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   });
 
   useEffect(() => {
-    if (scheduleState === SCHEDULE_STATES.FULL_LOADING) {
-      setShowFullSchedule(true);
-    }
-  }, [scheduleState])
+    const isInitialLoading = scheduleState === SCHEDULE_STATES.INITIAL_LOADING;
+    const isFullLoading = scheduleState === SCHEDULE_STATES.FULL_LOADING;
 
-  const onSeasonTypeSelect = (seasonType: SeasonType) => setFilterSeasonType(seasonType);
+    if (isInitialLoading || isFullLoading) {
+      setShowFullSchedule(isFullLoading);
+    }
+  }, [scheduleState]);
+
+  useEffect(() => {
+    setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
+    setScheduleHeight(0);
+  }, [filterSeasonType, filterTeam]);
+
+  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
+    setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
+    setFilterSeasonType(seasonType);
+  };
   const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
   const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
