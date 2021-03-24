@@ -93,6 +93,7 @@ function SkaterAdvStatsTable({ data: players }: Props): JSX.Element {
           id: 'player-table-cfpctrel',
           accessor: 'advancedStats.CFPctRel',
           title: 'Corsi For Percentage Relative',
+          sortType: 'basic',
           sortDescFirst: true
         },
         {
@@ -121,6 +122,7 @@ function SkaterAdvStatsTable({ data: players }: Props): JSX.Element {
           id: 'player-table-ffpctrel',
           accessor: 'advancedStats.FFPctRel',
           title: 'Fenwick For Percentage Relative',
+          sortType: 'basic',
           sortDescFirst: true
         },
       ],

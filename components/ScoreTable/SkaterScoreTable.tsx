@@ -62,6 +62,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: '+/-',
           accessor: 'plusMinus',
           title: 'Plus/Minus',
+          sortType: 'basic',
           sortDescFirst: true
         },
         {
