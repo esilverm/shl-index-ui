@@ -30,7 +30,6 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
   const [selectedTeam, setselectedTeam] = useState<MinimalTeam>(defaultOption);
   const selectorRef = useRef(null);
   const onMouseLeave = () => {
-
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);

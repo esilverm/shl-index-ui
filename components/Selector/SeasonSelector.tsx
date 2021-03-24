@@ -13,7 +13,7 @@ import {
 import { getLatestSeason, getQuerySeason } from '../../utils/season';
 
 interface Props {
-  seasons: string[];
+  seasons: number[];
   loading: boolean;
 }
 
@@ -24,7 +24,6 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const [selectedSeason, setSelectedSeason] = useState('');
   const selectorRef = useRef(null);
   const onMouseLeave = () => {
-
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
@@ -79,13 +78,13 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
       {isExpanded && (
         <DropdownList>
           {seasons
-            .sort((a, b) => parseInt(b) - parseInt(a))
+            .sort((a, b) => b - a)
             .map((season) => (
               <DropdownItem
                 key={season}
                 data-season={season}
                 onClick={onSeasonSelect}
-                className={selectedSeason == season && "active"} // Only two equal signs as they're different types<string, number>
+                className={parseInt(selectedSeason) === season && "active"}
               >
                 <SeasonText data-season={season} />
                 {season}

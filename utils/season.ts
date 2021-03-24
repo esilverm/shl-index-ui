@@ -6,9 +6,9 @@ export const getQuerySeason = (): string => {
   return season.match(/\d+/) ? season : '';
 };
 
-export const getLatestSeason = (seasons: string[]): string => {
+export const getLatestSeason = (seasons: number[]): string => {
   if (seasons) {
-    const numericSeasons = seasons.map((season) => parseInt(season));
+    const numericSeasons = seasons.map((season) => season);
     const currentSeason = seasons.length > 0 ? Math.max(...numericSeasons) : '';
     return currentSeason.toString();
   }

@@ -27,7 +27,6 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
   const [selectedSeasonType, setselectedSeasonType] = useState<SeasonType>(SEASON_TYPE.REGULAR);
   const selectorRef = useRef(null);
   const onMouseLeave = () => {
-
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
