@@ -139,7 +139,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       );
     });
 
-    return gameDaySchedules;
+    return gameDaySchedules.length > 0 ? gameDaySchedules : "No games found";
   };
 
   const isScheduleLoading = scheduleState === SCHEDULE_STATES.INITIAL_LOADING || scheduleState === SCHEDULE_STATES.FULL_LOADING;
