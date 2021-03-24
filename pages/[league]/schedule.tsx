@@ -179,6 +179,16 @@ const Filters = styled.div`
     width: 225px;
     margin-right: 10px;
   }
+
+  @media screen and (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
 `;
 
 const ScheduleContainer = styled.div`
