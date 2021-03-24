@@ -10,6 +10,8 @@ import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
 import { getQuerySeason } from '../../utils/season';
 import TeamSelector, { MinimalTeam } from '../../components/Selector/TeamSelector';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../api/v1/schedule';
 
 enum SCHEDULE_STATES {
   INITIAL_LOADING = 'INITIAL_LOADING',
@@ -27,16 +29,16 @@ interface Props {
 }
 
 function Schedule({ league, teamlist }: Props): JSX.Element {
-  const [seasonType, setSeasonType] = useState('Regular Season');
-  const { games, isLoading } = useSchedule(league, seasonType);
   const [scheduleHeight, setScheduleHeight] = useState(0);
   const [scheduleState, setScheduleState] = useState<ScheduleState>('INITIAL_LOADING');
   const [showFullSchedule, setShowFullSchedule] = useState(false);
+  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
   const [filterTeam, setFilterTeam] = useState<number>(-1);
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
+  const { games, isLoading } = useSchedule(league, filterSeasonType);
   const scheduleContainerRef = useRef();
 
   useEffect(() => {
@@ -73,6 +75,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     }
   }, [scheduleState])
 
+  const onSeasonTypeSelect = (seasonType: SeasonType) => setFilterSeasonType(seasonType);
   const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
   const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
@@ -140,40 +143,8 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       />
       <Header league={league} activePage="schedule" />
       <Container>
-        <SeasonTypeSelectContainer role="tablist">
-          <SeasonTypeSelectItem
-            key="Pre-Season"
-            onClick={() => setSeasonType(() => 'Pre-Season')}
-            active={seasonType === 'Pre-Season'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Pre-Season'}
-          >
-            Pre-Season
-          </SeasonTypeSelectItem>
-          <SeasonTypeSelectItem
-            key="Regular Season"
-            onClick={() => setSeasonType(() => 'Regular Season')}
-            active={seasonType === 'Regular Season'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Regular Season'}
-          >
-            Regular Season
-          </SeasonTypeSelectItem>
-          <SeasonTypeSelectItem
-            key="Playoffs"
-            onClick={() => setSeasonType(() => 'Playoffs')}
-            active={seasonType === 'Playoffs'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={seasonType === 'Playoffs'}
-          >
-            Playoffs
-          </SeasonTypeSelectItem>
-        </SeasonTypeSelectContainer>
         <Filters>
-          Team
+          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           <TeamSelector teams={teamlist} onChange={onTeamSelect} />
         </Filters>
         <ScheduleContainer ref={scheduleContainerRef}>{renderGameDays()}</ScheduleContainer>
@@ -198,28 +169,16 @@ const Container = styled.div`
   }
 `;
 
-const SeasonTypeSelectContainer = styled.div`
-  margin: 0 auto 40px;
-  width: 95%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
-`;
-
-const SeasonTypeSelectItem = styled.div<{ active: boolean }>`
-  display: inline-block;
-  padding: 8px 20px;
-  border: 1px solid
-    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors.grey100 : 'transparent'};
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  position: relative;
-  border-bottom: none;
-  bottom: -1px;
-`;
-
 const Filters = styled.div`
-  max-width: 250px;
+  display: flex;
+  flex-direction: row;
+  margin-right: 4%;
+  justify-content: flex-end;
+
+  button {
+    width: 225px;
+    margin-right: 10px;
+  }
 `;
 
 const ScheduleContainer = styled.div`

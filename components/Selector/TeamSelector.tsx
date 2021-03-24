@@ -21,8 +21,8 @@ interface Props {
 }
 
 const defaultOption = {
-  id: -1,
-  name: "All"
+  id: "-1",
+  name: "All Teams"
 };
 
 function TeamSelector({ teams, onChange }: Props): JSX.Element {
@@ -62,19 +62,19 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
       </DropdownButton>
       {isExpanded && (
         <DropdownList>
-        <DropdownItem
-          key="all"
-          align="left"
-          data-team={JSON.stringify(defaultOption)}
-          onClick={onTeamSelect}
-        >
-          All
-        </DropdownItem>
+          <DropdownItem
+            key="all"
+            align="left"
+            data-team={JSON.stringify(defaultOption)}
+            onClick={onTeamSelect}
+          >
+            {defaultOption.name}
+          </DropdownItem>
           {teams
             .sort((a, b) => a.name > b.name ? 1 : -1)
             .map(team => {
               const teamData: MinimalTeam = {
-                id: team.id,
+                id: `${team.id}`,
                 name: team.name
               };
               return (

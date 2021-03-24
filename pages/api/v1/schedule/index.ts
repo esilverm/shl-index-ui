@@ -9,7 +9,7 @@ const cors = Cors({
 });
 
 const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
-type SeasonType = typeof seasonTypes[number];
+export type SeasonType = typeof seasonTypes[number];
 
 export interface Game {
   slug: string | undefined;
