@@ -65,6 +65,7 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
                 align="left"
                 data-seasontype={SEASON_TYPE[type]}
                 onClick={onSeasonTypeSelect}
+                className={SEASON_TYPE[type] === selectedSeasonType && "active"}
               >
                 {SEASON_TYPE[type]}
               </DropdownItem>

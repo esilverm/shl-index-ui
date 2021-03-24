@@ -88,6 +88,10 @@ export const DropdownItem = styled.li`
   padding: 2px ${(props: StyleProps) => props.align === 'right' ? '16px' : '0'} 2px ${(props: StyleProps) => props.align === 'left' ? '16px' : '0'};
   cursor: pointer;
 
+  &.active {
+    background-color: ${({ theme }) => theme.colors.grey300};
+  }
+
   &:hover {
     background-color: ${({ theme }) => theme.colors.grey400};
   }

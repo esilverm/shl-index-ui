@@ -85,6 +85,7 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
                 key={season}
                 data-season={season}
                 onClick={onSeasonSelect}
+                className={selectedSeason == season && "active"} // Only two equal signs as they're different types<string, number>
               >
                 <SeasonText data-season={season} />
                 {season}

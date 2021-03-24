@@ -67,6 +67,7 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
             align="left"
             data-team={JSON.stringify(defaultOption)}
             onClick={onTeamSelect}
+            className={selectedTeam.id === defaultOption.id && "active"}
           >
             {defaultOption.name}
           </DropdownItem>
@@ -83,6 +84,7 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
                   align="left"
                   data-team={JSON.stringify(teamData)}
                   onClick={onTeamSelect}
+                  className={selectedTeam.id === teamData.id && "active"}
                 >
                   {team.name}
                 </DropdownItem>
