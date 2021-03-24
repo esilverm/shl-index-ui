@@ -22,7 +22,7 @@ function LeagueHome({ league }: Props): JSX.Element {
       <Header league={league} />
       <Container>
         <YoutubeEmbedContainer>
-          <LiveStream isSHL={['shl', 'iihf'].includes(league)}/>
+          <LiveStream isSHL={['shl', 'iihf'].includes(league)} />
         </YoutubeEmbedContainer>
       </Container>
     </React.Fragment>
@@ -43,7 +43,6 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     width: 100%;
     padding: 2.5%;
-
   }
 
   @media screen and (max-width: 800px) {

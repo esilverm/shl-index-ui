@@ -38,7 +38,7 @@ export default async (
 
   const goalieStats = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.Minutes, s.Wins, s.Losses, s.OT, s.ShotsAgainst, s.Saves, s.GoalsAgainst, s.GAA, s.Shutouts, s.SavePct, s.GameRating
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.Minutes, s.Wins, s.Losses, s.OT, s.ShotsAgainst, s.Saves, s.GoalsAgainst, s.GAA, s.Shutouts, s.SavePct, s.GameRating, team_data.Abbr, team_data.LeagueID, team_data.TeamID, team_data.SeasonID
     FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
     INNER JOIN player_master as p
     ON s.SeasonID = p.SeasonID 
@@ -48,6 +48,10 @@ export default async (
     ON s.SeasonID = r.SeasonID 
     AND s.LeagueID = r.LeagueID
     AND s.PlayerID = r.PlayerID
+    INNER JOIN team_data
+    ON p.TeamID = team_data.TeamID
+    AND s.SeasonID = team_data.SeasonID
+    AND s.LeagueID = team_data.LeagueID  
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     AND r.G=20
@@ -61,7 +65,7 @@ export default async (
       name: player.Name,
       position: 'G',
       league: player.LeagueID,
-      team: player.TeamID,
+      team: player.Abbr,
       season: player.SeasonID,
       gamesPlayed: player.GP,
       minutes: player.Minutes,

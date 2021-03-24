@@ -8,49 +8,6 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-interface MasterPlayer {
-  PlayerID: number;
-  TeamID: number;
-  FranchiseID: number;
-  LeagueID: number;
-  SeasonID: number;
-  'First Name': string;
-  'Last Name': string;
-  'Nick Name': string;
-  Height: number;
-  Weight: number;
-  DOB: string;
-  Birthcity: string;
-  Birthstate: string;
-  Nationality_One: string;
-  Nationality_Two: string;
-  Nationality_Three: string;
-  position: string;
-}
-
-const getBasePlayerData = async (league, season) =>
-  await query(SQL`
-  SELECT *
-  FROM corrected_player_ratings
-  INNER JOIN player_master
-  ON corrected_player_ratings.PlayerID = player_master.PlayerID
-  AND corrected_player_ratings.SeasonID = player_master.SeasonID
-  AND corrected_player_ratings.LeagueID = player_master.LeagueID
-  WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.SeasonID=${season.SeasonID} 
-  AND corrected_player_ratings.G=20
-  AND player_master.TeamID>=0;
-`);
-
-const getPlayerInfo = (player: MasterPlayer) => ({
-  id: player.PlayerID,
-  league: player.LeagueID,
-  season: player.SeasonID,
-  name: player['Last Name'],
-  team: player.TeamID,
-  position: player.position,
-});
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -58,7 +15,6 @@ export default async (
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
-  let basePlayerData = [];
 
   const [season] =
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
@@ -70,52 +26,49 @@ export default async (
       LIMIT 1
   `));
 
-  const queries = [getBasePlayerData];
+  const basePlayerData = await query(SQL`
+  SELECT *
+  FROM corrected_player_ratings
+  INNER JOIN player_master
+  ON corrected_player_ratings.PlayerID = player_master.PlayerID
+  AND corrected_player_ratings.SeasonID = player_master.SeasonID
+  AND corrected_player_ratings.LeagueID = player_master.LeagueID
+  INNER JOIN team_data
+  ON player_master.TeamID = team_data.TeamID
+  AND corrected_player_ratings.SeasonID = team_data.SeasonID
+  AND corrected_player_ratings.LeagueID = team_data.LeagueID
+  WHERE corrected_player_ratings.LeagueID=${+league}
+  AND corrected_player_ratings.SeasonID=${season.SeasonID}
+  AND corrected_player_ratings.G=20
+  AND player_master.TeamID>=0;
+`);
 
-  await Promise.all(queries.map((fn) => fn(league, season))).then((values) => {
-    basePlayerData = values[0];
-  });
-
-  const combinedPlayerData = basePlayerData.map((player) => {
-    const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
-        20
-      )
-    ];
-
+  const parsed = basePlayerData.map((player) => {
     return {
-      baseData: player,
-      position,
-    };
-  });
-
-  const parsed = combinedPlayerData.map((player) => {
-    const playerInfo = getPlayerInfo(player.baseData);
-
-    const ratings = {
-      blocker: player.baseData.Blocker,
-      glove: player.baseData.Glove,
-      passing: player.baseData.GPassing,
-      pokeCheck: player.baseData.GPokecheck,
-      positioning: player.baseData.GPositioning,
-      rebound: player.baseData.Rebound,
-      recovery: player.baseData.Recovery,
-      puckhandling: player.baseData.GPuckhandling,
-      lowShots: player.baseData.LowShots,
-      reflexes: player.baseData.Reflexes,
-      skating: player.baseData.GSkating,
-      aggression: player.baseData.Aggression,
-      mentalToughness: player.baseData.MentalToughness,
-      determination: player.baseData.Determination,
-      teamPlayer: player.baseData.TeamPlayer,
-      leadership: player.baseData.Leadership,
-      goalieStamina: player.baseData.GoalieStamina,
-      professionalism: player.baseData.Professionalism,
-    };
-
-    return {
-      ...playerInfo,
-      ...ratings,
+      id: player.PlayerID,
+      league: player.LeagueID,
+      season: player.SeasonID,
+      name: player['Last Name'],
+      team: player.Abbr,
+      position: "G",
+      blocker: player.Blocker,
+      glove: player.Glove,
+      passing: player.GPassing,
+      pokeCheck: player.GPokecheck,
+      positioning: player.GPositioning,
+      rebound: player.Rebound,
+      recovery: player.Recovery,
+      puckhandling: player.GPuckhandling,
+      lowShots: player.LowShots,
+      reflexes: player.Reflexes,
+      skating: player.GSkating,
+      aggression: player.Aggression,
+      mentalToughness: player.MentalToughness,
+      determination: player.Determination,
+      teamPlayer: player.TeamPlayer,
+      leadership: player.Leadership,
+      goalieStamina: player.GoalieStamina,
+      professionalism: player.Professionalism,
     };
   });
 

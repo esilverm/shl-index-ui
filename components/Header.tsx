@@ -130,15 +130,6 @@ function HeaderBar({
                 Standings
               </MenuItem>
             </Link>
-            <Link href="/[league]/playoffs" as={`/${league}/playoffs`} passHref>
-              <MenuItem
-                active={activePage === 'playoffs'}
-                role="link"
-                tabIndex={0}
-              >
-                Playoffs
-              </MenuItem>
-            </Link>
             <Link href="/[league]/stats" as={`/${league}/stats`} passHref>
               <MenuItem
                 active={activePage === 'stats'}
@@ -157,7 +148,7 @@ function HeaderBar({
                 Schedule
               </MenuItem>
             </Link>
-            <Link href="/[league]/player " as={`/${league}/player`} passHref>
+            <Link href="/[league]/players " as={`/${league}/players`} passHref>
               <MenuItem
                 active={activePage === 'players'}
                 role="link"

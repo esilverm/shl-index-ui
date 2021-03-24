@@ -13,7 +13,9 @@ function Livestream({ isSHL = true }: { isSHL?: boolean }): JSX.Element {
             isSHL
               ? process.env.NEXT_PUBLIC_SHL_CHANNEL_ID
               : process.env.NEXT_PUBLIC_SMJHL_CHANNEL_ID
-          }&type=video&order=date&maxResults=1&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
+          }&type=video&order=date&maxResults=1&key=${
+            process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
+          }`
         ).then((res) => res.json());
 
         if (data.items && data.items.length >= 1) {
