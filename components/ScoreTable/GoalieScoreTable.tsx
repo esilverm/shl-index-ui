@@ -23,61 +23,73 @@ function GoalieScoreTable({ data: players }: Props): JSX.Element {
           Header: 'GP',
           accessor: 'gamesPlayed',
           title: 'Games Played',
+          sortDescFirst: true
         },
         {
           Header: 'MP',
           accessor: 'minutes',
           title: 'Minutes Played',
+          sortDescFirst: true
         },
         {
           Header: 'W',
           accessor: 'wins',
           title: 'Wins',
+          sortDescFirst: true
         },
         {
           Header: 'L',
           accessor: 'losses',
           title: 'Losses',
+          sortDescFirst: true
         },
         {
           Header: 'OTL',
           accessor: 'ot',
           title: 'Overtime Losses',
+          sortDescFirst: true
         },
         {
           Header: 'SHA',
           accessor: 'shotsAgainst',
           title: 'Shots Against',
+          sortDescFirst: true
         },
         {
           Header: 'SAV',
           accessor: 'saves',
           title: 'Saves',
+          sortDescFirst: true
         },
         {
           Header: 'GA',
           accessor: 'goalsAgainst',
           title: 'Goals Against',
+          sortDescFirst: true
         },
         {
           Header: 'GAA',
           accessor: 'gaa',
           title: 'Goals Against Average',
+          sortDescFirst: true
         },
         {
           Header: 'SO',
           accessor: 'shutouts',
           title: 'Shutouts',
+          sortDescFirst: true
         },
         {
           Header: 'SV%',
           accessor: 'savePct',
           title: 'Save Percentage',
+          sortDescFirst: true
         },
         {
           Header: 'GR',
           accessor: 'gameRating',
           title: 'Overall Game Rating',
+          sortDescFirst: true
         },
       ],
     },

@@ -62,7 +62,6 @@ const GameDayMatchup = ({
   const AwayLogo = sprites[awayTeamAbbr];
   const HomeLogo = sprites[homeTeamAbbr];
 
-  console.log(game);
   return (
     <Link
       href="/[league]/[season]/game/[gameid]"
