@@ -155,6 +155,10 @@ const Filters = styled.div<{
   [role='tablist'] {
     display: ${props => props.hideTabList ? 'none' : 'block'}
   }
+
+  button {
+    ${props => props.hideTabList && 'margin-top: 28px;'}
+  }
 `;
 
 const SelectorWrapper = styled.div`
