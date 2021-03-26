@@ -135,8 +135,11 @@ const Round = styled.div`
 const Series = styled.div`
   display: flex;
   flex-direction: column;
+  width: 130px;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.colors.grey300};
 `;
 
 const SeriesTeam = styled.div<{
