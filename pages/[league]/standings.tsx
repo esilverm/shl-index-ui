@@ -9,7 +9,7 @@ import PlayoffsBracket from '../../components/PlayoffsBracket';
 import useStandings from '../../hooks/useStandings';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
-import { PlayoffsSeries } from '../api/v1/standings/playoffs';
+import { PlayoffsRound } from '../api/v1/standings/playoffs';
 import { Standings as StandingsData } from '../api/v1/standings';
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
+  const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
   const { data, isLoading } = useStandings(league, display, isPlayoffs);
 
@@ -74,7 +74,7 @@ function Standings({ league }: Props): JSX.Element {
             )}
           </DisplaySelectContainer>
         </Filters>
-        {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsSeries>} />}
+        {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsRound>} league={league} />}
         {!isPlayoffs &&
           <StandingsTableWrapper>
             {Array.isArray(data) &&
@@ -153,7 +153,7 @@ const Filters = styled.div<{
   hideTabList: boolean;
 }>`
   [role='tablist'] {
-    visibility: ${props => props.hideTabList ? 'hidden' : 'visible'}
+    display: ${props => props.hideTabList ? 'none' : 'block'}
   }
 `;
 

@@ -1,10 +1,10 @@
 import useSWR from 'swr';
 import { Standings } from '../pages/api/v1/standings';
-import { PlayoffsSeries } from '../pages/api/v1/standings/playoffs';
+import { PlayoffsRounds } from '../pages/api/v1/standings/playoffs';
 import { getQuerySeason } from '../utils/season';
 
 interface Hook {
-  data: Standings | Array<PlayoffsSeries>,
+  data: Standings | Array<PlayoffsRounds>,
   isLoading: boolean;
   isError: boolean;
 }
