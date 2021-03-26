@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
+import PlayoffsBracket from '../../components/PlayoffsBracket';
 import useStandings from '../../hooks/useStandings';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
+import { PlayoffsSeries } from '../api/v1/standings/playoffs';
+import { Standings as StandingsData } from '../api/v1/standings';
 
 interface Props {
   league: string;
@@ -16,7 +19,12 @@ interface Props {
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
-  const { standings, isLoading } = useStandings(league, display);
+  const [isPlayoffs, setIsPlayoffs] = useState(false);
+  const { data, isLoading } = useStandings(league, display, isPlayoffs);
+
+  useEffect(() => {
+    setIsPlayoffs(seasonType === "Playoffs");
+  }, [seasonType]);
 
   const onSeasonTypeSelect = (type) => setSeasonType(type);
 
@@ -66,31 +74,34 @@ function Standings({ league }: Props): JSX.Element {
             )}
           </DisplaySelectContainer>
         </Filters>
-        <StandingsTableWrapper>
-          {Array.isArray(standings) &&
-          standings.length > 0 &&
-          'teams' in standings[0] &&
-          !isLoading ? (
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            standings.map((group, i) => (
-              <StandingsTableContainer key={i}>
-                <StandingsTable
-                  data={group.teams}
-                  league={league}
-                  title={group.name}
-                  isLoading={isLoading}
-                />
-              </StandingsTableContainer>
-            ))
-          ) : (
-            <StandingsTable
-              data={standings}
-              league={league}
-              isLoading={isLoading}
-            />
-          )}
-        </StandingsTableWrapper>
+        {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsSeries>} />}
+        {!isPlayoffs &&
+          <StandingsTableWrapper>
+            {Array.isArray(data) &&
+            data.length > 0 &&
+            'teams' in data[0] &&
+            !isLoading ? (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              data.map((group, i) => (
+                <StandingsTableContainer key={i}>
+                  <StandingsTable
+                    data={group.teams}
+                    league={league}
+                    title={group.name}
+                    isLoading={isLoading}
+                  />
+                </StandingsTableContainer>
+              ))
+            ) : (
+              <StandingsTable
+                data={data as StandingsData}
+                league={league}
+                isLoading={isLoading}
+              />
+            )}
+          </StandingsTableWrapper>
+        }
       </Container>
     </React.Fragment>
   );

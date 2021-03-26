@@ -8,7 +8,7 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export interface Playoffs {
+export interface PlayoffsSeries {
   team1: number;
   team2: number;
   LeagueID: number;
@@ -26,7 +26,7 @@ export interface Playoffs {
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
-): Promise<Playoffs[]> => {
+): Promise<Array<PlayoffsSeries>> => {
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
