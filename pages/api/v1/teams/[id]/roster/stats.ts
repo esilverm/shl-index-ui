@@ -8,6 +8,9 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
+export type SeasonType = typeof seasonTypes[number];
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -17,7 +20,7 @@ export default async (
   const {
     id,
     league = 0,
-    type: shorttype = 'rs',
+    SeasonType,
     season: seasonid,
   } = req.query;
 
@@ -27,9 +30,13 @@ export default async (
   }
 
   let type: string;
-  if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
-    type = shorttype;
-  } else {
+  if (SeasonType === 'Pre-Season') {
+    type = 'ps';
+  }
+  else if (SeasonType === 'Playoffs') {
+    type = 'po';
+  }
+  else {
     type = 'rs';
   }
 
