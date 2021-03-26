@@ -6,6 +6,8 @@ import { NextSeo } from 'next-seo';
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../api/v1/schedule';
 
 interface Props {
   league: string;
@@ -13,7 +15,10 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
+  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const { standings, isLoading } = useStandings(league, display);
+
+  const onSeasonTypeSelect = (type) => setSeasonType(type);
 
   return (
     <React.Fragment>
@@ -25,37 +30,42 @@ function Standings({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="standings" />
       <Container>
-        <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'league')}
-            active={display === 'league'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'league'}
-          >
-            League
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'conference')}
-            active={display === 'conference'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'conference'}
-          >
-            Conference
-          </DisplaySelectItem>
-          {league !== 'iihf' && league !== 'wjc' && (
+        <Filters hideTabList={seasonType === "Playoffs"}>
+          <SelectorWrapper>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          </SelectorWrapper>
+          <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
-              onClick={() => setDisplay(() => 'division')}
-              active={display === 'division'}
+              onClick={() => setDisplay(() => 'league')}
+              active={display === 'league'}
               tabIndex={0}
               role="tab"
-              aria-selected={display === 'division'}
+              aria-selected={display === 'league'}
             >
-              Division
+              League
             </DisplaySelectItem>
-          )}
-        </DisplaySelectContainer>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'conference')}
+              active={display === 'conference'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'conference'}
+            >
+              Conference
+            </DisplaySelectItem>
+            {league !== 'iihf' && league !== 'wjc' && (
+              <DisplaySelectItem
+                onClick={() => setDisplay(() => 'division')}
+                active={display === 'division'}
+                tabIndex={0}
+                role="tab"
+                aria-selected={display === 'division'}
+              >
+                Division
+              </DisplaySelectItem>
+            )}
+          </DisplaySelectContainer>
+        </Filters>
         <StandingsTableWrapper>
           {Array.isArray(standings) &&
           standings.length > 0 &&
@@ -126,6 +136,20 @@ const StandingsTableWrapper = styled.div`
 const StandingsTableContainer = styled.div`
   width: 100%;
   margin: 30px 0;
+`;
+
+const Filters = styled.div<{
+  hideTabList: boolean;
+}>`
+  [role='tablist'] {
+    visibility: ${props => props.hideTabList ? 'hidden' : 'visible'}
+  }
+`;
+
+const SelectorWrapper = styled.div`
+  width: 250px;
+  float: right;
+  margin-right: 3%;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
