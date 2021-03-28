@@ -16,8 +16,6 @@ const LEAGUE_WIN_CONDITION = {
   wjc: 1
 };
 
-const isColorDark = (color: string) => tinycolor(color).getBrightness() <= 125;
-
 function PlayoffsBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
@@ -66,7 +64,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
       wins: serie.team1Wins,
       color: {
         background: primaryColors.away,
-        isDark: isColorDark(primaryColors.away)
+        isDark: tinycolor(primaryColors.away).isDark()
       }
     };
     const homeTeam = {
@@ -76,7 +74,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
       wins: serie.team2Wins,
       color: {
         background: primaryColors.home,
-        isDark: isColorDark(primaryColors.home)
+        isDark: tinycolor(primaryColors.home).isDark()
       }
     };
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
