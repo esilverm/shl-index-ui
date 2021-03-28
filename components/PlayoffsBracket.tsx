@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
+import tinycolor from 'tinycolor2';
 import { PlayoffsRound, PlayoffsSerie } from '../pages/api/v1/standings/playoffs';
 
 interface Props {
@@ -14,6 +15,8 @@ const LEAGUE_WIN_CONDITION = {
   iihf: 1,
   wjc: 1
 };
+
+const isColorDark = (color: string) => tinycolor(color).getBrightness() <= 125;
 
 function PlayoffsBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
@@ -51,43 +54,51 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   if (isLoading) return null; // TODO: Loader
 
   const renderSerie = (serie: PlayoffsSerie) => {
+    const isInternationalLeague = league === "iihf" || league === "wjc";
+    const primaryColors = {
+      away: teamData.find(team => team.id === serie.team1).colors.primary || '#FFFFFF',
+      home: teamData.find(team => team.id === serie.team2).colors.primary || '#FFFFFF'
+    };
     const awayTeam = {
       id: serie.team1,
       abbr: serie.team1_Abbr,
+      name: isInternationalLeague ? serie.team1_Nickname : serie.team1_Name,
       wins: serie.team1Wins,
-      color: teamData.find(team => team.id === serie.team1).colors.primary || '#FFFFFF'
+      color: {
+        background: primaryColors.away,
+        isDark: isColorDark(primaryColors.away)
+      }
     };
     const homeTeam = {
       id: serie.team2,
       abbr: serie.team2_Abbr,
+      name: isInternationalLeague ? serie.team2_Nickname : serie.team2_Name,
       wins: serie.team2Wins,
-      color: teamData.find(team => team.id === serie.team2).colors.primary || '#FFFFFF'
+      color: {
+        background: primaryColors.home,
+        isDark: isColorDark(primaryColors.home)
+      }
     };
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
     const hasHomeTeamWon = homeTeam.wins === LEAGUE_WIN_CONDITION[league];
     const AwayLogo = sprites[awayTeam.abbr];
     const HomeLogo = sprites[homeTeam.abbr];
-    let leader = 'Tied';
-    let score = `${awayTeam.wins} - ${homeTeam.wins}`;
-
-    if (awayTeam.wins > homeTeam.wins) {
-      leader = awayTeam.wins === LEAGUE_WIN_CONDITION[league] ? `${awayTeam.abbr} wins` : `${awayTeam.abbr} leads`;
-    } else if (homeTeam.wins > awayTeam.wins) {
-      leader = homeTeam.wins === LEAGUE_WIN_CONDITION[league] ? `${homeTeam.abbr} wins` : `${homeTeam.abbr} leads`;
-      score = `${homeTeam.wins} - ${awayTeam.wins}`;
-    }
 
     return (
       <Series key={`${awayTeam.id}${homeTeam.id}`}>
-        <SeriesTeam color={awayTeam.color} lost={hasHomeTeamWon}>
+        <SeriesTeam color={awayTeam.color.background} isDark={awayTeam.color.isDark} lost={hasHomeTeamWon}>
           <AwayLogo />
+          <span>{awayTeam.name}</span>
+          <SeriesScore>
+            {awayTeam.wins}
+          </SeriesScore>
         </SeriesTeam>
-        <SeriesScore>
-          <p>{leader}</p>
-          <p>{score}</p>
-        </SeriesScore>
-        <SeriesTeam color={homeTeam.color} lost={hasAwayTeamWon}>
+        <SeriesTeam color={homeTeam.color.background} isDark={homeTeam.color.isDark} lost={hasAwayTeamWon}>
           <HomeLogo />
+          <span>{homeTeam.name}</span>
+          <SeriesScore>
+            {homeTeam.wins}
+          </SeriesScore>
         </SeriesTeam>
       </Series>
     );
@@ -125,7 +136,7 @@ const Round = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
+  width: 270px;
 
   h2 {
     margin-bottom: 10px;
@@ -139,30 +150,47 @@ const Series = styled.div`
   align-items: center;
   margin-bottom: 5px;
   padding: 20px;
-  background-color: ${({ theme }) => theme.colors.grey300};
 `;
-
 const SeriesTeam = styled.div<{
   color: string;
+  isDark: boolean;
   lost: boolean;
 }>`
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 65px;
-  width: 65px;
+  height: 55px;
+  width: 230px;
   background-color: ${props => props.color};
-  border-radius: 15%;
-  padding: 5px;
-  ${props => props.lost && 'opacity: 0.4;'}
+  letter-spacing: 0.05rem;
+  font-size: 18px;
+  font-weight: 600;
+  ${props => props.lost && 'opacity: 0.5;'}
+
+  svg {
+    width: 55px;
+    padding: 5px;
+  }
+
+  span {
+    padding-right: 5px;
+    color: ${({ isDark, theme }) => isDark ? theme.colors.grey100 : theme.colors.grey900};
+  }
 `;
 
 const SeriesScore = styled.div`
+  background-color: ${({ theme }) => theme.colors.grey900}80;
+  color: ${({ theme }) => theme.colors.grey100};
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 20px;
+  padding: 0 15px;
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-weight: bold;
-  padding: 10px 0;
+  font-size: 25px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  margin-left: auto;
 `;
 
 export default React.memo(PlayoffsBracket);
