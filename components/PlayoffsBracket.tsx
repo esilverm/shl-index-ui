@@ -125,8 +125,11 @@ const Container = styled.div`
 
 const Bracket = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  width: 100%;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding: 0 3%;
 `;
 
@@ -144,7 +147,7 @@ const Round = styled.div`
 const Series = styled.div`
   display: flex;
   flex-direction: column;
-  width: 130px;
+  width: 230px;
   align-items: center;
   margin-bottom: 5px;
   padding: 20px;

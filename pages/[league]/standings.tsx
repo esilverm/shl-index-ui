@@ -159,6 +159,17 @@ const Filters = styled.div<{
   button {
     ${props => props.hideTabList && 'margin-top: 28px;'}
   }
+
+  @media screen and (max-width: 750px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
 `;
 
 const SelectorWrapper = styled.div`
