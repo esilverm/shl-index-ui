@@ -20,7 +20,7 @@ export default async (
   const {
     id,
     league = 0,
-    SeasonType,
+    type: longType =  'Regular',
     season: seasonid,
   } = req.query;
 
