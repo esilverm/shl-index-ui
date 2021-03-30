@@ -39,6 +39,8 @@ export default async (
         ps.PTS,
         ps.GF,
         ps.GA,
+        ps.SOL,
+        ps.SOW,
         td.Name,
         td.Nickname,
         td.Abbr,
@@ -66,9 +68,24 @@ export default async (
       OTL: team.OTL,
       points: team.PTS,
       winPercentage: (team.PTS/(team.GP*2)).toFixed(3),
+      ROW: team.Wins - team.SOW,
       goalsFor: team.GF,
       goalsAgainst: team.GA,
       goalDiff: team.GF - team.GA,
+      home: {
+        wins: team.HomeWins,
+        losses: team.HomeLosses,
+        OTL: team.HomeOTL,
+      },
+      away: {
+        wins: team.AwayWins,
+        losses: team.AwayLosses,
+        OTL: team.AwayOTL,
+      },
+      shootout: {
+        wins: team.SOW,
+        losses: team.SOL,
+      },
   }));
 
   res.status(200).json(parsed);
