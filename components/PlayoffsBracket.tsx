@@ -49,8 +49,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !data || !teamData);
   }, [isLoadingAssets, data, teamData]);
 
-  if (teamError) return <div>{teamError}</div>; // TODO: Pretty error
-  if (isLoading) return <PlayoffsBracketSkeleton />;
+  if (teamError || isLoading) return <PlayoffsBracketSkeleton isError={teamError} />;
 
   const renderSerie = (serie: PlayoffsSerie) => {
     const isInternationalLeague = league === "iihf" || league === "wjc";
@@ -120,7 +119,9 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   );
 }
 
-function PlayoffsBracketSkeleton(): JSX.Element {
+function PlayoffsBracketSkeleton({ isError }: {
+  isError: boolean
+}): JSX.Element {
   const fakeArray = (length) => new Array(length).fill(0);
 
   const renderSkeletonSeries = () => (
@@ -166,6 +167,7 @@ function PlayoffsBracketSkeleton(): JSX.Element {
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
       <Container>
+        {isError && <strong>A technical error occurred. Please reload the page to try again.</strong>}
         {renderSkeletonBracket()}
       </Container>
     </SkeletonTheme>
@@ -178,6 +180,8 @@ const Container = styled.div`
   margin-top: 25px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Bracket = styled.div`
