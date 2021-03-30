@@ -18,7 +18,7 @@ const useStandings = (
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams/${team}/roster/stats?league=${leagueid}${seasonParam}${SeasonTypeParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams/${team}/roster/stats?league=${leagueid}${seasonParam}${seasonTypeParam}`
   );
 
   return {
