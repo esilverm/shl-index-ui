@@ -20,11 +20,23 @@ function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
   const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
+  const [isLoadingView, setIsLoadingView] = useState(true);
   const { data, isLoading } = useStandings(league, display, isPlayoffs);
 
   useEffect(() => {
-    setIsPlayoffs(seasonType === "Playoffs");
+    const nextIsPlayoffs = seasonType === "Playoffs";
+    if (nextIsPlayoffs !== isPlayoffs) {
+      setIsLoadingView(true);
+    }
   }, [seasonType]);
+
+  useEffect(() => {
+    setIsPlayoffs(seasonType === "Playoffs");
+  }, [isLoadingView]);
+
+  useEffect(() => {
+    setIsLoadingView(false);
+  }, [data]);
 
   const onSeasonTypeSelect = (type) => setSeasonType(type);
 
@@ -38,7 +50,7 @@ function Standings({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="standings" />
       <Container>
-        <Filters hideTabList={seasonType === "Playoffs"}>
+        <Filters hideTabList={isPlayoffs}>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           </SelectorWrapper>
@@ -74,40 +86,43 @@ function Standings({ league }: Props): JSX.Element {
             )}
           </DisplaySelectContainer>
         </Filters>
-        {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsRound>} league={league} />}
-        {!isPlayoffs &&
-          <StandingsTableWrapper>
-            {Array.isArray(data) &&
-            data.length > 0 &&
-            'teams' in data[0] &&
-            !isLoading ? (
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              data.map((group, i) => (
-                <StandingsTableContainer key={i}>
-                  <StandingsTable
-                    data={group.teams}
-                    league={league}
-                    title={group.name}
-                    isLoading={isLoading}
-                  />
-                </StandingsTableContainer>
-              ))
-            ) : (
-              <StandingsTable
-                data={data as StandingsData}
-                league={league}
-                isLoading={isLoading}
-              />
-            )}
-          </StandingsTableWrapper>
-        }
+        <Main>
+          {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsRound>} league={league} />}
+          {!isPlayoffs &&
+            <StandingsTableWrapper>
+              {Array.isArray(data) &&
+              data.length > 0 &&
+              'teams' in data[0] &&
+              !isLoading ? (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                data.map((group, i) => (
+                  <StandingsTableContainer key={i}>
+                    <StandingsTable
+                      data={group.teams}
+                      league={league}
+                      title={group.name}
+                      isLoading={isLoading}
+                    />
+                  </StandingsTableContainer>
+                ))
+              ) : (
+                <StandingsTable
+                  data={data as StandingsData}
+                  league={league}
+                  isLoading={isLoading}
+                />
+              )}
+            </StandingsTableWrapper>
+          }
+        </Main>
       </Container>
     </React.Fragment>
   );
 }
 
 const Container = styled.div`
+  height: 100%;
   width: 75%;
   padding: 1px 0 40px 0;
   margin: 0 auto;
@@ -117,6 +132,40 @@ const Container = styled.div`
     width: 100%;
     padding: 2.5%;
   }
+`;
+
+const Filters = styled.div<{
+  hideTabList: boolean;
+}>`
+  [role='tablist'] {
+    display: ${props => props.hideTabList ? 'none' : 'block'}
+  }
+
+  button {
+    ${props => props.hideTabList && 'margin-top: 28px;'}
+  }
+
+  @media screen and (max-width: 750px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
+`;
+
+const SelectorWrapper = styled.div`
+  width: 250px;
+  float: right;
+  margin-right: 3%;
+`;
+
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
 `;
 
 const DisplaySelectContainer = styled.div`
@@ -147,35 +196,6 @@ const StandingsTableWrapper = styled.div`
 const StandingsTableContainer = styled.div`
   width: 100%;
   margin: 30px 0;
-`;
-
-const Filters = styled.div<{
-  hideTabList: boolean;
-}>`
-  [role='tablist'] {
-    display: ${props => props.hideTabList ? 'none' : 'block'}
-  }
-
-  button {
-    ${props => props.hideTabList && 'margin-top: 28px;'}
-  }
-
-  @media screen and (max-width: 750px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-`;
-
-const SelectorWrapper = styled.div`
-  width: 250px;
-  float: right;
-  margin-right: 3%;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
@@ -49,29 +50,29 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   }, [isLoadingAssets, data, teamData]);
 
   if (teamError) return <div>{teamError}</div>; // TODO: Pretty error
-  if (isLoading) return null; // TODO: Loader
+  if (isLoading) return <PlayoffsBracketSkeleton />;
 
   const renderSerie = (serie: PlayoffsSerie) => {
     const isInternationalLeague = league === "iihf" || league === "wjc";
     const primaryColors = {
-      away: teamData.find(team => team.id === serie.team1).colors.primary || '#FFFFFF',
-      home: teamData.find(team => team.id === serie.team2).colors.primary || '#FFFFFF'
+      away: teamData?.find(team => team.id === serie.team1)?.colors.primary || '#DDD',
+      home: teamData?.find(team => team.id === serie.team2)?.colors.primary || '#BBB'
     };
     const awayTeam = {
-      id: serie.team1,
-      abbr: serie.team1_Abbr,
-      name: isInternationalLeague ? serie.team1_Nickname : serie.team1_Name,
-      wins: serie.team1Wins,
+      id: serie.team1 || -1,
+      abbr: serie.team1_Abbr || "TEST",
+      name: isInternationalLeague ? serie.team1_Nickname || "Away Team" : serie.team1_Name || "Away Team",
+      wins: serie.team1Wins || 0,
       color: {
         background: primaryColors.away,
         isDark: tinycolor(primaryColors.away).isDark()
       }
     };
     const homeTeam = {
-      id: serie.team2,
-      abbr: serie.team2_Abbr,
-      name: isInternationalLeague ? serie.team2_Nickname : serie.team2_Name,
-      wins: serie.team2Wins,
+      id: serie.team2 || -1,
+      abbr: serie.team2_Abbr || "TEST",
+      name: isInternationalLeague ? serie.team2_Nickname || "Home Team" : serie.team2_Name || "Home Team",
+      wins: serie.team2Wins || 0,
       color: {
         background: primaryColors.home,
         isDark: tinycolor(primaryColors.home).isDark()
@@ -79,8 +80,9 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     };
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
     const hasHomeTeamWon = homeTeam.wins === LEAGUE_WIN_CONDITION[league];
-    const AwayLogo = sprites[awayTeam.abbr];
-    const HomeLogo = sprites[homeTeam.abbr];
+    const temp = () => <div></div>;
+    const AwayLogo = sprites[awayTeam.abbr] || temp;
+    const HomeLogo = sprites[homeTeam.abbr] || temp; 
 
     return (
       <Series key={`${awayTeam.id}${homeTeam.id}`}>
@@ -118,9 +120,66 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   );
 }
 
+function PlayoffsBracketSkeleton(): JSX.Element {
+  const fakeArray = (length) => new Array(length).fill(0);
+
+  const renderSkeletonSeries = () => (
+    <Series>
+      <SeriesTeam color={'#CCC'} isDark={false} lost={false}>
+        <div style={{ marginLeft: '5px' }}></div>
+        <Skeleton width={45} height={45} />
+        <span><Skeleton width={100} /></span>
+        <SeriesScore>
+          <Skeleton />
+        </SeriesScore>
+      </SeriesTeam>
+      <SeriesTeam color={'#EEE'} isDark={false} lost={false}>
+        <div style={{ marginLeft: '5px' }}></div>
+        <Skeleton width={45} height={45} />
+        <span><Skeleton width={100} /></span>
+        <SeriesScore>
+          <Skeleton />
+        </SeriesScore>
+      </SeriesTeam>
+    </Series>
+  );
+
+  const renderSkeletonBracket = () => (
+    <Bracket>
+      {fakeArray(2).map((_, i) => (
+        <Round key={i}>
+          <Skeleton width={150} height={30} />
+          {fakeArray(4).map(() => renderSkeletonSeries())}
+        </Round>
+      ))}
+      <Round>
+          <Skeleton width={150} height={30} />
+        {fakeArray(2).map(() => renderSkeletonSeries())}
+      </Round>
+      <Round>
+          <Skeleton width={150} height={30} />
+        <Series>
+          {renderSkeletonSeries()}
+        </Series>
+      </Round>
+    </Bracket>
+  );
+
+  return (
+    <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
+      <Container>
+        {renderSkeletonBracket()}
+      </Container>
+    </SkeletonTheme>
+  );
+}
+
 const Container = styled.div`
-  margin-top: 25px;
   width: 95%;
+  height: 100%;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Bracket = styled.div`
