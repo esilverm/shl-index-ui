@@ -8,6 +8,41 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export type Standings = Array<{
+  name: string;
+  teams: {
+    position: number;
+    id: number;
+    name: string;
+    location: string;
+    abbreviation: string;
+    gp: number;
+    wins: number;
+    losses: number;
+    OTL: number;
+    points: number;
+    winPercent: string;
+    ROW: number;
+    goalsFor: number;
+    goalsAgainst: number;
+    goalDiff: number;
+    home: {
+      wins: number;
+      losses: number;
+      OTL: number;
+    };
+    away: {
+      wins: number;
+      losses: number;
+      OTL: number;
+    };
+    shootout: {
+      wins: number;
+      losses: number;
+    };
+  };
+}>;
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse

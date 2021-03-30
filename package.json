@@ -35,7 +35,8 @@
     "sql-template-strings": "^2.2.2",
     "styled-components": "^5.1.1",
     "svg-sprite-loader": "^5.0.0",
-    "swr": "^0.3.6"
+    "swr": "^0.3.6",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

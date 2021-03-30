@@ -1,90 +1,32 @@
 import useSWR from 'swr';
+import { Standings } from '../pages/api/v1/standings';
+import { PlayoffsRound } from '../pages/api/v1/standings/playoffs';
 import { getQuerySeason } from '../utils/season';
+
+interface Hook {
+  data: Standings | Array<PlayoffsRound>,
+  isLoading: boolean;
+  isError: boolean;
+}
 
 const useStandings = (
   league: string,
-  display = 'league'
-): {
-  standings:
-    | {
-        position: number;
-        id: number;
-        name: string;
-        location: string;
-        abbreviation: string;
-        gp: number;
-        wins: number;
-        losses: number;
-        OTL: number;
-        points: number;
-        winPercent: string;
-        ROW: number;
-        goalsFor: number;
-        goalsAgainst: number;
-        goalDiff: number;
-        home: {
-          wins: number;
-          losses: number;
-          OTL: number;
-        };
-        away: {
-          wins: number;
-          losses: number;
-          OTL: number;
-        };
-        shootout: {
-          wins: number;
-          losses: number;
-        };
-      }
-    | Array<{
-        name: string;
-        teams: {
-          position: number;
-          id: number;
-          name: string;
-          location: string;
-          abbreviation: string;
-          gp: number;
-          wins: number;
-          losses: number;
-          OTL: number;
-          points: number;
-          winPercent: string;
-          ROW: number;
-          goalsFor: number;
-          goalsAgainst: number;
-          goalDiff: number;
-          home: {
-            wins: number;
-            losses: number;
-            OTL: number;
-          };
-          away: {
-            wins: number;
-            losses: number;
-            OTL: number;
-          };
-          shootout: {
-            wins: number;
-            losses: number;
-          };
-        };
-      }>;
-  isLoading: boolean;
-  isError: boolean;
-} => {
+  display = 'league',
+  isPlayoffs = false
+): Hook => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
+  const endpoint = isPlayoffs ? 'standings/playoffs' : 'standings';
+  const displayParam = !isPlayoffs ? `&display=${display}` : '';
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?league=${leagueid}&display=${display}${seasonParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/${endpoint}?league=${leagueid}${displayParam}${seasonParam}`
   );
 
   return {
-    standings: data,
+    data,
     isLoading: !error && !data,
     isError: error,
   };
