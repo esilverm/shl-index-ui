@@ -8,8 +8,7 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
-export type SeasonType = typeof seasonTypes[number];
+export type SeasonType = String;
 
 export default async (
   req: NextApiRequest,
