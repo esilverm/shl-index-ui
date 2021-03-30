@@ -5,7 +5,7 @@ import { getQuerySeason } from '../utils/season';
 const useStandings = (
   league: string,
   team: number,
-  SeasonType: string
+  seasonType: string
 ): {
   roster: Array<Player | Goalie>;
   isLoading: boolean;
