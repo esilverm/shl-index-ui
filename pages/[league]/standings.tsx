@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
 import StandingsTable from '../../components/StandingsTable';
+import PlayoffsBracket from '../../components/PlayoffsBracket';
 import useStandings from '../../hooks/useStandings';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../api/v1/schedule';
+import { PlayoffsRound } from '../api/v1/standings/playoffs';
+import { Standings as StandingsData } from '../api/v1/standings';
 
 interface Props {
   league: string;
@@ -13,7 +18,27 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-  const { standings, isLoading } = useStandings(league, display);
+  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
+  const [isPlayoffs, setIsPlayoffs] = useState(false);
+  const [isLoadingView, setIsLoadingView] = useState(true);
+  const { data, isLoading } = useStandings(league, display, isPlayoffs);
+
+  useEffect(() => {
+    const nextIsPlayoffs = seasonType === "Playoffs";
+    if (nextIsPlayoffs !== isPlayoffs) {
+      setIsLoadingView(true);
+    }
+  }, [seasonType]);
+
+  useEffect(() => {
+    setIsPlayoffs(seasonType === "Playoffs");
+  }, [isLoadingView]);
+
+  useEffect(() => {
+    setIsLoadingView(false);
+  }, [data]);
+
+  const onSeasonTypeSelect = (type) => setSeasonType(type);
 
   return (
     <React.Fragment>
@@ -25,68 +50,79 @@ function Standings({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="standings" />
       <Container>
-        <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'league')}
-            active={display === 'league'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'league'}
-          >
-            League
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'conference')}
-            active={display === 'conference'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'conference'}
-          >
-            Conference
-          </DisplaySelectItem>
-          {league !== 'iihf' && league !== 'wjc' && (
+        <Filters hideTabList={isPlayoffs}>
+          <SelectorWrapper>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          </SelectorWrapper>
+          <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
-              onClick={() => setDisplay(() => 'division')}
-              active={display === 'division'}
+              onClick={() => setDisplay(() => 'league')}
+              active={display === 'league'}
               tabIndex={0}
               role="tab"
-              aria-selected={display === 'division'}
+              aria-selected={display === 'league'}
             >
-              Division
+              League
             </DisplaySelectItem>
-          )}
-        </DisplaySelectContainer>
-        <StandingsTableWrapper>
-          {Array.isArray(standings) &&
-          standings.length > 0 &&
-          'teams' in standings[0] &&
-          !isLoading ? (
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            standings.map((group, i) => (
-              <StandingsTableContainer key={i}>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'conference')}
+              active={display === 'conference'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'conference'}
+            >
+              Conference
+            </DisplaySelectItem>
+            {league !== 'iihf' && league !== 'wjc' && (
+              <DisplaySelectItem
+                onClick={() => setDisplay(() => 'division')}
+                active={display === 'division'}
+                tabIndex={0}
+                role="tab"
+                aria-selected={display === 'division'}
+              >
+                Division
+              </DisplaySelectItem>
+            )}
+          </DisplaySelectContainer>
+        </Filters>
+        <Main>
+          {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsRound>} league={league} />}
+          {!isPlayoffs &&
+            <StandingsTableWrapper>
+              {Array.isArray(data) &&
+              data.length > 0 &&
+              'teams' in data[0] &&
+              !isLoading ? (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                data.map((group, i) => (
+                  <StandingsTableContainer key={i}>
+                    <StandingsTable
+                      data={group.teams}
+                      league={league}
+                      title={group.name}
+                      isLoading={isLoading}
+                    />
+                  </StandingsTableContainer>
+                ))
+              ) : (
                 <StandingsTable
-                  data={group.teams}
+                  data={data as StandingsData}
                   league={league}
-                  title={group.name}
                   isLoading={isLoading}
                 />
-              </StandingsTableContainer>
-            ))
-          ) : (
-            <StandingsTable
-              data={standings}
-              league={league}
-              isLoading={isLoading}
-            />
-          )}
-        </StandingsTableWrapper>
+              )}
+            </StandingsTableWrapper>
+          }
+        </Main>
       </Container>
     </React.Fragment>
   );
 }
 
 const Container = styled.div`
+  height: 100%;
   width: 75%;
   padding: 1px 0 40px 0;
   margin: 0 auto;
@@ -96,6 +132,40 @@ const Container = styled.div`
     width: 100%;
     padding: 2.5%;
   }
+`;
+
+const Filters = styled.div<{
+  hideTabList: boolean;
+}>`
+  [role='tablist'] {
+    display: ${props => props.hideTabList ? 'none' : 'block'}
+  }
+
+  button {
+    ${props => props.hideTabList && 'margin-top: 28px;'}
+  }
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
+`;
+
+const SelectorWrapper = styled.div`
+  width: 250px;
+  float: right;
+  margin-right: 3%;
+`;
+
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
 `;
 
 const DisplaySelectContainer = styled.div`
