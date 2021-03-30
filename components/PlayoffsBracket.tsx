@@ -146,18 +146,16 @@ function PlayoffsBracketSkeleton(): JSX.Element {
 
   const renderSkeletonBracket = () => (
     <Bracket>
-      {fakeArray(2).map((_, i) => (
-        <Round key={i}>
-          <Skeleton width={150} height={30} />
-          {fakeArray(4).map(() => renderSkeletonSeries())}
-        </Round>
-      ))}
       <Round>
-          <Skeleton width={150} height={30} />
+        <Skeleton width={150} height={30} />
+        {fakeArray(4).map(() => renderSkeletonSeries())}
+      </Round>
+      <Round>
+        <Skeleton width={150} height={30} />
         {fakeArray(2).map(() => renderSkeletonSeries())}
       </Round>
       <Round>
-          <Skeleton width={150} height={30} />
+        <Skeleton width={150} height={30} />
         <Series>
           {renderSkeletonSeries()}
         </Series>
