@@ -30,13 +30,11 @@ export default async (
   }
 
   let type: string;
-  if (SeasonType === 'Pre-Season') {
+  if (longType.toLowerCase().replace('-', '') === 'preseason') {
     type = 'ps';
-  }
-  else if (SeasonType === 'Playoffs') {
+  } else if (longType.toLowerCase() === 'playoffs') {
     type = 'po';
-  }
-  else {
+  } else {
     type = 'rs';
   }
 
