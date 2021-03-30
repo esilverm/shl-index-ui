@@ -65,6 +65,7 @@ export default async (
       losses: team.Losses,
       OTL: team.OTL,
       points: team.PTS,
+      winPercentage: (team.PTS/(team.GP*2)).toFixed(3),
       goalsFor: team.GF,
       goalsAgainst: team.GA,
       goalDiff: team.GF - team.GA,
