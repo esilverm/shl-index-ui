@@ -19,7 +19,7 @@ export default async (
   const {
     id,
     league = 0,
-    type: longType = 'Regular',
+    type: longType = 'regular',
     season: seasonid,
   } = req.query;
 
@@ -29,9 +29,9 @@ export default async (
   }
 
   let type: string;
-  if (longType[0].toLowerCase().replace('-', '') === 'preseason') {
+  if (longType === 'preseason') {
     type = 'ps';
-  } else if (longType[0].toLowerCase() === 'playoffs') {
+  } else if (longType === 'playoffs') {
     type = 'po';
   } else {
     type = 'rs';
