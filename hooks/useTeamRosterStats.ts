@@ -14,7 +14,7 @@ const useStandings = (
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
-  const SeasonTypeParam = SeasonType ? `&SeasonType=${SeasonType}` : '';
+  const seasonTypeParam = seasonType ? `&type=${seasonType}` : '';
 
   const { data, error } = useSWR(
     () =>
