@@ -53,10 +53,7 @@ function TeamPage({
   }
 
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-
   const { roster, isLoading } = useTeamRosterStats(leaguename, id, filterSeasonType);
-
-  if (!isLoading) console.log(roster);
   const [display, setDisplay] = useState('stats');
 
   const getSkaters = () =>

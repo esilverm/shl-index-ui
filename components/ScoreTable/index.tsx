@@ -36,7 +36,7 @@ Props): JSX.Element {
   const columns = useMemo(() => columnData, []);
 
   const initialState = useMemo(() => {
-    if ('wins' in players[0]) {
+    if (players[0] && 'wins' in players[0]) {
       return { sortBy: [{ id: 'wins', desc: true }] };
     }
     return { sortBy: [{ id: 'points', desc: true }] };
@@ -50,54 +50,61 @@ Props): JSX.Element {
     prepareRow,
   } = useTable({ columns, data, initialState }, useSortBy);
 
-  return (
-    <TableContainer>
-      <Table {...getTableProps()}>
-        <TableHeader>
-          {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
-              {headerGroup.headers.map((column, i) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  title={column.title}
-                  key={`${i}_${column.id}`}
-                  className={
-                    column.isSorted
-                      ? column.isSortedDesc
-                        ? 'sorted--desc'
-                        : 'sorted--asc'
-                      : ''
-                  }
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </TableHeader>
-        <TableBody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
+  const hasData = rows.length > 0;
 
-            return (
-              <tr {...row.getRowProps()} key={i}>
-                {row.cells.map((cell, i) => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                      key={i}
-                      className={cell.column.isSorted ? 'sorted' : ''}
+  return (
+    <>
+      {!hasData && <Notice>No results found</Notice>}
+      {hasData &&
+        <TableContainer>
+          <Table {...getTableProps()}>
+            <TableHeader>
+              {headerGroups.map((headerGroup, i) => (
+                <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                  {headerGroup.headers.map((column, i) => (
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      title={column.title}
+                      key={`${i}_${column.id}`}
+                      className={
+                        column.isSorted
+                          ? column.isSortedDesc
+                            ? 'sorted--desc'
+                            : 'sorted--asc'
+                          : ''
+                      }
                     >
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                      {column.render('Header')}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </TableHeader>
+            <TableBody {...getTableBodyProps()}>
+              {hasData && rows.map((row, i) => {
+                prepareRow(row);
+
+                return (
+                  <tr {...row.getRowProps()} key={i}>
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <td
+                          {...cell.getCellProps()}
+                          key={i}
+                          className={cell.column.isSorted ? 'sorted' : ''}
+                        >
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      }
+    </>
   );
 }
 
@@ -198,6 +205,14 @@ const TableBody = styled.tbody`
       background-color: rgba(1, 131, 218, 0.1);
     }
   }
+`;
+
+const Notice = styled.div`
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
 `;
 
 export default ScoreTable;
