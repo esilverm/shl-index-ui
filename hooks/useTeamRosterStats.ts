@@ -4,7 +4,8 @@ import { getQuerySeason } from '../utils/season';
 
 const useStandings = (
   league: string,
-  team: number
+  team: number,
+  seasonType: string
 ): {
   roster: Array<Player | Goalie>;
   isLoading: boolean;
@@ -13,10 +14,11 @@ const useStandings = (
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
+  const seasonTypeParam = seasonType ? `&type=${seasonType.toLowerCase().replace('-', '')}` : '';
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams/${team}/roster/stats?league=${leagueid}${seasonParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams/${team}/roster/stats?league=${leagueid}${seasonParam}${seasonTypeParam}`
   );
 
   return {

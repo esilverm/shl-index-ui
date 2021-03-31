@@ -12,6 +12,8 @@ import SkaterAdvStatsTable from '../../../components/ScoreTable/SkaterAdvStatsTa
 import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
 import { Goalie, Player } from '../../..';
+import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../../api/v1/teams/[id]/roster/stats';
 
 interface Props {
   leaguename: string;
@@ -50,7 +52,9 @@ function TeamPage({
     return <Error statusCode={404} />;
   }
 
-  const { roster, isLoading } = useTeamRosterStats(leaguename, id);
+  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
+
+  const { roster, isLoading } = useTeamRosterStats(leaguename, id, filterSeasonType);
 
   if (!isLoading) console.log(roster);
   const [display, setDisplay] = useState('stats');
@@ -63,6 +67,10 @@ function TeamPage({
     roster
       ? (roster.filter((player) => player.position === 'G') as Array<Goalie>)
       : [];
+
+  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
+    setFilterSeasonType(seasonType);
+  };
 
   return (
     <React.Fragment>
@@ -117,7 +125,12 @@ function TeamPage({
       </TeamHero>
       <Container>
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
-        <TableHeading>Skaters</TableHeading>
+        <TableHeading>
+          Skaters
+        </TableHeading>
+        <Filters>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+        </Filters>
         <DisplaySelectContainer role="tablist">
           <DisplaySelectItem
             onClick={() => setDisplay(() => 'stats')}
@@ -172,6 +185,30 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     width: 100%;
     padding: 2.5%;
+  }
+`;
+
+const Filters = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-right: 3%;
+  justify-content: flex-end;
+  float: right;
+  margin-top: -88px;
+
+  button {
+    width: 200px;
+  }
+
+  @media screen and (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+      width: 150px;
+    }
   }
 `;
 
