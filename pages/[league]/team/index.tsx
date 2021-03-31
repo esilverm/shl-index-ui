@@ -2,6 +2,7 @@ import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
+import tinycolor from 'tinycolor2';
 import { Team } from '../../..';
 import Header from '../../../components/Header';
 import Link from '../../../components/LinkWithSeason';
@@ -41,15 +42,7 @@ function index({ league, teamlist }: Props): JSX.Element {
                     .join('_')}.svg`)}
                   alt={`${team.name} logo`}
                 />
-                <TeamName
-                  color={
-                    ['Kelowna', 'Maine', 'Anaheim', 'Anchorage'].indexOf(
-                      team.location
-                    ) != -1
-                      ? '#FFFFFF'
-                      : team.colors.text
-                  }
-                >
+                <TeamName bright={tinycolor(team.colors.primary).isDark()}>
                   <span className="first">{team.nameDetails.first}</span>
                   <span className="second">{team.nameDetails.second}</span>
                 </TeamName>
@@ -107,8 +100,8 @@ const TeamLogo = styled.img`
   margin: 0 5%;
 `;
 
-const TeamName = styled.h2<{ color: string }>`
-  color: ${({ color }) => color};
+const TeamName = styled.h2<{ bright: boolean }>`
+  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
 
   span {
     display: block;
