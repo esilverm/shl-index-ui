@@ -46,10 +46,10 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   }, []);
 
   useEffect(() => {
-    setIsLoading(isLoadingAssets || !data || !teamData);
-  }, [isLoadingAssets, data, teamData]);
+    setIsLoading(isLoadingAssets || !teamData);
+  }, [isLoadingAssets, teamData]);
 
-  if (teamError || isLoading) return <PlayoffsBracketSkeleton isError={teamError} />;
+  if (teamError || isLoading || !data) return <PlayoffsBracketSkeleton isError={teamError} />;
 
   const renderSerie = (serie: PlayoffsSerie) => {
     const isInternationalLeague = league === "iihf" || league === "wjc";
@@ -124,8 +124,8 @@ function PlayoffsBracketSkeleton({ isError }: {
 }): JSX.Element {
   const fakeArray = (length) => new Array(length).fill(0);
 
-  const renderSkeletonSeries = () => (
-    <Series>
+  const renderSkeletonSeries = (i) => (
+    <Series key={i}>
       <SeriesTeam color={'#CCC'} isDark={false} lost={false}>
         <div style={{ marginLeft: '5px' }}></div>
         <Skeleton width={45} height={45} />
@@ -149,16 +149,16 @@ function PlayoffsBracketSkeleton({ isError }: {
     <Bracket>
       <Round>
         <Skeleton width={150} height={30} />
-        {fakeArray(4).map(() => renderSkeletonSeries())}
+        {fakeArray(4).map((_, i) => renderSkeletonSeries(i))}
       </Round>
       <Round>
         <Skeleton width={150} height={30} />
-        {fakeArray(2).map(() => renderSkeletonSeries())}
+        {fakeArray(2).map((_, i) => renderSkeletonSeries(i))}
       </Round>
       <Round>
         <Skeleton width={150} height={30} />
         <Series>
-          {renderSkeletonSeries()}
+          {renderSkeletonSeries(0)}
         </Series>
       </Round>
     </Bracket>
