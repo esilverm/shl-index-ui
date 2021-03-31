@@ -18,7 +18,7 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs');
+  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
   const [isLoadingView, setIsLoadingView] = useState(true);
   const { data, isLoading } = useStandings(league, display, isPlayoffs);

@@ -104,7 +104,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   };
   const renderRound = (round, index) => (
     <Round key={index}>
-      <h2>{`Round ${index + 1}`}</h2>
+      <h2>{round.length === 1 ? "Finals" : `Round ${index + 1}`}</h2>
       {round.map(serie => renderSerie(serie))}
     </Round>
   );
