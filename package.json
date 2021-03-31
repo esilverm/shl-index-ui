@@ -25,7 +25,7 @@
     "react-dom": "16.14.0",
     "react-horizontal-scrolling-menu": "^0.7.8",
     "react-icons": "^4.1.0",
-    "react-loading-skeleton": "^2.1.1",
+    "react-loading-skeleton": "^2.2.0",
     "react-spinners": "^0.10.6",
     "react-table": "^7.6.0",
     "react-visibility-sensor": "^5.1.1",
@@ -34,15 +34,15 @@
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2",
     "styled-components": "^5.1.1",
-    "svg-sprite-loader": "^5.0.0",
+    "svg-sprite-loader": "^6.0.2",
     "swr": "^0.3.6",
     "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
     "@types/node": "^14.14.33",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.14.1",
@@ -54,7 +54,7 @@
     "eslint-plugin-react": "^7.21.5",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.3",
-    "prettier": "^2.0.5",
+    "prettier": "^2.2.1",
     "typescript": "^4.0.3"
   },
   "husky": {
