@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import Error from 'next/error';
 import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
+import tinycolor from 'tinycolor2';
 
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
@@ -95,25 +96,11 @@ function TeamPage({
           alt={`${name} logo`}
         />
         <TeamInfoContainer>
-          <TeamName
-            color={
-              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) !=
-              -1
-                ? '#FFFFFF'
-                : colors.text
-            }
-          >
+          <TeamName bright={tinycolor(colors.primary).isDark()}>
             <span className="first">{nameDetails.first}</span>
             <span className="second">{nameDetails.second}</span>
           </TeamName>
-          <TeamHeaderStats
-            color={
-              ['Anchorage', 'Kelowna', 'Maine', 'Anaheim'].indexOf(location) !=
-              -1
-                ? '#FFFFFF'
-                : colors.text
-            }
-          >
+          <TeamHeaderStats bright={tinycolor(colors.primary).isDark()}>
             <span>
               {stats.wins} - {stats.losses} -{' '}
               {stats.overtimeLosses + stats.shootoutLosses}
@@ -254,14 +241,14 @@ const TeamInfoContainer = styled.div`
   }
 `;
 
-const TeamName = styled.h1<{ color: string }>`
-  color: ${({ color }) => color};
+const TeamName = styled.h1<{ bright: boolean }>`
+  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
   span {
     display: block;
   }
 
   span.first {
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.1rem;
   }
 
@@ -272,9 +259,9 @@ const TeamName = styled.h1<{ color: string }>`
   }
 `;
 
-const TeamHeaderStats = styled.h3<{ color: string }>`
-  color: ${({ color }) => color};
-  font-weight: 100;
+const TeamHeaderStats = styled.h3<{ bright: boolean }>`
+  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
+  font-weight: 400;
   font-size: 1.1rem;
 
   span {
