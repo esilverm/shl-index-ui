@@ -108,7 +108,7 @@ const TeamName = styled.h2<{ bright: boolean }>`
   }
 
   span.first {
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.1rem;
   }
 
