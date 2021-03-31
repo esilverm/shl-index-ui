@@ -12,7 +12,7 @@ const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
 export type SeasonType = typeof seasonTypes[number];
 
 export interface Game {
-  slug: string | undefined;
+  slug: string;
   season: string;
   league: string;
   date: string;
@@ -38,7 +38,7 @@ export default async (
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
     (await query(SQL`
       SELECT DISTINCT SeasonID
-      FROM schedules
+      FROM slugviewer
       WHERE LeagueID=${league}
       ORDER BY SeasonID DESC
       LIMIT 1
@@ -46,7 +46,7 @@ export default async (
 
   const search = SQL`
     SELECT *
-    FROM schedules
+    FROM slugviewer
     WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
   `;
@@ -69,6 +69,7 @@ export default async (
     played: game.Played,
     overtime: game.Overtime,
     shootout: game.Shootout,
+    slug: game.Slug
   }));
 
   res.status(200).json(parsed);

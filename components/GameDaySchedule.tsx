@@ -37,6 +37,7 @@ const GameDayMatchup = ({
     shootout,
     league: leagueid,
     season,
+    slug,
   } = game;
   const league = ['shl', 'smjhl', 'iihf', 'wjc'][leagueid];
   const awayTeamWon = awayScore > homeScore;
@@ -65,7 +66,7 @@ const GameDayMatchup = ({
   return (
     <Link
       href="/[league]/[season]/game/[gameid]"
-      as={`/${league}/${season}/game/${'5'}`}
+      as={`/${league}/${season}/game/${slug}`}
       passHref
     >
       <GameRow>
