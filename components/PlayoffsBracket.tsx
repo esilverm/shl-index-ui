@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
 import { PlayoffsRound, PlayoffsSerie } from '../pages/api/v1/standings/playoffs';
+import Link from './LinkWithSeason';
 
 interface Props {
   data: Array<PlayoffsRound>;
@@ -58,7 +59,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
       home: teamData?.find(team => team.id === serie.team2)?.colors.primary || '#BBB'
     };
     const awayTeam = {
-      id: serie.team1 || -1,
+      id: serie.team1 >= 0 ? serie.team1 : -1,
       abbr: serie.team1_Abbr || "TEST",
       name: isInternationalLeague ? serie.team1_Nickname || "Away Team" : serie.team1_Name || "Away Team",
       wins: serie.team1Wins || 0,
@@ -68,7 +69,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
       }
     };
     const homeTeam = {
-      id: serie.team2 || -1,
+      id: serie.team2 >= 0 ? serie.team2 : -1,
       abbr: serie.team2_Abbr || "TEST",
       name: isInternationalLeague ? serie.team2_Nickname || "Home Team" : serie.team2_Name || "Home Team",
       wins: serie.team2Wins || 0,
@@ -85,20 +86,32 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
 
     return (
       <Series key={`${awayTeam.id}${homeTeam.id}`}>
-        <SeriesTeam color={awayTeam.color.background} isDark={awayTeam.color.isDark} lost={hasHomeTeamWon}>
-          <AwayLogo />
-          <span>{awayTeam.name}</span>
-          <SeriesScore>
-            {awayTeam.wins}
-          </SeriesScore>
-        </SeriesTeam>
-        <SeriesTeam color={homeTeam.color.background} isDark={homeTeam.color.isDark} lost={hasAwayTeamWon}>
-          <HomeLogo />
-          <span>{homeTeam.name}</span>
-          <SeriesScore>
-            {homeTeam.wins}
-          </SeriesScore>
-        </SeriesTeam>
+        <Link
+          href="/[league]/team/[id]"
+          as={`/${league}/team/${awayTeam.id}`}
+          passHref
+        >
+          <SeriesTeam color={awayTeam.color.background} isDark={awayTeam.color.isDark} lost={hasHomeTeamWon}>
+            <AwayLogo />
+            <span>{awayTeam.name}</span>
+            <SeriesScore>
+              {awayTeam.wins}
+            </SeriesScore>
+          </SeriesTeam>
+        </Link>
+        <Link
+          href="/[league]/team/[id]"
+          as={`/${league}/team/${homeTeam.id}`}
+          passHref
+        >
+          <SeriesTeam color={homeTeam.color.background} isDark={homeTeam.color.isDark} lost={hasAwayTeamWon}>
+            <HomeLogo />
+            <span>{homeTeam.name}</span>
+            <SeriesScore>
+              {homeTeam.wins}
+            </SeriesScore>
+          </SeriesTeam>
+        </Link>
       </Series>
     );
   };
@@ -213,6 +226,7 @@ const Series = styled.div`
   margin-bottom: 5px;
   padding: 20px;
 `;
+
 const SeriesTeam = styled.div<{
   color: string;
   isDark: boolean;
@@ -223,6 +237,7 @@ const SeriesTeam = styled.div<{
   height: 55px;
   width: 230px;
   background-color: ${props => props.color};
+  cursor: pointer;
   letter-spacing: 0.05rem;
   font-size: 18px;
   font-weight: 600;
@@ -236,6 +251,10 @@ const SeriesTeam = styled.div<{
   span {
     padding-right: 5px;
     color: ${({ isDark, theme }) => isDark ? theme.colors.grey100 : theme.colors.grey900};
+  }
+
+  &:hover {
+    background-color: ${props => tinycolor(props.color).setAlpha(.85).toRgbString()};
   }
 `;
 
