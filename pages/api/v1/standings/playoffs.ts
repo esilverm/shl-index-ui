@@ -8,7 +8,7 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export interface PlayoffsSerie {
+export interface PlayoffsSeries {
   team1: number;
   team2: number;
   LeagueID: number;
@@ -23,7 +23,7 @@ export interface PlayoffsSerie {
   team2_Abbr: string;
 }
 
-export type PlayoffsRound = Array<PlayoffsSerie>;
+export type PlayoffsRound = Array<PlayoffsSeries>;
 
 export default async (
   req: NextApiRequest,

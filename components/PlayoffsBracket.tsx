@@ -3,7 +3,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
-import { PlayoffsRound, PlayoffsSerie } from '../pages/api/v1/standings/playoffs';
+import { PlayoffsRound, PlayoffsSeries } from '../pages/api/v1/standings/playoffs';
 import Link from './LinkWithSeason';
 
 interface Props {
@@ -52,27 +52,27 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
 
   if (teamError || isLoading || !data) return <PlayoffsBracketSkeleton isError={teamError} />;
 
-  const renderSerie = (serie: PlayoffsSerie) => {
+  const renderSeries = (series: PlayoffsSeries) => {
     const isInternationalLeague = league === "iihf" || league === "wjc";
     const primaryColors = {
-      away: teamData?.find(team => team.id === serie.team1)?.colors.primary || '#DDD',
-      home: teamData?.find(team => team.id === serie.team2)?.colors.primary || '#BBB'
+      away: teamData?.find(team => team.id === series.team1)?.colors.primary || '#DDD',
+      home: teamData?.find(team => team.id === series.team2)?.colors.primary || '#BBB'
     };
     const awayTeam = {
-      id: serie.team1 >= 0 ? serie.team1 : -1,
-      abbr: serie.team1_Abbr || "TEST",
-      name: isInternationalLeague ? serie.team1_Nickname || "Away Team" : serie.team1_Name || "Away Team",
-      wins: serie.team1Wins || 0,
+      id: series.team1 >= 0 ? series.team1 : -1,
+      abbr: series.team1_Abbr || "TEST",
+      name: isInternationalLeague ? series.team1_Nickname || "Away Team" : series.team1_Name || "Away Team",
+      wins: series.team1Wins || 0,
       color: {
         background: primaryColors.away,
         isDark: tinycolor(primaryColors.away).isDark()
       }
     };
     const homeTeam = {
-      id: serie.team2 >= 0 ? serie.team2 : -1,
-      abbr: serie.team2_Abbr || "TEST",
-      name: isInternationalLeague ? serie.team2_Nickname || "Home Team" : serie.team2_Name || "Home Team",
-      wins: serie.team2Wins || 0,
+      id: series.team2 >= 0 ? series.team2 : -1,
+      abbr: series.team2_Abbr || "TEST",
+      name: isInternationalLeague ? series.team2_Nickname || "Home Team" : series.team2_Name || "Home Team",
+      wins: series.team2Wins || 0,
       color: {
         background: primaryColors.home,
         isDark: tinycolor(primaryColors.home).isDark()
@@ -118,7 +118,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   const renderRound = (round, index) => (
     <Round key={index}>
       <h2>{round.length === 1 ? "Finals" : `Round ${index + 1}`}</h2>
-      {round.map(serie => renderSerie(serie))}
+      {round.map(series => renderSeries(series))}
     </Round>
   );
   const renderBracket = () => data.map((round, i) => renderRound(round, i));
