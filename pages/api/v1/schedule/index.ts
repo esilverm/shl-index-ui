@@ -11,6 +11,21 @@ const cors = Cors({
 const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
 export type SeasonType = typeof seasonTypes[number];
 
+export interface GameRow {
+  Slug: string;
+  SeasonID: string;
+  LeagueID: string;
+  Date: string;
+  Home: number;
+  HomeScore: number;
+  Away: number;
+  AwayScore: number;
+  Played: number;
+  Overtime: number;
+  Shootout: number;
+  Type: string;
+}
+
 export interface Game {
   slug: string;
   season: string;
@@ -57,7 +72,7 @@ export default async (
 
   const schedule = await query(search);
 
-  const parsed: Game[] = schedule.map((game) => ({
+  const parsed: Game[] = schedule.map((game: GameRow) => ({
     season: game.SeasonID,
     league: game.LeagueID,
     date: game.Date,
