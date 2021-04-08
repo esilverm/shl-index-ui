@@ -148,7 +148,7 @@ const TableContainer = styled.div`
   border-top: none;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
 
   tr:not(:last-child) th,
   tr:not(:last-child) td {
@@ -249,15 +249,14 @@ const Pagination = styled.div`
   flex: 1.5;
   flex-direction: row;
   align-items: center;
-  padding: 3px;
-  box-shadow: 0 0 15px 0 rgb(0 0 0 / 10%);
+  padding: 8px 16px;
   box-sizing: border-box;
-  border-radius: 5px;
+  border-radius: 0 0 10px 10px;
   border: 1px solid #ADB5BD;
   border-top: none;
+  font-family: Montserrat, sans-serif;
 
   button {
-    -webkit-writing-mode: horizontal-tb !important;
     text-rendering: auto;
     display: block;
     color: #fff;
@@ -269,7 +268,7 @@ const Pagination = styled.div`
     text-align: center;
     align-items: flex-start;
     box-sizing: border-box;
-    margin: 0.1em;
+    margin: 0.2rem 0.4rem;
     font-size: 24px;
     padding: 1px 8px;
     background-color: #0183da;
@@ -278,15 +277,14 @@ const Pagination = styled.div`
     border-width: 1.5px;
     border-style: outset;
     border-image: initial;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
   }
 
-  button:disabled,
-  button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
+  button:disabled, button[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
   }
 
   .pagenav {
