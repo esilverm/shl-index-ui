@@ -5,7 +5,7 @@ function FooterBar(): JSX.Element {
   return (
     <FooterWrapper>
       <FooterText>
-        &copy; {new Date().getFullYear()} | Made with 🤍 by the SHL Dev Team |{' '}
+        &copy; {new Date().getFullYear()} | Made with ♥︎ by the SHL Dev Team |{' '}
         <a
           href="https://simulationhockey.com/index.php"
           rel="noreferrer"
