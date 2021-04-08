@@ -4,6 +4,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import StandingsTable from '../../components/StandingsTable';
 import PlayoffsBracket from '../../components/PlayoffsBracket';
 import useStandings from '../../hooks/useStandings';
@@ -24,14 +25,14 @@ function Standings({ league }: Props): JSX.Element {
   const { data, isLoading } = useStandings(league, display, isPlayoffs);
 
   useEffect(() => {
-    const nextIsPlayoffs = seasonType === "Playoffs";
+    const nextIsPlayoffs = seasonType === 'Playoffs';
     if (nextIsPlayoffs !== isPlayoffs) {
       setIsLoadingView(true);
     }
   }, [seasonType]);
 
   useEffect(() => {
-    setIsPlayoffs(seasonType === "Playoffs");
+    setIsPlayoffs(seasonType === 'Playoffs');
   }, [isLoadingView]);
 
   useEffect(() => {
@@ -87,8 +88,13 @@ function Standings({ league }: Props): JSX.Element {
           </DisplaySelectContainer>
         </Filters>
         <Main>
-          {isPlayoffs && <PlayoffsBracket data={data as Array<PlayoffsRound>} league={league} />}
-          {!isPlayoffs &&
+          {isPlayoffs && (
+            <PlayoffsBracket
+              data={data as Array<PlayoffsRound>}
+              league={league}
+            />
+          )}
+          {!isPlayoffs && (
             <StandingsTableWrapper>
               {Array.isArray(data) &&
               data.length > 0 &&
@@ -114,9 +120,10 @@ function Standings({ league }: Props): JSX.Element {
                 />
               )}
             </StandingsTableWrapper>
-          }
+          )}
         </Main>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -138,11 +145,11 @@ const Filters = styled.div<{
   hideTabList: boolean;
 }>`
   [role='tablist'] {
-    display: ${props => props.hideTabList ? 'none' : 'block'}
+    display: ${(props) => (props.hideTabList ? 'none' : 'block')};
   }
 
   button {
-    ${props => props.hideTabList && 'margin-top: 28px;'}
+    ${(props) => props.hideTabList && 'margin-top: 28px;'}
   }
 
   @media screen and (max-width: 1024px) {

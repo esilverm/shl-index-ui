@@ -3,6 +3,8 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
+
+import Footer from '../../../components/Footer';
 import { Team } from '../../..';
 import Header from '../../../components/Header';
 import Link from '../../../components/LinkWithSeason';
@@ -51,6 +53,7 @@ function index({ league, teamlist }: Props): JSX.Element {
           ))}
         </TeamListContainer>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -101,7 +104,8 @@ const TeamLogo = styled.img`
 `;
 
 const TeamName = styled.h2<{ bright: boolean }>`
-  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
+  color: ${({ bright, theme }) =>
+    bright ? theme.colors.grey100 : theme.colors.grey900};
 
   span {
     display: block;

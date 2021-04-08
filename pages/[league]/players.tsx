@@ -6,6 +6,7 @@ import { NextSeo } from 'next-seo';
 
 // import useSWR from 'swr';
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import useRatings from '../../hooks/useRatings';
 import useGoalieRatings from '../../hooks/useGoalieRatings';
 import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
@@ -18,22 +19,28 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings(league);
-  const { ratings: goalieratingdata, isLoading: isLoadingGoalies } = useGoalieRatings(league);
-  if (!isLoadingPlayers && !isLoadingGoalies) console.log(skaterratings, goalieratingdata);
+  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings(
+    league
+  );
+  const {
+    ratings: goalieratingdata,
+    isLoading: isLoadingGoalies,
+  } = useGoalieRatings(league);
+  if (!isLoadingPlayers && !isLoadingGoalies)
+    console.log(skaterratings, goalieratingdata);
 
   const getSkaters = () =>
     skaterratings
-      ? (skaterratings.filter((player) => player.position !== 'G') as Array<
-          PlayerRatings
-        >)
+      ? (skaterratings.filter(
+          (player) => player.position !== 'G'
+        ) as Array<PlayerRatings>)
       : [];
 
   const getGoalies = () =>
     goalieratingdata
-      ? (goalieratingdata.filter((player) => player.position === 'G') as Array<
-          GoalieRatings
-        >)
+      ? (goalieratingdata.filter(
+          (player) => player.position === 'G'
+        ) as Array<GoalieRatings>)
       : [];
 
   return (
@@ -51,7 +58,7 @@ function PlayerPage({ league }: Props): JSX.Element {
         <TableWrapper>
           {!isLoadingPlayers && (
             <TableContainer>
-              <SkaterRatingsTable data={getSkaters()}/>
+              <SkaterRatingsTable data={getSkaters()} />
             </TableContainer>
           )}
         </TableWrapper>
@@ -59,11 +66,12 @@ function PlayerPage({ league }: Props): JSX.Element {
         <TableWrapper>
           {!isLoadingGoalies && (
             <TableContainer>
-              <GoalieRatingsTable data={getGoalies()}/>
+              <GoalieRatingsTable data={getGoalies()} />
             </TableContainer>
           )}
         </TableWrapper>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }

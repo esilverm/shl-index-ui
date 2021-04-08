@@ -4,12 +4,16 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 import { PulseLoader } from 'react-spinners';
+
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import GameDaySchedule from '../../components/GameDaySchedule';
 import { Team } from '../..';
 import useSchedule from '../../hooks/useSchedule';
 import { getQuerySeason } from '../../utils/season';
-import TeamSelector, { MinimalTeam } from '../../components/Selector/TeamSelector';
+import TeamSelector, {
+  MinimalTeam,
+} from '../../components/Selector/TeamSelector';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
 
@@ -17,7 +21,7 @@ enum SCHEDULE_STATES {
   INITIAL_LOADING = 'INITIAL_LOADING',
   INITIAL_LOADED = 'INITIAL_LOADED',
   FULL_LOADING = 'FULL_LOADING',
-  FULL_LOADED = 'FULL_LOADED'
+  FULL_LOADED = 'FULL_LOADED',
 }
 type ScheduleState = keyof typeof SCHEDULE_STATES;
 
@@ -30,7 +34,9 @@ interface Props {
 
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [scheduleHeight, setScheduleHeight] = useState(0);
-  const [scheduleState, setScheduleState] = useState<ScheduleState>('INITIAL_LOADING');
+  const [scheduleState, setScheduleState] = useState<ScheduleState>(
+    'INITIAL_LOADING'
+  );
   const [showFullSchedule, setShowFullSchedule] = useState(false);
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
   const [filterTeam, setFilterTeam] = useState<number>(-1);
@@ -57,11 +63,10 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     if (scheduleContainerRef.current) {
       const containerElem = scheduleContainerRef.current as HTMLElement;
       if (containerElem.clientHeight > scheduleHeight) {
-        const newState = (
+        const newState =
           scheduleState === SCHEDULE_STATES.INITIAL_LOADING
             ? SCHEDULE_STATES.INITIAL_LOADED
-            : SCHEDULE_STATES.FULL_LOADED
-        );
+            : SCHEDULE_STATES.FULL_LOADED;
 
         setScheduleState(newState);
         setScheduleHeight(containerElem.clientHeight);
@@ -98,11 +103,14 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     );
   };
 
-  const hasFilteredTeam = game => filterTeam === -1 || (game.awayTeam === filterTeam || game.homeTeam === filterTeam);
+  const hasFilteredTeam = (game) =>
+    filterTeam === -1 ||
+    game.awayTeam === filterTeam ||
+    game.homeTeam === filterTeam;
 
   const getDatesForRendering = (sortedGames) => {
     let gameDates = [];
-    sortedGames.forEach(game => {
+    sortedGames.forEach((game) => {
       if (!gameDates.includes(game.date) && hasFilteredTeam(game)) {
         gameDates.push(game.date);
       }
@@ -125,8 +133,10 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     const gameDates = getDatesForRendering(sortedGames);
 
     gameDates.forEach((date) => {
-      const gamesOnDate = sortedGames.filter(game => game.date === date);
-      const filteredGamesOnDate = gamesOnDate.filter(game => hasFilteredTeam(game));
+      const gamesOnDate = sortedGames.filter((game) => game.date === date);
+      const filteredGamesOnDate = gamesOnDate.filter((game) =>
+        hasFilteredTeam(game)
+      );
 
       gameDaySchedules.push(
         <GameDaySchedule
@@ -139,10 +149,12 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
       );
     });
 
-    return gameDaySchedules.length > 0 ? gameDaySchedules : "No games found";
+    return gameDaySchedules.length > 0 ? gameDaySchedules : 'No games found';
   };
 
-  const isScheduleLoading = scheduleState === SCHEDULE_STATES.INITIAL_LOADING || scheduleState === SCHEDULE_STATES.FULL_LOADING;
+  const isScheduleLoading =
+    scheduleState === SCHEDULE_STATES.INITIAL_LOADING ||
+    scheduleState === SCHEDULE_STATES.FULL_LOADING;
 
   return (
     <React.Fragment>
@@ -158,12 +170,19 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
           <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           <TeamSelector teams={teamlist} onChange={onTeamSelect} />
         </Filters>
-        <ScheduleContainer ref={scheduleContainerRef}>{renderGameDays()}</ScheduleContainer>
+        <ScheduleContainer ref={scheduleContainerRef}>
+          {renderGameDays()}
+        </ScheduleContainer>
         <LoadingWrapper>
           {isScheduleLoading && <PulseLoader size={15} />}
-          {!isScheduleLoading && !showFullSchedule && <LoadAllButton onClick={onLoadAllGames}>Load all games</LoadAllButton>}
+          {!isScheduleLoading && !showFullSchedule && (
+            <LoadAllButton onClick={onLoadAllGames}>
+              Load all games
+            </LoadAllButton>
+          )}
         </LoadingWrapper>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }

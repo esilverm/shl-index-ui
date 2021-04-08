@@ -4,7 +4,7 @@ import { PlayoffsRound } from '../pages/api/v1/standings/playoffs';
 import { getQuerySeason } from '../utils/season';
 
 interface Hook {
-  data: Standings | Array<PlayoffsRound>,
+  data: Standings | Array<PlayoffsRound>;
   isLoading: boolean;
   isError: boolean;
 }

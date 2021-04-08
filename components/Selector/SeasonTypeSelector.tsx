@@ -6,7 +6,7 @@ import {
   DropdownButton,
   DropdownItem,
   DropdownList,
-  Caret
+  Caret,
 } from './styles';
 import { SeasonType } from '../../pages/api/v1/schedule';
 
@@ -15,16 +15,18 @@ interface Props {
 }
 
 const SEASON_TYPE: {
-  [key: string]: SeasonType
+  [key: string]: SeasonType;
 } = {
-  PRE: "Pre-Season",
-  REGULAR: "Regular Season",
-  PLAYOFFS: "Playoffs"
+  PRE: 'Pre-Season',
+  REGULAR: 'Regular Season',
+  PLAYOFFS: 'Playoffs',
 };
 
 function SeasonTypeSelector({ onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedSeasonType, setselectedSeasonType] = useState<SeasonType>(SEASON_TYPE.REGULAR);
+  const [selectedSeasonType, setselectedSeasonType] = useState<SeasonType>(
+    SEASON_TYPE.REGULAR
+  );
   const selectorRef = useRef(null);
   const onMouseLeave = () => {
     setIsExpanded(false);
@@ -42,7 +44,7 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonTypeSelect = (event) => {
     const { seasontype } = event.target.dataset;
-    onChange(seasontype)
+    onChange(seasontype);
     setselectedSeasonType(seasontype);
     setIsExpanded(false);
   };
@@ -57,19 +59,17 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
       </DropdownButton>
       {isExpanded && (
         <DropdownList>
-          {Object.keys(SEASON_TYPE)
-            .map(type => (
-              <DropdownItem
-                key={SEASON_TYPE[type]}
-                align="left"
-                data-seasontype={SEASON_TYPE[type]}
-                onClick={onSeasonTypeSelect}
-                className={SEASON_TYPE[type] === selectedSeasonType && "active"}
-              >
-                {SEASON_TYPE[type]}
-              </DropdownItem>
-            ))
-          }
+          {Object.keys(SEASON_TYPE).map((type) => (
+            <DropdownItem
+              key={SEASON_TYPE[type]}
+              align="left"
+              data-seasontype={SEASON_TYPE[type]}
+              onClick={onSeasonTypeSelect}
+              className={SEASON_TYPE[type] === selectedSeasonType && 'active'}
+            >
+              {SEASON_TYPE[type]}
+            </DropdownItem>
+          ))}
         </DropdownList>
       )}
     </Container>

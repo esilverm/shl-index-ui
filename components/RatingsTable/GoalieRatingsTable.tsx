@@ -7,7 +7,6 @@ interface Props {
 }
 
 function GoalieRatingsTable({ data: players }: Props): JSX.Element {
-
   const columnData = [
     {
       Header: 'Player Info',
@@ -34,67 +33,67 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           Header: 'BLO',
           accessor: 'blocker',
           title: 'Blocker',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'GLO',
           accessor: 'glove',
           title: 'Glove',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PAS',
           accessor: 'passing',
           title: 'Passing',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'POK',
           accessor: 'pokeCheck',
           title: 'Poke Check',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'POS',
           accessor: 'positioning',
           title: 'Positioning',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'REB',
           accessor: 'rebound',
           title: 'Rebound',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'REC',
           accessor: 'recovery',
           title: 'Recovery',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PHA',
           accessor: 'puckhandling',
           title: 'Puckhandling',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'LOW',
           accessor: 'lowShots',
           title: 'Low Shots',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'REF',
           accessor: 'reflexes',
           title: 'Reflexes',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'SKA',
           accessor: 'skating',
           title: 'Skating',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -106,19 +105,19 @@ function GoalieRatingsTable({ data: players }: Props): JSX.Element {
           Header: 'MTO',
           accessor: 'mentalToughness',
           title: 'Mental Toughness',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'GST',
           accessor: 'goalieStamina',
           title: 'Goalie Stamina',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData}/>;
+  return <RatingsTable data={players} columnData={columnData} />;
 }
 
 export default GoalieRatingsTable;

@@ -8,6 +8,7 @@ import tinycolor from 'tinycolor2';
 
 // import useSWR from 'swr';
 import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
 import SkaterAdvStatsTable from '../../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
@@ -54,7 +55,11 @@ function TeamPage({
   }
 
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-  const { roster, isLoading } = useTeamRosterStats(leaguename, id, filterSeasonType);
+  const { roster, isLoading } = useTeamRosterStats(
+    leaguename,
+    id,
+    filterSeasonType
+  );
   const [display, setDisplay] = useState('stats');
 
   const getSkaters = () =>
@@ -109,11 +114,9 @@ function TeamPage({
       </TeamHero>
       <Container>
         {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
-        <TableHeading>
-          Skaters
-        </TableHeading>
+        <TableHeading>Skaters</TableHeading>
         <Filters>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
         </Filters>
         <DisplaySelectContainer role="tablist">
           <DisplaySelectItem
@@ -155,6 +158,7 @@ function TeamPage({
           )}
         </TableWrapper>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -239,7 +243,8 @@ const TeamInfoContainer = styled.div`
 `;
 
 const TeamName = styled.h1<{ bright: boolean }>`
-  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
+  color: ${({ bright, theme }) =>
+    bright ? theme.colors.grey100 : theme.colors.grey900};
   span {
     display: block;
   }
@@ -257,7 +262,8 @@ const TeamName = styled.h1<{ bright: boolean }>`
 `;
 
 const TeamHeaderStats = styled.h3<{ bright: boolean }>`
-  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
+  color: ${({ bright, theme }) =>
+    bright ? theme.colors.grey100 : theme.colors.grey900};
   font-weight: 400;
   font-size: 1.1rem;
   font-family: Montserrat, sans-serif;

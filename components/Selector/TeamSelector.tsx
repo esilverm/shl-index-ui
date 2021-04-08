@@ -6,7 +6,7 @@ import {
   DropdownButton,
   DropdownItem,
   DropdownList,
-  Caret
+  Caret,
 } from './styles';
 import { Team } from '../..';
 
@@ -21,8 +21,8 @@ interface Props {
 }
 
 const defaultOption = {
-  id: "-1",
-  name: "All Teams"
+  id: '-1',
+  name: 'All Teams',
 };
 
 function TeamSelector({ teams, onChange }: Props): JSX.Element {
@@ -46,7 +46,7 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
   const onTeamSelect = (event) => {
     const { team } = event.target.dataset;
     const parsedTeam = JSON.parse(team);
-    onChange(parsedTeam)
+    onChange(parsedTeam);
     setselectedTeam(parsedTeam);
     setIsExpanded(false);
   };
@@ -66,16 +66,16 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
             align="left"
             data-team={JSON.stringify(defaultOption)}
             onClick={onTeamSelect}
-            className={selectedTeam.id === defaultOption.id && "active"}
+            className={selectedTeam.id === defaultOption.id && 'active'}
           >
             {defaultOption.name}
           </DropdownItem>
           {teams
-            .sort((a, b) => a.name > b.name ? 1 : -1)
-            .map(team => {
+            .sort((a, b) => (a.name > b.name ? 1 : -1))
+            .map((team) => {
               const teamData: MinimalTeam = {
                 id: `${team.id}`,
-                name: team.name
+                name: team.name,
               };
               return (
                 <DropdownItem
@@ -83,13 +83,12 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
                   align="left"
                   data-team={JSON.stringify(teamData)}
                   onClick={onTeamSelect}
-                  className={selectedTeam.id === teamData.id && "active"}
+                  className={selectedTeam.id === teamData.id && 'active'}
                 >
                   {team.name}
                 </DropdownItem>
               );
-            })
-          }
+            })}
         </DropdownList>
       )}
     </Container>

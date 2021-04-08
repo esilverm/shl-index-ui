@@ -4,6 +4,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import LiveStream from '../../components/Livestream';
 
 interface Props {
@@ -25,6 +26,7 @@ function LeagueHome({ league }: Props): JSX.Element {
           <LiveStream isSHL={['shl', 'iihf'].includes(league)} />
         </YoutubeEmbedContainer>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }

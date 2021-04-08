@@ -3,6 +3,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 interface Props {
   league: string;
@@ -19,6 +20,7 @@ function Stats({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="stats" />
       <div>This is a placeholder</div>
+      <Footer />
     </React.Fragment>
   );
 }

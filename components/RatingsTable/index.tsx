@@ -41,7 +41,7 @@ Props): JSX.Element {
     headerGroups,
     page,
     prepareRow,
-    
+
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -51,94 +51,110 @@ Props): JSX.Element {
     gotoPage,
     state: { pageIndex },
   } = useTable(
-    { columns, data,
-      initialState: { pageIndex: 0, pageSize: 15 },
-    }, 
-    useSortBy, 
+    { columns, data, initialState: { pageIndex: 0, pageSize: 15 } },
+    useSortBy,
     usePagination
-    );
+  );
 
   return (
     <>
-    <TableContainer>
-      <Table {...getTableProps()}>
-        <TableHeader>
-          {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
-              {headerGroup.headers.map((column, i) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  title={column.title}
-                  key={`${i}_${column.id}`}
-                  className={
-                    column.isSorted
-                      ? column.isSortedDesc
-                        ? 'sorted--desc'
-                        : 'sorted--asc'
-                      : ''
-                  }
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </TableHeader>
-        <TableBody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row);
-
-            return (
-              <tr {...row.getRowProps()} key={i}>
-                {row.cells.map((cell, i) => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                      key={i}
-                      className={cell.column.isSorted ? 'sorted' : ''}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
+      <TableContainer>
+        <Table {...getTableProps()}>
+          <TableHeader>
+            {headerGroups.map((headerGroup, i) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                {headerGroup.headers.map((column, i) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    title={column.title}
+                    key={`${i}_${column.id}`}
+                    className={
+                      column.isSorted
+                        ? column.isSortedDesc
+                          ? 'sorted--desc'
+                          : 'sorted--asc'
+                        : ''
+                    }
+                  >
+                    {column.render('Header')}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <Pagination>
-        <button className="-next" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            ))}
+          </TableHeader>
+          <TableBody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+
+              return (
+                <tr {...row.getRowProps()} key={i}>
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        key={i}
+                        className={cell.column.isSorted ? 'sorted' : ''}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Pagination>
+        <button
+          className="-next"
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+        >
           {'<<'}
         </button>{' '}
-        <button className="-next" onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button
+          className="-next"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
           {'<'}
         </button>
-        <div className = 'pagenav'><span>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </span>
-        <span className = 'mediahide'>
-          | Go to page:{' '}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              gotoPage(page)
-            }}
-            style={{ width: '40px' }}
-          />
-        </span></div>
-        <button className="-next" onClick={() => nextPage()} disabled={!canNextPage}>
+        <div className="pagenav">
+          <span>
+            Page{' '}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{' '}
+          </span>
+          <span className="mediahide">
+            | Go to page:{' '}
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={{ width: '40px' }}
+            />
+          </span>
+        </div>
+        <button
+          className="-next"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
           {'>'}
         </button>{' '}
-        <button className="-next" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <button
+          className="-next"
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
           {'>>'}
         </button>{' '}
-    </Pagination>
+      </Pagination>
     </>
   );
 }
@@ -252,7 +268,7 @@ const Pagination = styled.div`
   padding: 8px 16px;
   box-sizing: border-box;
   border-radius: 0 0 10px 10px;
-  border: 1px solid #ADB5BD;
+  border: 1px solid #adb5bd;
   border-top: none;
   font-family: Montserrat, sans-serif;
 
@@ -281,7 +297,8 @@ const Pagination = styled.div`
     cursor: pointer;
   }
 
-  button:disabled, button[disabled] {
+  button:disabled,
+  button[disabled] {
     border: 1px solid #999999;
     background-color: #cccccc;
     color: #666666;
@@ -296,9 +313,9 @@ const Pagination = styled.div`
 
   .mediahide {
     @media screen and (max-width: 1024px) {
-     display: none; 
+      display: none;
     }
   }
-`
+`;
 
 export default RatingsTable;
