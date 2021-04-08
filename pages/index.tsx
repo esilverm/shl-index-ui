@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 
@@ -12,6 +12,9 @@ const WJCLogo = require('../public/league_logos/WJC.svg?sprite');
 export default function Home(): JSX.Element {
   return (
     <React.Fragment>
+      <Overlay>
+        For Slappy &lt;3
+      </Overlay>
       <NextSeo
         title="Home"
         openGraph={{
@@ -125,4 +128,42 @@ const LeagueLink = styled.div`
     box-shadow: 0 15px 25px 4px rgba(0, 0, 0, 0.3);
     transform: scale(1.04);
   }
+`;
+
+const FadeIn = keyframes`
+  0%, 20% {
+    opacity: 100%;
+    z-index: 999;
+  }
+
+  
+  99% {
+    z-index: 999;
+  }
+  100% {
+    opacity: 0%;
+    display: none;
+    z-index: -999;
+  }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding:0;
+
+
+  animation: 5s ease-in normal forwards ${FadeIn};
+  color: ${({ theme }) => theme.colors.grey900};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-weight: 800;
+
 `;
