@@ -260,6 +260,7 @@ const TeamHeaderStats = styled.h3<{ bright: boolean }>`
   color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
   font-weight: 400;
   font-size: 1.1rem;
+  font-family: Montserrat, sans-serif;
 
   span {
     margin-right: 1rem;

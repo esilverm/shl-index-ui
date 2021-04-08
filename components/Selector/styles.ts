@@ -87,6 +87,7 @@ export const DropdownItem = styled.li`
   text-align: ${(props: StyleProps) => props.align ? props.align : 'center'};
   padding: 2px ${(props: StyleProps) => props.align === 'right' ? '16px' : '0'} 2px ${(props: StyleProps) => props.align === 'left' ? '16px' : '0'};
   cursor: pointer;
+  font-family: Montserrat, sans-serif;
 
   &.active {
     background-color: ${({ theme }) => theme.colors.grey300};
