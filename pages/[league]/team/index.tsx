@@ -27,35 +27,37 @@ function index({ league, teamlist }: Props): JSX.Element {
       <Header league={league} activePage="teams" />
       <Container>
         <TeamListContainer>
-          {teamlist.sort((a, b) => {
-            if (league === 'iihf' || league === 'wjc') {
-              return a.nameDetails.second.localeCompare(b.nameDetails.second);
-            }
-            return a.nameDetails.first.localeCompare(b.nameDetails.first);
-          }).map((team) => (
-            <Link
-              href="/[league]/team/[id]"
-              as={`/${league}/team/${team.id}`}
-              passHref
-              key={team.id}
-            >
-              <TeamLink {...team.colors}>
-                <TeamLogo
-                  src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
-                    .replace('.', '')
-                    .replace(/white|blue/i, '')
-                    .trim()
-                    .split(' ')
-                    .join('_')}.svg`)}
-                  alt={`${team.name} logo`}
-                />
-                <TeamName bright={tinycolor(team.colors.primary).isDark()}>
-                  <span className="first">{team.nameDetails.first}</span>
-                  <span className="second">{team.nameDetails.second}</span>
-                </TeamName>
-              </TeamLink>
-            </Link>
-          ))}
+          {teamlist
+            .sort((a, b) => {
+              if (league === 'iihf' || league === 'wjc') {
+                return a.nameDetails.second.localeCompare(b.nameDetails.second);
+              }
+              return a.nameDetails.first.localeCompare(b.nameDetails.first);
+            })
+            .map((team) => (
+              <Link
+                href="/[league]/team/[id]"
+                as={`/${league}/team/${team.id}`}
+                passHref
+                key={team.id}
+              >
+                <TeamLink {...team.colors}>
+                  <TeamLogo
+                    src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
+                      .replace('.', '')
+                      .replace(/white|blue/i, '')
+                      .trim()
+                      .split(' ')
+                      .join('_')}.svg`)}
+                    alt={`${team.name} logo`}
+                  />
+                  <TeamName bright={tinycolor(team.colors.primary).isDark()}>
+                    <span className="first">{team.nameDetails.first}</span>
+                    <span className="second">{team.nameDetails.second}</span>
+                  </TeamName>
+                </TeamLink>
+              </Link>
+            ))}
         </TeamListContainer>
       </Container>
       <Footer />

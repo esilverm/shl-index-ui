@@ -22,10 +22,8 @@ function Livestream({ isSHL = true }: { isSHL?: boolean }): JSX.Element {
           setIsLive(streamInfo.liveBroadcastContent === 'live');
           return streamInfo.id.videoId;
         }
-
       });
   });
-  
 
   return (
     <>

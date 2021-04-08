@@ -23,7 +23,7 @@ function LeagueHome({ league }: Props): JSX.Element {
       <Header league={league} />
       <Container>
         <YoutubeEmbedContainer>
-          <LiveStream isSHL={league === "shl"} />
+          <LiveStream isSHL={league === 'shl'} />
         </YoutubeEmbedContainer>
       </Container>
       <Footer />

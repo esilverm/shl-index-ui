@@ -234,7 +234,7 @@ const LoadingWrapper = styled.div<{ isLoading: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  ${({isLoading}) => isLoading ? "height: 65vh" : ""};
+  ${({ isLoading }) => (isLoading ? 'height: 65vh' : '')};
 `;
 
 const LoadAllButton = styled.button`

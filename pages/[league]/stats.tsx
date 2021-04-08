@@ -27,18 +27,17 @@ function Stats({ league }: Props): JSX.Element {
 }
 
 const Container = styled.div`
-width: 75%;
-height: 80vh;
-// padding: 41px 0 40px 0;
-padding: 0 0 40px 0;
-margin: 0 auto;
-background-color: ${({ theme }) => theme.colors.grey100};
+  width: 75%;
+  height: 80vh;
+  // padding: 41px 0 40px 0;
+  padding: 0 0 40px 0;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.grey100};
 
-@media screen and (max-width: 1024px) {
-  width: 100%;
-  padding: 2.5%;
-}
-
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    padding: 2.5%;
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
