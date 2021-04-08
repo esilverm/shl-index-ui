@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import useSWR from 'swr';
 
 function Livestream({ isSHL = true }: { isSHL?: boolean }): JSX.Element {
   const [isLive, setIsLive] = useState(false);
-  const [videoID, setVideoID] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${
-            isSHL
-              ? process.env.NEXT_PUBLIC_SHL_CHANNEL_ID
-              : process.env.NEXT_PUBLIC_SMJHL_CHANNEL_ID
-          }&type=video&order=date&maxResults=1&key=${
-            process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
-          }`
-        ).then((res) => res.json());
-
-        if (data.items && data.items.length >= 1) {
-          const streamInfo = data.items[0];
+  const { data: videoID } = useSWR('youtube', () => {
+    return fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${
+        isSHL
+          ? process.env.NEXT_PUBLIC_SHL_CHANNEL_ID
+          : process.env.NEXT_PUBLIC_SMJHL_CHANNEL_ID
+      }&type=video&order=date&maxResults=1&key=${
+        process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
+      }`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.items && res.items.length >= 1) {
+          const streamInfo = res.items[0];
           setIsLive(streamInfo.liveBroadcastContent === 'live');
-          setVideoID(streamInfo.id.videoId);
+          return streamInfo.id.videoId;
         }
-      } catch (e) {
-        console.log('Error fetching data from YouTube API', e);
-      }
-    })();
-  }, []);
+
+      });
+  });
+  
 
   return (
     <>
