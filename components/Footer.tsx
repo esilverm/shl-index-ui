@@ -5,13 +5,16 @@ function FooterBar(): JSX.Element {
   return (
     <FooterWrapper>
       <FooterText>
-        &copy; {new Date().getFullYear()} | Made with ♥︎ by the SHL Dev Team |{' '}
+        &copy; {new Date().getFullYear()} | <span>Made with ♥︎ by the SHL Dev Team |{' '}</span>
         <a
           href="https://simulationhockey.com/index.php"
           rel="noreferrer"
           target="_blank"
         >
           Visit Forum
+        </a> |{' '}
+        <a href="https://gitreports.com/issue/esilverm/shl-index-ui/">
+          Report a Bug
         </a>
       </FooterText>
     </FooterWrapper>
@@ -30,11 +33,19 @@ const FooterWrapper = styled.footer`
 
 const FooterText = styled.div`
   font-family: Montserrat, sans-serif;
+  font-size: 0.8rem;
   & a:active,
   & a:visited,
   & a:hover,
   & a:link {
     color: ${({ theme }) => theme.colors.grey100};
+  }
+  
+
+  @media screen and (max-width: 510px) {
+    & span {
+      display: none;
+    }
   }
 `;
 
