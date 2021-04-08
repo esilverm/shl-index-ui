@@ -27,7 +27,12 @@ function index({ league, teamlist }: Props): JSX.Element {
       <Header league={league} activePage="teams" />
       <Container>
         <TeamListContainer>
-          {teamlist.map((team) => (
+          {teamlist.sort((a, b) => {
+            if (league === 'iihf' || league === 'wjc') {
+              return a.nameDetails.second.localeCompare(b.nameDetails.second);
+            }
+            return a.nameDetails.first.localeCompare(b.nameDetails.first);
+          }).map((team) => (
             <Link
               href="/[league]/team/[id]"
               as={`/${league}/team/${team.id}`}
