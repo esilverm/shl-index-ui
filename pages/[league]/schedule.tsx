@@ -234,6 +234,7 @@ const LoadingWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 65vh;
 `;
 
 const LoadAllButton = styled.button`

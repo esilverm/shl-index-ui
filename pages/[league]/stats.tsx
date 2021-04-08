@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 
@@ -19,11 +20,26 @@ function Stats({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} activePage="stats" />
-      <div>This is a placeholder</div>
+      <Container>This is a placeholder</Container>
       <Footer />
     </React.Fragment>
   );
 }
+
+const Container = styled.div`
+width: 75%;
+height: 80vh;
+// padding: 41px 0 40px 0;
+padding: 0 0 40px 0;
+margin: 0 auto;
+background-color: ${({ theme }) => theme.colors.grey100};
+
+@media screen and (max-width: 1024px) {
+  width: 100%;
+  padding: 2.5%;
+}
+
+`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
