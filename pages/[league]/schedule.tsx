@@ -173,7 +173,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
         <ScheduleContainer ref={scheduleContainerRef}>
           {renderGameDays()}
         </ScheduleContainer>
-        <LoadingWrapper>
+        <LoadingWrapper isLoading={isScheduleLoading}>
           {isScheduleLoading && <PulseLoader size={15} />}
           {!isScheduleLoading && !showFullSchedule && (
             <LoadAllButton onClick={onLoadAllGames}>
@@ -230,11 +230,11 @@ const ScheduleContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const LoadingWrapper = styled.div`
+const LoadingWrapper = styled.div<{ isLoading: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 65vh;
+  ${({isLoading}) => isLoading ? "height: 65vh" : ""};
 `;
 
 const LoadAllButton = styled.button`
