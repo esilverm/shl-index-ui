@@ -145,6 +145,7 @@ export default async (
   `)
   );
 
+
   const parsed = standings.map((team) => ({
     position: team.Position,
     id: team.TeamID,
@@ -159,7 +160,7 @@ export default async (
     losses: team.Losses,
     OTL: team.OTL + team.SOL,
     points: team.Points,
-    winPercent: team.PCT.toFixed(3),
+    winPercent: team.PCT === 0.999 ? (1).toFixed(3) : team.PCT.toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
     goalsAgainst: team.GA,
