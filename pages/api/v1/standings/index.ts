@@ -118,7 +118,7 @@ export default async (
           `
           : ''
       ).append(SQL`
-      INNER JOIN (
+      LEFT JOIN (
         SELECT Home AS TeamID, SeasonID, LeagueID, 
           SUM(CASE WHEN HomeScore > AwayScore THEN 1 ELSE 0 END) AS HomeWins, 
           SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 0 THEN 1 ELSE 0 END) AS HomeLosses,
@@ -129,7 +129,7 @@ export default async (
         ON tr.TeamID = h.TeamID
         AND tr.LeagueID = h.LeagueID
         AND tr.SeasonID = h.SeasonID
-      INNER JOIN (
+      LEFT JOIN (
         SELECT Away AS TeamID, SeasonID, LeagueID, 
           SUM(CASE WHEN AwayScore > HomeScore THEN 1 ELSE 0 END) AS AwayWins, 
             SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 0 THEN 1 ELSE 0 END) AS AwayLosses,
@@ -165,14 +165,14 @@ export default async (
     goalsAgainst: team.GA,
     goalDiff: team.GF - team.GA,
     home: {
-      wins: team.HomeWins,
-      losses: team.HomeLosses,
-      OTL: team.HomeOTL,
+      wins: team.HomeWins ?? 0,
+      losses: team.HomeLosses ?? 0,
+      OTL: team.HomeOTL ?? 0,
     },
     away: {
-      wins: team.AwayWins,
-      losses: team.AwayLosses,
-      OTL: team.AwayOTL,
+      wins: team.AwayWins ?? 0,
+      losses: team.AwayLosses ?? 0,
+      OTL: team.AwayOTL ?? 0,
     },
     shootout: {
       wins: team.SOW,
