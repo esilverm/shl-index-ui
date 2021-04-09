@@ -147,7 +147,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'S%',
           id: 'player-table-spct',
           accessor: ({ goals, shotsOnGoal }) =>
-            `${((goals * 100) / shotsOnGoal).toFixed(1)}%`,
+            `${((goals * 100) / Math.max(shotsOnGoal, 1)).toFixed(1)}%`,
           title: 'Shooting Percentage',
           sortDescFirst: true,
         },

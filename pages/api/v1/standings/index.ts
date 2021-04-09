@@ -145,7 +145,6 @@ export default async (
   `)
   );
 
-
   const parsed = standings.map((team) => ({
     position: team.Position,
     id: team.TeamID,
