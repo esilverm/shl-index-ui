@@ -3,8 +3,7 @@ import SQL from 'sql-template-strings';
 import Cors from 'cors';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
-import { convertGameRowToGame, GameRow } from '../';
-import { Game } from '../../../../..';
+import { Game, convertGameRowToGame, GameRow } from '..';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -97,12 +96,13 @@ export default async (
     WHERE Slug=${gameId}
   `;
 
-  const game: GameRow[] = await query(gameSearch);
+  const game: Array<GameRow> = await query(gameSearch);
   if (game.length < 1) {
     return res.status(404).json(`No game found with id ${gameId}`);
   } else if (game.length > 1) {
     return res.status(500).json(`More than one game matches id ${gameId}`);
   }
+
   const relevantGame = game[0];
   const { SeasonID, LeagueID, Away, Home, Date } = relevantGame;
 
