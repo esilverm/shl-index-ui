@@ -3,7 +3,10 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
-import { PlayoffsRound, PlayoffsSeries } from '../pages/api/v1/standings/playoffs';
+import {
+  PlayoffsRound,
+  PlayoffsSeries,
+} from '../pages/api/v1/standings/playoffs';
 import Link from './LinkWithSeason';
 
 interface Props {
@@ -15,7 +18,7 @@ const LEAGUE_WIN_CONDITION = {
   shl: 4,
   smjhl: 4,
   iihf: 1,
-  wjc: 1
+  wjc: 1,
 };
 
 function PlayoffsBracket({ data, league }: Props): JSX.Element {
@@ -50,39 +53,48 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !teamData);
   }, [isLoadingAssets, teamData]);
 
-  if (teamError || isLoading || !data) return <PlayoffsBracketSkeleton isError={teamError} />;
+  if (teamError || isLoading || !data)
+    return <PlayoffsBracketSkeleton isError={teamError} />;
 
   const renderSeries = (series: PlayoffsSeries) => {
-    const isInternationalLeague = league === "iihf" || league === "wjc";
+    const isInternationalLeague = league === 'iihf' || league === 'wjc';
     const primaryColors = {
-      away: teamData?.find(team => team.id === series.team1)?.colors.primary || '#DDD',
-      home: teamData?.find(team => team.id === series.team2)?.colors.primary || '#BBB'
+      away:
+        teamData?.find((team) => team.id === series.team1)?.colors.primary ||
+        '#DDD',
+      home:
+        teamData?.find((team) => team.id === series.team2)?.colors.primary ||
+        '#BBB',
     };
     const awayTeam = {
       id: series.team1 >= 0 ? series.team1 : -1,
-      abbr: series.team1_Abbr || "TEST",
-      name: isInternationalLeague ? series.team1_Nickname || "Away Team" : series.team1_Name || "Away Team",
+      abbr: series.team1_Abbr || 'TEST',
+      name: isInternationalLeague
+        ? series.team1_Nickname || 'Away Team'
+        : series.team1_Name || 'Away Team',
       wins: series.team1Wins || 0,
       color: {
         background: primaryColors.away,
-        isDark: tinycolor(primaryColors.away).isDark()
-      }
+        isDark: tinycolor(primaryColors.away).isDark(),
+      },
     };
     const homeTeam = {
       id: series.team2 >= 0 ? series.team2 : -1,
-      abbr: series.team2_Abbr || "TEST",
-      name: isInternationalLeague ? series.team2_Nickname || "Home Team" : series.team2_Name || "Home Team",
+      abbr: series.team2_Abbr || 'TEST',
+      name: isInternationalLeague
+        ? series.team2_Nickname || 'Home Team'
+        : series.team2_Name || 'Home Team',
       wins: series.team2Wins || 0,
       color: {
         background: primaryColors.home,
-        isDark: tinycolor(primaryColors.home).isDark()
-      }
+        isDark: tinycolor(primaryColors.home).isDark(),
+      },
     };
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
     const hasHomeTeamWon = homeTeam.wins === LEAGUE_WIN_CONDITION[league];
     const temp = () => <div></div>;
     const AwayLogo = sprites[awayTeam.abbr] || temp;
-    const HomeLogo = sprites[homeTeam.abbr] || temp; 
+    const HomeLogo = sprites[homeTeam.abbr] || temp;
 
     return (
       <Series key={`${awayTeam.id}${homeTeam.id}`}>
@@ -91,12 +103,14 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
           as={`/${league}/team/${awayTeam.id}`}
           passHref
         >
-          <SeriesTeam color={awayTeam.color.background} isDark={awayTeam.color.isDark} lost={hasHomeTeamWon}>
+          <SeriesTeam
+            color={awayTeam.color.background}
+            isDark={awayTeam.color.isDark}
+            lost={hasHomeTeamWon}
+          >
             <AwayLogo />
             <span>{awayTeam.name}</span>
-            <SeriesScore>
-              {awayTeam.wins}
-            </SeriesScore>
+            <SeriesScore>{awayTeam.wins}</SeriesScore>
           </SeriesTeam>
         </Link>
         <Link
@@ -104,12 +118,14 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
           as={`/${league}/team/${homeTeam.id}`}
           passHref
         >
-          <SeriesTeam color={homeTeam.color.background} isDark={homeTeam.color.isDark} lost={hasAwayTeamWon}>
+          <SeriesTeam
+            color={homeTeam.color.background}
+            isDark={homeTeam.color.isDark}
+            lost={hasAwayTeamWon}
+          >
             <HomeLogo />
             <span>{homeTeam.name}</span>
-            <SeriesScore>
-              {homeTeam.wins}
-            </SeriesScore>
+            <SeriesScore>{homeTeam.wins}</SeriesScore>
           </SeriesTeam>
         </Link>
       </Series>
@@ -117,23 +133,23 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   };
   const renderRound = (round, index) => (
     <Round key={index}>
-      <h2>{round.length === 1 ? "Finals" : `Round ${index + 1}`}</h2>
-      {round.map(series => renderSeries(series))}
+      <h2>{round.length === 1 ? 'Finals' : `Round ${index + 1}`}</h2>
+      {round.map((series) => renderSeries(series))}
     </Round>
   );
   const renderBracket = () => data.map((round, i) => renderRound(round, i));
 
   return (
     <Container>
-      <Bracket>
-        {renderBracket()}
-      </Bracket>
+      <Bracket>{renderBracket()}</Bracket>
     </Container>
   );
 }
 
-function PlayoffsBracketSkeleton({ isError }: {
-  isError: boolean
+function PlayoffsBracketSkeleton({
+  isError,
+}: {
+  isError: boolean;
 }): JSX.Element {
   const fakeArray = (length) => new Array(length).fill(0);
 
@@ -142,7 +158,9 @@ function PlayoffsBracketSkeleton({ isError }: {
       <SeriesTeam color={'#CCC'} isDark={false} lost={false}>
         <div style={{ marginLeft: '5px' }}></div>
         <Skeleton width={45} height={45} />
-        <span><Skeleton width={100} /></span>
+        <span>
+          <Skeleton width={100} />
+        </span>
         <SeriesScore>
           <Skeleton />
         </SeriesScore>
@@ -150,7 +168,9 @@ function PlayoffsBracketSkeleton({ isError }: {
       <SeriesTeam color={'#EEE'} isDark={false} lost={false}>
         <div style={{ marginLeft: '5px' }}></div>
         <Skeleton width={45} height={45} />
-        <span><Skeleton width={100} /></span>
+        <span>
+          <Skeleton width={100} />
+        </span>
         <SeriesScore>
           <Skeleton />
         </SeriesScore>
@@ -170,9 +190,7 @@ function PlayoffsBracketSkeleton({ isError }: {
       </Round>
       <Round>
         <Skeleton width={150} height={30} />
-        <Series>
-          {renderSkeletonSeries(0)}
-        </Series>
+        <Series>{renderSkeletonSeries(0)}</Series>
       </Round>
     </Bracket>
   );
@@ -180,7 +198,11 @@ function PlayoffsBracketSkeleton({ isError }: {
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
       <Container>
-        {isError && <strong>A technical error occurred. Please reload the page to try again.</strong>}
+        {isError && (
+          <strong>
+            A technical error occurred. Please reload the page to try again.
+          </strong>
+        )}
         {renderSkeletonBracket()}
       </Container>
     </SkeletonTheme>
@@ -236,12 +258,12 @@ const SeriesTeam = styled.div<{
   align-items: center;
   height: 55px;
   width: 230px;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
   cursor: pointer;
   letter-spacing: 0.05rem;
   font-size: 18px;
   font-weight: 600;
-  ${props => props.lost && 'opacity: 0.5;'}
+  ${(props) => props.lost && 'opacity: 0.5;'}
 
   svg {
     width: 55px;
@@ -250,11 +272,13 @@ const SeriesTeam = styled.div<{
 
   span {
     padding-right: 5px;
-    color: ${({ isDark, theme }) => isDark ? theme.colors.grey100 : theme.colors.grey900};
+    color: ${({ isDark, theme }) =>
+      isDark ? theme.colors.grey100 : theme.colors.grey900};
   }
 
   &:hover {
-    background-color: ${props => tinycolor(props.color).setAlpha(.85).toRgbString()};
+    background-color: ${(props) =>
+      tinycolor(props.color).setAlpha(0.85).toRgbString()};
   }
 `;
 

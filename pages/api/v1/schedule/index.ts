@@ -69,7 +69,7 @@ export default async (
     played: game.Played,
     overtime: game.Overtime,
     shootout: game.Shootout,
-    slug: game.Slug
+    slug: game.Slug,
   }));
 
   res.status(200).json(parsed);

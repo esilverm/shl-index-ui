@@ -57,7 +57,8 @@ export default async (
     AND po.SeasonID = td2.SeasonID
       WHERE po.LeagueID=${+league}
         AND po.SeasonID=${season.SeasonID}
-  `);
+  `
+  );
 
   const parsed = playoffs.reduce((res, { startdate, ...matchup }) => {
     if (startdate in res) {
@@ -66,17 +67,15 @@ export default async (
         [startdate]: [...res[startdate], matchup],
       };
     }
-      return {
-        ...res,
-        [startdate]: [matchup],
-      };
-      
-   }, {})
+    return {
+      ...res,
+      [startdate]: [matchup],
+    };
+  }, {});
 
-
-    const parsedByRounds = Object.keys(parsed).map((key) => {
-      return parsed[key];
-    });
+  const parsedByRounds = Object.keys(parsed).map((key) => {
+    return parsed[key];
+  });
 
   res.status(200).json(parsedByRounds);
   return;

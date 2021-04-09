@@ -136,6 +136,7 @@ const Matchups = styled.div`
 const GameHeader = styled.div`
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey500};
   padding-bottom: 5px;
+  font-family: Montserrat, sans-serif;
 `;
 
 const GameRow = styled.div`
