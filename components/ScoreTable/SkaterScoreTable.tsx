@@ -268,7 +268,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
         },
         {
           Header: 'DGR',
-          accessor: 'devensiveGameRating',
+          accessor: 'defensiveGameRating',
           title: 'Defensive Game Rating',
           sortDescFirst: true,
         },
