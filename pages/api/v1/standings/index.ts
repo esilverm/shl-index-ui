@@ -83,7 +83,7 @@ export default async (
           : ''
       )
       .append(
-        SQL` ORDER BY tr.Points DESC, tr.Wins - tr.SOW DESC ) as Position, td.LeagueID,`
+        SQL` ORDER BY tr.Points DESC, tr.Wins DESC, tr.SOW ASC) as Position, td.LeagueID,`
       )
       .append(
         display === 'conference'
