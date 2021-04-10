@@ -25,7 +25,6 @@ interface TeamStats {
 }
 
 interface TeamIdentity {
-  id: number,
   name: string;
   nickname: string;
   abbr: string;
@@ -150,13 +149,11 @@ export default async (
     },
     teams: {
       away: {
-        id: game.Away,
         name: game.AwayName,
         nickname: game.AwayNickname,
         abbr: game.AwayAbbr,
       },
       home: {
-        id: game.Home,
         name: game.HomeName,
         nickname: game.HomeNickname,
         abbr: game.HomwAbbr,
