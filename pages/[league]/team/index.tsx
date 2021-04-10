@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
@@ -8,7 +8,6 @@ import Footer from '../../../components/Footer';
 import { Team } from '../../..';
 import Header from '../../../components/Header';
 import Link from '../../../components/LinkWithSeason';
-import { getQuerySeason } from '../../../utils/season';
 
 interface Props {
   league: string;
@@ -130,22 +129,13 @@ const TeamName = styled.h2<{ bright: boolean }>`
   }
 `;
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
-
-  const paths = leagues.map((league) => ({
-    params: { league },
-  }));
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const { league: leaguename } = ctx.params;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { query: { season, league: leaguename} } = ctx;
+  
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );
-  const season = getQuerySeason();
+
   const seasonParam = season ? `&season=${season}` : '';
 
   const teamlist = await fetch(

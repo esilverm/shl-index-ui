@@ -29,6 +29,7 @@ export default async (
   const preseason = await query(
     SQL`
     SELECT 
+        ROW_NUMBER() OVER (PARTITION BY ps.TeamID AND ps.SeasonID AND ps.LeagueID ORDER BY ps.PTS DESC, ps.Wins DESC) as Position,
         ps.TeamID,
         ps.SeasonID,
         ps.LeagueID,
@@ -43,8 +44,7 @@ export default async (
         ps.SOW,
         td.Name,
         td.Nickname,
-        td.Abbr,
-        ROW_NUMBER() OVER (PARTITION BY ps.TeamID AND ps.SeasonID AND ps.LeagueID ORDER BY ps.PTS DESC, ps.Wins DESC) as Position
+        td.Abbr
     FROM
         preseason_standings AS ps
         INNER JOIN
@@ -68,7 +68,7 @@ export default async (
     losses: team.Losses,
     OTL: team.OTL,
     points: team.PTS,
-    winPercentage: (team.PTS / (team.GP * 2)).toFixed(3),
+    winPercentage: (team.PTS / (Math.max(team.GP, 1) * 2)).toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
     goalsAgainst: team.GA,
@@ -90,5 +90,4 @@ export default async (
   }));
 
   res.status(200).json(parsed);
-  return;
 };
