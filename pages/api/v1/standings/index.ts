@@ -202,6 +202,10 @@ export default async (
       teams: hash[conference],
     }));
 
+    if (+league === 2 || +league === 3 ) {
+      conferenceList.sort((a, b) => a.name.localeCompare(b.name))
+    }
+
     res.status(200).json(conferenceList);
     return;
   } else if (+league !== 2 && +league !== 3 && display === 'division') {
