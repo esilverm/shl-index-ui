@@ -203,7 +203,7 @@ export default async (
     }));
 
     if (+league === 2 || +league === 3 ) {
-      conferenceList.sort((a, b) => a.name.localeCompare(b.name))
+      conferenceList.reverse();
     }
 
     res.status(200).json(conferenceList);
