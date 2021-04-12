@@ -31,6 +31,7 @@ interface Team {
   Abbr: string;
   Name: string;
   Nickname: string;
+  PrimaryColor: string;
 }
 
 interface TeamStats {

@@ -41,40 +41,62 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     })();
   }, [data]);
 
-  console.log(data, error);
+  console.log(data, error); // TODO
 
   if (isLoadingAssets) return null; // TODO
 
   const renderTeamStats = () => {
     const stats = {
-      away: {
-        goalsForPerGame: 0,
-        goalsAgainstPerGame: 0
+      goalsForPerGame: {
+        title: "GF/GP",
+        away: {
+          total: 0,
+          perc: 0
+        },
+        home: {
+          total: 0,
+          perc: 0
+        }
       },
-      home: {
-        goalsForPerGame: 0,
-        goalsAgainstPerGame: 0
+      goalsAgainstPerGame: {
+        title: "GA/GP",
+        away: {
+          total: 0,
+          perc: 0
+        },
+        home: {
+          total: 0,
+          perc: 0
+        }
       }
     };
+    const awayColor = data.teams.away.PrimaryColor;
+    const homeColor = data.teams.home.PrimaryColor;
     Object.keys(data.teamStats).forEach((team) => {
-      stats[team] = {
-        goalsForPerGame: (data.teamStats[team].goalsFor / data.teamStats[team].gamesPlayed).toFixed(2),
-        goalsAgainstPerGame: (data.teamStats[team].goalsAgainst / data.teamStats[team].gamesPlayed).toFixed(2),
-      }
+      stats.goalsForPerGame[team].total = parseFloat((data.teamStats[team].goalsFor / data.teamStats[team].gamesPlayed).toFixed(2));
+      stats.goalsAgainstPerGame[team].total = parseFloat((data.teamStats[team].goalsAgainst / data.teamStats[team].gamesPlayed).toFixed(2));
     });
+    stats.goalsForPerGame.away.perc = stats.goalsForPerGame.away.total / (stats.goalsForPerGame.away.total + stats.goalsForPerGame.home.total) * 100;
+    stats.goalsAgainstPerGame.away.perc = stats.goalsAgainstPerGame.home.total / (stats.goalsAgainstPerGame.away.total + stats.goalsAgainstPerGame.home.total) * 100;
 
     return (
       <>
-        <FlexRow>
-          {stats.away.goalsForPerGame}
-          <span>GF/GP</span>
-          {stats.home.goalsForPerGame}
-        </FlexRow>
-        <FlexRow>
-          {stats.away.goalsAgainstPerGame}
-          <span>GA/GP</span>
-          {stats.home.goalsAgainstPerGame}
-        </FlexRow>
+        <TeamStatsRow>
+          <FlexRow>
+            <StatValue>{stats.goalsForPerGame.away.total}</StatValue>
+            <StatTitle>{stats.goalsForPerGame.title}</StatTitle>
+            <StatValue>{stats.goalsForPerGame.home.total}</StatValue>
+          </FlexRow>
+          <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsForPerGame.away.perc} homeColor={homeColor} />
+        </TeamStatsRow>
+        <TeamStatsRow>
+          <FlexRow>
+            <StatValue>{stats.goalsAgainstPerGame.away.total}</StatValue>
+            <StatTitle>{stats.goalsAgainstPerGame.title}</StatTitle>
+            <StatValue>{stats.goalsAgainstPerGame.home.total}</StatValue>
+          </FlexRow>
+          <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsAgainstPerGame.away.perc} homeColor={homeColor} />
+        </TeamStatsRow>
       </>
     )
   };
@@ -110,15 +132,17 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       <Header league={league} />
       <Container>
         <TeamStats>
-          <FlexRow>
-            <TeamLogoSmall>
-              <Sprites.Away />
-            </TeamLogoSmall>
-            Team Stats
-            <TeamLogoSmall>
-              <Sprites.Home />
-            </TeamLogoSmall>
-          </FlexRow>
+          <TeamStatsHeader>
+            <FlexRow height={50}>
+              <TeamLogoSmall>
+                <Sprites.Away />
+              </TeamLogoSmall>
+              <strong>Team Stats</strong>
+              <TeamLogoSmall>
+                <Sprites.Home />
+              </TeamLogoSmall>
+            </FlexRow>
+          </TeamStatsHeader>
           {renderTeamStats()}
         </TeamStats>
         <Comparison>
@@ -171,8 +195,8 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   justify-content: space-evenly;
-  background-color: ${({ theme }) => theme.colors.grey100};
 
   @media screen and (max-width: 1024px) {
     width: 100%;
@@ -180,11 +204,13 @@ const Container = styled.div`
   }
 `;
 
-const FlexRow = styled.div`
+const FlexRow = styled.div<{ height?: number; }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  height: ${({ height }) => height ? `${height}px` : 'auto'}
 `;
+
 const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
@@ -195,6 +221,34 @@ const FlexColumn = styled.div`
 const TeamStats = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.grey100};
+  width: 300px;
+  padding: 15px;
+`;
+
+const TeamStatsHeader = styled.div`
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+`;
+
+const TeamStatsRow = styled.div`
+  padding: 15px 0;
+`;
+
+const TeamStatsBar = styled.div<{
+  awayColor: string;
+  awayPerc: number;
+  homeColor: string;
+}>`
+  border: 2px solid;
+  border-image: ${props => `
+    linear-gradient(to right,
+      ${props.awayColor} 0%,
+      ${props.awayColor} ${props.awayPerc}%,
+      ${props.theme.colors.grey100} ${props.awayPerc}%,
+      ${props.theme.colors.grey100} ${props.awayPerc+1}%,
+      ${props.homeColor} ${props.awayPerc+1}%,
+      ${props.homeColor} 100%
+    ) 5`};
 `;
 
 // Middle
@@ -208,14 +262,24 @@ const Result = styled.div`
   flex-direction: row;
 `;
 
+const StatTitle = styled.span`
+  font-size: 16px;
+`;
+
+const StatValue = styled.span`
+  font-family: Montserrat, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+`;
+
 const TeamData = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
 const TeamLogoSmall = styled.div`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
 `;
 
 const TeamLogo = styled.div`
