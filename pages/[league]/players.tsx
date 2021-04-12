@@ -13,9 +13,9 @@ import useGoalieStats from '../../hooks/useGoalieStats';
 import useGoalieRatings from '../../hooks/useGoalieRatings';
 import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
 import GoalieRatingsTable from '../../components/RatingsTable/GoalieRatingsTable';
-import SkaterAdvStatTable from '../../components/PlayersTable/SkaterAdvStatTable';
-import SkaterStatsTable from '../../components/PlayersTable/SkaterStatsTable';
-import GoalieStatsTable from '../../components/PlayersTable/GoalieStatsTable';
+import SkaterAdvStatsTable from '../../components/ScoreTable/SkaterAdvStatsTable';
+import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
+import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
 
 interface Props {
@@ -25,8 +25,8 @@ interface Props {
 
 function PlayerPage({ league }: Props): JSX.Element {
   const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings( league );
-  const { ratings: skater } = useSkaterStats( league );
-  const { ratings: goalie } = useGoalieStats( league );
+  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats( league );
+  const { ratings: goalie, isLoading: isLoadingGoalieStat } = useGoalieStats( league );
 
   const {
     ratings: goalieratingdata,
@@ -112,9 +112,9 @@ function PlayerPage({ league }: Props): JSX.Element {
                 display === 'ratings' ? (
                   <SkaterRatingsTable data={getSkaters()} />
                 ) : display === 'stats' ? (
-                  <SkaterStatsTable data={getSkater()} />
+                  <SkaterScoreTable data={getSkater()} />
                 ) : (
-                  <SkaterAdvStatTable data={getSkater()} />
+                  <SkaterAdvStatsTable data={getSkater()} />
                 )
               }
             </TableContainer>
@@ -128,7 +128,7 @@ function PlayerPage({ league }: Props): JSX.Element {
                 display === 'ratings' ? (
                   <GoalieRatingsTable data={getGoalies()} />
                 ) : (
-                  <GoalieStatsTable data={getGoalie()} />
+                  <GoalieScoreTable data={getGoalie()} />
                 )
               }
             </TableContainer>
