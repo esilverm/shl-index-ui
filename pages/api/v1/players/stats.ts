@@ -8,6 +8,8 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export type SeasonType = string;
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse

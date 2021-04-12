@@ -17,6 +17,8 @@ import SkaterAdvStatsTable from '../../components/ScoreTable/SkaterAdvStatsTable
 import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../api/v1/players/stats';
 
 interface Props {
   league: string;
@@ -25,15 +27,14 @@ interface Props {
 
 function PlayerPage({ league }: Props): JSX.Element {
   const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings( league );
-  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats( league );
-  const { ratings: goalie, isLoading: isLoadingGoalieStat } = useGoalieStats( league );
+  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
+  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats( league, filterSeasonType );
+  const { ratings: goalie } = useGoalieStats( league, filterSeasonType );
 
   const {
     ratings: goalieratingdata,
     isLoading: isLoadingGoalies,
   } = useGoalieRatings(league);
-  if (!isLoadingPlayers && !isLoadingGoalies)
-    console.log(skaterratings, goalieratingdata);
 
   const getSkaters = () =>
     skaterratings
@@ -59,11 +60,15 @@ function PlayerPage({ league }: Props): JSX.Element {
   const getGoalie = () =>
   goalie
     ? (goalie.filter(
-        (player) => player.position !== 'G'
+        (player) => player.position === 'G'
       ) as Array<Goalie>)
     : [];
   
-      const [display, setDisplay] = useState('ratings');
+  const [display, setDisplay] = useState('ratings');
+
+  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
+    setFilterSeasonType(seasonType);
+  };
   
   return (
     <React.Fragment>
@@ -104,28 +109,29 @@ function PlayerPage({ league }: Props): JSX.Element {
             Adv Stats
           </DisplaySelectItem>
         </DisplaySelectContainer>
+        <Filters>
+          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+        </Filters>
         <TableHeading>Skaters</TableHeading>
         <TableWrapper>
-          {!isLoadingPlayers && (
             <TableContainer>
               {
-                display === 'ratings' ? (
+                display === 'ratings' && !isLoadingPlayers ? (
                   <SkaterRatingsTable data={getSkaters()} />
-                ) : display === 'stats' ? (
+                ) : display === 'stats' && !isLoadingPlayerStat ? (
                   <SkaterScoreTable data={getSkater()} />
                 ) : (
                   <SkaterAdvStatsTable data={getSkater()} />
                 )
               }
             </TableContainer>
-          )}
         </TableWrapper>
         <TableHeading>Goalies</TableHeading>
         <TableWrapper>
           {!isLoadingGoalies && (
             <TableContainer>
               {
-                display === 'ratings' ? (
+                display === 'ratings' && !isLoadingGoalies ? (
                   <GoalieRatingsTable data={getGoalies()} />
                 ) : (
                   <GoalieScoreTable data={getGoalie()} />
@@ -205,4 +211,28 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
   position: relative;
   border-bottom: none;
   bottom: -1px;
+`;
+
+const Filters = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-right: 3%;
+  justify-content: flex-end;
+  float: right;
+  margin-top: -80px;
+
+  button {
+    width: 200px;
+  }
+
+  @media screen and (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+      width: 150px;
+    }
+  }
 `;
