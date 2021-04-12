@@ -22,8 +22,7 @@ function FooterBar(): JSX.Element {
         >
           Report a Bug
         </a>{' '}
-        |{' '}
-        <a href="/api">API Docs</a>
+        | <a href="/api">API Docs</a>
       </FooterText>
     </FooterWrapper>
   );

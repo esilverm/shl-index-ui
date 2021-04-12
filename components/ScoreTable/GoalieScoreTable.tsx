@@ -5,9 +5,10 @@ import { Goalie } from '../..';
 
 interface Props {
   data: Array<Goalie>;
+  pagination? : boolean;
 }
 
-function GoalieScoreTable({ data: players }: Props): JSX.Element {
+function GoalieScoreTable({ data: players, pagination = false }: Props): JSX.Element {
   const columnData = [
     {
       Header: '',
@@ -95,7 +96,7 @@ function GoalieScoreTable({ data: players }: Props): JSX.Element {
     },
   ];
 
-  return <ScoreTable data={players} columnData={columnData} />;
+  return <ScoreTable data={players} columnData={columnData} pagination={pagination}/>;
 }
 
 export default GoalieScoreTable;
