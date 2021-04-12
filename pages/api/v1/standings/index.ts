@@ -83,7 +83,7 @@ export default async (
           : ''
       )
       .append(
-        SQL` ORDER BY tr.PCT DESC, tr.Wins DESC, tr.SOW ASC ) as Position, td.LeagueID,`
+        SQL` ORDER BY tr.Points DESC, tr.Wins DESC, tr.SOW ASC) as Position, td.LeagueID,`
       )
       .append(
         display === 'conference'
@@ -201,6 +201,10 @@ export default async (
       name: conference,
       teams: hash[conference],
     }));
+
+    if (+league === 2 || +league === 3 ) {
+      conferenceList.reverse();
+    }
 
     res.status(200).json(conferenceList);
     return;

@@ -139,13 +139,6 @@ const TableHeader = styled.thead`
     display: table-row;
   }
 
-  th:first-child {
-    position: sticky;
-    left: 0px;
-    z-index: 2;
-    text-align: left;
-    padding-left: 10px;
-  }
 
   th {
     height: 50px;

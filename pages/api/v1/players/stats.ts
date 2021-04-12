@@ -96,7 +96,7 @@ export default async (
       shotsOnGoal: player.SOG,
       gameRating: player.GR,
       offensiveGameRating: player.OGR,
-      devensiveGameRating: player.DGR,
+      defensiveGameRating: player.DGR,
 
       advancedStats: {
         PDO: player.PDO,
