@@ -47,7 +47,7 @@ Props): JSX.Element {
   let table;
   if (pagination) {
     table = useTable(
-      { columns, data, initialState: { pageIndex: 0, pageSize: 15 } },
+      { columns, data, initialState: { pageIndex: 0, pageSize: 15, ...initialState } },
       useSortBy,
       usePagination
     );
