@@ -8,7 +8,7 @@ import {
   DropdownButton,
   DropdownItem,
   DropdownList,
-  Caret
+  Caret,
 } from './styles';
 import { getLatestSeason, getQuerySeason } from '../../utils/season';
 
@@ -84,7 +84,7 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
                 key={season}
                 data-season={season}
                 onClick={onSeasonSelect}
-                className={parseInt(selectedSeason) === season && "active"}
+                className={parseInt(selectedSeason) === season && 'active'}
               >
                 <SeasonText data-season={season} />
                 {season}

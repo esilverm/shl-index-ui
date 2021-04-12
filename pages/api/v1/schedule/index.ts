@@ -20,10 +20,10 @@ export interface GameRow {
   HomeScore: number;
   Away: number;
   AwayScore: number;
-  Played: number;
   Overtime: number;
   Shootout: number;
-  Type: string;
+  Played: number;
+  Type: SeasonType;
 }
 
 export interface Game {
@@ -40,6 +40,21 @@ export interface Game {
   played: number;
   type: SeasonType;
 }
+
+export const convertGameRowToGame = (game: GameRow): Game => ({
+  season: game.SeasonID,
+  league: game.LeagueID,
+  date: game.Date,
+  homeTeam: game.Home,
+  homeScore: game.HomeScore,
+  awayTeam: game.Away,
+  awayScore: game.AwayScore,
+  type: game.Type,
+  played: game.Played,
+  overtime: game.Overtime,
+  shootout: game.Shootout,
+  slug: game.Slug,
+});
 
 export default async (
   req: NextApiRequest,
@@ -72,20 +87,7 @@ export default async (
 
   const schedule = await query(search);
 
-  const parsed: Game[] = schedule.map((game: GameRow) => ({
-    season: game.SeasonID,
-    league: game.LeagueID,
-    date: game.Date,
-    homeTeam: game.Home,
-    homeScore: game.HomeScore,
-    awayTeam: game.Away,
-    awayScore: game.AwayScore,
-    type: game.Type,
-    played: game.Played,
-    overtime: game.Overtime,
-    shootout: game.Shootout,
-    slug: game.Slug
-  }));
+  const parsed: Game[] = schedule.map((game) => convertGameRowToGame(game));
 
   res.status(200).json(parsed);
 };

@@ -45,9 +45,14 @@ export default async (
 
   const combinedPlayerData = basePlayerData.map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [+player.G, +player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(
-        20
-      )
+      [
+        +player.G,
+        +player.LD,
+        +player.RD,
+        +player.LW,
+        +player.C,
+        +player.RW,
+      ].indexOf(20)
     ];
 
     return {

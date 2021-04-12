@@ -3,12 +3,12 @@ info:
   description: |-
     This is the API documentation for the Simulation Hockey League API. You can find out more about the SHL at [simulationhockey.com](https://simulationhockey.com/index.php). This API is a work in progress so expect future changes.
     NOTE: Whenever left unspecified, the season defaults to the current one, the league defaults to the SHL (0), and the seasontype defaults to regular season.
-  version: 1.0.2
+  version: 1.0.3
   title: Simulation Hockey League
   contact:
-    email: apiteam@swagger.io
+    email: simulationhockeysite@gmail.com
   license:
-    name: MIT
+    name: MIT License
     url: 'https://mit-license.org/'
 host: index.simulationhockey.com
 basePath: /api/v1
@@ -509,6 +509,695 @@ paths:
             type: array
             items:
               $ref: '#/definitions/standings'
+  /standings/preseason:
+    get:
+      tags:
+        - results
+      summary: List Pre-Season standings
+      description: Returns Pre-Season Standings by League
+      operationId: getPreseasonStandingsByLeague
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/preseason'
+  /standings/playoffs:
+    get:
+      tags:
+        - results
+      summary: List Playoff Bracket
+      description: Returns Playoff Bracket by League
+      operationId: getPlayoffsByLeague
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/playoffs'
+  /leaders/skaters/goals:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Goals
+      description: Returns top goal scorers for a League
+      operationId: getGoalLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/goalLeaders'
+
+  /leaders/skaters/assists:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Assists
+      description: Returns top assists for a League
+      operationId: getAssistLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/assistLeaders'
+  /leaders/skaters/penaltyminutes:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in PIMs
+      description: Returns top PIMs for a League
+      operationId: getPenaltyLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/penaltyLeaders'
+  /leaders/skaters/plusminus:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in plus minus
+      description: Returns top plus minus for a League
+      operationId: getPlusMinusLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/plusMinusLeaders'
+  /leaders/skaters/points:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in points
+      description: Returns top points for a League
+      operationId: getPointsLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/pointLeaders'
+  /leaders/skaters/ppg:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Power Play Points
+      description: Returns top Power Play Points for a League
+      operationId: getPpgLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ppgLeaders'
+  /leaders/skaters/shg:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in shg
+      description: Returns top shg for a League
+      operationId: getShgLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/shgLeaders'
+  /leaders/skaters/shotpct:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Shot Percentage
+      description: Returns top Shot Percentage for a League
+      operationId: getShotPctLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/shotpctLeaders'
+  /leaders/skaters/shots:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Shots
+      description: Returns top Shots for a League
+      operationId: getShotsLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/shotLeaders'
+  /leaders/skaters/shotsblocked:
+    get:
+      tags:
+        - skater leaders
+      summary: List of Leaders in Shots Blocked
+      description: Returns top Shots Blocked for a League
+      operationId: getShotsBlockedLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/shotblockLeaders'
+  /leaders/goalies/ga:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Goals Against
+      description: Returns top Goals Against for a League
+      operationId: getGaLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/gaLeaders'
+  /leaders/goalies/gaa:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Goals Against Avg
+      description: Returns top Goals Against Avg for a League
+      operationId: getGaaLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/gaaLeaders'
+  /leaders/goalies/gamesplayed:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Games Played
+      description: Returns top Games Played for a League
+      operationId: getGpLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/gpLeaders'
+  /leaders/goalies/gsaa:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Goals Saved Above Average
+      description: Returns top Goals Saved Above Average for a League
+      operationId: getGsaaLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/gsaaLeaders'
+  /leaders/goalies/losses:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Losses
+      description: Returns top Losses for a League
+      operationId: getLossLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/lossLeaders'
+  /leaders/goalies/otl:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in OTL
+      description: Returns top OT Losses for a League
+      operationId: getOtlLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/otlLeaders'
+  /leaders/goalies/savepct:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Save Percentage
+      description: Returns top Save Percentage for a League
+      operationId: getSavePctLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/savepctLeaders'
+  /leaders/goalies/saves:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Saves
+      description: Returns top Saves for a League
+      operationId: getSavesLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/saveLeaders'
+  /leaders/goalies/shutouts:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Shutouts
+      description: Returns top Shutouts for a League
+      operationId: getShutoutsLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/shutoutLeaders'
+  /leaders/goalies/wins:
+    get:
+      tags:
+        - goalie leaders
+      summary: List of Leaders in Wins
+      description: Returns top Wins for a League
+      operationId: getWinsLeaders
+      produces:
+        - application/json
+      parameters:
+        - name: league
+          in: query
+          type: number
+          default: 0
+        - name: season
+          in: query
+          type: number
+        - name: type
+          in: query
+          type: string
+          default: 'rs'
+        - name: limit
+          in: query
+          type: number
+          default: 10
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/winLeaders'
 definitions:
   League:
     type: object
@@ -631,8 +1320,8 @@ definitions:
         type: string
         example: Poopity Scoop
       team:
-        type: number
-        example: 13
+        type: string
+        example: 'BUF'
       height:
         type: number
         example: 79
@@ -655,8 +1344,8 @@ definitions:
         type: number
         example: 0
       team:
-        type: number
-        example: 19
+        type: string
+        example: 'SEA'
       season:
         type: number
         example: 58
@@ -937,8 +1626,8 @@ definitions:
         type: string
         example: Tatu Makela
       team:
-        type: number
-        example: 15
+        type: string
+        example: 'BUF'
       screening:
         type: number
         example: 5
@@ -1027,8 +1716,8 @@ definitions:
         type: string
         example: Tibuk Soonika
       team:
-        type: number
-        example: 1
+        type: string
+        example: 'CHI'
       height:
         type: number
         example: 76
@@ -1051,8 +1740,8 @@ definitions:
         type: number
         example: 0
       team:
-        type: number
-        example: 4
+        type: string
+        example: 'NEW'
       season:
         type: number
         example: 58
@@ -1106,10 +1795,10 @@ definitions:
         example: 58
       name:
         type: string
-        example: Billy Sorokin
+        example: 'Billy Sorokin'
       team:
-        type: number
-        example: 11
+        type: string
+        example: 'WPG'
       blocker:
         type: number
         example: 14
@@ -1161,6 +1850,45 @@ definitions:
       professionalism:
         type: number
         example: 15
+  playoffs:
+    type: object
+    properties:
+      team1:
+        type: number
+        example: 3
+      team2:
+        type: number
+        example: 12
+      LeagueID:
+        type: number
+        example: 0
+      SeasonID:
+        type: number
+        example: 58
+      team1Wins:
+        type: number
+        example: 4
+      team2Wins:
+        type: number
+        example: 3
+      team1_Name:
+        type: string
+        example: "Toronto"
+      team1_Nickname:
+        type: string
+        example: "North Stars"
+      team1_Abbr:
+        type: string
+        example: "TOR"
+      team2_Name:
+        type: string
+        example: "San Francisco"
+      team2_Nickname:
+        type: string
+        example: "Pride"
+      team2_Abbr:
+        type: string
+        example: "SFP"
   schedule:
     type: object
     properties:
@@ -1278,6 +2006,507 @@ definitions:
           losses:
             type: number
             example: 0
+  preseason:
+    type: object
+    properties:
+      position:
+        type: number
+        example: 10
+      id:
+        type: number
+        example: 18
+      name:
+        type: string
+        example: "Atlanta Inferno"
+      location:
+        type: string
+        example: "Atlanta"
+      abbreviation:
+        type: string
+        example: "ATL"
+      gp:
+        type: number
+        example: 7
+      wins:
+        type: number
+        example: 5
+      losses:
+        type: number
+        example: 2
+      OTL:
+        type: number
+        example: 0
+      points:
+        type: number
+        example: 10
+      winPercent:
+        type: number
+        example: "0.714"
+      ROW:
+        type: number
+        example: 4
+      goalsFor:
+        type: number
+        example: 19
+      goalsAgainst:
+        type: number
+        example: 13
+      goalDiff:
+        type: number
+        example: 6
+      home:
+        type: object
+        properties:
+          wins:
+            type: number
+            example: 4
+          losses:
+            type: number
+            example: 0
+          OTL:
+            type: number
+            example: 0
+      away:
+        type: object
+        properties:
+          wins:
+            type: number
+            example: 1
+          losses:
+            type: number
+            example: 2
+          OTL:
+            type: number
+            example: 0
+      shootout:
+        type: object
+        properties:
+          wins:
+            type: number
+            example: 1
+          losses:
+            type: number
+            example: 0
+  goalLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 5
+      name:
+        type: string
+        example: 'Martijn  Westbroek'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 1
+      season:
+        type: number
+        example: 58
+      goals:
+        type: number
+        example: 41
+  assistLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 284
+      name:
+        type: string
+        example: 'Esa Parmberg'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 8
+      season:
+        type: number
+        example: 58
+      assists:
+        type: number
+        example: 60
+  penaltyLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 478
+      name:
+        type: string
+        example: 'DeMaricus Smyth'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 18
+      season:
+        type: number
+        example: 58
+      penaltyMinutes:
+        type: number
+        example: 148
+  plusMinusLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 950
+      name:
+        type: string
+        example: 'Axel Meszaros'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 3
+      season:
+        type: number
+        example: 58
+      plusMinus:
+        type: number
+        example: 55
+  pointLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 284
+      name:
+        type: string
+        example: 'Esa Parmberg'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 8
+      season:
+        type: number
+        example: 58
+      points:
+        type: number
+        example: 79
+  ppgLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 284
+      name:
+        type: string
+        example: 'Michael Scarn'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 2
+      season:
+        type: number
+        example: 58
+      powerPlayGoals:
+        type: number
+        example: 14
+  shgLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 413
+      name:
+        type: string
+        example: 'Nathan Explosion'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 18
+      season:
+        type: number
+        example: 58
+      shorthandedGoals:
+        type: number
+        example: 4
+  shotpctLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 692
+      name:
+        type: string
+        example: 'Karl Krashwagen'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 7
+      season:
+        type: number
+        example: 58
+      shotPct:
+        type: number
+        example: 0.1963
+  shotLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 457
+      name:
+        type: string
+        example: 'Theo Morgan'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 2
+      season:
+        type: number
+        example: 58
+      shots:
+        type: number
+        example: 305
+  shotblockLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 470
+      name:
+        type: string
+        example: 'Lyle Odelein III'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 2
+      season:
+        type: number
+        example: 58
+      shotsBlocked:
+        type: number
+        example: 305
+  gaLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 738
+      name:
+        type: string
+        example: 'Olli Saarinen, Jr'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 14
+      season:
+        type: number
+        example: 58
+      goalsAgainst:
+        type: number
+        example: 234
+  gaaLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 661
+      name:
+        type: string
+        example: 'Cale Amundsen'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 8
+      season:
+        type: number
+        example: 58
+      gaa:
+        type: number
+        example: 1.72
+  gpLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 738
+      name:
+        type: string
+        example: 'Olli Saarinen, Jr'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 14
+      season:
+        type: number
+        example: 58
+      gamesPlayed:
+        type: number
+        example: 58
+  gsaaLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 629
+      name:
+        type: string
+        example: 'Frans Eller'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 5
+      season:
+        type: number
+        example: 58
+      gamesPlayed:
+        type: number
+        example: 23.5308
+  lossLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 565
+      name:
+        type: string
+        example: 'Strom Chamberlain'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 11
+      season:
+        type: number
+        example: 58
+      losses:
+        type: number
+        example: 30
+  winLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 596
+      name:
+        type: string
+        example: 'A Jobin'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 2
+      season:
+        type: number
+        example: 58
+      losses:
+        type: number
+        example: 39
+  otlLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 429
+      name:
+        type: string
+        example: 'Knox Booth'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 13
+      season:
+        type: number
+        example: 58
+      overtimelosses:
+        type: number
+        example: 6
+  savepctLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 497
+      name:
+        type: string
+        example: 'White Goodman'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 15
+      season:
+        type: number
+        example: 58
+      savePct:
+        type: number
+        example: 0.927
+  saveLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 738
+      name:
+        type: string
+        example: 'Olli Saarinen, Jr'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 14
+      season:
+        type: number
+        example: 58
+      saves:
+        type: number
+        example: 2205
+  shutoutLeaders:
+    type: object
+    properties:
+      id:
+        type: number
+        example: 33
+      name:
+        type: string
+        example: 'Tibuk Soonika'
+      league:
+        type: number
+        example: 0
+      team:
+        type: number
+        example: 1
+      season:
+        type: number
+        example: 58
+      shutouts:
+        type: number
+        example: 13
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'

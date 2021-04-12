@@ -55,7 +55,7 @@ Props): JSX.Element {
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
-      {hasData &&
+      {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>
             <TableHeader>
@@ -81,29 +81,30 @@ Props): JSX.Element {
               ))}
             </TableHeader>
             <TableBody {...getTableBodyProps()}>
-              {hasData && rows.map((row, i) => {
-                prepareRow(row);
+              {hasData &&
+                rows.map((row, i) => {
+                  prepareRow(row);
 
-                return (
-                  <tr {...row.getRowProps()} key={i}>
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <td
-                          {...cell.getCellProps()}
-                          key={i}
-                          className={cell.column.isSorted ? 'sorted' : ''}
-                        >
-                          {cell.render('Cell')}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr {...row.getRowProps()} key={i}>
+                      {row.cells.map((cell, i) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            key={i}
+                            className={cell.column.isSorted ? 'sorted' : ''}
+                          >
+                            {cell.render('Cell')}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      )}
     </>
   );
 }
@@ -138,13 +139,6 @@ const TableHeader = styled.thead`
     display: table-row;
   }
 
-  th:first-child {
-    position: sticky;
-    left: 0px;
-    z-index: 2;
-    text-align: left;
-    padding-left: 10px;
-  }
 
   th {
     height: 50px;

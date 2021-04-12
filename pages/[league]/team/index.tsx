@@ -1,12 +1,13 @@
 import React from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
+
+import Footer from '../../../components/Footer';
 import { Team } from '../../..';
 import Header from '../../../components/Header';
 import Link from '../../../components/LinkWithSeason';
-import { getQuerySeason } from '../../../utils/season';
 
 interface Props {
   league: string;
@@ -25,32 +26,40 @@ function index({ league, teamlist }: Props): JSX.Element {
       <Header league={league} activePage="teams" />
       <Container>
         <TeamListContainer>
-          {teamlist.map((team) => (
-            <Link
-              href="/[league]/team/[id]"
-              as={`/${league}/team/${team.id}`}
-              passHref
-              key={team.id}
-            >
-              <TeamLink {...team.colors}>
-                <TeamLogo
-                  src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
-                    .replace('.', '')
-                    .replace(/white|blue/i, '')
-                    .trim()
-                    .split(' ')
-                    .join('_')}.svg`)}
-                  alt={`${team.name} logo`}
-                />
-                <TeamName bright={tinycolor(team.colors.primary).isDark()}>
-                  <span className="first">{team.nameDetails.first}</span>
-                  <span className="second">{team.nameDetails.second}</span>
-                </TeamName>
-              </TeamLink>
-            </Link>
-          ))}
+          {teamlist
+            .sort((a, b) => {
+              if (league === 'iihf' || league === 'wjc') {
+                return a.nameDetails.second.localeCompare(b.nameDetails.second);
+              }
+              return a.nameDetails.first.localeCompare(b.nameDetails.first);
+            })
+            .map((team) => (
+              <Link
+                href="/[league]/team/[id]"
+                as={`/${league}/team/${team.id}`}
+                passHref
+                key={team.id}
+              >
+                <TeamLink {...team.colors}>
+                  <TeamLogo
+                    src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
+                      .replace('.', '')
+                      .replace(/white|blue/i, '')
+                      .trim()
+                      .split(' ')
+                      .join('_')}.svg`)}
+                    alt={`${team.name} logo`}
+                  />
+                  <TeamName bright={tinycolor(team.colors.primary).isDark()}>
+                    <span className="first">{team.nameDetails.first}</span>
+                    <span className="second">{team.nameDetails.second}</span>
+                  </TeamName>
+                </TeamLink>
+              </Link>
+            ))}
         </TeamListContainer>
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -101,7 +110,8 @@ const TeamLogo = styled.img`
 `;
 
 const TeamName = styled.h2<{ bright: boolean }>`
-  color: ${({ bright, theme }) => bright ? theme.colors.grey100 : theme.colors.grey900};
+  color: ${({ bright, theme }) =>
+    bright ? theme.colors.grey100 : theme.colors.grey900};
 
   span {
     display: block;
@@ -119,22 +129,13 @@ const TeamName = styled.h2<{ bright: boolean }>`
   }
 `;
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
-
-  const paths = leagues.map((league) => ({
-    params: { league },
-  }));
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const { league: leaguename } = ctx.params;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { query: { season, league: leaguename} } = ctx;
+  
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );
-  const season = getQuerySeason();
+
   const seasonParam = season ? `&season=${season}` : '';
 
   const teamlist = await fetch(

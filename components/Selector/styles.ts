@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface StyleProps {
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
   inverse?: boolean;
 }
 
@@ -20,8 +20,9 @@ export const DropdownButton = styled.button`
   width: 100%;
   background-color: transparent;
   padding: 6px 16px;
-  border: 1px solid ${(props: StyleProps) => props.inverse ? 'black' : 'white'};
-  color: ${(props: StyleProps) => props.inverse ? 'black' : 'white'};
+  border: 1px solid
+    ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
+  color: ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
   cursor: pointer;
   border-radius: 5px;
 
@@ -60,12 +61,14 @@ export const Caret = styled.span`
   margin-left: 5px;
 
   &.down {
-    border-top-color: ${(props: StyleProps) => props.inverse ? 'black' : 'white'};
+    border-top-color: ${(props: StyleProps) =>
+      props.inverse ? 'black' : 'white'};
     margin-top: 5px;
   }
 
   &.up {
-    border-bottom-color: ${(props: StyleProps) => props.inverse ? 'black' : 'white'};
+    border-bottom-color: ${(props: StyleProps) =>
+      props.inverse ? 'black' : 'white'};
     margin-bottom: 5px;
   }
 `;
@@ -84,9 +87,12 @@ export const DropdownList = styled.ul`
 
 export const DropdownItem = styled.li`
   line-height: 1.75;
-  text-align: ${(props: StyleProps) => props.align ? props.align : 'center'};
-  padding: 2px ${(props: StyleProps) => props.align === 'right' ? '16px' : '0'} 2px ${(props: StyleProps) => props.align === 'left' ? '16px' : '0'};
+  text-align: ${(props: StyleProps) => (props.align ? props.align : 'center')};
+  padding: 2px
+    ${(props: StyleProps) => (props.align === 'right' ? '16px' : '0')} 2px
+    ${(props: StyleProps) => (props.align === 'left' ? '16px' : '0')};
   cursor: pointer;
+  font-family: Montserrat, sans-serif;
 
   &.active {
     background-color: ${({ theme }) => theme.colors.grey300};

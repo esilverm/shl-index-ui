@@ -83,7 +83,7 @@ export default async (
           : ''
       )
       .append(
-        SQL` ORDER BY tr.PCT DESC, tr.Wins DESC, tr.SOW ASC ) as Position, td.LeagueID,`
+        SQL` ORDER BY tr.Points DESC, tr.Wins DESC, tr.SOW ASC) as Position, td.LeagueID,`
       )
       .append(
         display === 'conference'
@@ -118,7 +118,7 @@ export default async (
           `
           : ''
       ).append(SQL`
-      INNER JOIN (
+      LEFT JOIN (
         SELECT Home AS TeamID, SeasonID, LeagueID, 
           SUM(CASE WHEN HomeScore > AwayScore THEN 1 ELSE 0 END) AS HomeWins, 
           SUM(CASE WHEN HomeScore < AwayScore AND Overtime = 0 THEN 1 ELSE 0 END) AS HomeLosses,
@@ -129,7 +129,7 @@ export default async (
         ON tr.TeamID = h.TeamID
         AND tr.LeagueID = h.LeagueID
         AND tr.SeasonID = h.SeasonID
-      INNER JOIN (
+      LEFT JOIN (
         SELECT Away AS TeamID, SeasonID, LeagueID, 
           SUM(CASE WHEN AwayScore > HomeScore THEN 1 ELSE 0 END) AS AwayWins, 
             SUM(CASE WHEN AwayScore < HomeScore AND Overtime = 0 THEN 1 ELSE 0 END) AS AwayLosses,
@@ -159,20 +159,20 @@ export default async (
     losses: team.Losses,
     OTL: team.OTL + team.SOL,
     points: team.Points,
-    winPercent: team.PCT.toFixed(3),
+    winPercent: team.PCT === 0.999 ? (1).toFixed(3) : team.PCT.toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
     goalsAgainst: team.GA,
     goalDiff: team.GF - team.GA,
     home: {
-      wins: team.HomeWins,
-      losses: team.HomeLosses,
-      OTL: team.HomeOTL,
+      wins: team.HomeWins ?? 0,
+      losses: team.HomeLosses ?? 0,
+      OTL: team.HomeOTL ?? 0,
     },
     away: {
-      wins: team.AwayWins,
-      losses: team.AwayLosses,
-      OTL: team.AwayOTL,
+      wins: team.AwayWins ?? 0,
+      losses: team.AwayLosses ?? 0,
+      OTL: team.AwayOTL ?? 0,
     },
     shootout: {
       wins: team.SOW,
@@ -201,6 +201,10 @@ export default async (
       name: conference,
       teams: hash[conference],
     }));
+
+    if (+league === 2 || +league === 3 ) {
+      conferenceList.reverse();
+    }
 
     res.status(200).json(conferenceList);
     return;

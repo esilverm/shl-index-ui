@@ -38,38 +38,38 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'GP',
           accessor: 'gamesPlayed',
           title: 'Games Played',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'G',
           accessor: 'goals',
           title: 'Goals',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'A',
           accessor: 'assists',
           title: 'Assists',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PTS',
           accessor: 'points',
           title: 'Points',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: '+/-',
           accessor: 'plusMinus',
           title: 'Plus/Minus',
           sortType: 'basic',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PIM',
           accessor: 'pim',
           title: 'Penalties in Minutes',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -82,21 +82,21 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           accessor: ({ goals, ppGoals, shGoals }) =>
             `${goals - ppGoals - shGoals}`,
           title: 'Even Strength Goals',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PP',
           id: 'player-table-ppGoals',
           accessor: 'ppGoals',
           title: 'Power Play Goals',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'SH',
           id: 'player-table-shGoals',
           accessor: 'shGoals',
           title: 'Short-Handed Goals',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -109,21 +109,21 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           accessor: ({ assists, ppAssists, shAssists }) =>
             `${assists - ppAssists - shAssists}`,
           title: 'Even Strength Assists',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'PP',
           id: 'player-table-ppAssists',
           accessor: 'ppAssists',
           title: 'Power Play Assists',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'SH',
           id: 'player-table-shAssists',
           accessor: 'shAssists',
           title: 'Short-Handed Assists',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -135,7 +135,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'S',
           accessor: 'shotsOnGoal',
           title: 'Shots On Goal',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -147,9 +147,9 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'S%',
           id: 'player-table-spct',
           accessor: ({ goals, shotsOnGoal }) =>
-            `${((goals * 100) / shotsOnGoal).toFixed(1)}%`,
+            `${((goals * 100) / Math.max(shotsOnGoal, 1)).toFixed(1)}%`,
           title: 'Shooting Percentage',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -161,7 +161,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           id: 'player-table-toi',
           accessor: ({ timeOnIce }) => `${(timeOnIce / 60) >> 0}`,
           title: 'Time on Ice (in Minutes)',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           // ! Will want to make this column sortable by time rather than string
@@ -170,7 +170,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           accessor: ({ timeOnIce, gamesPlayed }) =>
             calculateTimeOnIce(timeOnIce, gamesPlayed),
           title: 'Average Time on Ice',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           // ! Will want to make this column sortable by time rather than string
@@ -179,7 +179,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           accessor: ({ ppTimeOnIce, gamesPlayed }) =>
             calculateTimeOnIce(ppTimeOnIce, gamesPlayed),
           title: 'Average Power Play Time on Ice',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           // ! Will want to make this column sortable by time rather than string
@@ -188,7 +188,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           accessor: ({ shTimeOnIce, gamesPlayed }) =>
             calculateTimeOnIce(shTimeOnIce, gamesPlayed),
           title: 'Average Short-Handed Time on Ice',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -200,13 +200,13 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'GA',
           accessor: 'giveaways',
           title: 'Giveaways',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'TA',
           accessor: 'takeaways',
           title: 'Takeaways',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -217,13 +217,13 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'W',
           accessor: 'fightWins',
           title: 'Fight Wins',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'L',
           accessor: 'fightLosses',
           title: 'Fight Losses',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -235,7 +235,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'BLK',
           accessor: 'shotsBlocked',
           title: 'Blocks',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -247,7 +247,7 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'HIT',
           accessor: 'hits',
           title: 'Hits',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },
@@ -258,19 +258,19 @@ function SkaterScoreTable({ data: players }: Props): JSX.Element {
           Header: 'GR',
           accessor: 'gameRating',
           title: 'Overall Game Rating',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'OGR',
           accessor: 'offensiveGameRating',
           title: 'Offensive Game Rating',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
         {
           Header: 'DGR',
-          accessor: 'devensiveGameRating',
+          accessor: 'defensiveGameRating',
           title: 'Defensive Game Rating',
-          sortDescFirst: true
+          sortDescFirst: true,
         },
       ],
     },

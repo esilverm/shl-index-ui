@@ -50,7 +50,7 @@ export default async (
       season: player.SeasonID,
       name: player['Last Name'],
       team: player.Abbr,
-      position: "G",
+      position: 'G',
       blocker: player.Blocker,
       glove: player.Glove,
       passing: player.GPassing,
