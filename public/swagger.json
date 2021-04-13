@@ -491,7 +491,7 @@
             "name": "type",
             "in": "query",
             "type": "string",
-            "default": "rs"
+            "default": "regular"
           }
         ],
         "responses": {
@@ -596,7 +596,7 @@
             "name": "type",
             "in": "query",
             "type": "string",
-            "default": "rs"
+            "default": "regular"
           }
         ],
         "responses": {

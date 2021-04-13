@@ -353,7 +353,7 @@ paths:
         - name: type
           in: query
           type: string
-          default: rs
+          default: regular
       responses:
         '200':
           description: OK
@@ -429,7 +429,7 @@ paths:
         - name: type
           in: query
           type: string
-          default: rs
+          default: regular
       responses:
         '200':
           description: OK
