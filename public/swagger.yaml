@@ -2116,7 +2116,7 @@ definitions:
         example: 284
       name:
         type: string
-        example: 'Esa Parmberg'
+        example: 'Esa Parmborg'
       league:
         type: number
         example: 0
