@@ -14,6 +14,7 @@ import GBR from './Great_Britain.svg?sprite';
 import USA from './United_States.svg?sprite';
 
 export default {
+  AUS: AUT,
   AUT,
   CAN,
   CZH,
