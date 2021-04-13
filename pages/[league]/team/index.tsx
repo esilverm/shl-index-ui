@@ -130,8 +130,10 @@ const TeamName = styled.h2<{ bright: boolean }>`
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { query: { season, league: leaguename} } = ctx;
-  
+  const {
+    query: { season, league: leaguename },
+  } = ctx;
+
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );

@@ -5,9 +5,10 @@ import { Player } from '../..';
 
 interface Props {
   data: Array<Player>;
+  pagination? : boolean;
 }
 
-function SkaterAdvStatsTable({ data: players }: Props): JSX.Element {
+function SkaterAdvStatsTable({ data: players, pagination = false }: Props): JSX.Element {
   const columnData = [
     {
       Header: 'Advanced Stats',
@@ -129,7 +130,7 @@ function SkaterAdvStatsTable({ data: players }: Props): JSX.Element {
     },
   ];
 
-  return <ScoreTable data={players} columnData={columnData} />;
+  return <ScoreTable data={players} columnData={columnData} pagination={pagination}/>;
 }
 
 export default SkaterAdvStatsTable;

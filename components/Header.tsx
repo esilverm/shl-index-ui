@@ -148,7 +148,7 @@ function HeaderBar({
                 Schedule
               </MenuItem>
             </Link>
-            <Link href="/[league]/players " as={`/${league}/players`} passHref>
+            <Link href="/[league]/players" as={`/${league}/players`} passHref>
               <MenuItem
                 active={activePage === 'players'}
                 role="link"

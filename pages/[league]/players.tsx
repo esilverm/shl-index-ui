@@ -26,10 +26,15 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings( league );
+  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings(
+    league
+  );
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats( league, filterSeasonType );
-  const { ratings: goalie } = useGoalieStats( league, filterSeasonType );
+  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats(
+    league,
+    filterSeasonType
+  );
+  const { ratings: goalie } = useGoalieStats(league, filterSeasonType);
 
   const {
     ratings: goalieratingdata,
@@ -49,27 +54,23 @@ function PlayerPage({ league }: Props): JSX.Element {
           (player) => player.position === 'G'
         ) as Array<GoalieRatings>)
       : [];
-  
+
   const getSkater = () =>
-  skater
-    ? (skater.filter(
-        (player) => player.position !== 'G'
-      ) as Array<Player>)
-    : [];
+    skater
+      ? (skater.filter((player) => player.position !== 'G') as Array<Player>)
+      : [];
 
   const getGoalie = () =>
-  goalie
-    ? (goalie.filter(
-        (player) => player.position === 'G'
-      ) as Array<Goalie>)
-    : [];
-  
+    goalie
+      ? (goalie.filter((player) => player.position === 'G') as Array<Goalie>)
+      : [];
+
   const [display, setDisplay] = useState('ratings');
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
     setFilterSeasonType(seasonType);
   };
-  
+
   return (
     <React.Fragment>
       <NextSeo
@@ -114,29 +115,25 @@ function PlayerPage({ league }: Props): JSX.Element {
         </Filters>
         <TableHeading>Skaters</TableHeading>
         <TableWrapper>
-            <TableContainer>
-              {
-                display === 'ratings' && !isLoadingPlayers ? (
-                  <SkaterRatingsTable data={getSkaters()} />
-                ) : display === 'stats' && !isLoadingPlayerStat ? (
-                  <SkaterScoreTable data={getSkater()} />
-                ) : (
-                  <SkaterAdvStatsTable data={getSkater()} />
-                )
-              }
-            </TableContainer>
+          <TableContainer>
+            {display === 'ratings' && !isLoadingPlayers ? (
+              <SkaterRatingsTable data={getSkaters()} />
+            ) : display === 'stats' && !isLoadingPlayerStat ? (
+              <SkaterScoreTable data={getSkater()} pagination/>
+            ) : (
+              <SkaterAdvStatsTable data={getSkater()} pagination/>
+            )}
+          </TableContainer>
         </TableWrapper>
         <TableHeading>Goalies</TableHeading>
         <TableWrapper>
           {!isLoadingGoalies && (
             <TableContainer>
-              {
-                display === 'ratings' && !isLoadingGoalies ? (
-                  <GoalieRatingsTable data={getGoalies()} />
-                ) : (
-                  <GoalieScoreTable data={getGoalie()} />
-                )
-              }
+              {display === 'ratings' && !isLoadingGoalies ? (
+                <GoalieRatingsTable data={getGoalies()} />
+              ) : (
+                <GoalieScoreTable data={getGoalie()} pagination />
+              )}
             </TableContainer>
           )}
         </TableWrapper>
