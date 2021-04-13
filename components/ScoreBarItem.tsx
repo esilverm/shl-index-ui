@@ -176,7 +176,7 @@ const TeamLine = styled.div<{ winner: boolean; played: boolean }>`
     font-size: 0.9rem;
     font-weight: 700;
     display: inline-block;
-    font-family: Montserrat, sans-serif
+    font-family: Montserrat, sans-serif;
   }
 `;
 

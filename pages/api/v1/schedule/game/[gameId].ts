@@ -9,9 +9,8 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-
 interface TeamRecordRow {
-  Wins: number
+  Wins: number;
   Losses: number;
   OTL: number;
   SOL: number;
@@ -43,9 +42,12 @@ export interface Matchup {
   previousMatchups: Game[];
 }
 
-const parseGamesPlayed = (record: TeamRecordRow) => record ? record.Wins + record.Losses + record.OTL + record.SOL : 0;
-const parseTeamRecord = (record: TeamRecordRow) => record ? `${record.Wins}-${record.Losses}-${record.OTL + record.SOL}` : '0-0-0';
-
+const parseGamesPlayed = (record: TeamRecordRow) =>
+  record ? record.Wins + record.Losses + record.OTL + record.SOL : 0;
+const parseTeamRecord = (record: TeamRecordRow) =>
+  record
+    ? `${record.Wins}-${record.Losses}-${record.OTL + record.SOL}`
+    : '0-0-0';
 
 export default async (
   req: NextApiRequest,
@@ -97,16 +99,16 @@ export default async (
   const previousMatchups: Array<GameRow> = await query(previousMatchupsSearch);
 
   const awayStats: TeamStats = {
-    gamesPlayed: parseGamesPlayed({ 
-      Wins: game.AwayWins, 
+    gamesPlayed: parseGamesPlayed({
+      Wins: game.AwayWins,
       Losses: game.AwayLosses,
       OTL: game.AwayOTL,
       SOL: game.AwaySOL,
     }),
     goalsFor: game.AwayGF,
     goalsAgainst: game.AwayGA,
-    record: parseTeamRecord({ 
-      Wins: game.AwayWins, 
+    record: parseTeamRecord({
+      Wins: game.AwayWins,
       Losses: game.AwayLosses,
       OTL: game.AwayOTL,
       SOL: game.AwaySOL,
@@ -114,24 +116,26 @@ export default async (
   };
 
   const homeStats: TeamStats = {
-    gamesPlayed: parseGamesPlayed({ 
-      Wins: game.HomeWins, 
+    gamesPlayed: parseGamesPlayed({
+      Wins: game.HomeWins,
       Losses: game.HomeLosses,
       OTL: game.HomeOTL,
       SOL: game.HomeSOL,
     }),
     goalsFor: game.HomeGF,
     goalsAgainst: game.HomeGA,
-    record: parseTeamRecord({ 
-      Wins: game.HomeWins, 
+    record: parseTeamRecord({
+      Wins: game.HomeWins,
       Losses: game.HomeLosses,
       OTL: game.HomeOTL,
       SOL: game.HomeSOL,
     }),
-  }
+  };
 
-  const parsedPrevMatchups = previousMatchups.map((game) => convertGameRowToGame(game));
- 
+  const parsedPrevMatchups = previousMatchups.map((game) =>
+    convertGameRowToGame(game)
+  );
+
   const response: Matchup = {
     game: {
       season: game.SeasonID,
@@ -145,7 +149,7 @@ export default async (
       played: game.Played,
       overtime: game.Overtime,
       shootout: game.Shootout,
-      slug: game.Slug
+      slug: game.Slug,
     },
     teams: {
       away: {
@@ -161,9 +165,9 @@ export default async (
     },
     teamStats: {
       away: awayStats,
-      home: homeStats
+      home: homeStats,
     },
-    previousMatchups: parsedPrevMatchups
+    previousMatchups: parsedPrevMatchups,
   };
 
   res.status(200).json(response);

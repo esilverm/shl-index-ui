@@ -16,7 +16,7 @@ const useGoalieStats = (
   const seasonTypeParam = seasonType
     ? `&type=${seasonType.toLowerCase().replace('-', '')}`
     : '';
-    
+
   const { data, error } = useSWR(
     () =>
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/goalies/stats?league=${leagueid}${seasonParam}${seasonTypeParam}`
