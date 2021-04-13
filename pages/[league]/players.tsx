@@ -81,6 +81,11 @@ function PlayerPage({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="players" />
       <Container>
+        <Filters>
+          <SelectorWrapper>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          </SelectorWrapper>
+        
         <DisplaySelectContainer role="tablist">
           <DisplaySelectItem
             onClick={() => setDisplay(() => 'ratings')}
@@ -110,16 +115,16 @@ function PlayerPage({ league }: Props): JSX.Element {
             Adv Stats
           </DisplaySelectItem>
         </DisplaySelectContainer>
-        <Filters>
-          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
         </Filters>
+        <Main>
+
         <TableHeading>Skaters</TableHeading>
         <TableWrapper>
           <TableContainer>
             {display === 'ratings' && !isLoadingPlayers ? (
               <SkaterRatingsTable data={getSkaters()} />
             ) : display === 'stats' && !isLoadingPlayerStat ? (
-              <SkaterScoreTable data={getSkater()} pagination/>
+              <SkaterScoreTable data={getSkater()} pagination />
             ) : (
               <SkaterAdvStatsTable data={getSkater()} pagination/>
             )}
@@ -137,6 +142,8 @@ function PlayerPage({ league }: Props): JSX.Element {
             </TableContainer>
           )}
         </TableWrapper>
+                  
+        </Main>
       </Container>
       <Footer />
     </React.Fragment>
@@ -190,6 +197,11 @@ const TableHeading = styled.h2`
   border-bottom: 1px solid black;
 `;
 
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
+`;
+
 const DisplaySelectContainer = styled.div`
   margin: 28px auto;
   width: 95%;
@@ -211,15 +223,17 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const Filters = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-right: 3%;
-  justify-content: flex-end;
-  float: right;
-  margin-top: -80px;
 
-  button {
-    width: 200px;
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
   }
 
   @media screen and (max-width: 750px) {
@@ -229,7 +243,13 @@ const Filters = styled.div`
     button {
       margin-right: 0;
       margin-bottom: 5px;
-      width: 150px;
     }
   }
+
+`;
+
+const SelectorWrapper = styled.div`
+  width: 250px;
+  float: right;
+  margin-right: 3%;
 `;
