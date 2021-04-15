@@ -48,11 +48,15 @@ export default async (
     SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, ((s.ShotsAgainst * (1 - (
       SELECT AVG(SavePct)
-      FROM `.append(`player_goalie_stats_${type}`).append(SQL`
+      FROM `
+      .append(`player_goalie_stats_${type}`)
+      .append(
+        SQL`
       WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
     ))) - s.GoalsAgainst) as GSAA
-    FROM `)
+    FROM `
+      )
       .append(`player_goalie_stats_${type} AS s`)
       .append(
         SQL`

@@ -62,7 +62,11 @@ export default async (
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     AND s.GP >= (
-      SELECT MAX(GP) FROM `).append(`player_goalie_stats_${type}`).append(SQL`
+      SELECT MAX(GP) FROM `
+      )
+      .append(`player_goalie_stats_${type}`)
+      .append(
+        SQL`
       WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
     ) / 5

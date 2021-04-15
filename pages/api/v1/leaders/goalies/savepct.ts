@@ -44,7 +44,6 @@ export default async (
   `)
     ));
 
-
   const savepctLeaders = await query(
     SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.SavePct
@@ -64,7 +63,11 @@ export default async (
     AND s.SeasonID=${season.SeasonID}
     AND s.Minutes > 60
     AND s.GP >= (
-      SELECT MAX(GP) FROM `).append(`player_goalie_stats_${type}`).append(SQL`
+      SELECT MAX(GP) FROM `
+      )
+      .append(`player_goalie_stats_${type}`)
+      .append(
+        SQL`
       WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
     ) / 5
