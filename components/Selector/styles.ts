@@ -37,7 +37,6 @@ export const DropdownButton = styled.button`
   @media screen and (max-width: 700px) {
     padding: 6px 8px;
   }
-
 `;
 
 export const SeasonText = styled.span`

@@ -85,64 +85,62 @@ function PlayerPage({ league }: Props): JSX.Element {
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           </SelectorWrapper>
-        
-        <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'ratings')}
-            active={display === 'ratings'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'ratings'}
-          >
-            Ratings
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'stats')}
-            active={display === 'stats'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'stats'}
-          >
-            Stats
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => '')}
-            active={display === ''}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === ''}
-          >
-            Adv Stats
-          </DisplaySelectItem>
-        </DisplaySelectContainer>
+
+          <DisplaySelectContainer role="tablist">
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'stats')}
+              active={display === 'stats'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'stats'}
+            >
+              Stats
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => '')}
+              active={display === ''}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === ''}
+            >
+              Adv Stats
+            </DisplaySelectItem>
+          </DisplaySelectContainer>
         </Filters>
         <Main>
-
-        <TableHeading>Skaters</TableHeading>
-        <TableWrapper>
-          <TableContainer>
-            {display === 'ratings' && !isLoadingPlayers ? (
-              <SkaterRatingsTable data={getSkaters()} />
-            ) : display === 'stats' && !isLoadingPlayerStat ? (
-              <SkaterScoreTable data={getSkater()} pagination />
-            ) : (
-              <SkaterAdvStatsTable data={getSkater()} pagination/>
-            )}
-          </TableContainer>
-        </TableWrapper>
-        <TableHeading>Goalies</TableHeading>
-        <TableWrapper>
-          {!isLoadingGoalies && (
+          <TableHeading>Skaters</TableHeading>
+          <TableWrapper>
             <TableContainer>
-              {display === 'ratings' && !isLoadingGoalies ? (
-                <GoalieRatingsTable data={getGoalies()} />
+              {display === 'ratings' && !isLoadingPlayers ? (
+                <SkaterRatingsTable data={getSkaters()} />
+              ) : display === 'stats' && !isLoadingPlayerStat ? (
+                <SkaterScoreTable data={getSkater()} pagination />
               ) : (
-                <GoalieScoreTable data={getGoalie()} pagination />
+                <SkaterAdvStatsTable data={getSkater()} pagination />
               )}
             </TableContainer>
-          )}
-        </TableWrapper>
-                  
+          </TableWrapper>
+          <TableHeading>Goalies</TableHeading>
+          <TableWrapper>
+            {!isLoadingGoalies && (
+              <TableContainer>
+                {display === 'ratings' && !isLoadingGoalies ? (
+                  <GoalieRatingsTable data={getGoalies()} />
+                ) : (
+                  <GoalieScoreTable data={getGoalie()} pagination />
+                )}
+              </TableContainer>
+            )}
+          </TableWrapper>
         </Main>
       </Container>
       <Footer />
@@ -223,8 +221,6 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const Filters = styled.div`
-
-
   @media screen and (max-width: 1024px) {
     display: flex;
     flex-direction: column;
@@ -245,7 +241,6 @@ const Filters = styled.div`
       margin-bottom: 5px;
     }
   }
-
 `;
 
 const SelectorWrapper = styled.div`

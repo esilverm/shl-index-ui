@@ -14,7 +14,11 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, type: longType = 'regular', season: seasonid } = req.query;
+  const {
+    league = 0,
+    type: longType = 'regular',
+    season: seasonid,
+  } = req.query;
 
   let type: string;
   if (longType === 'preseason') {
