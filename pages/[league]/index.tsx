@@ -6,7 +6,7 @@ import { NextSeo } from 'next-seo';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import LiveStream from '../../components/Livestream';
-import Leaders from '../../components/Leaders';
+import HomepageLeaders from '../../components/HomepageLeaders';
 import useLeaders from '../../hooks/useLeaders';
 
 interface Props {
@@ -14,16 +14,45 @@ interface Props {
 }
 
 function LeagueHome({ league }: Props): JSX.Element {
-  const { leaders: skaterLeaders, isLoading: isLoadingSkater } = useLeaders(
+  const { leaders: goalLeader, isLoading: isLoadingGL } = useLeaders(
     league,
     'skater',
-    'points'
+    'goals',
+    null,
+    1
   );
-  const { leaders: goalieLeaders, isLoading: isLoadingGoalie } = useLeaders(
+  const { leaders: pointLeader, isLoading: isLoadingPL } = useLeaders(
+    league,
+    'skater',
+    'points',
+    null,
+    1
+  );
+  const { leaders: winLeader, isLoading: isLoadingWL } = useLeaders(
     league,
     'goalie',
-    'wins'
+    'wins',
+    null,
+    1
   );
+  const { leaders: shutoutLeader, isLoading: isLoadingSL } = useLeaders(
+    league,
+    'goalie',
+    'shutouts',
+    null,
+    1
+  );
+
+  let leaders = [];
+  if (!isLoadingGL && !isLoadingPL && !isLoadingSL && !isLoadingWL) {
+    leaders = [
+      goalLeader[0],
+      pointLeader[0],
+      winLeader[0],
+      shutoutLeader[0]
+    ];
+  }
+
 
   return (
     <React.Fragment>
@@ -38,10 +67,9 @@ function LeagueHome({ league }: Props): JSX.Element {
         <YoutubeEmbedContainer>
           <LiveStream isSHL={league === 'shl'} />
         </YoutubeEmbedContainer>
-        <SkaterLeadersContainer>
-          {!isLoadingSkater && <Leaders league={league} data={skaterLeaders} />}
-          
-        </SkaterLeadersContainer>
+        <HomepageLeadersContainer>
+          <HomepageLeaders league={league} leaders={leaders} />
+        </HomepageLeadersContainer>
       </Container>
       <Footer />
     </React.Fragment>
@@ -59,13 +87,14 @@ const Container = styled.div`
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1224px) {
     width: 100%;
     padding: 2.5%;
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1024px) {
     display: block;
+    height: auto;
   }
 `;
 
@@ -81,9 +110,9 @@ const YoutubeEmbedContainer = styled.div`
   }
 `;
 
-const SkaterLeadersContainer = styled.div`
+const HomepageLeadersContainer = styled.div`
   grid-column: 4 / 5;
-  grid-row: 1 / 3;
+  grid-row: 1 / 7;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
