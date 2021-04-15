@@ -46,7 +46,7 @@ export default async (
 
   const lossLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.Losses
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.Losses
     FROM `
       .append(`player_goalie_stats_${type} AS s`)
       .append(
@@ -55,6 +55,10 @@ export default async (
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
+    INNER JOIN team_data as t
+      ON s.TeamID = t.TeamID
+      AND s.SeasonID = t.SeasonID
+      AND s.LeagueID = t.LeagueID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     ORDER BY s.Losses `
@@ -68,7 +72,12 @@ export default async (
     id: player.PlayerID,
     name: player.Name,
     league: player.LeagueID,
-    team: player.TeamID,
+    team: {
+      id: player.TeamID,
+      name: player.TeamName,
+      nickname: player.TeamNickname,
+      abbr: player.TeamAbbr,
+    },
     season: player.SeasonID,
     losses: player.Losses,
   }));

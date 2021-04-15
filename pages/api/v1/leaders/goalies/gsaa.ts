@@ -44,23 +44,15 @@ export default async (
   `)
     ));
 
-  const averageSavePct = await query(
-    SQL`
-    SELECT AVG(SavePct) as avg
-    FROM `.append(`player_goalie_stats_${type}`).append(SQL`
-    WHERE LeagueID=${+league}
-    AND SeasonID=${season.SeasonID}
-  `)
-  );
-
   const gsaaLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, ((s.ShotsAgainst * (1 - `
-      .append(averageSavePct[0].avg)
-      .append(
-        `)) - s.GoalsAgainst) as GSAA
-    FROM `
-      )
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, ((s.ShotsAgainst * (1 - (
+      SELECT AVG(SavePct)
+      FROM `.append(`player_goalie_stats_${type}`).append(SQL`
+      WHERE LeagueID=${+league}
+      AND SeasonID=${season.SeasonID}
+    ))) - s.GoalsAgainst) as GSAA
+    FROM `)
       .append(`player_goalie_stats_${type} AS s`)
       .append(
         SQL`
@@ -68,6 +60,10 @@ export default async (
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
+    INNER JOIN team_data as t
+      ON s.TeamID = t.TeamID
+      AND s.SeasonID = t.SeasonID
+      AND s.LeagueID = t.LeagueID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     ORDER BY GSAA `
@@ -77,13 +73,16 @@ export default async (
     `)
   );
 
-  console.log(gsaaLeaders);
-
   const parsed = [...gsaaLeaders].map((player) => ({
     id: player.PlayerID,
     name: player.Name,
     league: player.LeagueID,
-    team: player.TeamID,
+    team: {
+      id: player.TeamID,
+      name: player.TeamName,
+      nickname: player.TeamNickname,
+      abbr: player.TeamAbbr,
+    },
     season: player.SeasonID,
     gsaa: player.GSAA,
   }));
