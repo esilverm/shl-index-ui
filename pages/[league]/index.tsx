@@ -6,12 +6,25 @@ import { NextSeo } from 'next-seo';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import LiveStream from '../../components/Livestream';
+import Leaders from '../../components/Leaders';
+import useLeaders from '../../hooks/useLeaders';
 
 interface Props {
   league: string;
 }
 
 function LeagueHome({ league }: Props): JSX.Element {
+  const { leaders: skaterLeaders, isLoading: isLoadingSkater } = useLeaders(
+    league,
+    'skater',
+    'points'
+  );
+  const { leaders: goalieLeaders, isLoading: isLoadingGoalie } = useLeaders(
+    league,
+    'goalie',
+    'wins'
+  );
+
   return (
     <React.Fragment>
       <NextSeo
@@ -25,6 +38,10 @@ function LeagueHome({ league }: Props): JSX.Element {
         <YoutubeEmbedContainer>
           <LiveStream isSHL={league === 'shl'} />
         </YoutubeEmbedContainer>
+        <SkaterLeadersContainer>
+          {!isLoadingSkater && <Leaders league={league} data={skaterLeaders} />}
+          
+        </SkaterLeadersContainer>
       </Container>
       <Footer />
     </React.Fragment>
@@ -62,6 +79,11 @@ const YoutubeEmbedContainer = styled.div`
     grid-row: initial;
     margin: auto;
   }
+`;
+
+const SkaterLeadersContainer = styled.div`
+  grid-column: 4 / 5;
+  grid-row: 1 / 3;
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
