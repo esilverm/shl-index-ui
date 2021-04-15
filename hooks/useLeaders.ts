@@ -1,15 +1,28 @@
 import useSWR from 'swr';
-import { PlayerRatings } from '../';
+
 import { getQuerySeason } from '../utils/season';
 
 const useLeaders = (
   league: string,
   playerType = 'skater',
   stat = 'goals',
-  limit = 10,
-  seasonType = 'Regular Season'
+  seasonType = 'Regular Season',
+  limit = 10
 ): {
-  leaders: Array<PlayerRatings>;
+  leaders: Array<{
+    id: number;
+    name: string;
+    league: number;
+    team: {
+      id: number;
+      name: string;
+      nickname: string;
+      abbr: string;
+    };
+    season: number;
+    stat: number | string;
+    statName: string;
+  }>;
   isLoading: boolean;
   isError: boolean;
 } => {
@@ -30,7 +43,7 @@ const useLeaders = (
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leaders/${endpoint}?league=${leagueid}${seasonParam}${limitParam}${seasonTypeParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leaders${endpoint}?league=${leagueid}${seasonParam}${limitParam}${seasonTypeParam}`
   );
 
   return {
