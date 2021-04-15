@@ -88,7 +88,7 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
-    gsaa: player.GSAA,
+    stat: player.GSAA,
   }));
 
   res.status(200).json(parsed);
