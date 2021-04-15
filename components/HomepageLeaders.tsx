@@ -21,9 +21,6 @@ interface Props {
 }
 
 function HomepageLeaders({ leaders, league}: Props): JSX.Element {
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isloadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
@@ -35,7 +32,6 @@ function HomepageLeaders({ leaders, league}: Props): JSX.Element {
         `../public/team_logos/${league.toUpperCase()}/`
       );
       setSprites(() => s);
-      setLoadingAssets(() => false);
     })();
   }, [leaders]);
 
