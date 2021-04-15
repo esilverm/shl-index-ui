@@ -538,7 +538,8 @@ const LogoWrapper = styled.div<{ abbr: string }>`
 `;
 
 const GoalDiff = styled.span<{ value: number }>`
-  color: ${({ value, theme }) => (value === 0 ? theme.colors.grey900 : value > 0 ? '#48b400' : '#d60000')};
+  color: ${({ value, theme }) =>
+    value === 0 ? theme.colors.grey900 : value > 0 ? '#48b400' : '#d60000'};
 `;
 
 const HomeAwayRecords = styled.div`

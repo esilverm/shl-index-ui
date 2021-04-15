@@ -17,18 +17,19 @@ export default async (
   const {
     league = 0,
     season: seasonid,
-    type: shorttype = 'rs',
+    type: longType = 'regular',
     limit = 10,
     desc = true,
   } = req.query;
 
   let type: string;
-  if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
-    type = shorttype;
+  if (longType === 'preseason') {
+    type = 'ps';
+  } else if (longType === 'playoffs') {
+    type = 'po';
   } else {
     type = 'rs';
   }
-
   const [season] =
     (seasonid !== undefined &&
       !Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||

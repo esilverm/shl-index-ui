@@ -12,11 +12,16 @@ interface Hook {
 const useStandings = (
   league: string,
   display = 'league',
-  seasonType = 'Regular Season',
+  seasonType = 'Regular Season'
 ): Hook => {
-  console.log(seasonType)
+  console.log(seasonType);
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
-  const endpoint = seasonType === 'Playoffs' ? 'standings/playoffs' : seasonType === 'Pre-Season' ? 'standings/preseason' : 'standings';
+  const endpoint =
+    seasonType === 'Playoffs'
+      ? 'standings/playoffs'
+      : seasonType === 'Pre-Season'
+      ? 'standings/preseason'
+      : 'standings';
   const displayParam = seasonType !== 'Playoffs' ? `&display=${display}` : '';
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
