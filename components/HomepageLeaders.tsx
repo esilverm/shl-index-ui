@@ -20,7 +20,7 @@ interface Props {
   league: string;
 }
 
-function HomepageLeaders({ leaders, league}: Props): JSX.Element {
+function HomepageLeaders({ leaders,  league}: Props): JSX.Element {
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
@@ -35,11 +35,12 @@ function HomepageLeaders({ leaders, league}: Props): JSX.Element {
     })();
   }, [leaders]);
 
+
   return (
     <Container>
       <Link href="/[league]/leaders" as={`/${league}/leaders`} passHref><Title>League Leaders</Title></Link>
       {
-        leaders.map(({name, team, stat, statName}, i) => {
+        leaders[0] ? leaders.map(({name, team, stat, statName}, i) => {
           const Logo = sprites[team.abbr];
 
           return (
@@ -61,6 +62,8 @@ function HomepageLeaders({ leaders, league}: Props): JSX.Element {
             </LeaderContainer>
           )
         })
+        :
+        <NoContent>No Data to Display</NoContent>
       }
     </Container>
   );
@@ -86,6 +89,11 @@ const Title = styled.h3`
   padding: 1rem;
   border-bottom: 2px solid ${({theme}) => theme.colors.grey300};
   cursor: pointer;
+`;
+
+const NoContent = styled.h3`
+  font-size: 1.5rem;
+  padding: 1rem;
 `;
 
 const LeaderContainer = styled.div`

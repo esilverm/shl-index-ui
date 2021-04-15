@@ -53,6 +53,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     ];
   }
 
+  console.log(leaders);
 
   return (
     <React.Fragment>
