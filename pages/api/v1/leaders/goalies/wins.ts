@@ -79,6 +79,7 @@ export default async (
     },
     season: player.SeasonID,
     stat: player.Wins,
+    statName: "Wins",
   }));
 
   res.status(200).json(parsed);
