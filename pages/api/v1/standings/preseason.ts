@@ -110,7 +110,7 @@ export default async (
     AND ps.SeasonID=${season.SeasonID}
   `)
   );
-  
+
   const parsed = preseason.map((team) => ({
     position: team.Position,
     id: team.TeamID,
@@ -125,7 +125,7 @@ export default async (
     losses: team.Losses,
     OTL: team.OTL + team.SOL,
     points: team.PTS,
-    winPercentage: (team.PTS / (Math.max(team.GP, 1) * 2)).toFixed(3),
+    winPercent: (team.PTS / (Math.max(team.GP, 1) * 2)).toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
     goalsAgainst: team.GA,

@@ -22,7 +22,7 @@ function Standings({ league }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
   const [isLoadingView, setIsLoadingView] = useState(true);
-  const { data, isLoading } = useStandings(league, display, isPlayoffs);
+  const { data, isLoading } = useStandings(league, display, seasonType);
 
   useEffect(() => {
     const nextIsPlayoffs = seasonType === 'Playoffs';
