@@ -88,6 +88,10 @@ const Container = styled.div`
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
 
+  @media screen and (min-width: 2200px) {
+    height: auto;
+  }
+
   @media screen and (max-width: 1224px) {
     width: 100%;
     padding: 2.5%;
