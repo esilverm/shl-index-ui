@@ -81,9 +81,9 @@ export default async (
       shotsAgainst: player.ShotsAgainst,
       saves: player.Saves,
       goalsAgainst: player.GoalsAgainst,
-      gaa: player.GAA,
+      gaa: player.GAA.toFixed(2),
       shutouts: player.Shutouts,
-      savePct: player.SavePct,
+      savePct: player.SavePct.toFixed(3),
       gameRating: player.GameRating,
     };
   });

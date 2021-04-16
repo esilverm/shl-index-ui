@@ -88,7 +88,7 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
-    stat: player.GAA,
+    stat: player.GAA.toFixed(2),
     statName: 'GAA',
   }));
 

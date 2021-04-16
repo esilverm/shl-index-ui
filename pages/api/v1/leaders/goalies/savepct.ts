@@ -89,7 +89,7 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
-    stat: player.SavePct,
+    stat: player.SavePct.toFixed(3),
     statName: 'Save%',
   }));
 
