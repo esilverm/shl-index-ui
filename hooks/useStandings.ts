@@ -14,7 +14,6 @@ const useStandings = (
   display = 'league',
   seasonType = 'Regular Season'
 ): Hook => {
-  console.log(seasonType);
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const endpoint =
     seasonType === 'Playoffs'

@@ -20,7 +20,7 @@ interface Props {
   league: string;
 }
 
-function HomepageLeaders({ leaders,  league}: Props): JSX.Element {
+function HomepageLeaders({ leaders, league }: Props): JSX.Element {
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
@@ -35,17 +35,17 @@ function HomepageLeaders({ leaders,  league}: Props): JSX.Element {
     })();
   }, [leaders]);
 
-
   return (
     <Container>
-      <Link href="/[league]/leaders" as={`/${league}/leaders`} passHref><Title>League Leaders</Title></Link>
-      {
-        leaders[0] ? leaders.map(({name, team, stat, statName}, i) => {
+      <Link href="/[league]/leaders" as={`/${league}/leaders`} passHref>
+        <Title>League Leaders</Title>
+      </Link>
+      {leaders[0] ? (
+        leaders.map(({ name, team, stat, statName }, i) => {
           const Logo = sprites[team.abbr];
 
           return (
             <LeaderContainer key={`${statName}_${name}_${i}`}>
-
               <LeaderStatWrapper>
                 <LeaderName>{name}</LeaderName>
                 <LeaderStats>
@@ -54,21 +54,16 @@ function HomepageLeaders({ leaders,  league}: Props): JSX.Element {
                 </LeaderStats>
               </LeaderStatWrapper>
 
-              <LogoWrapper>
-                {
-                  Logo && <Logo />
-                }
-              </LogoWrapper>
+              <LogoWrapper>{Logo && <Logo />}</LogoWrapper>
             </LeaderContainer>
-          )
+          );
         })
-        :
+      ) : (
         <NoContent>No Data to Display</NoContent>
-      }
+      )}
     </Container>
   );
 }
-
 
 const Container = styled.div`
   width: 100%;
@@ -87,7 +82,7 @@ const Container = styled.div`
 const Title = styled.h3`
   font-size: 2rem;
   padding: 1rem;
-  border-bottom: 2px solid ${({theme}) => theme.colors.grey300};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
   cursor: pointer;
 `;
 
@@ -99,7 +94,7 @@ const NoContent = styled.h3`
 const LeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  border-bottom: 2px solid ${({theme}) => theme.colors.grey300};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
   margin: 0 5%;
   padding: 1rem 0;
 `;
@@ -130,7 +125,6 @@ const LeaderStats = styled.div`
 
 const LogoWrapper = styled.div`
   width: 30%;
-  
 `;
 
 export default HomepageLeaders;

@@ -45,15 +45,8 @@ function LeagueHome({ league }: Props): JSX.Element {
 
   let leaders = [];
   if (!isLoadingGL && !isLoadingPL && !isLoadingSL && !isLoadingWL) {
-    leaders = [
-      goalLeader[0],
-      pointLeader[0],
-      winLeader[0],
-      shutoutLeader[0]
-    ];
+    leaders = [goalLeader[0], pointLeader[0], winLeader[0], shutoutLeader[0]];
   }
-
-  console.log(leaders);
 
   return (
     <React.Fragment>

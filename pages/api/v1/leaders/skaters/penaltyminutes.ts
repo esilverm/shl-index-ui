@@ -80,7 +80,7 @@ export default async (
     },
     season: player.SeasonID,
     stat: player.PenaltyMinutes,
-    statName: "Penalty Minutes",
+    statName: 'Penalty Minutes',
   }));
 
   res.status(200).json(parsed);

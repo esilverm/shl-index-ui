@@ -80,7 +80,7 @@ export default async (
     },
     season: player.SeasonID,
     stat: player.Shutouts,
-    statName: "Shutouts",
+    statName: 'Shutouts',
   }));
 
   res.status(200).json(parsed);

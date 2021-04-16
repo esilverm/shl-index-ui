@@ -125,7 +125,10 @@ export default async (
     losses: team.Losses,
     OTL: team.OTL + team.SOL,
     points: team.PTS,
-    winPercent: (team.PTS / (Math.max(team.GP, 1) * 2)).toFixed(3),
+    winPercent: (
+      team.PTS /
+      (Math.max(team.Wins + team.Losses + team.OTL + team.SOL, 1) * 2)
+    ).toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
     goalsAgainst: team.GA,
