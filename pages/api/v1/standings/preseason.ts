@@ -120,14 +120,14 @@ export default async (
     abbreviation: team.Abbr,
     conference: team.Conference,
     division: team.Division,
-    gp: team.Wins + team.Losses + team.OTL + team.SOL,
+    gp: team.Wins + team.Losses + team.OTL,
     wins: team.Wins,
     losses: team.Losses,
-    OTL: team.OTL + team.SOL,
+    OTL: team.OTL,
     points: team.PTS,
     winPercent: (
       team.PTS /
-      (Math.max(team.Wins + team.Losses + team.OTL + team.SOL, 1) * 2)
+      (Math.max(team.Wins + team.Losses + team.OTL, 1) * 2)
     ).toFixed(3),
     ROW: team.Wins - team.SOW,
     goalsFor: team.GF,
