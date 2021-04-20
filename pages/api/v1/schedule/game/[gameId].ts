@@ -28,6 +28,7 @@ interface TeamIdentity {
   name: string;
   nickname: string;
   abbr: string;
+  primaryColor: string;
 }
 
 export interface Matchup {
@@ -56,7 +57,7 @@ export default async (
   const { gameId } = req.query;
 
   const gameSearch = SQL`
-  SELECT DISTINCT s.Slug, s.SeasonID, s.LeagueID, s.Type, s.Date, s.Home, t1.Name as 'HomeName', t1.Nickname as 'HomeNickname', t1.abbr AS 'HomeAbbr', tr1.Wins as 'HomeWins', tr1.Losses as 'HomeLosses', tr1.OTL as 'HomeOTL', tr1.SOW as 'HomeSOW', tr1.SOL as 'HomeSOL', tr1.GF as 'HomeGF', tr1.GA as 'HomeGA', s.HomeScore, s.Away, t2.Name as 'AwayName', t2.Nickname as 'AwayNickname', t2.abbr AS 'AwayAbbr',  tr2.Wins as 'AwayWins', tr2.Losses as 'AwayLosses', tr2.OTL as 'AwayOTL', tr2.SOW as 'AwaySOW', tr2.SOL as 'AwaySOL', tr2.GF as 'AwayGF', tr2.GA as 'AwayGA', s.AwayScore, s.Overtime, s.Shootout, s.Played
+  SELECT DISTINCT s.Slug, s.SeasonID, s.LeagueID, s.Type, s.Date, s.Home, t1.Name as 'HomeName', t1.Nickname as 'HomeNickname', t1.abbr AS 'HomeAbbr', t1.PrimaryColor AS 'HomePrimaryColor', tr1.Wins as 'HomeWins', tr1.Losses as 'HomeLosses', tr1.OTL as 'HomeOTL', tr1.SOW as 'HomeSOW', tr1.SOL as 'HomeSOL', tr1.GF as 'HomeGF', tr1.GA as 'HomeGA', s.HomeScore, s.Away, t2.Name as 'AwayName', t2.Nickname as 'AwayNickname', t2.Abbr AS 'AwayAbbr', t2.PrimaryColor AS 'AwayPrimaryColor', tr2.Wins as 'AwayWins', tr2.Losses as 'AwayLosses', tr2.OTL as 'AwayOTL', tr2.SOW as 'AwaySOW', tr2.SOL as 'AwaySOL', tr2.GF as 'AwayGF', tr2.GA as 'AwayGA', s.AwayScore, s.Overtime, s.Shootout, s.Played
     FROM slugviewer AS s
     INNER JOIN team_data as t1
       ON t1.TeamID = s.Home 
@@ -152,11 +153,13 @@ export default async (
         name: game.AwayName,
         nickname: game.AwayNickname,
         abbr: game.AwayAbbr,
+        primaryColor: game.AwayPrimaryColor
       },
       home: {
         name: game.HomeName,
         nickname: game.HomeNickname,
-        abbr: game.HomwAbbr,
+        abbr: game.HomeAbbr,
+        primaryColor: game.HomePrimaryColor
       },
     },
     teamStats: {
