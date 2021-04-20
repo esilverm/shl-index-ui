@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import styled from 'styled-components';
 
 import Header from '../../../../components/Header';
-import { Matchup as MatchupData } from '../../../api/v1/schedule/[gameId]';
+import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 
 interface Props {
   league: string;
@@ -19,12 +19,12 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   }>({});
 
   const { data, error } = useSWR<MatchupData>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/${gameId}`
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/game/${gameId}`
   );
 
   useEffect(() => {
     if (!data) return;
-
+    console.log(data);
     // Dynamically import svg icons based on the league chosen
     (async () => {
       const { default: s } = await import(
@@ -32,8 +32,8 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       );
 
       const teamSprites = {
-        Away: s[data.teams.away.Abbr],
-        Home: s[data.teams.home.Abbr]
+        Away: s[data.teams.away.abbr],
+        Home: s[data.teams.home.abbr]
       };
 
       setSprites(() => teamSprites);
@@ -70,8 +70,8 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         }
       }
     };
-    const awayColor = data.teams.away.PrimaryColor;
-    const homeColor = data.teams.home.PrimaryColor;
+    const awayColor = data.teams.away.primaryColor;
+    const homeColor = data.teams.home.primaryColor;
     Object.keys(data.teamStats).forEach((team) => {
       stats.goalsForPerGame[team].total = parseFloat((data.teamStats[team].goalsFor / data.teamStats[team].gamesPlayed).toFixed(2));
       stats.goalsAgainstPerGame[team].total = parseFloat((data.teamStats[team].goalsAgainst / data.teamStats[team].gamesPlayed).toFixed(2));
@@ -98,22 +98,24 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   };
 
   const renderPreviousMatchups = () => data.previousMatchups.map((matchup) => (
-    <Matchup key={matchup.Slug}>
-      <span>{matchup.Date}</span>
-      <FlexRow>
+    <Matchup key={matchup.slug}>
+      <SectionTitle>
+        {matchup.date}
+      </SectionTitle>
+      <MatchupTeamRow>
         <TeamLogoSmall>
-          {matchup.Away === data.game.Away ? <Sprites.Away /> : <Sprites.Home />}
+          {matchup.awayTeam === data.game.awayTeam ? <Sprites.Away /> : <Sprites.Home />}
         </TeamLogoSmall>
-        <span>{matchup.Away === data.game.Away ? data.teams.away.Nickname : data.teams.home.Nickname}</span>
-        <span>{matchup.AwayScore}</span>
-      </FlexRow>
-      <FlexRow>
+        <span>{matchup.awayTeam === data.game.awayTeam ? data.teams.away.nickname : data.teams.home.nickname}</span>
+        <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>{matchup.awayScore}</MatchupRowScore>
+      </MatchupTeamRow>
+      <MatchupTeamRow>
         <TeamLogoSmall>
-          {matchup.Home === data.game.Home ? <Sprites.Home /> : <Sprites.Away />}
+          {matchup.homeTeam === data.game.homeTeam ? <Sprites.Home /> : <Sprites.Away />}
         </TeamLogoSmall>
-        <span>{matchup.Home === data.game.Home ? data.teams.home.Nickname : data.teams.away.Nickname}</span>
-        <span>{matchup.HomeScore}</span>
-      </FlexRow>
+        <span>{matchup.homeTeam === data.game.homeTeam ? data.teams.home.nickname : data.teams.away.nickname}</span>
+        <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>{matchup.homeScore}</MatchupRowScore>
+      </MatchupTeamRow>
     </Matchup>
   ));
 
@@ -133,7 +135,9 @@ function GameResults({ league, gameId }: Props): JSX.Element {
               <TeamLogoSmall>
                 <Sprites.Away />
               </TeamLogoSmall>
-              <strong>Team Stats</strong>
+              <SectionTitle>
+                Team Stats
+              </SectionTitle>
               <TeamLogoSmall>
                 <Sprites.Home />
               </TeamLogoSmall>
@@ -145,7 +149,9 @@ function GameResults({ league, gameId }: Props): JSX.Element {
           <Result>
             <FlexColumn>
               <GameDate>
-                {data.game.Date}
+                <SectionTitle>
+                  {data.game.date}
+                </SectionTitle>
               </GameDate>
               <FlexRow>
                 <TeamData>
@@ -154,7 +160,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
                   </TeamLogo>
                   <FlexColumn>
                     <TeamName>
-                      {`${data.teams.away.Name} ${data.teams.away.Nickname}`}
+                      {`${data.teams.away.name} ${data.teams.away.nickname}`}
                     </TeamName>
                     <TeamRecord>
                       {data.teamStats.away.record}
@@ -164,7 +170,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
                 <TeamData>
                   <FlexColumn>
                     <TeamName home>
-                      {`${data.teams.home.Name} ${data.teams.home.Nickname}`}
+                      {`${data.teams.home.name} ${data.teams.home.nickname}`}
                     </TeamName>
                     <TeamRecord home>
                       {data.teamStats.home.record}
@@ -179,7 +185,11 @@ function GameResults({ league, gameId }: Props): JSX.Element {
           </Result>
         </Comparison>
         <PreviousMatchups>
-          Previous Matchups
+          <MatchupsHeader>
+            <SectionTitle>
+              Season Series
+            </SectionTitle>
+          </MatchupsHeader>
           {renderPreviousMatchups()}
         </PreviousMatchups>
       </Container>
@@ -188,7 +198,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 }
 
 const Container = styled.div`
-  width: 75%;
+  width: 65%;
   padding: 41px 0 40px 0;
   margin: 0 auto;
   display: flex;
@@ -217,6 +227,10 @@ const FlexColumn = styled.div`
   height: fit-content;
 `;
 
+const SectionTitle = styled.span`
+  font-weight: 600;
+`;
+
 // Left
 const TeamStats = styled.div`
   display: flex;
@@ -227,6 +241,7 @@ const TeamStats = styled.div`
 `;
 
 const TeamStatsHeader = styled.div`
+  font-weight: 600;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
 `;
 
@@ -261,7 +276,8 @@ const Comparison = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
   padding: 0 15px 15px 15px;
-  width: 500px;
+  flex: 1;
+  margin: 0 20px;
 `;
 
 const Result = styled.div`
@@ -290,7 +306,9 @@ const TeamData = styled.div`
 `;
 
 const GameDate = styled.div`
+  font-family: Montserrat, sans-serif;
   font-weight: 600;
+  font-size: 14px;
   border-bottom: 4px solid ${({ theme }) => theme.colors.grey300};
   margin-bottom: 10px;
   padding 10px 0;
@@ -307,14 +325,16 @@ const TeamName = styled.span<{
 const TeamRecord = styled.span<{
   home?: boolean;
 }>`
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
   text-align: ${({ home }) => home ? 'right' : 'left'};
   padding: 0 10px;
   color: ${({ theme }) => theme.colors.grey600};
 `;
 
 const TeamLogoSmall = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 `;
 
 const TeamLogo = styled.div`
@@ -326,12 +346,63 @@ const TeamLogo = styled.div`
 const PreviousMatchups = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.grey100};
+  padding: 0 15px;
+  width: 300px;
+
+  div:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+`;
+
+const MatchupTeamRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  div:first-child {
+    margin-right: 10px;
+  }
+`;
+
+const MatchupRowScore = styled.span<{
+  lost?: boolean;
+}>`
+  ${({ lost, theme }) => lost && `color: ${theme.colors.grey500};`};
+  font-family: Montserrat, sans-serif;
+  margin-left: auto;
+  font-size: 16px;
+`;
+
+const MatchupsHeader = styled.div`
+  font-weight: 600;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+  margin-bottom: 10px;
+  padding: 10px 0;
 `;
 
 // Component?
 const Matchup = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+
+  * {
+    padding-bottom: 5px;
+  }
+
+  span:first-child {
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
