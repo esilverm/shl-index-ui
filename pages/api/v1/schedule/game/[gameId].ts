@@ -31,6 +31,23 @@ interface TeamIdentity {
   primaryColor: string;
 }
 
+interface SkaterStats {
+  name: string;
+  goals: number;
+  assists: number;
+  plusMinus: number;
+}
+
+interface GoalieStats {
+  name: string;
+  wins: number;
+  losses: number;
+  OT: number;
+  GAA: number;
+  savePct: number;
+  shutouts: number;
+}
+
 export interface Matchup {
   game: Game;
   teams: {
@@ -40,6 +57,14 @@ export interface Matchup {
   teamStats: {
     away: TeamStats;
     home: TeamStats;
+  };
+  skaterStats: {
+    away: SkaterStats;
+    home: SkaterStats;
+  };
+  goalieStats: {
+    away: GoalieStats;
+    home: GoalieStats;
   };
   previousMatchups: Game[];
 }
@@ -95,7 +120,33 @@ export default async (
     ORDER BY CAST(Date as DATE) DESC;
   `;
 
+  const skaterStatsSearch = SQL`
+    SELECT p.\`Last Name\` as 'Name', ss.G, ss.A, ss.PlusMinus, ss.TeamID
+    FROM player_skater_stats_rs as ss
+    INNER JOIN player_master as p
+      ON ss.SeasonID = p.SeasonID
+      AND ss.LeagueID = p.LeagueID
+      AND ss.PlayerID = p.PlayerID
+    WHERE ss.SeasonID=${SeasonID}
+      AND ss.LeagueID=${LeagueID}
+      AND (ss.TeamID=${Away} OR ss.TeamID=${Home})
+  `;
+
+  const goalieStatsSearch = SQL`
+    SELECT p.\`Last Name\` as 'Name', gs.Wins, gs.Losses, gs.OT, gs.GAA, gs.SavePct, gs.Shutouts, gs.TeamID
+    FROM player_goalie_stats_rs as gs
+    INNER JOIN player_master as p
+      ON gs.SeasonID = p.SeasonID
+      AND gs.LeagueID = p.LeagueID
+      AND gs.PlayerID = p.PlayerID
+    WHERE gs.SeasonID=${SeasonID}
+      AND gs.LeagueID=${LeagueID}
+      AND (gs.TeamID=${Away} OR gs.TeamID=${Home})
+  `;
+
   const previousMatchups: Array<GameRow> = await query(previousMatchupsSearch);
+  const skaterStats = await query(skaterStatsSearch);
+  const goalieStats = await query(goalieStatsSearch);
 
   const awayStats: TeamStats = {
     gamesPlayed: parseGamesPlayed({ 
@@ -165,6 +216,48 @@ export default async (
     teamStats: {
       away: awayStats,
       home: homeStats
+    },
+    skaterStats: {
+      away: skaterStats
+        .filter((skater) => skater.TeamID === Away)
+        .map((skater) => ({
+          name: skater.Name,
+          goals: skater.G,
+          assists: skater.A,
+          plusMinus: skater.PlusMinus
+        })),
+      home: skaterStats
+        .filter((skater) => skater.TeamID === Home)
+        .map((skater) => ({
+          name: skater.Name,
+          goals: skater.G,
+          assists: skater.A,
+          plusMinus: skater.PlusMinus
+        })),
+    },
+    goalieStats: {
+      away: goalieStats
+        .filter((goalie) => goalie.TeamID === Away)
+        .map((goalie) => ({
+          name: goalie.Name,
+          wins: goalie.Wins,
+          losses: goalie.Losses,
+          OT: goalie.OT,
+          GAA: goalie.GAA,
+          savePct: goalie.SavePct,
+          shutouts: goalie.Shutouts
+        })),
+      home: goalieStats
+        .filter((goalie) => goalie.TeamID === Home)
+        .map((goalie) => ({
+          name: goalie.Name,
+          wins: goalie.Wins,
+          losses: goalie.Losses,
+          OT: goalie.OT,
+          GAA: goalie.GAA,
+          savePct: goalie.SavePct,
+          shutouts: goalie.Shutouts
+        })),
     },
     previousMatchups: parsedPrevMatchups
   };
