@@ -82,21 +82,17 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     return (
       <>
         <TeamStatsRow>
-          <FlexRow>
-            <StatValue>{stats.goalsForPerGame.away.total}</StatValue>
-            <StatTitle>{stats.goalsForPerGame.title}</StatTitle>
-            <StatValue>{stats.goalsForPerGame.home.total}</StatValue>
-          </FlexRow>
-          <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsForPerGame.away.perc} homeColor={homeColor} />
+          <StatValue>{stats.goalsForPerGame.away.total}</StatValue>
+          <StatTitle>{stats.goalsForPerGame.title}</StatTitle>
+          <StatValue home>{stats.goalsForPerGame.home.total}</StatValue>
         </TeamStatsRow>
+        <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsForPerGame.away.perc} homeColor={homeColor} />
         <TeamStatsRow>
-          <FlexRow>
-            <StatValue>{stats.goalsAgainstPerGame.away.total}</StatValue>
-            <StatTitle>{stats.goalsAgainstPerGame.title}</StatTitle>
-            <StatValue>{stats.goalsAgainstPerGame.home.total}</StatValue>
-          </FlexRow>
-          <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsAgainstPerGame.away.perc} homeColor={homeColor} />
+          <StatValue>{stats.goalsAgainstPerGame.away.total}</StatValue>
+          <StatTitle>{stats.goalsAgainstPerGame.title}</StatTitle>
+          <StatValue home>{stats.goalsAgainstPerGame.home.total}</StatValue>
         </TeamStatsRow>
+        <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsAgainstPerGame.away.perc} homeColor={homeColor} />
       </>
     )
   };
@@ -148,7 +144,9 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         <Comparison>
           <Result>
             <FlexColumn>
-              {data.game.Date}
+              <GameDate>
+                {data.game.Date}
+              </GameDate>
               <FlexRow>
                 <TeamData>
                   <TeamLogo>
@@ -165,10 +163,10 @@ function GameResults({ league, gameId }: Props): JSX.Element {
                 </TeamData>
                 <TeamData>
                   <FlexColumn>
-                    <TeamName>
+                    <TeamName home>
                       {`${data.teams.home.Name} ${data.teams.home.Nickname}`}
                     </TeamName>
-                    <TeamRecord>
+                    <TeamRecord home>
                       {data.teamStats.home.record}
                     </TeamRecord>
                   </FlexColumn>
@@ -215,6 +213,8 @@ const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
+  height: fit-content;
 `;
 
 // Left
@@ -231,7 +231,11 @@ const TeamStatsHeader = styled.div`
 `;
 
 const TeamStatsRow = styled.div`
-  padding: 15px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 15px;
+  padding-bottom: 5px;
 `;
 
 const TeamStatsBar = styled.div<{
@@ -255,26 +259,57 @@ const TeamStatsBar = styled.div<{
 const Comparison = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.grey100};
+  padding: 0 15px 15px 15px;
+  width: 500px;
 `;
 
 const Result = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;
 
 const StatTitle = styled.span`
   font-size: 16px;
 `;
 
-const StatValue = styled.span`
+const StatValue = styled.span<{
+  home?: boolean;
+}>`
   font-family: Montserrat, sans-serif;
   font-size: 22px;
   font-weight: 700;
+  flex: 1;
+  ${({ home }) => home && 'text-align: right;'};
 `;
 
 const TeamData = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const GameDate = styled.div`
+  font-weight: 600;
+  border-bottom: 4px solid ${({ theme }) => theme.colors.grey300};
+  margin-bottom: 10px;
+  padding 10px 0;
+`;
+
+const TeamName = styled.span<{
+  home?: boolean;
+}>`
+  text-align: ${({ home }) => home ? 'right' : 'left'};
+  padding: 0 10px;
+  font-weight: 600;
+`;
+
+const TeamRecord = styled.span<{
+  home?: boolean;
+}>`
+  text-align: ${({ home }) => home ? 'right' : 'left'};
+  padding: 0 10px;
+  color: ${({ theme }) => theme.colors.grey600};
 `;
 
 const TeamLogoSmall = styled.div`
@@ -283,16 +318,8 @@ const TeamLogoSmall = styled.div`
 `;
 
 const TeamLogo = styled.div`
-  width: 40px;
-  height: 40px;
-`;
-
-const TeamName = styled.span`
-
-`;
-
-const TeamRecord = styled.span`
-
+  width: 50px;
+  height: 50px;
 `;
 
 // Right
