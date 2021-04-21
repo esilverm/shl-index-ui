@@ -65,7 +65,7 @@ export default async (
       aggression: player.Aggression,
       mentalToughness: player.MentalToughness,
       determination: player.Determination,
-      teamPlayer: player.TeamPlayer,
+      teamPlayer: player.Teamplayer,
       leadership: player.Leadership,
       goalieStamina: player.GoalieStamina,
       professionalism: player.Professionalism,

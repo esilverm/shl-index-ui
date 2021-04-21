@@ -95,7 +95,7 @@ export default async (
       aggression: player.Aggression,
       bravery: player.Bravery,
       determination: player.Determination,
-      teamPlayer: player.TeamPlayer,
+      teamPlayer: player.Teamplayer,
       leadership: player.Leadership,
       temperament: player.Temperament,
       professionalism: player.Professionalism,
