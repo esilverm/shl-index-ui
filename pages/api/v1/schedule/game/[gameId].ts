@@ -38,7 +38,7 @@ interface SkaterStats {
   plusMinus: number;
 }
 
-interface GoalieStats {
+export interface GoalieStats {
   name: string;
   wins: number;
   losses: number;
@@ -59,14 +59,14 @@ export interface Matchup {
     home: TeamStats;
   };
   skaterStats: {
-    away: SkaterStats[];
-    home: SkaterStats[];
+    away: Array<SkaterStats>;
+    home: Array<SkaterStats>;
   };
   goalieStats: {
-    away: GoalieStats[];
-    home: GoalieStats[];
+    away: Array<GoalieStats>;
+    home: Array<GoalieStats>;
   };
-  previousMatchups: Game[];
+  previousMatchups: Array<Game>;
 }
 
 const parseGamesPlayed = (record: TeamRecordRow) => record ? record.Wins + record.Losses + record.OTL + record.SOL : 0;

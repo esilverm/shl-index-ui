@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import styled from 'styled-components';
 
 import Header from '../../../../components/Header';
-import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
+import { Matchup as MatchupData, GoalieStats } from '../../../api/v1/schedule/game/[gameId]';
 
 interface Props {
   league: string;
@@ -45,7 +45,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   const renderTeamStats = () => {
     const stats = {
       goalsForPerGame: {
-        title: "GF/GP",
+        title: 'GF/GP',
         away: {
           total: 0,
           perc: 0
@@ -56,7 +56,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         }
       },
       goalsAgainstPerGame: {
-        title: "GA/GP",
+        title: 'GA/GP',
         away: {
           total: 0,
           perc: 0
@@ -138,29 +138,29 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     const defaultStatLeaders = {
       away: {
         player: '',
-        value: 0
+        value: -99
       },
       home: {
         player: '',
-        value: 0
+        value: -99
       }
     };
     // Using JSON because the spread and Object.assign operators copied the object with its reference
     const teamLeaders = {
       points: {
-        label: "Points",
+        label: 'Points',
         ...JSON.parse(JSON.stringify(defaultStatLeaders))
       },
       goals: {
-        label: "Goals",
+        label: 'Goals',
         ...JSON.parse(JSON.stringify(defaultStatLeaders))
       },
       assists: {
-        label: "Assists",
+        label: 'Assists',
         ...JSON.parse(JSON.stringify(defaultStatLeaders))
       },
       plusMinus: {
-        label: "+/-",
+        label: '+/-',
         ...JSON.parse(JSON.stringify(defaultStatLeaders))
       }
     };
@@ -169,7 +169,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       data.skaterStats[team].forEach((skater) => {
         const points = skater.goals + skater.assists;
         Object.keys(teamLeaders).forEach((stat) => {
-          const skaterValue = stat === "points" ? points : skater[stat];
+          const skaterValue = stat === 'points' ? points : skater[stat];
           if (skaterValue > teamLeaders[stat][team].value) {
             teamLeaders[stat][team].player = skater.name;
             teamLeaders[stat][team].value = skaterValue;
@@ -180,7 +180,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
     return (
       <SkaterComparison>
-        <SkaterComparisonHeader>
+        <ComparisonHeader>
           <TeamLogoSmall>
             <Sprites.Away />
           </TeamLogoSmall>
@@ -190,12 +190,12 @@ function GameResults({ league, gameId }: Props): JSX.Element {
           <TeamLogoSmall>
             <Sprites.Home />
           </TeamLogoSmall>
-        </SkaterComparisonHeader>
+        </ComparisonHeader>
         <SkaterStats>
           {Object.keys(teamLeaders).map((stat) => (
             <StatComparison key={stat}>
               <TeamLeader>
-                <LeaderPlayer>{teamLeaders[stat].away.player}</LeaderPlayer>
+                <LeaderSkater>{teamLeaders[stat].away.player}</LeaderSkater>
                 <LeaderValue gray={teamLeaders[stat].away.value < teamLeaders[stat].home.value}>{teamLeaders[stat].away.value}</LeaderValue>
               </TeamLeader>
               <LeaderLabel>
@@ -203,7 +203,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
               </LeaderLabel>
               <TeamLeader home>
                 <LeaderValue gray={teamLeaders[stat].home.value < teamLeaders[stat].away.value}>{teamLeaders[stat].home.value}</LeaderValue>
-                <LeaderPlayer>{teamLeaders[stat].home.player}</LeaderPlayer>
+                <LeaderSkater>{teamLeaders[stat].home.player}</LeaderSkater>
               </TeamLeader>
             </StatComparison>
           ))}
@@ -212,6 +212,66 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     );
   };
 
+  const renderGoalieComparison = () => {
+    const sortByGamesPlayed = (goalies: Array<GoalieStats>) => goalies.sort((a, b) => (a.wins + a.losses + a.OT > b.wins + b.losses + b.OT) ? -1 : 1);
+    const statLabels = {
+      record: 'Record',
+      GAA: 'GAA',
+      savePct: 'SV%',
+      shutouts: 'SO'
+    };
+    const renderAwayGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(data.goalieStats[team])).map((goalie) => (
+      <>
+        <GoalieName>
+          {goalie.name}
+        </GoalieName>
+        <FlexRow>
+          <GoalieStat>
+            <span>{statLabels.record}</span>
+            <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
+          </GoalieStat>
+          {Object.keys(goalie).map((stat) => {
+            if (!Object.keys(statLabels).includes(stat)) {
+              return null;
+            }
+
+            return (
+              <GoalieStat key={stat}>
+                <span>{statLabels[stat]}</span>
+                <span>{goalie[stat]}</span>
+              </GoalieStat>
+            );
+          })}
+        </FlexRow>
+      </>
+    ));
+
+    return (
+      <GoalieComparison>
+        <ComparisonHeader>
+          <TeamLogoSmall>
+            <Sprites.Away />
+          </TeamLogoSmall>
+          <SectionTitle>
+            Goaltender Comparison
+          </SectionTitle>
+          <TeamLogoSmall>
+            <Sprites.Home />
+          </TeamLogoSmall>
+        </ComparisonHeader>
+        <GoalieStatsBlock>
+          <TeamGoalies>
+            {renderAwayGoalieStats('away')}
+          </TeamGoalies>
+          <TeamGoalies home>
+            {renderAwayGoalieStats('home')}
+          </TeamGoalies>
+        </GoalieStatsBlock>
+      </GoalieComparison>
+    );
+  };
+
+  // TODO: Render message stating no previous games played if none found
   const renderPreviousMatchups = () => data.previousMatchups.map((matchup) => (
     <Matchup key={matchup.slug}>
       <SectionTitle>
@@ -263,6 +323,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         <Comparison>
           {renderTeamsBlock()}
           {renderSkaterComparison()}
+          {renderGoalieComparison()}
         </Comparison>
         <PreviousMatchups>
           <MatchupsHeader>
@@ -430,7 +491,7 @@ const SkaterComparison = styled.div`
   margin-top: 10px;
 `;
 
-const SkaterComparisonHeader = styled.div`
+const ComparisonHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -463,7 +524,7 @@ const TeamLeader = styled.div<{
   margin-${({ home }) => home ? 'left' : 'right'}: 10px;
 `;
 
-const LeaderPlayer = styled.span`
+const LeaderSkater = styled.span`
   font-weight: 600;
 `;
 
@@ -480,6 +541,46 @@ const LeaderLabel = styled.span`
   width: 75px;
   font-size: 14px;
   text-align: center;
+`;
+
+const GoalieComparison = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.grey100};
+  padding: 15px;
+  margin-top: 10px;
+`;
+
+const GoalieStatsBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const TeamGoalies = styled.div<{
+  home?: boolean;
+}>`
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  ${({ home }) => home && `text-align: right;`}
+`;
+
+const GoalieName = styled.span`
+  font-weight: 600;
+  margin-top: 15px;
+`;
+
+const GoalieStat = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.grey600};
+
+  span:last-child {
+    font-weight: 600;
+  }
 `;
 
 // Right
