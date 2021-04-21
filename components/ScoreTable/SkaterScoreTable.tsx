@@ -6,11 +6,13 @@ import { Player } from '../..';
 interface Props {
   data: Array<Player>;
   pagination?: boolean;
+  teamPage?: boolean;
 }
 
 function SkaterScoreTable({
   data: players,
   pagination = false,
+  teamPage=false,
 }: Props): JSX.Element {
   const calculateTimeOnIce = (toi: number, gamesPlayed: number) =>
     `${(toi / gamesPlayed / 60) >> 0}:${
@@ -32,6 +34,11 @@ function SkaterScoreTable({
           Header: 'Pos',
           id: 'player-table-position',
           accessor: 'position',
+        },
+        {
+          Header: 'Team',
+          accessor: 'team',
+          title: 'Team',
         },
       ],
     },
@@ -285,6 +292,7 @@ function SkaterScoreTable({
       data={players}
       columnData={columnData}
       pagination={pagination}
+      teamPage={teamPage}
     />
   );
 }
