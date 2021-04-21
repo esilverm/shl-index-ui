@@ -235,11 +235,11 @@ public/
 ├── swagger.json
 ├── swagger.yaml
 ├── team_logos
-│ ├── IIHF
+│ ├── IIHF (directory)
 │ ├── index.js
-│ ├── SHL
-│ ├── SMJHL
-│ └── WJC
+│ ├── SHL (directory)
+│ ├── SMJHL (directory)
+│ └── WJC (directory)
 └── vercel.svg
 ```
 
