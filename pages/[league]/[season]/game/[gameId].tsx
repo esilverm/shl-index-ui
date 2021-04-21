@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import Header from '../../../../components/Header';
 import { Matchup as MatchupData, GoalieStats } from '../../../api/v1/schedule/game/[gameId]';
+import { Standings } from '../../../api/v1/standings';
 
 interface Props {
   league: string;
@@ -13,17 +14,22 @@ interface Props {
 }
 
 function GameResults({ league, gameId }: Props): JSX.Element {
+  const [divisions, setDivisions] = useState<Array<Standings[number]>>();
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [Sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
 
-  const { data, error } = useSWR<MatchupData>(
+  const { data: gameData, error: gameError } = useSWR<MatchupData>(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/game/${gameId}`
   );
 
+  const { data: divisionData, error: divisionError } = useSWR<Standings>(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=division`
+  );
+
   useEffect(() => {
-    if (!data) return;
+    if (!gameData) return;
     // Dynamically import svg icons based on the league chosen
     (async () => {
       const { default: s } = await import(
@@ -31,16 +37,30 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       );
 
       const teamSprites = {
-        Away: s[data.teams.away.abbr],
-        Home: s[data.teams.home.abbr]
+        Away: s[gameData.teams.away.abbr],
+        Home: s[gameData.teams.home.abbr]
       };
 
-      setSprites(() => teamSprites);
+      setSprites(() => ({
+        ...teamSprites,
+        ...s
+      }));
       setLoadingAssets(() => false);
     })();
-  }, [data]);
+  }, [gameData]);
 
-  if (isLoadingAssets || error) return null; // TODO
+  useEffect(() => {
+    if (!divisionData || !gameData || divisions) return;
+
+    const awayDivision = divisionData.find((division) =>
+      division.teams.some((team) => team.abbreviation === gameData.teams.away.abbr));
+    const homeDivision = divisionData.find((division) =>
+      division.teams.some((team) => team.abbreviation === gameData.teams.home.abbr));
+
+    setDivisions([awayDivision, homeDivision]);
+  }, [divisionData, gameData, divisions]);
+
+  if (isLoadingAssets || gameError || divisionError) return null; // TODO
 
   const renderTeamStats = () => {
     const stats = {
@@ -67,11 +87,11 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         }
       }
     };
-    const awayColor = data.teams.away.primaryColor;
-    const homeColor = data.teams.home.primaryColor;
-    Object.keys(data.teamStats).forEach((team) => {
-      stats.goalsForPerGame[team].total = parseFloat((data.teamStats[team].goalsFor / data.teamStats[team].gamesPlayed).toFixed(2));
-      stats.goalsAgainstPerGame[team].total = parseFloat((data.teamStats[team].goalsAgainst / data.teamStats[team].gamesPlayed).toFixed(2));
+    const awayColor = gameData.teams.away.primaryColor;
+    const homeColor = gameData.teams.home.primaryColor;
+    Object.keys(gameData.teamStats).forEach((team) => {
+      stats.goalsForPerGame[team].total = parseFloat((gameData.teamStats[team].goalsFor / gameData.teamStats[team].gamesPlayed).toFixed(2));
+      stats.goalsAgainstPerGame[team].total = parseFloat((gameData.teamStats[team].goalsAgainst / gameData.teamStats[team].gamesPlayed).toFixed(2));
     });
     stats.goalsForPerGame.away.perc = stats.goalsForPerGame.away.total / (stats.goalsForPerGame.away.total + stats.goalsForPerGame.home.total) * 100;
     stats.goalsAgainstPerGame.away.perc = stats.goalsAgainstPerGame.home.total / (stats.goalsAgainstPerGame.away.total + stats.goalsAgainstPerGame.home.total) * 100;
@@ -94,12 +114,69 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     )
   };
 
+  const renderDivisionStandings = () => {
+    const isSameDivision = divisions[0].name === divisions[1].name;
+    const sortedStandings = [
+      {
+        name: divisions[0].name,
+        teams: divisions[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      },
+    ];
+    if (!isSameDivision) {
+      sortedStandings.push({
+        name: divisions[1].name,
+        teams: divisions[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      });
+    }
+
+    return sortedStandings.map((divisionStandings) => (
+      <DivisionStandings key={divisionStandings.name}>
+        <StandingsTableRow>
+          <SectionTitle>
+            {`${divisionStandings.name} Standings`}
+          </SectionTitle>
+        </StandingsTableRow>
+        <StandingsTable>
+          <StandingsTableHeader>
+            <StandingsTableCell></StandingsTableCell>
+            <StandingsTableCell>PTS</StandingsTableCell>
+            <StandingsTableCell>GP</StandingsTableCell>
+            <StandingsTableCell>W</StandingsTableCell>
+            <StandingsTableCell>L</StandingsTableCell>
+            <StandingsTableCell>OT</StandingsTableCell>
+          </StandingsTableHeader>
+          {divisionStandings.teams.map((team) => {
+            const isRelevantTeam = team.abbreviation === gameData.teams.away.abbr || team.abbreviation === gameData.teams.home.abbr;
+            const Logo = Sprites[team.abbreviation];
+            return (
+              <StandingsTableRow highlight={isRelevantTeam} key={team.abbreviation}>
+                <StandingsTableCell>
+                  <TeamInfo>
+                    <TeamLogoSmall>
+                      <Logo />
+                    </TeamLogoSmall>
+                    {team.abbreviation}
+                  </TeamInfo>
+                </StandingsTableCell>
+                <StandingsTableCell>{team.points}</StandingsTableCell>
+                <StandingsTableCell>{team.gp}</StandingsTableCell>
+                <StandingsTableCell>{team.wins}</StandingsTableCell>
+                <StandingsTableCell>{team.losses}</StandingsTableCell>
+                <StandingsTableCell>{team.OTL}</StandingsTableCell>
+              </StandingsTableRow>
+            );
+          })}
+        </StandingsTable>
+      </DivisionStandings>
+    ));
+  };
+
   const renderTeamsBlock = () => (
     <TeamsPreview>
       <FlexColumn>
         <GameDate>
           <SectionTitle>
-            {data.game.date}
+            {gameData.game.date}
           </SectionTitle>
         </GameDate>
         <FlexRow>
@@ -109,20 +186,20 @@ function GameResults({ league, gameId }: Props): JSX.Element {
             </TeamLogo>
             <FlexColumn>
               <TeamName>
-                {`${data.teams.away.name} ${data.teams.away.nickname}`}
+                {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
               </TeamName>
               <TeamRecord>
-                {data.teamStats.away.record}
+                {gameData.teamStats.away.record}
               </TeamRecord>
             </FlexColumn>
           </TeamData>
           <TeamData>
             <FlexColumn>
               <TeamName home>
-                {`${data.teams.home.name} ${data.teams.home.nickname}`}
+                {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
               </TeamName>
               <TeamRecord home>
-                {data.teamStats.home.record}
+                {gameData.teamStats.home.record}
               </TeamRecord>
             </FlexColumn>
             <TeamLogo>
@@ -165,8 +242,8 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       }
     };
 
-    Object.keys(data.skaterStats).forEach((team) => {
-      data.skaterStats[team].forEach((skater) => {
+    Object.keys(gameData.skaterStats).forEach((team) => {
+      gameData.skaterStats[team].forEach((skater) => {
         const points = skater.goals + skater.assists;
         Object.keys(teamLeaders).forEach((stat) => {
           const skaterValue = stat === 'points' ? points : skater[stat];
@@ -220,7 +297,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       savePct: 'SV%',
       shutouts: 'SO'
     };
-    const renderAwayGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(data.goalieStats[team])).map((goalie) => (
+    const renderAwayGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map((goalie) => (
       <>
         <GoalieName>
           {goalie.name}
@@ -231,9 +308,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
             <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
           </GoalieStat>
           {Object.keys(goalie).map((stat) => {
-            if (!Object.keys(statLabels).includes(stat)) {
-              return null;
-            }
+            if (!Object.keys(statLabels).includes(stat)) return null;
 
             return (
               <GoalieStat key={stat}>
@@ -272,23 +347,23 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   };
 
   // TODO: Render message stating no previous games played if none found
-  const renderPreviousMatchups = () => data.previousMatchups.map((matchup) => (
+  const renderPreviousMatchups = () => gameData.previousMatchups.map((matchup) => (
     <Matchup key={matchup.slug}>
       <SectionTitle>
         {matchup.date}
       </SectionTitle>
       <MatchupTeamRow>
         <TeamLogoSmall>
-          {matchup.awayTeam === data.game.awayTeam ? <Sprites.Away /> : <Sprites.Home />}
+          {matchup.awayTeam === gameData.game.awayTeam ? <Sprites.Away /> : <Sprites.Home />}
         </TeamLogoSmall>
-        <span>{matchup.awayTeam === data.game.awayTeam ? data.teams.away.nickname : data.teams.home.nickname}</span>
+        <span>{matchup.awayTeam === gameData.game.awayTeam ? gameData.teams.away.nickname : gameData.teams.home.nickname}</span>
         <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>{matchup.awayScore}</MatchupRowScore>
       </MatchupTeamRow>
       <MatchupTeamRow>
         <TeamLogoSmall>
-          {matchup.homeTeam === data.game.homeTeam ? <Sprites.Home /> : <Sprites.Away />}
+          {matchup.homeTeam === gameData.game.homeTeam ? <Sprites.Home /> : <Sprites.Away />}
         </TeamLogoSmall>
-        <span>{matchup.homeTeam === data.game.homeTeam ? data.teams.home.nickname : data.teams.away.nickname}</span>
+        <span>{matchup.homeTeam === gameData.game.homeTeam ? gameData.teams.home.nickname : gameData.teams.away.nickname}</span>
         <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>{matchup.homeScore}</MatchupRowScore>
       </MatchupTeamRow>
     </Matchup>
@@ -304,22 +379,25 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       />
       <Header league={league} />
       <Container>
-        <TeamStats>
-          <TeamStatsHeader>
-            <FlexRow height={50}>
-              <TeamLogoSmall>
-                <Sprites.Away />
-              </TeamLogoSmall>
-              <SectionTitle>
-                Team Stats
-              </SectionTitle>
-              <TeamLogoSmall>
-                <Sprites.Home />
-              </TeamLogoSmall>
-            </FlexRow>
-          </TeamStatsHeader>
-          {renderTeamStats()}
-        </TeamStats>
+        <FlexColumn width={300}>
+          <TeamStats>
+            <TeamStatsHeader>
+              <FlexRow height={50}>
+                <TeamLogoSmall>
+                  <Sprites.Away />
+                </TeamLogoSmall>
+                <SectionTitle>
+                  Team Stats
+                </SectionTitle>
+                <TeamLogoSmall>
+                  <Sprites.Home />
+                </TeamLogoSmall>
+              </FlexRow>
+            </TeamStatsHeader>
+            {renderTeamStats()}
+          </TeamStats>
+          {renderDivisionStandings()}
+        </FlexColumn>
         <Comparison>
           {renderTeamsBlock()}
           {renderSkaterComparison()}
@@ -353,18 +431,22 @@ const Container = styled.div`
   }
 `;
 
-const FlexRow = styled.div<{ height?: number; }>`
+const FlexRow = styled.div<{
+  height?: number;
+}>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   height: ${({ height }) => height ? `${height}px` : 'auto'}
 `;
 
-const FlexColumn = styled.div`
+const FlexColumn = styled.div<{
+  width?: number;
+}>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: ${({ width }) => width ? `${width}px` : '100%'};
   height: fit-content;
 `;
 
@@ -377,7 +459,6 @@ const TeamStats = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
-  width: 300px;
   padding: 15px;
 `;
 
@@ -409,6 +490,58 @@ const TeamStatsBar = styled.div<{
       ${props.homeColor} ${props.awayPerc+1}%,
       ${props.homeColor} 100%
     ) 5`};
+`;
+
+const DivisionStandings = styled.div`
+  background-color: ${({ theme }) => theme.colors.grey100};
+  margin-top: 10px;
+  padding: 15px 15px 0 15px;
+  width: 100%;
+`;
+
+const StandingsTable = styled.div`
+  display: table;
+  width: calc(100% + 30px);
+  margin: 15px 0 0 -15px;
+`;
+
+const StandingsTableRow = styled.div<{
+  highlight?: boolean;
+}>`
+  display: table-row;
+  width: 100%;
+  ${({ highlight, theme }) => highlight && `background-color: ${theme.colors.grey300};`}
+`;
+
+const StandingsTableCell = styled.div`
+  display: table-cell;
+  width: 30px;
+  height: 40px;
+  padding: 5px 0;
+  font-family: Montserrat, sans-serif;
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+`;
+
+const TeamInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 15px;
+  font-weight: 600;
+
+  div:first-child {
+    margin-right: 5px;
+  }
+`;
+
+const StandingsTableHeader = styled(StandingsTableRow)`
+  background-color: ${({ theme }) => theme.colors.grey300};
+  width: calc(100% + 30px);
+  left: -15px;
+  font-weight: 600;
+  height: 40px;
 `;
 
 // Middle
