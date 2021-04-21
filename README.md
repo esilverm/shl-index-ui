@@ -34,7 +34,7 @@ npm install
 
 5. Get the .env.local file from one of the head developers and place it in the top level directory.
 
-### Run The Developer Server
+### Run The Development Server
 
 1. SSH tunnel into the production server to get access to the database
 
