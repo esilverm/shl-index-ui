@@ -142,9 +142,9 @@ function TeamPage({
           {!isLoading && (
             <TableContainer>
               {display ? (
-                <SkaterScoreTable data={getSkaters()} />
+                <SkaterScoreTable data={getSkaters()} teamPage />
               ) : (
-                <SkaterAdvStatsTable data={getSkaters()} />
+                <SkaterAdvStatsTable data={getSkaters()} teamPage />
               )}
             </TableContainer>
           )}
@@ -153,7 +153,7 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              <GoalieScoreTable data={getGoalies()} />
+              <GoalieScoreTable data={getGoalies()} teamPage/>
             </TableContainer>
           )}
         </TableWrapper>
