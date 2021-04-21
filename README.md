@@ -57,6 +57,208 @@ Open [http://127.0.0.1:3000](http://127.0.0.1:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
+## Architecture
+
+As the overall system is setup using Next.js, the entire project is a set of pages, libraries, components, and static content.
+
+### Pages
+
+The physical number of defined pages is very limited, depending mostly on the league, season, and various ids.  
+Each of these pages calls to a compenent that then calls into the api to get its data.
+
+#### Tree
+
+```bash
+pages/
+├── api (directory)
+├── _app.tsx
+├── _document.tsx
+├── index.tsx
+├── [league]
+│   ├── index.tsx
+│   ├── leaders.tsx
+│   ├── players.tsx
+│   ├── schedule.tsx
+│   ├── [season]
+│   │   └── game
+│   │       └── [gameid].tsx
+│   ├── standings.tsx
+│   └── team
+│       ├── index.tsx
+│       └── [teamid].tsx
+├── player
+│   └── [id].tsx
+└── vhl.tsx
+```
+
+### API
+
+The API is where the interface with the database takes place. It allows anyone to get whatever information they need to access in the SHL database.
+The SHL API can be accessed right on the main [site](https://index.simulationhockey.com/api).
+
+#### Tree
+
+```bash
+api/
+├── index.ts
+└── v1
+    ├── conferences
+    │   ├── [id].ts
+    │   └── index.ts
+    ├── divisions
+    │   ├── [id].ts
+    │   └── index.ts
+    ├── goalies
+    │   ├── index.ts
+    │   ├── ratings.ts
+    │   └── stats.ts
+    ├── leaders
+    │   ├── goalies
+    │   │   ├── gaa.ts
+    │   │   ├── gamesplayed.ts
+    │   │   ├── ga.ts
+    │   │   ├── gsaa.ts
+    │   │   ├── losses.ts
+    │   │   ├── otl.ts
+    │   │   ├── savepct.ts
+    │   │   ├── saves.ts
+    │   │   ├── shutouts.ts
+    │   │   └── wins.ts
+    │   └── skaters
+    │       ├── assists.ts
+    │       ├── goals.ts
+    │       ├── penaltyminutes.ts
+    │       ├── plusminus.ts
+    │       ├── points.ts
+    │       ├── ppg.ts
+    │       ├── shg.ts
+    │       ├── shotpct.ts
+    │       ├── shotsblocked.ts
+    │       └── shots.ts
+    ├── leagues
+    │   ├── index.ts
+    │   └── seasons.ts
+    ├── players
+    │   ├── index.ts
+    │   ├── ratings.ts
+    │   └── stats.ts
+    ├── schedule
+    │   ├── game
+    │   │   └── [gameId].ts
+    │   ├── header.ts
+    │   └── index.ts
+    ├── standings
+    │   ├── index.ts
+    │   ├── playoffs.ts
+    │   └── preseason.ts
+    └── teams
+        ├── [id]
+        │   ├── index.ts
+        │   ├── roster
+        │   │   ├── index.ts
+        │   │   └── stats.ts
+        │   └── schedule.ts
+        └── index.ts
+```
+
+### Libraries
+
+There are only two files in the library.
+
+1. db.js - used as the interface with the SQL database
+2. middleware.ts - provides a helper method to wait for middleware to execute before continuing
+
+#### Tree
+
+```bash
+lib/
+├── db.js
+└── middleware.ts
+```
+
+### Components
+
+This is where all the work on the pages themselves happen. The components are doing all the interacting with the API and filled based on the results.
+
+#### Tree
+
+```bash
+components/
+├── Footer.tsx
+├── GameDaySchedule.tsx
+├── Header.tsx
+├── HomepageLeaders.tsx
+├── LinkWithSeason.tsx
+├── Livestream.tsx
+├── PlayoffsBracket.tsx
+├── RatingsTable
+│   ├── GoalieRatingsTable.tsx
+│   ├── index.tsx
+│   └── SkaterRatingsTable.tsx
+├── ScheduleTable.tsx
+├── ScoreBarItem.tsx
+├── ScoreBar.tsx
+├── ScoreTable
+│   ├── GoalieScoreTable.tsx
+│   ├── index.tsx
+│   ├── SkaterAdvStatsTable.tsx
+│   └── SkaterScoreTable.tsx
+├── Selector
+│   ├── SeasonSelector.tsx
+│   ├── SeasonTypeSelector.tsx
+│   ├── styles.ts
+│   └── TeamSelector.tsx
+└── StandingsTable.tsx
+```
+
+### Static Content
+
+All static content is held in the public directory, per Next.js standards.
+This is the location of all of the different images that apppear throughout the site.
+
+#### Tree
+
+public/
+├── 404.mp4
+├── 404.webm
+├── back.svg
+├── ChallengeCup.png
+├── docs.html
+├── favicon.ico
+├── favicon.svg
+├── league_logos
+│ ├── IIHF.svg
+│ ├── SHL.svg
+│ ├── SMJHL.svg
+│ └── WJC.svg
+├── swagger.json
+├── swagger.yaml
+├── team_logos
+│ ├── IIHF
+│ ├── index.js
+│ ├── SHL
+│ ├── SMJHL
+│ └── WJC
+└── vercel.svg
+
+### Hooks
+
+Hooks is a directory that contains helper functions for the players page.
+
+#### Tree
+
+```bash
+hooks/
+├── useGoalieRatings.ts
+├── useGoalieStats.ts
+├── useLeaders.ts
+├── useRatings.ts
+├── useSchedule.ts
+├── useSkaterStats.ts
+├── useStandings.ts
+└── useTeamRosterStats.ts
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
