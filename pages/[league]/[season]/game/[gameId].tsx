@@ -1,3 +1,9 @@
+// TODO: Add logic to
+// * Add loading state
+// * Add error state(s)
+// * Hide all preview widgets when game has been played
+// * Rename "Season Series" to "Playoff Series" for playoff games
+// * Hide Divisional widgets if season type is "Playoffs"
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -146,10 +152,9 @@ function GameResults({ league, gameId }: Props): JSX.Element {
             <StandingsTableCell>OT</StandingsTableCell>
           </StandingsTableHeader>
           {divisionStandings.teams.map((team) => {
-            const isRelevantTeam = team.abbreviation === gameData.teams.away.abbr || team.abbreviation === gameData.teams.home.abbr;
             const Logo = Sprites[team.abbreviation];
             return (
-              <StandingsTableRow highlight={isRelevantTeam} key={team.abbreviation}>
+              <StandingsTableRow key={team.abbreviation}>
                 <StandingsTableCell>
                   <TeamInfo>
                     <TeamLogoSmall>
@@ -346,7 +351,6 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     );
   };
 
-  // TODO: Render message stating no previous games played if none found
   const renderPreviousMatchups = () => gameData.previousMatchups.map((matchup) => (
     <Matchup key={matchup.slug}>
       <SectionTitle>
@@ -409,7 +413,14 @@ function GameResults({ league, gameId }: Props): JSX.Element {
               Season Series
             </SectionTitle>
           </MatchupsHeader>
-          {renderPreviousMatchups()}
+          {gameData.previousMatchups.length > 0 && renderPreviousMatchups()}
+          {gameData.previousMatchups.length === 0 && (
+            <Matchup>
+              <div>
+                No previous games played
+              </div>
+            </Matchup>
+          )}
         </PreviousMatchups>
       </Container>
     </React.Fragment>
@@ -505,12 +516,9 @@ const StandingsTable = styled.div`
   margin: 15px 0 0 -15px;
 `;
 
-const StandingsTableRow = styled.div<{
-  highlight?: boolean;
-}>`
+const StandingsTableRow = styled.div`
   display: table-row;
   width: 100%;
-  ${({ highlight, theme }) => highlight && `background-color: ${theme.colors.grey300};`}
 `;
 
 const StandingsTableCell = styled.div`
