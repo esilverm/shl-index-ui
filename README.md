@@ -99,7 +99,7 @@ The SHL API can be accessed right on the main [site](https://index.simulationhoc
 #### Tree
 
 ```bash
-api/
+pages/api/
 ├── index.ts
 └── v1
     ├── conferences
