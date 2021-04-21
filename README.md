@@ -4,11 +4,13 @@
 
 ### Installation
 
-1. On linux, run
+1. On linux, run to install npm
 
 ```bash
 sudo apt install npm
 ```
+
+**Note: There may be other dependancies that need installed with nmp**
 
 2. Clone the repository to your local environment
 
