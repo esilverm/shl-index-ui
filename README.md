@@ -218,6 +218,7 @@ This is the location of all of the different images that apppear throughout the 
 
 #### Tree
 
+```bash
 public/
 ├── 404.mp4
 ├── 404.webm
@@ -240,6 +241,7 @@ public/
 │ ├── SMJHL
 │ └── WJC
 └── vercel.svg
+```
 
 ### Hooks
 
