@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
@@ -21,25 +21,12 @@ function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
-  const [isLoadingView, setIsLoadingView] = useState(true);
-  const { data, isLoading } = useStandings(league, display, isPlayoffs);
+  const { data, isLoading } = useStandings(league, display, seasonType);
 
-  useEffect(() => {
-    const nextIsPlayoffs = seasonType === 'Playoffs';
-    if (nextIsPlayoffs !== isPlayoffs) {
-      setIsLoadingView(true);
-    }
-  }, [seasonType]);
-
-  useEffect(() => {
-    setIsPlayoffs(seasonType === 'Playoffs');
-  }, [isLoadingView]);
-
-  useEffect(() => {
-    setIsLoadingView(false);
-  }, [data]);
-
-  const onSeasonTypeSelect = (type) => setSeasonType(type);
+  const onSeasonTypeSelect = (type) => {
+    setIsPlayoffs(type === 'Playoffs');
+    setSeasonType(type);
+  }
 
   return (
     <React.Fragment>

@@ -189,28 +189,20 @@ const TableHeader = styled.thead`
     display: table-row;
   }
 
-  th:first-child {
-    position: sticky;
-    left: 0px;
-    z-index: 2;
-    text-align: left;
-    padding-left: 10px;
-  }
-
   th {
     height: 50px;
     font-weight: 400;
     background-color: ${({ theme }) => theme.colors.grey900};
     position: relative;
 
-    &.sorted--desc::before {
+    &.sorted--asc::before {
       content: '^';
       position: absolute;
       top: 3px;
       left: calc(100% / 2 - 4px);
     }
 
-    &.sorted--asc::after {
+    &.sorted--desc::after {
       content: 'v';
       font-size: 14px;
       position: absolute;

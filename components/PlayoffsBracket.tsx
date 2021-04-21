@@ -3,6 +3,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
+
 import {
   PlayoffsRound,
   PlayoffsSeries,
@@ -60,41 +61,42 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     const isInternationalLeague = league === 'iihf' || league === 'wjc';
     const primaryColors = {
       away:
-        teamData?.find((team) => team.id === series.team1)?.colors.primary ||
+        teamData?.find((team) => team.id === series.team1.id)?.colors.primary ||
         '#DDD',
       home:
-        teamData?.find((team) => team.id === series.team2)?.colors.primary ||
+        teamData?.find((team) => team.id === series.team2.id)?.colors.primary ||
         '#BBB',
     };
     const awayTeam = {
-      id: series.team1 >= 0 ? series.team1 : -1,
-      abbr: series.team1_Abbr || 'TEST',
+      id: series.team1.id >= 0 ? series.team1.id : -1,
+      abbr: series.team1.abbr ?? 'TEST',
       name: isInternationalLeague
-        ? series.team1_Nickname || 'Away Team'
-        : series.team1_Name || 'Away Team',
-      wins: series.team1Wins || 0,
+        ? series.team1.nickname ?? 'Away Team'
+        : series.team1.name ?? 'Away Team',
+      wins: series.team1.wins ?? 0,
       color: {
         background: primaryColors.away,
         isDark: tinycolor(primaryColors.away).isDark(),
       },
     };
     const homeTeam = {
-      id: series.team2 >= 0 ? series.team2 : -1,
-      abbr: series.team2_Abbr || 'TEST',
+      id: series.team2.id >= 0 ? series.team2.id : -1,
+      abbr: series.team2.abbr ?? 'TEST',
       name: isInternationalLeague
-        ? series.team2_Nickname || 'Home Team'
-        : series.team2_Name || 'Home Team',
-      wins: series.team2Wins || 0,
+        ? series.team2.nickname ?? 'Home Team'
+        : series.team2.name ?? 'Home Team',
+      wins: series.team2.wins ?? 0,
       color: {
         background: primaryColors.home,
         isDark: tinycolor(primaryColors.home).isDark(),
       },
     };
+
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
     const hasHomeTeamWon = homeTeam.wins === LEAGUE_WIN_CONDITION[league];
     const temp = () => <div></div>;
-    const AwayLogo = sprites[awayTeam.abbr] || temp;
-    const HomeLogo = sprites[homeTeam.abbr] || temp;
+    const AwayLogo = sprites[awayTeam.abbr] ?? temp;
+    const HomeLogo = sprites[homeTeam.abbr] ?? temp;
 
     return (
       <Series key={`${awayTeam.id}${homeTeam.id}`}>
@@ -131,12 +133,14 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
       </Series>
     );
   };
+
   const renderRound = (round, index) => (
     <Round key={index}>
       <h2>{round.length === 1 ? 'Finals' : `Round ${index + 1}`}</h2>
       {round.map((series) => renderSeries(series))}
     </Round>
   );
+
   const renderBracket = () => data.map((round, i) => renderRound(round, i));
 
   return (

@@ -9,18 +9,18 @@ const cors = Cors({
 });
 
 export interface PlayoffsSeries {
-  team1: number;
-  team2: number;
-  LeagueID: number;
-  SeasonID: number;
-  team1Wins: number;
-  team2Wins: number;
-  team1_Name: string;
-  team1_Nickname: string;
-  team1_Abbr: string;
-  team2_Name: string;
-  team2_Nickname: string;
-  team2_Abbr: string;
+  league: number;
+  season: number;
+  team1: PlayoffTeam;
+  team2: PlayoffTeam;
+}
+
+interface PlayoffTeam {
+  id: number;
+  wins: number;
+  name: string;
+  nickname: string;
+  abbr: string;
 }
 
 export type PlayoffsRound = Array<PlayoffsSeries>;
@@ -28,7 +28,7 @@ export type PlayoffsRound = Array<PlayoffsSeries>;
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
-): Promise<Array<PlayoffsRound>> => {
+): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
@@ -64,12 +64,46 @@ export default async (
     if (startdate in res) {
       return {
         ...res,
-        [startdate]: [...res[startdate], matchup],
+        [startdate]: [...res[startdate], {
+          league: matchup.LeagueID,
+          season: matchup.SeasonID,
+          team1: {
+            id: matchup.team1,
+            wins: matchup.team1Wins,
+            name: matchup.team1_Name,
+            nickname: matchup.team1_Nickname,
+            abbr: matchup.team1_Abbr
+          },
+          team2: {
+            id: matchup.team2,
+            wins: matchup.team2Wins,
+            name: matchup.team2_Name,
+            nickname: matchup.team2_Nickname,
+            abbr: matchup.team2_Abbr
+          }
+        }],
       };
     }
     return {
       ...res,
-      [startdate]: [matchup],
+      [startdate]: [{
+        league: matchup.LeagueID,
+        season: matchup.SeasonID,
+        team1: {
+          id: matchup.team1,
+          wins: matchup.team1Wins,
+          name: matchup.team1_Name,
+          nickname: matchup.team1_Nickname,
+          abbr: matchup.team1_Abbr
+        },
+        team2: {
+          id: matchup.team2,
+          wins: matchup.team2Wins,
+          name: matchup.team2_Name,
+          nickname: matchup.team2_Nickname,
+          abbr: matchup.team2_Abbr
+        }
+      }],
     };
   }, {});
 
@@ -78,5 +112,4 @@ export default async (
   });
 
   res.status(200).json(parsedByRounds);
-  return;
 };

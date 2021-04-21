@@ -81,62 +81,67 @@ function PlayerPage({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="players" />
       <Container>
-        <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'ratings')}
-            active={display === 'ratings'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'ratings'}
-          >
-            Ratings
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'stats')}
-            active={display === 'stats'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'stats'}
-          >
-            Stats
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => '')}
-            active={display === ''}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === ''}
-          >
-            Adv Stats
-          </DisplaySelectItem>
-        </DisplaySelectContainer>
         <Filters>
-          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          <SelectorWrapper>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          </SelectorWrapper>
+
+          <DisplaySelectContainer role="tablist">
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'stats')}
+              active={display === 'stats'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'stats'}
+            >
+              Stats
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => '')}
+              active={display === ''}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === ''}
+            >
+              Adv Stats
+            </DisplaySelectItem>
+          </DisplaySelectContainer>
         </Filters>
-        <TableHeading>Skaters</TableHeading>
-        <TableWrapper>
-          <TableContainer>
-            {display === 'ratings' && !isLoadingPlayers ? (
-              <SkaterRatingsTable data={getSkaters()} />
-            ) : display === 'stats' && !isLoadingPlayerStat ? (
-              <SkaterScoreTable data={getSkater()} pagination/>
-            ) : (
-              <SkaterAdvStatsTable data={getSkater()} pagination/>
-            )}
-          </TableContainer>
-        </TableWrapper>
-        <TableHeading>Goalies</TableHeading>
-        <TableWrapper>
-          {!isLoadingGoalies && (
+        <Main>
+          <TableHeading>Skaters</TableHeading>
+          <TableWrapper>
             <TableContainer>
-              {display === 'ratings' && !isLoadingGoalies ? (
-                <GoalieRatingsTable data={getGoalies()} />
+              {display === 'ratings' && !isLoadingPlayers ? (
+                <SkaterRatingsTable data={getSkaters()} />
+              ) : display === 'stats' && !isLoadingPlayerStat ? (
+                <SkaterScoreTable data={getSkater()} pagination />
               ) : (
-                <GoalieScoreTable data={getGoalie()} pagination />
+                <SkaterAdvStatsTable data={getSkater()} pagination />
               )}
             </TableContainer>
-          )}
-        </TableWrapper>
+          </TableWrapper>
+          <TableHeading>Goalies</TableHeading>
+          <TableWrapper>
+            {!isLoadingGoalies && (
+              <TableContainer>
+                {display === 'ratings' && !isLoadingGoalies ? (
+                  <GoalieRatingsTable data={getGoalies()} />
+                ) : (
+                  <GoalieScoreTable data={getGoalie()} pagination />
+                )}
+              </TableContainer>
+            )}
+          </TableWrapper>
+        </Main>
       </Container>
       <Footer />
     </React.Fragment>
@@ -190,6 +195,11 @@ const TableHeading = styled.h2`
   border-bottom: 1px solid black;
 `;
 
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
+`;
+
 const DisplaySelectContainer = styled.div`
   margin: 28px auto;
   width: 95%;
@@ -211,15 +221,15 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const Filters = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-right: 3%;
-  justify-content: flex-end;
-  float: right;
-  margin-top: -80px;
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  button {
-    width: 200px;
+    button {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
   }
 
   @media screen and (max-width: 750px) {
@@ -229,7 +239,12 @@ const Filters = styled.div`
     button {
       margin-right: 0;
       margin-bottom: 5px;
-      width: 150px;
     }
   }
+`;
+
+const SelectorWrapper = styled.div`
+  width: 250px;
+  float: right;
+  margin-right: 3%;
 `;

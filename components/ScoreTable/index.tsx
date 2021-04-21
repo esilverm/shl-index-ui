@@ -47,7 +47,11 @@ Props): JSX.Element {
   let table;
   if (pagination) {
     table = useTable(
-      { columns, data, initialState: { pageIndex: 0, pageSize: 15, ...initialState } },
+      {
+        columns,
+        data,
+        initialState: { pageIndex: 0, pageSize: 15, ...initialState },
+      },
       useSortBy,
       usePagination
     );
@@ -104,45 +108,45 @@ Props): JSX.Element {
               ))}
             </TableHeader>
             <TableBody {...getTableBodyProps()}>
-              {hasData && pagination ? page.map((row, i) => {
-                  prepareRow(row);
+              {hasData && pagination
+                ? page.map((row, i) => {
+                    prepareRow(row);
 
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                }) : 
-                rows.map((row, i) => {
-                  prepareRow(row);
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
+                : rows.map((row, i) => {
+                    prepareRow(row);
 
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })
-              }
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -239,14 +243,14 @@ const TableHeader = styled.thead`
     background-color: ${({ theme }) => theme.colors.grey900};
     position: relative;
 
-    &.sorted--desc::before {
+    &.sorted--asc::before {
       content: '^';
       position: absolute;
       top: 3px;
       left: calc(100% / 2 - 4px);
     }
 
-    &.sorted--asc::after {
+    &.sorted--desc::after {
       content: 'v';
       font-size: 14px;
       position: absolute;

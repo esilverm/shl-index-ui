@@ -17,14 +17,16 @@ export default async (
   const {
     league = 0,
     season: seasonid,
-    type: shorttype = 'rs',
+    type: longType = 'regular',
     limit = 10,
     desc = true,
   } = req.query;
 
   let type: string;
-  if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
-    type = shorttype;
+  if (longType === 'preseason') {
+    type = 'ps';
+  } else if (longType === 'playoffs') {
+    type = 'po';
   } else {
     type = 'rs';
   }
@@ -42,17 +44,9 @@ export default async (
   `)
     ));
 
-  const cutoffGames = await query(
-    SQL`
-  SELECT MAX(GP) as games
-  FROM `.append(`player_goalie_stats_${type}`).append(SQL`
-  WHERE LeagueID=${+league}
-    AND SeasonID=${season.SeasonID}`)
-  );
-
   const savepctLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.SavePct
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.SavePct
     FROM `
       .append(`player_goalie_stats_${type} AS s`)
       .append(
@@ -61,14 +55,22 @@ export default async (
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
+    INNER JOIN team_data as t
+      ON s.TeamID = t.TeamID
+      AND s.SeasonID = t.SeasonID
+      AND s.LeagueID = t.LeagueID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     AND s.Minutes > 60
-    AND s.GP >= `
+    AND s.GP >= (
+      SELECT MAX(GP) FROM `
       )
-      .append(Math.floor(cutoffGames[0].games * 0.2))
+      .append(`player_goalie_stats_${type}`)
       .append(
-        `
+        SQL`
+      WHERE LeagueID=${+league}
+      AND SeasonID=${season.SeasonID}
+    ) / 5
     ORDER BY s.SavePct `
       )
       .append(desc ? `DESC` : `ASC`).append(`
@@ -80,9 +82,15 @@ export default async (
     id: player.PlayerID,
     name: player.Name,
     league: player.LeagueID,
-    team: player.TeamID,
+    team: {
+      id: player.TeamID,
+      name: player.TeamName,
+      nickname: player.TeamNickname,
+      abbr: player.TeamAbbr,
+    },
     season: player.SeasonID,
-    savePct: player.SavePct,
+    stat: player.SavePct.toFixed(3),
+    statName: 'Save%',
   }));
 
   res.status(200).json(parsed);

@@ -14,7 +14,11 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, type: longType = 'regular', season: seasonid } = req.query;
+  const {
+    league = 0,
+    type: longType = 'regular',
+    season: seasonid,
+  } = req.query;
 
   let type: string;
   if (longType === 'preseason') {
@@ -77,9 +81,9 @@ export default async (
       shotsAgainst: player.ShotsAgainst,
       saves: player.Saves,
       goalsAgainst: player.GoalsAgainst,
-      gaa: player.GAA,
+      gaa: player.GAA.toFixed(2),
       shutouts: player.Shutouts,
-      savePct: player.SavePct,
+      savePct: player.SavePct.toFixed(3),
       gameRating: player.GameRating,
     };
   });
