@@ -59,12 +59,12 @@ export interface Matchup {
     home: TeamStats;
   };
   skaterStats: {
-    away: SkaterStats;
-    home: SkaterStats;
+    away: SkaterStats[];
+    home: SkaterStats[];
   };
   goalieStats: {
-    away: GoalieStats;
-    home: GoalieStats;
+    away: GoalieStats[];
+    home: GoalieStats[];
   };
   previousMatchups: Game[];
 }
