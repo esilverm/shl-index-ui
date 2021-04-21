@@ -4,7 +4,7 @@
 
 ### Installation
 
-1. On linux, run to install npm
+1. On linux debian based systems, run to install npm
 
 ```bash
 sudo apt install npm
