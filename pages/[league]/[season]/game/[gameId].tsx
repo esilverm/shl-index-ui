@@ -1,5 +1,4 @@
 // TODO: Add logic to
-// * Add loading state
 // * Add error state(s)
 // * Hide all preview widgets when game has been played
 // * Rename "Season Series" to "Playoff Series" for playoff games
@@ -9,6 +8,7 @@ import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import useSWR from 'swr';
 import styled from 'styled-components';
+import { PulseLoader } from 'react-spinners';
 
 import Header from '../../../../components/Header';
 import { Matchup as MatchupData, GoalieStats } from '../../../api/v1/schedule/game/[gameId]';
@@ -65,8 +65,6 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
     setDivisions([awayDivision, homeDivision]);
   }, [divisionData, gameData, divisions]);
-
-  if (isLoadingAssets || gameError || divisionError) return null; // TODO
 
   const renderTeamStats = () => {
     const stats = {
@@ -373,6 +371,8 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     </Matchup>
   ));
 
+  const isLoading = isLoadingAssets || !gameData;
+
   return (
     <React.Fragment>
       <NextSeo
@@ -383,45 +383,60 @@ function GameResults({ league, gameId }: Props): JSX.Element {
       />
       <Header league={league} />
       <Container>
-        <FlexColumn width={300}>
-          <TeamStats>
-            <TeamStatsHeader>
-              <FlexRow height={50}>
-                <TeamLogoSmall>
-                  <Sprites.Away />
-                </TeamLogoSmall>
+        {gameError &&
+          <ErrorBlock>
+            Failed to load game preview. Please reload the page to try again.
+          </ErrorBlock>
+        }
+        {isLoading && !gameError && <PulseLoader size={15} />}
+        {!isLoading && (
+          <>
+            <FlexColumn width={300}>
+              <TeamStats>
+                <TeamStatsHeader>
+                  <FlexRow height={50}>
+                    <TeamLogoSmall>
+                      <Sprites.Away />
+                    </TeamLogoSmall>
+                    <SectionTitle>
+                      Team Stats
+                    </SectionTitle>
+                    <TeamLogoSmall>
+                      <Sprites.Home />
+                    </TeamLogoSmall>
+                  </FlexRow>
+                </TeamStatsHeader>
+                {renderTeamStats()}
+              </TeamStats>
+              {divisionError &&
+                <ErrorBlock>
+                  Failed to load division standings
+                </ErrorBlock>
+              }
+              {divisionData && renderDivisionStandings()}
+            </FlexColumn>
+            <Comparison>
+              {renderTeamsBlock()}
+              {renderSkaterComparison()}
+              {renderGoalieComparison()}
+            </Comparison>
+            <PreviousMatchups>
+              <MatchupsHeader>
                 <SectionTitle>
-                  Team Stats
+                  Season Series
                 </SectionTitle>
-                <TeamLogoSmall>
-                  <Sprites.Home />
-                </TeamLogoSmall>
-              </FlexRow>
-            </TeamStatsHeader>
-            {renderTeamStats()}
-          </TeamStats>
-          {renderDivisionStandings()}
-        </FlexColumn>
-        <Comparison>
-          {renderTeamsBlock()}
-          {renderSkaterComparison()}
-          {renderGoalieComparison()}
-        </Comparison>
-        <PreviousMatchups>
-          <MatchupsHeader>
-            <SectionTitle>
-              Season Series
-            </SectionTitle>
-          </MatchupsHeader>
-          {gameData.previousMatchups.length > 0 && renderPreviousMatchups()}
-          {gameData.previousMatchups.length === 0 && (
-            <Matchup>
-              <div>
-                No previous games played
-              </div>
-            </Matchup>
-          )}
-        </PreviousMatchups>
+              </MatchupsHeader>
+              {gameData.previousMatchups.length > 0 && renderPreviousMatchups()}
+              {gameData.previousMatchups.length === 0 && (
+                <Matchup>
+                  <div>
+                    No previous games played
+                  </div>
+                </Matchup>
+              )}
+            </PreviousMatchups>
+          </>
+        )}
       </Container>
     </React.Fragment>
   );
@@ -768,7 +783,6 @@ const MatchupsHeader = styled.div`
   padding: 10px 0;
 `;
 
-// Component?
 const Matchup = styled.div`
   display: flex;
   flex-direction: column;
@@ -785,6 +799,18 @@ const Matchup = styled.div`
     font-size: 14px;
     margin-bottom: 10px;
   }
+`;
+
+// Error
+const ErrorBlock = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.red200};
+  height: 50px;
+  padding: 10px;
+  margin: 10px 0;
+  font-weight: 500;
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
