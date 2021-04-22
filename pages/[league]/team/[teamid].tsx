@@ -10,10 +10,14 @@ import tinycolor from 'tinycolor2';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
+import useRatings from '../../../hooks/useRatings';
+import useGoalieRatings from '../../../hooks/useGoalieRatings';
 import SkaterAdvStatsTable from '../../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
-import { Goalie, Player } from '../../..';
+import SkaterRatingsTable from '../../../components/RatingsTable/SkaterRatingsTable';
+import GoalieRatingsTable from '../../../components/RatingsTable/GoalieRatingsTable';
+import { PlayerRatings, GoalieRatings, Goalie, Player } from '../../..';
 import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../../api/v1/teams/[id]/roster/stats';
 
@@ -46,6 +50,7 @@ function TeamPage({
   id,
   name,
   nameDetails,
+  abbreviation,
   location,
   colors,
   stats,
@@ -69,6 +74,30 @@ function TeamPage({
   const getGoalies = () =>
     roster
       ? (roster.filter((player) => player.position === 'G') as Array<Goalie>)
+      : [];
+
+  // ratings
+  const { ratings: skaterratings, isLoading: isLoadingPlayerRatings } = useRatings(
+    leaguename
+  );
+
+  const getSkaterRatings = () =>
+    skaterratings
+      ? (skaterratings.filter(
+          (player) => player.position !== 'G' && player.team == abbreviation
+        ) as Array<PlayerRatings>)
+      : [];
+      
+  const {
+    ratings: goalieratingdata,
+    isLoading: isLoadingGoalieRatings,
+  } = useGoalieRatings(leaguename);
+
+  const getGoalieRating = () =>
+    goalieratingdata
+      ? (goalieratingdata.filter(
+          (player) => player.position === 'G' && player.team == abbreviation
+        ) as Array<GoalieRatings>)
       : [];
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
@@ -119,6 +148,15 @@ function TeamPage({
           <SeasonTypeSelector onChange={onSeasonTypeSelect} />
         </Filters>
         <DisplaySelectContainer role="tablist">
+        <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
+          </DisplaySelectItem>
           <DisplaySelectItem
             onClick={() => setDisplay(() => 'stats')}
             active={display === 'stats'}
@@ -141,7 +179,10 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              {display ? (
+              {display === 'ratings' && !isLoadingPlayerRatings ? (
+                <SkaterRatingsTable data={getSkaterRatings()} teamPage />
+              )
+              : display === 'stats' ? (
                 <SkaterScoreTable data={getSkaters()} teamPage />
               ) : (
                 <SkaterAdvStatsTable data={getSkaters()} teamPage />
@@ -153,7 +194,11 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              <GoalieScoreTable data={getGoalies()} teamPage/>
+              {display === 'ratings' && !isLoadingGoalieRatings ? (
+                  <GoalieRatingsTable data={getGoalieRating()} teamPage />
+                ) : (
+                  <GoalieScoreTable data={getGoalies()} teamPage />
+                )}
             </TableContainer>
           )}
         </TableWrapper>
