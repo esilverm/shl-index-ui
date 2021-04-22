@@ -1,8 +1,6 @@
 // TODO: Add logic to
-// * Add error state(s)
 // * Hide all preview widgets when game has been played
-// * Rename "Season Series" to "Playoff Series" for playoff games
-// * Hide Divisional widgets if season type is "Playoffs"
+// * Break out widgets into components
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -372,6 +370,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   ));
 
   const isLoading = isLoadingAssets || !gameData;
+  const isRegularSeason = gameData && gameData.game.type === "Regular Season";
 
   return (
     <React.Fragment>
@@ -408,12 +407,12 @@ function GameResults({ league, gameId }: Props): JSX.Element {
                 </TeamStatsHeader>
                 {renderTeamStats()}
               </TeamStats>
-              {divisionError &&
+              {isRegularSeason && divisionError &&
                 <ErrorBlock>
                   Failed to load division standings
                 </ErrorBlock>
               }
-              {divisionData && renderDivisionStandings()}
+              {isRegularSeason && divisionData && renderDivisionStandings()}
             </FlexColumn>
             <Comparison>
               {renderTeamsBlock()}
@@ -423,7 +422,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
             <PreviousMatchups>
               <MatchupsHeader>
                 <SectionTitle>
-                  Season Series
+                  {`${gameData.game.type} Series`}
                 </SectionTitle>
               </MatchupsHeader>
               {gameData.previousMatchups.length > 0 && renderPreviousMatchups()}
