@@ -5,9 +5,10 @@ import { PlayerRatings } from '../..';
 
 interface Props {
   data: Array<PlayerRatings>;
+  teamPage?: boolean;
 }
 
-function PlayerRatingsTable({ data: players }: Props): JSX.Element {
+function PlayerRatingsTable({ data: players, teamPage: teamPage }: Props): JSX.Element {
   const columnData = [
     {
       Header: 'Player Info',
@@ -191,7 +192,7 @@ function PlayerRatingsTable({ data: players }: Props): JSX.Element {
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData} />;
+  return <RatingsTable data={players} columnData={columnData} teamPage={teamPage} />;
 }
 
 export default PlayerRatingsTable;

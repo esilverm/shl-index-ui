@@ -21,19 +21,33 @@ interface ColumnData {
 interface Props {
   data: Array<PlayerRatings | GoalieRatings>;
   columnData: Array<ColumnData>;
+  teamPage?: boolean;
   // isLoading: boolean;
 }
 
 function RatingsTable({
   data: players,
   columnData,
+  teamPage = false,
 }: // isLoading
 Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
   // ! add loading state
-  const columns = useMemo(() => columnData, []);
+  const columns = useMemo(() => {
+    // handle logic with teamPage
+    if(teamPage) {
+      // loop through columns to find the team column and remove it from the columnData
+      let i = columnData[0]["columns"].length
+      while(i--) {
+        if (columnData[0]["columns"][i].Header == "Team") {
+          delete columnData[0]["columns"][i]
+        }
+      }
+    }
+    return columnData
+  }, []);
 
   const {
     getTableProps,
