@@ -465,6 +465,7 @@ const TableBody = styled.tbody`
   position: relative;
 
   th {
+    font-family: Montserrat, sans-serif;
     display: table-cell;
     text-align: left;
     font-weight: 400;

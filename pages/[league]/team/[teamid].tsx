@@ -248,7 +248,7 @@ const TeamName = styled.h1<{ bright: boolean }>`
   span {
     display: block;
   }
-
+  font-family: Montserrat, sans-serif;
   span.first {
     font-weight: 400;
     letter-spacing: 0.1rem;

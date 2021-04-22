@@ -116,6 +116,7 @@ const TeamName = styled.h2<{ bright: boolean }>`
   span {
     display: block;
   }
+  font-family: Montserrat, sans-serif;
 
   span.first {
     font-weight: 400;
