@@ -9,10 +9,10 @@ import styled from 'styled-components';
 import { PulseLoader } from 'react-spinners';
 
 import Header from '../../../../components/Header';
-import { DivisionStandings, SkaterComparison, TeamsBlock, TeamStats } from '../../../../components/Game';
-import { Matchup as MatchupData, GoalieStats } from '../../../api/v1/schedule/game/[gameId]';
+import { DivisionStandings, GoalieComparison, SkaterComparison, TeamsBlock, TeamStats } from '../../../../components/Game';
+import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
-import { ComparisonHeader, FlexColumn, FlexRow, SectionTitle, TeamLogoSmall } from '../../../../components/Game/common';
+import { FlexColumn, SectionTitle, TeamLogoSmall } from '../../../../components/Game/common';
 
 interface Props {
   league: string;
@@ -65,63 +65,6 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
     setDivisions([awayDivision, homeDivision]);
   }, [divisionData, gameData, divisions]);
-
-  const renderGoalieComparison = () => {
-    const sortByGamesPlayed = (goalies: Array<GoalieStats>) => goalies.sort((a, b) => (a.wins + a.losses + a.OT > b.wins + b.losses + b.OT) ? -1 : 1);
-    const statLabels = {
-      record: 'Record',
-      GAA: 'GAA',
-      savePct: 'SV%',
-      shutouts: 'SO'
-    };
-    const renderAwayGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map((goalie) => (
-      <>
-        <GoalieName>
-          {goalie.name}
-        </GoalieName>
-        <FlexRow>
-          <GoalieStat>
-            <span>{statLabels.record}</span>
-            <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
-          </GoalieStat>
-          {Object.keys(goalie).map((stat) => {
-            if (!Object.keys(statLabels).includes(stat)) return null;
-
-            return (
-              <GoalieStat key={stat}>
-                <span>{statLabels[stat]}</span>
-                <span>{goalie[stat]}</span>
-              </GoalieStat>
-            );
-          })}
-        </FlexRow>
-      </>
-    ));
-
-    return (
-      <GoalieComparison>
-        <ComparisonHeader>
-          <TeamLogoSmall>
-            <Sprites.Away />
-          </TeamLogoSmall>
-          <SectionTitle>
-            Goaltender Comparison
-          </SectionTitle>
-          <TeamLogoSmall>
-            <Sprites.Home />
-          </TeamLogoSmall>
-        </ComparisonHeader>
-        <GoalieStatsBlock>
-          <TeamGoalies>
-            {renderAwayGoalieStats('away')}
-          </TeamGoalies>
-          <TeamGoalies home>
-            {renderAwayGoalieStats('home')}
-          </TeamGoalies>
-        </GoalieStatsBlock>
-      </GoalieComparison>
-    );
-  };
 
   const renderPreviousMatchups = () => gameData.previousMatchups.map((matchup) => (
     <Matchup key={matchup.slug}>
@@ -178,7 +121,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
             <Comparison>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
               <SkaterComparison gameData={gameData} Sprites={Sprites} />
-              {renderGoalieComparison()}
+              <GoalieComparison gameData={gameData} Sprites={Sprites} />
             </Comparison>
             <PreviousMatchups>
               <MatchupsHeader>
@@ -226,46 +169,6 @@ const Comparison = styled.div`
   flex-direction: column;
   flex: 1;
   margin: 0 20px;
-`;
-
-const GoalieComparison = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px;
-  margin-top: 10px;
-`;
-
-const GoalieStatsBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const TeamGoalies = styled.div<{
-  home?: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  ${({ home }) => home && `text-align: right;`}
-`;
-
-const GoalieName = styled.span`
-  font-weight: 600;
-  margin-top: 15px;
-`;
-
-const GoalieStat = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.grey600};
-
-  span:last-child {
-    font-weight: 600;
-  }
 `;
 
 // Right
