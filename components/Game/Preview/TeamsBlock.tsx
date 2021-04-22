@@ -10,53 +10,45 @@ interface Props {
   };
 }
 
-const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
-  const renderTeamsBlock = () => (
-    <TeamsPreview>
-      <FlexColumn>
-        <GameDate>
-          <SectionTitle>
-            {gameData.game.date}
-          </SectionTitle>
-        </GameDate>
-        <FlexRow>
-          <TeamData>
-            <TeamLogo>
-              <Sprites.Away />
-            </TeamLogo>
-            <FlexColumn>
-              <TeamName>
-                {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
-              </TeamName>
-              <TeamRecord>
-                {gameData.teamStats.away.record}
-              </TeamRecord>
-            </FlexColumn>
-          </TeamData>
-          <TeamData>
-            <FlexColumn>
-              <TeamName home>
-                {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
-              </TeamName>
-              <TeamRecord home>
-                {gameData.teamStats.home.record}
-              </TeamRecord>
-            </FlexColumn>
-            <TeamLogo>
-              <Sprites.Home />
-            </TeamLogo>
-          </TeamData>
-        </FlexRow>
-      </FlexColumn>
-    </TeamsPreview>
-  );
-
-  return (
-    <>
-      {renderTeamsBlock()}
-    </>
-  );
-};
+const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => (
+  <TeamsPreview>
+    <FlexColumn>
+      <GameDate>
+        <SectionTitle>
+          {gameData.game.date}
+        </SectionTitle>
+      </GameDate>
+      <FlexRow>
+        <TeamData>
+          <TeamLogo>
+            <Sprites.Away />
+          </TeamLogo>
+          <FlexColumn>
+            <TeamName>
+              {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
+            </TeamName>
+            <TeamRecord>
+              {gameData.teamStats.away.record}
+            </TeamRecord>
+          </FlexColumn>
+        </TeamData>
+        <TeamData>
+          <FlexColumn>
+            <TeamName home>
+              {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
+            </TeamName>
+            <TeamRecord home>
+              {gameData.teamStats.home.record}
+            </TeamRecord>
+          </FlexColumn>
+          <TeamLogo>
+            <Sprites.Home />
+          </TeamLogo>
+        </TeamData>
+      </FlexRow>
+    </FlexColumn>
+  </TeamsPreview>
+);
 
 const TeamsPreview = styled.div`
   display: flex;

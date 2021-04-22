@@ -11,65 +11,61 @@ interface Props {
 }
 
 const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
-  const renderDivisionStandings = () => {
-    const isSameDivision = divisions[0].name === divisions[1].name;
-    const sortedStandings = [
-      {
-        name: divisions[0].name,
-        teams: divisions[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
-      },
-    ];
-    if (!isSameDivision) {
-      sortedStandings.push({
-        name: divisions[1].name,
-        teams: divisions[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
-      });
-    }
-
-    return sortedStandings.map((divisionStandings) => (
-      <DivisionStandingsContainer key={divisionStandings.name}>
-        <StandingsTableRow>
-          <SectionTitle>
-            {`${divisionStandings.name} Standings`}
-          </SectionTitle>
-        </StandingsTableRow>
-        <StandingsTable>
-          <StandingsTableHeader>
-            <StandingsTableCell></StandingsTableCell>
-            <StandingsTableCell>PTS</StandingsTableCell>
-            <StandingsTableCell>GP</StandingsTableCell>
-            <StandingsTableCell>W</StandingsTableCell>
-            <StandingsTableCell>L</StandingsTableCell>
-            <StandingsTableCell>OT</StandingsTableCell>
-          </StandingsTableHeader>
-          {divisionStandings.teams.map((team) => {
-            const Logo = Sprites[team.abbreviation];
-            return (
-              <StandingsTableRow key={team.abbreviation}>
-                <StandingsTableCell>
-                  <TeamInfo>
-                    <TeamLogoSmall>
-                      <Logo />
-                    </TeamLogoSmall>
-                    {team.abbreviation}
-                  </TeamInfo>
-                </StandingsTableCell>
-                <StandingsTableCell>{team.points}</StandingsTableCell>
-                <StandingsTableCell>{team.gp}</StandingsTableCell>
-                <StandingsTableCell>{team.wins}</StandingsTableCell>
-                <StandingsTableCell>{team.losses}</StandingsTableCell>
-                <StandingsTableCell>{team.OTL}</StandingsTableCell>
-              </StandingsTableRow>
-            );
-          })}
-        </StandingsTable>
-      </DivisionStandingsContainer>
-    ));
-  };
+  const isSameDivision = divisions[0].name === divisions[1].name;
+  const sortedStandings = [
+    {
+      name: divisions[0].name,
+      teams: divisions[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+    },
+  ];
+  if (!isSameDivision) {
+    sortedStandings.push({
+      name: divisions[1].name,
+      teams: divisions[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+    });
+  }
 
   return (
     <>
-      {renderDivisionStandings()}
+      {sortedStandings.map((divisionStandings) => (
+        <DivisionStandingsContainer key={divisionStandings.name}>
+          <StandingsTableRow>
+            <SectionTitle>
+              {`${divisionStandings.name} Standings`}
+            </SectionTitle>
+          </StandingsTableRow>
+          <StandingsTable>
+            <StandingsTableHeader>
+              <StandingsTableCell></StandingsTableCell>
+              <StandingsTableCell>PTS</StandingsTableCell>
+              <StandingsTableCell>GP</StandingsTableCell>
+              <StandingsTableCell>W</StandingsTableCell>
+              <StandingsTableCell>L</StandingsTableCell>
+              <StandingsTableCell>OT</StandingsTableCell>
+            </StandingsTableHeader>
+            {divisionStandings.teams.map((team) => {
+              const Logo = Sprites[team.abbreviation];
+              return (
+                <StandingsTableRow key={team.abbreviation}>
+                  <StandingsTableCell>
+                    <TeamInfo>
+                      <TeamLogoSmall>
+                        <Logo />
+                      </TeamLogoSmall>
+                      {team.abbreviation}
+                    </TeamInfo>
+                  </StandingsTableCell>
+                  <StandingsTableCell>{team.points}</StandingsTableCell>
+                  <StandingsTableCell>{team.gp}</StandingsTableCell>
+                  <StandingsTableCell>{team.wins}</StandingsTableCell>
+                  <StandingsTableCell>{team.losses}</StandingsTableCell>
+                  <StandingsTableCell>{team.OTL}</StandingsTableCell>
+                </StandingsTableRow>
+              );
+            })}
+          </StandingsTable>
+        </DivisionStandingsContainer>
+      ))}
     </>
   );
 };

@@ -27,3 +27,11 @@ export const TeamLogoSmall = styled.div`
   width: 25px;
   height: 25px;
 `;
+
+export const ComparisonHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+  padding-bottom: 15px;
+`;
