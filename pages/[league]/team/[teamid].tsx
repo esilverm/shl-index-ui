@@ -65,7 +65,7 @@ function TeamPage({
     id,
     filterSeasonType
   );
-  const [display, setDisplay] = useState('stats');
+  const [display, setDisplay] = useState('ratings');
 
   const getSkaters = () =>
     roster
