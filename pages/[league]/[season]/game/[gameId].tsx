@@ -1,6 +1,6 @@
 // TODO: Add logic to
 // * Hide all preview widgets when game has been played
-// * Break out widgets into components
+// * Responsive design
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -12,7 +12,6 @@ import Header from '../../../../components/Header';
 import { DivisionStandings, GoalieComparison, PreviousMatchups, SkaterComparison, TeamsBlock, TeamStats } from '../../../../components/Game';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
-import { FlexColumn, } from '../../../../components/Game/common';
 
 interface Props {
   league: string;
@@ -66,6 +65,28 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     setDivisions([awayDivision, homeDivision]);
   }, [divisionData, gameData, divisions]);
 
+  const renderDivisionStandings = () => {
+    if (!divisions && !divisionError) {
+      return (
+        <CenteredContent>
+          <PulseLoader size={15} />
+        </CenteredContent>
+      );
+    }
+
+    if (divisionError) {
+      return (
+        <ErrorBlock>
+          Failed to load division standings
+        </ErrorBlock>
+      );
+    }
+
+    if (divisions) {
+      return <DivisionStandings divisions={divisions} Sprites={Sprites} />;
+    }
+  };
+
   const isLoading = isLoadingAssets || !gameData;
   const isRegularSeason = gameData && gameData.game.type === "Regular Season";
 
@@ -88,15 +109,10 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
         {!isLoading && (
           <>
-            <FlexColumn width={300}>
+            <LeftColumn>
               <TeamStats gameData={gameData} Sprites={Sprites} />
-              {isRegularSeason && divisionError &&
-                <ErrorBlock>
-                  Failed to load division standings
-                </ErrorBlock>
-              }
-              {isRegularSeason && divisions && <DivisionStandings divisions={divisions} Sprites={Sprites} />}
-            </FlexColumn>
+              {isRegularSeason && renderDivisionStandings()}
+            </LeftColumn>
             <Comparison>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
               <SkaterComparison gameData={gameData} Sprites={Sprites} />
@@ -125,10 +141,21 @@ const Container = styled.div`
   }
 `;
 
-// Left
+const LeftColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  height: fit-content;
+`;
 
+const CenteredContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
-// Middle
 const Comparison = styled.div`
   display: flex;
   flex-direction: column;
@@ -136,8 +163,6 @@ const Comparison = styled.div`
   margin: 0 20px;
 `;
 
-// Right
-// Error
 const ErrorBlock = styled.div`
   display: flex;
   align-items: center;
