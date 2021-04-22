@@ -4,13 +4,17 @@
 
 ### Installation
 
-1. On linux debian based systems, run to install npm
+1. On linux debian based systems, run to install nodejs
 
 ```bash
-sudo apt install npm
+sudo apt install nodejs
 ```
 
-**Note: There may be other dependancies that need installed with nmp**
+1. On linux debian based systems, run to install yarn
+
+```bash
+curl -o- -L https://yarnpkg.com/install.sh | bash
+```
 
 2. Clone the repository to your local environment
 
@@ -29,7 +33,7 @@ cd shl-index-ui
 4. Install all libraries
 
 ```bash
-npm install
+yarn
 ```
 
 5. Get the .env.local file from one of the head developers and place it in the top level directory.
@@ -46,8 +50,6 @@ ssh -N -L 3306:127.0.0.1:3306 <username>@<server> -p <port> &
 2. Run the development server
 
 ```bash
-npm run dev
-# or
 yarn dev
 ```
 
