@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { PulseLoader } from 'react-spinners';
 
 import Header from '../../../../components/Header';
-import { DivisionStandings, TeamStats } from '../../../../components/Game';
+import { DivisionStandings, TeamsBlock, TeamStats } from '../../../../components/Game';
 import { Matchup as MatchupData, GoalieStats } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
 import { FlexColumn, FlexRow, SectionTitle, TeamLogoSmall } from '../../../../components/Game/common';
@@ -65,48 +65,6 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
     setDivisions([awayDivision, homeDivision]);
   }, [divisionData, gameData, divisions]);
-
-  
-
-  const renderTeamsBlock = () => (
-    <TeamsPreview>
-      <FlexColumn>
-        <GameDate>
-          <SectionTitle>
-            {gameData.game.date}
-          </SectionTitle>
-        </GameDate>
-        <FlexRow>
-          <TeamData>
-            <TeamLogo>
-              <Sprites.Away />
-            </TeamLogo>
-            <FlexColumn>
-              <TeamName>
-                {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
-              </TeamName>
-              <TeamRecord>
-                {gameData.teamStats.away.record}
-              </TeamRecord>
-            </FlexColumn>
-          </TeamData>
-          <TeamData>
-            <FlexColumn>
-              <TeamName home>
-                {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
-              </TeamName>
-              <TeamRecord home>
-                {gameData.teamStats.home.record}
-              </TeamRecord>
-            </FlexColumn>
-            <TeamLogo>
-              <Sprites.Home />
-            </TeamLogo>
-          </TeamData>
-        </FlexRow>
-      </FlexColumn>
-    </TeamsPreview>
-  );
 
   const renderSkaterComparison = () => {
     const defaultStatLeaders = {
@@ -296,7 +254,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
               {isRegularSeason && divisions && <DivisionStandings divisions={divisions} Sprites={Sprites} />}
             </FlexColumn>
             <Comparison>
-              {renderTeamsBlock()}
+              <TeamsBlock gameData={gameData} Sprites={Sprites} />
               {renderSkaterComparison()}
               {renderGoalieComparison()}
             </Comparison>
@@ -346,51 +304,6 @@ const Comparison = styled.div`
   flex-direction: column;
   flex: 1;
   margin: 0 20px;
-`;
-
-const TeamsPreview = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 0 15px 15px 15px;
-`;
-
-const TeamData = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const GameDate = styled.div`
-  font-family: Montserrat, sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border-bottom: 4px solid ${({ theme }) => theme.colors.grey300};
-  margin-bottom: 10px;
-  padding 10px 0;
-`;
-
-const TeamName = styled.span<{
-  home?: boolean;
-}>`
-  text-align: ${({ home }) => home ? 'right' : 'left'};
-  padding: 0 10px;
-  font-weight: 600;
-`;
-
-const TeamRecord = styled.span<{
-  home?: boolean;
-}>`
-  font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  text-align: ${({ home }) => home ? 'right' : 'left'};
-  padding: 0 10px;
-  color: ${({ theme }) => theme.colors.grey600};
-`;
-
-const TeamLogo = styled.div`
-  width: 50px;
-  height: 50px;
 `;
 
 const SkaterComparison = styled.div`

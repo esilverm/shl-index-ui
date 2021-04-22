@@ -67,7 +67,11 @@ const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
     ));
   };
 
-  return renderDivisionStandings();
+  return (
+    <>
+      {renderDivisionStandings()}
+    </>
+  );
 };
 
 const DivisionStandingsContainer = styled.div`
