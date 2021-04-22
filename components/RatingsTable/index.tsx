@@ -52,7 +52,7 @@ Props): JSX.Element {
   }, []);
 
   const initialState = useMemo(() => {
-    return { sortBy: [{ id: 'name', desc: true }] };
+    return { sortBy: [{ id: '', desc: true }] };
   }, []);
 
   let table;
