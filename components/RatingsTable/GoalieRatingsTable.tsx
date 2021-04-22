@@ -4,10 +4,11 @@ import { GoalieRatings } from '../..';
 
 interface Props {
   data: Array<GoalieRatings>;
+  pagination?: boolean;
   teamPage?: boolean;
 }
 
-function GoalieRatingsTable({ data: players, teamPage: teamPage }: Props): JSX.Element {
+function GoalieRatingsTable({ data: players, pagination=false, teamPage=false}: Props): JSX.Element {
   const columnData = [
     {
       Header: 'Player Info',
@@ -118,7 +119,7 @@ function GoalieRatingsTable({ data: players, teamPage: teamPage }: Props): JSX.E
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData} teamPage={teamPage} />;
+  return <RatingsTable data={players} columnData={columnData} pagination={pagination} teamPage={teamPage} />;
 }
 
 export default GoalieRatingsTable;

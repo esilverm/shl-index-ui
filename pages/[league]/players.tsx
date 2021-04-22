@@ -121,7 +121,7 @@ function PlayerPage({ league }: Props): JSX.Element {
           <TableWrapper>
             <TableContainer>
               {display === 'ratings' && !isLoadingPlayers ? (
-                <SkaterRatingsTable data={getSkaters()} />
+                <SkaterRatingsTable data={getSkaters()} pagination/>
               ) : display === 'stats' && !isLoadingPlayerStat ? (
                 <SkaterScoreTable data={getSkater()} pagination />
               ) : (
@@ -134,7 +134,7 @@ function PlayerPage({ league }: Props): JSX.Element {
             {!isLoadingGoalies && (
               <TableContainer>
                 {display === 'ratings' && !isLoadingGoalies ? (
-                  <GoalieRatingsTable data={getGoalies()} />
+                  <GoalieRatingsTable data={getGoalies()} pagination/>
                 ) : (
                   <GoalieScoreTable data={getGoalie()} pagination />
                 )}
