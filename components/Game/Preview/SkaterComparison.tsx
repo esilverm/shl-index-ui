@@ -123,6 +123,11 @@ const TeamLeader = styled.div<{
 
 const LeaderSkater = styled.span`
   font-weight: 600;
+  word-break: break-word;
+
+  @media screen and (max-width: 900px) {
+    font-size: 14px;
+  }
 `;
 
 const LeaderValue = styled.span<{
@@ -131,7 +136,11 @@ const LeaderValue = styled.span<{
   font-size: 32px;
   font-weight: 700;
   font-family: Montserrat, sans-serif;
-  ${({ gray, theme }) => gray && `color: ${theme.colors.grey500};`};
+  ${({ gray, theme }) => gray && `color: ${theme.colors.grey500};`}
+
+  @media screen and (max-width: 900px) {
+    font-size: 22px;
+  }
 `;
 
 const LeaderLabel = styled.span`

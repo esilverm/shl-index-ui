@@ -81,6 +81,10 @@ const GoalieStatsBlock = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const TeamGoalies = styled.div<{
@@ -90,6 +94,11 @@ const TeamGoalies = styled.div<{
   flex-direction: column;
   width: 200px;
   ${({ home }) => home && `text-align: right;`}
+
+  @media screen and (max-width: 900px) {
+    width: 50%;
+    ${({ home }) => home && `margin-left: auto;`}
+  }
 `;
 
 const GoalieName = styled.span`

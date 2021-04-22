@@ -57,7 +57,6 @@ const PreviousMatchupsContainer = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
   padding: 0 15px;
-  width: 300px;
 
   div:last-child {
     margin-bottom: 0;

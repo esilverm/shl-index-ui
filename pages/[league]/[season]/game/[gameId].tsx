@@ -1,6 +1,3 @@
-// TODO: Add logic to
-// * Hide all preview widgets when game has been played
-// * Responsive design
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -113,12 +110,14 @@ function GameResults({ league, gameId }: Props): JSX.Element {
               <TeamStats gameData={gameData} Sprites={Sprites} />
               {isRegularSeason && renderDivisionStandings()}
             </LeftColumn>
-            <Comparison>
+            <MiddleColumn>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
               <SkaterComparison gameData={gameData} Sprites={Sprites} />
               <GoalieComparison gameData={gameData} Sprites={Sprites} />
-            </Comparison>
-            <PreviousMatchups gameData={gameData} Sprites={Sprites} />
+            </MiddleColumn>
+            <RightColumn>
+              <PreviousMatchups gameData={gameData} Sprites={Sprites} />
+            </RightColumn>
           </>
         )}
       </Container>
@@ -135,9 +134,41 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: space-evenly;
 
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    padding: 2.5%;
+  @media screen and (max-width: 1650px) {
+    width: 75%;
+    padding: 21px 0 40px 0;
+  }
+
+  @media screen and (max-width: 1550px) {
+    width: 85%;
+  }
+
+  @media screen and (max-width: 1400px) {
+    width: 95%;
+  }
+
+  @media screen and (max-width: 1200px) {
+    display: grid;
+    grid-template-columns: 300px auto;
+    grid-template-areas:
+      'stats teams'
+      'matchups teams';
+    justify-content: normal;
+  }
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: 300px auto 300px;
+    grid-template-areas:
+      'teams teams teams'
+      'stats . matchups';
+  }
+
+  @media screen and (max-width: 670px) {
+    grid-template-columns: 100%;
+    grid-template-areas:
+      'teams'
+      'stats'
+      'matchups';
   }
 `;
 
@@ -147,6 +178,47 @@ const LeftColumn = styled.div`
   justify-content: space-between;
   width: 300px;
   height: fit-content;
+
+  @media screen and (max-width: 1200px) {
+    grid-area: stats;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 10px;
+  }
+
+  @media screen and (max-width: 670px) {
+    width: 100%;
+  }
+`;
+
+const MiddleColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 20px;
+
+  @media screen and (max-width: 1200px) {
+    grid-area: teams;
+    margin: 0 0 0 20px;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin: 0
+  }
+`;
+
+const RightColumn = styled.div`
+  width: 300px;
+
+  @media screen and (max-width: 1200px) {
+    grid-area: matchups;
+    margin-top: 10px;
+  }
+
+  @media screen and (max-width: 670px) {
+    width: 100%;
+  }
 `;
 
 const CenteredContent = styled.div`
@@ -154,13 +226,6 @@ const CenteredContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-
-const Comparison = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  margin: 0 20px;
 `;
 
 const ErrorBlock = styled.div`
