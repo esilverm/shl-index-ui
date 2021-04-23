@@ -120,29 +120,37 @@ export default async (
     ORDER BY CAST(Date as DATE) DESC;
   `;
 
+  const statsTableSuffix = {
+    'Pre-Season': 'ps',
+    'Regular Season': 'rs',
+    Playoffs: 'po'
+  }[Type];
+
   const skaterStatsSearch = SQL`
     SELECT p.\`Last Name\` as 'Name', ss.G, ss.A, ss.PlusMinus, ss.TeamID
-    FROM player_skater_stats_rs as ss
-    INNER JOIN player_master as p
+    FROM `.append(`player_skater_stats_${statsTableSuffix} as ss`)
+    .append(`
+      INNER JOIN player_master as p
       ON ss.SeasonID = p.SeasonID
       AND ss.LeagueID = p.LeagueID
       AND ss.PlayerID = p.PlayerID
     WHERE ss.SeasonID=${SeasonID}
       AND ss.LeagueID=${LeagueID}
       AND (ss.TeamID=${Away} OR ss.TeamID=${Home})
-  `;
+  `);
 
   const goalieStatsSearch = SQL`
     SELECT p.\`Last Name\` as 'Name', gs.Wins, gs.Losses, gs.OT, gs.GAA, gs.SavePct, gs.Shutouts, gs.TeamID
-    FROM player_goalie_stats_rs as gs
-    INNER JOIN player_master as p
+    FROM `.append(`player_goalie_stats_${statsTableSuffix} as gs`)
+    .append(`
+      INNER JOIN player_master as p
       ON gs.SeasonID = p.SeasonID
       AND gs.LeagueID = p.LeagueID
       AND gs.PlayerID = p.PlayerID
     WHERE gs.SeasonID=${SeasonID}
       AND gs.LeagueID=${LeagueID}
       AND (gs.TeamID=${Away} OR gs.TeamID=${Home})
-  `;
+  `);
 
   const previousMatchups: Array<GameRow> = await query(previousMatchupsSearch);
   const skaterStats = await query(skaterStatsSearch);

@@ -1,5 +1,3 @@
-// TODO
-// * API endpoint to return dynamic season type player data
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
