@@ -70,9 +70,9 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
           </GoalieFlexRow>
           <GoalieFlexRow>
             <GoalieStat>
-              {awayGoalie ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}` : <span></span>}
+              <span>{awayGoalie ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}` : ''}</span>
               <span>{statLabels.record}</span>
-              {homeGoalie ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}` : <span></span>}
+              <span>{homeGoalie ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}` : ''}</span>
             </GoalieStat>
           </GoalieFlexRow>
           {Object.keys(awayGoalie).map((stat) => {
@@ -221,6 +221,20 @@ const GoalieStat = styled.div`
     margin-top: 5px;
     flex-direction: row;
     justify-content: space-between;
+
+    > span:first-child {
+      width: 50%;
+    }
+
+    > span:last-child {
+      width: 50%;
+      text-align: right;
+    }
+
+    > span:nth-child(2) {
+      width: 60px;
+      text-align: center;
+    }
   }
 `;
 
