@@ -74,7 +74,7 @@ const Container = styled.div`
   display: grid;
   width: 75%;
   padding: 2.5%;
-  height: 80vh;
+  height: auto;
   grid-template-rows: repeat(6, 1fr);
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
