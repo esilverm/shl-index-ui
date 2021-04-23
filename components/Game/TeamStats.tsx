@@ -154,7 +154,7 @@ const StatValue = styled.span<{
 }>`
   font-family: Montserrat, sans-serif;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600;
   flex: 1;
   ${({ home }) => home && 'text-align: right;'};
 `;

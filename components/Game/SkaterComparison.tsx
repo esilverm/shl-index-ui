@@ -148,7 +148,7 @@ const LeaderValue = styled.span<{
   gray?: boolean;
 }>`
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 600;
   font-family: Montserrat, sans-serif;
   ${({ gray, theme }) => gray && `color: ${theme.colors.grey500};`}
 

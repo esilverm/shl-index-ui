@@ -28,7 +28,9 @@ const PreviousMatchups = ({
         key={matchup.slug}
       >
         <MatchupRow isGame>
-          <SectionTitle>{matchup.date}</SectionTitle>
+          <SectionTitle>
+            {matchup.date} {matchup.played ? ' • Final' : ' • Not Played'}
+          </SectionTitle>
           <MatchupTeamRow>
             <TeamLogoSmall>
               {matchup.awayTeam === gameData.game.awayTeam ? (
@@ -43,7 +45,7 @@ const PreviousMatchups = ({
                 : gameData.teams.home.nickname}
             </span>
             <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>
-              {matchup.awayScore}
+              {matchup.played ? matchup.awayScore : ''}
             </MatchupRowScore>
           </MatchupTeamRow>
           <MatchupTeamRow>
@@ -60,16 +62,17 @@ const PreviousMatchups = ({
                 : gameData.teams.away.nickname}
             </span>
             <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>
-              {matchup.homeScore}
+              {matchup.played ? matchup.homeScore : ''}
             </MatchupRowScore>
           </MatchupTeamRow>
         </MatchupRow>
       </LinkWithSeason>
     ));
 
-  const previouslyPlayedMatchups = gameData.previousMatchups.filter(
-    (game) => game.played === 1
-  );
+  const previouslyPlayedMatchups = gameData.previousMatchups;
+  // const previouslyPlayedMatchups = gameData.previousMatchups.filter(
+  //   (game) => game.played === 1
+  // );
 
   return (
     <PreviousMatchupsContainer>
@@ -105,10 +108,11 @@ const MatchupTeamRow = styled.div`
   align-items: center;
   font-family: Montserrat, sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 
   div:first-child {
     margin-right: 10px;
+    font-weight: 500;
   }
 `;
 
@@ -134,7 +138,6 @@ const MatchupRow = styled.div<{
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
   padding: 15px 15px 15px 15px;
-  margin-bottom: 15px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
 
   * {

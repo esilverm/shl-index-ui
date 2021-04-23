@@ -108,7 +108,7 @@ export default async (
 
   const [game] = await query(gameSearch);
 
-  const { SeasonID, LeagueID, Away, Home, Date, Type } = game;
+  const { SeasonID, LeagueID, Away, Home, Type } = game;
 
   const previousMatchupsSearch = SQL`
     SELECT *
@@ -117,9 +117,8 @@ export default async (
       AND LeagueID=${LeagueID}
       AND (Home=${Away} OR Away=${Away})
       AND (Home=${Home} OR Away=${Home})
-      AND CAST(Date as DATE) < ${Date}
       AND Type=${Type}
-    ORDER BY CAST(Date as DATE) DESC;
+    ORDER BY CAST(Date as DATE) ASC;
   `;
 
   const statsTableSuffix = {
