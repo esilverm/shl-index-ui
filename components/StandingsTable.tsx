@@ -42,7 +42,7 @@ interface Props {
       }
     | Array<{
         name: string;
-        teams: {
+        teams: Array<{
           position: number;
           id: number;
           name: string;
@@ -72,7 +72,7 @@ interface Props {
             wins: number;
             losses: number;
           };
-        };
+        }>;
       }>;
   isLoading: boolean;
   title?: string;
