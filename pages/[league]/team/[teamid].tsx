@@ -65,7 +65,7 @@ function TeamPage({
     id,
     filterSeasonType
   );
-  const [display, setDisplay] = useState('ratings');
+  const [display, setDisplay] = useState('stats');
 
   const getSkaters = () =>
     roster
@@ -148,15 +148,6 @@ function TeamPage({
           <SeasonTypeSelector onChange={onSeasonTypeSelect} />
         </Filters>
         <DisplaySelectContainer role="tablist">
-        <DisplaySelectItem
-              onClick={() => setDisplay(() => 'ratings')}
-              active={display === 'ratings'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'ratings'}
-            >
-              Ratings
-          </DisplaySelectItem>
           <DisplaySelectItem
             onClick={() => setDisplay(() => 'stats')}
             active={display === 'stats'}
@@ -174,6 +165,15 @@ function TeamPage({
             aria-selected={display === ''}
           >
             Advanced Stats
+          </DisplaySelectItem>
+          <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
           </DisplaySelectItem>
         </DisplaySelectContainer>
         <TableWrapper>
