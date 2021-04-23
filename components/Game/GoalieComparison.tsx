@@ -239,9 +239,10 @@ const GoalieStat = styled.div`
   flex-direction: column;
   font-family: Montserrat, sans-serif;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.grey600};
+  color: ${({ theme }) => theme.colors.grey800};
 
   span:last-child {
+    color: ${({ theme }) => theme.colors.grey600};
     font-weight: 600;
   }
 
