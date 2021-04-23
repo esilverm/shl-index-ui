@@ -14,31 +14,31 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
   const defaultStatLeaders = {
     away: {
       player: '',
-      value: -99
+      value: -99,
     },
     home: {
       player: '',
-      value: -99
-    }
+      value: -99,
+    },
   };
   // Using JSON because the spread and Object.assign operators copied the object with its reference
   const teamLeaders = {
     points: {
       label: 'Points',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders))
+      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
     },
     goals: {
       label: 'Goals',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders))
+      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
     },
     assists: {
       label: 'Assists',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders))
+      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
     },
     plusMinus: {
       label: '+/-',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders))
-    }
+      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
+    },
   };
 
   Object.keys(gameData.skaterStats).forEach((team) => {
@@ -62,9 +62,7 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
         <TeamLogoSmall>
           <Sprites.Away />
         </TeamLogoSmall>
-        <SectionTitle>
-          {title}
-        </SectionTitle>
+        <SectionTitle>{title}</SectionTitle>
         <TeamLogoSmall>
           <Sprites.Home />
         </TeamLogoSmall>
@@ -74,13 +72,23 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
           <StatComparison key={stat}>
             <TeamLeader>
               <LeaderSkater>{teamLeaders[stat].away.player}</LeaderSkater>
-              <LeaderValue gray={teamLeaders[stat].away.value < teamLeaders[stat].home.value}>{teamLeaders[stat].away.value}</LeaderValue>
+              <LeaderValue
+                gray={
+                  teamLeaders[stat].away.value < teamLeaders[stat].home.value
+                }
+              >
+                {teamLeaders[stat].away.value}
+              </LeaderValue>
             </TeamLeader>
-            <LeaderLabel>
-              {teamLeaders[stat].label}
-            </LeaderLabel>
+            <LeaderLabel>{teamLeaders[stat].label}</LeaderLabel>
             <TeamLeader home>
-              <LeaderValue gray={teamLeaders[stat].home.value < teamLeaders[stat].away.value}>{teamLeaders[stat].home.value}</LeaderValue>
+              <LeaderValue
+                gray={
+                  teamLeaders[stat].home.value < teamLeaders[stat].away.value
+                }
+              >
+                {teamLeaders[stat].home.value}
+              </LeaderValue>
               <LeaderSkater>{teamLeaders[stat].home.player}</LeaderSkater>
             </TeamLeader>
           </StatComparison>
@@ -119,8 +127,8 @@ const TeamLeader = styled.div<{
   justify-content: space-between;
   align-items: center;
   width: 50%;
-  text-align: ${({ home }) => home ? 'right' : 'left'};
-  margin-${({ home }) => home ? 'left' : 'right'}: 10px;
+  text-align: ${({ home }) => (home ? 'right' : 'left')};
+  margin-${({ home }) => (home ? 'left' : 'right')}: 10px;
 `;
 
 const LeaderSkater = styled.span`

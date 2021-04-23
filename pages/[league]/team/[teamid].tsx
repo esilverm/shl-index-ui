@@ -153,7 +153,7 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              <GoalieScoreTable data={getGoalies()} teamPage/>
+              <GoalieScoreTable data={getGoalies()} teamPage />
             </TableContainer>
           )}
         </TableWrapper>

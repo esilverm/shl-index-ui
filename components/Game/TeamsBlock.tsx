@@ -12,20 +12,14 @@ interface Props {
 
 const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
   const { awayScore, homeScore, played, overtime, shootout } = gameData.game;
-  const final = `Final${shootout ? ' (SO)' : (overtime ? ' (OT)' : '')}`;
+  const final = `Final${shootout ? ' (SO)' : overtime ? ' (OT)' : ''}`;
 
   return (
     <TeamsPreview>
       <FlexColumn>
         <GameDate>
-          <SectionTitle>
-            {gameData.game.date}
-          </SectionTitle>
-          {!!played && (
-            <FinalLabel>
-              {final}
-            </FinalLabel>
-          )}
+          <SectionTitle>{gameData.game.date}</SectionTitle>
+          {!!played && <FinalLabel>{final}</FinalLabel>}
         </GameDate>
         <ResponsiveFlex>
           <TeamData>
@@ -36,21 +30,21 @@ const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
               <TeamName>
                 {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
               </TeamName>
-              <TeamRecord>
-                {gameData.teamStats.away.record}
-              </TeamRecord>
+              <TeamRecord>{gameData.teamStats.away.record}</TeamRecord>
             </TeamInfo>
-            {!!played && <Score lost={awayScore < homeScore}>{awayScore}</Score>}
+            {!!played && (
+              <Score lost={awayScore < homeScore}>{awayScore}</Score>
+            )}
           </TeamData>
           <TeamData>
-            {!!played && <Score lost={homeScore < awayScore}>{homeScore}</Score>}
+            {!!played && (
+              <Score lost={homeScore < awayScore}>{homeScore}</Score>
+            )}
             <TeamInfo>
               <TeamName home>
                 {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
               </TeamName>
-              <TeamRecord home>
-                {gameData.teamStats.home.record}
-              </TeamRecord>
+              <TeamRecord home>{gameData.teamStats.home.record}</TeamRecord>
             </TeamInfo>
             <TeamLogo>
               <Sprites.Home />
@@ -124,7 +118,7 @@ const TeamInfo = styled(FlexColumn)`
 const TeamName = styled.span<{
   home?: boolean;
 }>`
-  text-align: ${({ home }) => home ? 'right' : 'left'};
+  text-align: ${({ home }) => (home ? 'right' : 'left')};
   padding: 0 10px;
   font-weight: 600;
 
@@ -139,7 +133,7 @@ const TeamRecord = styled.span<{
 }>`
   font-family: Montserrat, sans-serif;
   font-size: 14px;
-  text-align: ${({ home }) => home ? 'right' : 'left'};
+  text-align: ${({ home }) => (home ? 'right' : 'left')};
   padding: 0 10px;
   color: ${({ theme }) => theme.colors.grey600};
 

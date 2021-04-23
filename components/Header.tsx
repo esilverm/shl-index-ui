@@ -165,12 +165,12 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            {activePage !== 'game' &&
+            {activePage !== 'game' && (
               <SeasonSelector
                 seasons={getSeasonsList()}
                 loading={!seasonsData && !seasonsError}
               />
-            }
+            )}
           </SelectorWrapper>
         </Container>
       </HeaderNav>

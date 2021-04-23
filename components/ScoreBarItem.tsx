@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable no-nested-ternary  */
 import React from 'react';
 import styled from 'styled-components';
 import Link from '../components/LinkWithSeason';
@@ -46,6 +46,8 @@ function ScoreBarItem({
     'Dec',
   ];
 
+  console.log(data);
+
   return (
     <>
       {isDate ? (
@@ -71,7 +73,7 @@ function ScoreBarItem({
               winner={data.homeScore > data.awayScore}
             >
               <TeamIcon>
-                <HomeIcon aria-label={data.homeTeam} />
+                {HomeIcon && <HomeIcon aria-label={data.homeTeam} />}
               </TeamIcon>
               <span className="sbi-shortname" aria-label="Home Team">
                 {data.homeTeam}
@@ -87,7 +89,7 @@ function ScoreBarItem({
               winner={!(data.homeScore > data.awayScore)}
             >
               <TeamIcon>
-                <AwayIcon aria-label={data.awayTeam} />
+                {AwayIcon && <AwayIcon aria-label={data.awayTeam} />}
               </TeamIcon>
               <span className="sbi-shortname" aria-label="Away Team">
                 {data.awayTeam}
@@ -195,4 +197,4 @@ const GameResultText = styled.span<{ played: boolean }>`
   font-size: 0.8rem;
 `;
 
-export default React.memo(ScoreBarItem);
+export default ScoreBarItem;

@@ -11,43 +11,61 @@ interface Props {
 }
 
 const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
-  const renderPreviousMatchups = (previouslyPlayedMatchups) => previouslyPlayedMatchups.map((matchup) => (
-    <MatchupRow key={matchup.slug}>
-      <SectionTitle>
-        {matchup.date}
-      </SectionTitle>
-      <MatchupTeamRow>
-        <TeamLogoSmall>
-          {matchup.awayTeam === gameData.game.awayTeam ? <Sprites.Away /> : <Sprites.Home />}
-        </TeamLogoSmall>
-        <span>{matchup.awayTeam === gameData.game.awayTeam ? gameData.teams.away.nickname : gameData.teams.home.nickname}</span>
-        <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>{matchup.awayScore}</MatchupRowScore>
-      </MatchupTeamRow>
-      <MatchupTeamRow>
-        <TeamLogoSmall>
-          {matchup.homeTeam === gameData.game.homeTeam ? <Sprites.Home /> : <Sprites.Away />}
-        </TeamLogoSmall>
-        <span>{matchup.homeTeam === gameData.game.homeTeam ? gameData.teams.home.nickname : gameData.teams.away.nickname}</span>
-        <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>{matchup.homeScore}</MatchupRowScore>
-      </MatchupTeamRow>
-    </MatchupRow>
-  ));
+  const renderPreviousMatchups = (previouslyPlayedMatchups) =>
+    previouslyPlayedMatchups.map((matchup) => (
+      <MatchupRow key={matchup.slug}>
+        <SectionTitle>{matchup.date}</SectionTitle>
+        <MatchupTeamRow>
+          <TeamLogoSmall>
+            {matchup.awayTeam === gameData.game.awayTeam ? (
+              <Sprites.Away />
+            ) : (
+              <Sprites.Home />
+            )}
+          </TeamLogoSmall>
+          <span>
+            {matchup.awayTeam === gameData.game.awayTeam
+              ? gameData.teams.away.nickname
+              : gameData.teams.home.nickname}
+          </span>
+          <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>
+            {matchup.awayScore}
+          </MatchupRowScore>
+        </MatchupTeamRow>
+        <MatchupTeamRow>
+          <TeamLogoSmall>
+            {matchup.homeTeam === gameData.game.homeTeam ? (
+              <Sprites.Home />
+            ) : (
+              <Sprites.Away />
+            )}
+          </TeamLogoSmall>
+          <span>
+            {matchup.homeTeam === gameData.game.homeTeam
+              ? gameData.teams.home.nickname
+              : gameData.teams.away.nickname}
+          </span>
+          <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>
+            {matchup.homeScore}
+          </MatchupRowScore>
+        </MatchupTeamRow>
+      </MatchupRow>
+    ));
 
-  const previouslyPlayedMatchups = gameData.previousMatchups.filter((game) => game.played === 1);
+  const previouslyPlayedMatchups = gameData.previousMatchups.filter(
+    (game) => game.played === 1
+  );
 
   return (
     <PreviousMatchupsContainer>
       <MatchupsHeader>
-        <SectionTitle>
-          {`${gameData.game.type} Series`}
-        </SectionTitle>
+        <SectionTitle>{`${gameData.game.type} Series`}</SectionTitle>
       </MatchupsHeader>
-      {previouslyPlayedMatchups.length > 0 && renderPreviousMatchups(previouslyPlayedMatchups)}
+      {previouslyPlayedMatchups.length > 0 &&
+        renderPreviousMatchups(previouslyPlayedMatchups)}
       {previouslyPlayedMatchups.length === 0 && (
         <MatchupRow>
-          <div>
-            No previous games played
-          </div>
+          <div>No previous games played</div>
         </MatchupRow>
       )}
     </PreviousMatchupsContainer>

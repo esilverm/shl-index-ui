@@ -6,7 +6,7 @@ export const FlexRow = styled.div<{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: ${({ height }) => height ? `${height}px` : 'auto'}
+  height: ${({ height }) => (height ? `${height}px` : 'auto')};
 `;
 
 export const FlexColumn = styled.div<{
@@ -15,7 +15,7 @@ export const FlexColumn = styled.div<{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: ${({ width }) => width ? `${width}px` : '100%'};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
   height: fit-content;
 `;
 

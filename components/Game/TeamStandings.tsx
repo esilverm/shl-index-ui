@@ -15,13 +15,17 @@ const TeamStandings = ({ standings, Sprites }: Props): JSX.Element => {
   const sortedStandings = [
     {
       name: standings[0].name,
-      teams: standings[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      teams: standings[0].teams.sort((a, b) =>
+        a.position > b.position ? 1 : -1
+      ),
     },
   ];
   if (!isSameDivision) {
     sortedStandings.push({
       name: standings[1].name,
-      teams: standings[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      teams: standings[1].teams.sort((a, b) =>
+        a.position > b.position ? 1 : -1
+      ),
     });
   }
 
@@ -30,9 +34,7 @@ const TeamStandings = ({ standings, Sprites }: Props): JSX.Element => {
       {sortedStandings.map((TeamStandings) => (
         <TeamStandingsContainer key={TeamStandings.name}>
           <StandingsTableRow>
-            <SectionTitle>
-              {`${TeamStandings.name} Standings`}
-            </SectionTitle>
+            <SectionTitle>{`${TeamStandings.name} Standings`}</SectionTitle>
           </StandingsTableRow>
           <StandingsTable>
             <StandingsTableHeader>

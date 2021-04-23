@@ -12,7 +12,7 @@ interface Props {
 function SkaterScoreTable({
   data: players,
   pagination = false,
-  teamPage=false,
+  teamPage = false,
 }: Props): JSX.Element {
   const calculateTimeOnIce = (toi: number, gamesPlayed: number) =>
     `${(toi / gamesPlayed / 60) >> 0}:${

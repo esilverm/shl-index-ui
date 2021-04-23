@@ -125,13 +125,12 @@ export default async (
   const statsTableSuffix = {
     'Pre-Season': 'ps',
     'Regular Season': 'rs',
-    Playoffs: 'po'
+    Playoffs: 'po',
   }[Type];
 
   const skaterStatsSearch = SQL`
     SELECT p.\`Last Name\` as 'Name', ss.G, ss.A, ss.PlusMinus, ss.TeamID
-    FROM `.append(`player_skater_stats_${statsTableSuffix} as ss`)
-    .append(`
+    FROM `.append(`player_skater_stats_${statsTableSuffix} as ss`).append(`
       INNER JOIN player_master as p
       ON ss.SeasonID = p.SeasonID
       AND ss.LeagueID = p.LeagueID
@@ -143,8 +142,7 @@ export default async (
 
   const goalieStatsSearch = SQL`
     SELECT p.\`Last Name\` as 'Name', gs.Wins, gs.Losses, gs.OT, gs.GAA, gs.SavePct, gs.Shutouts, gs.TeamID
-    FROM `.append(`player_goalie_stats_${statsTableSuffix} as gs`)
-    .append(`
+    FROM `.append(`player_goalie_stats_${statsTableSuffix} as gs`).append(`
       INNER JOIN player_master as p
       ON gs.SeasonID = p.SeasonID
       AND gs.LeagueID = p.LeagueID
@@ -216,13 +214,13 @@ export default async (
         name: game.AwayName,
         nickname: game.AwayNickname,
         abbr: game.AwayAbbr,
-        primaryColor: game.AwayPrimaryColor
+        primaryColor: game.AwayPrimaryColor,
       },
       home: {
         name: game.HomeName,
         nickname: game.HomeNickname,
         abbr: game.HomeAbbr,
-        primaryColor: game.HomePrimaryColor
+        primaryColor: game.HomePrimaryColor,
       },
     },
     teamStats: {
@@ -236,7 +234,7 @@ export default async (
           name: skater.Name,
           goals: skater.G,
           assists: skater.A,
-          plusMinus: skater.PlusMinus
+          plusMinus: skater.PlusMinus,
         })),
       home: skaterStats
         .filter((skater) => skater.TeamID === Home)
@@ -244,7 +242,7 @@ export default async (
           name: skater.Name,
           goals: skater.G,
           assists: skater.A,
-          plusMinus: skater.PlusMinus
+          plusMinus: skater.PlusMinus,
         })),
     },
     goalieStats: {
@@ -257,7 +255,7 @@ export default async (
           OT: goalie.OT,
           GAA: goalie.GAA,
           savePct: goalie.SavePct,
-          shutouts: goalie.Shutouts
+          shutouts: goalie.Shutouts,
         })),
       home: goalieStats
         .filter((goalie) => goalie.TeamID === Home)
@@ -268,7 +266,7 @@ export default async (
           OT: goalie.OT,
           GAA: goalie.GAA,
           savePct: goalie.SavePct,
-          shutouts: goalie.Shutouts
+          shutouts: goalie.Shutouts,
         })),
     },
     previousMatchups: parsedPrevMatchups,

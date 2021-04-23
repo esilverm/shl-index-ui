@@ -11,5 +11,5 @@ export {
   SkaterComparison,
   TeamsBlock,
   TeamStandings,
-  TeamStats
+  TeamStats,
 };

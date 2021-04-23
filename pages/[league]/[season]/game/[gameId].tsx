@@ -12,7 +12,7 @@ import {
   SkaterComparison,
   TeamsBlock,
   TeamStandings,
-  TeamStats
+  TeamStats,
 } from '../../../../components/Game';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
@@ -50,12 +50,12 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
 
       const teamSprites = {
         Away: s[gameData.teams.away.abbr],
-        Home: s[gameData.teams.home.abbr]
+        Home: s[gameData.teams.home.abbr],
       };
 
       setSprites(() => ({
         ...teamSprites,
-        ...s
+        ...s,
       }));
       setLoadingAssets(() => false);
     })();
@@ -65,9 +65,15 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     if (!standingsData || !gameData || standings) return;
 
     const awayDivision = standingsData.find((division) =>
-      division.teams.some((team) => team.abbreviation === gameData.teams.away.abbr));
+      division.teams.some(
+        (team) => team.abbreviation === gameData.teams.away.abbr
+      )
+    );
     const homeDivision = standingsData.find((division) =>
-      division.teams.some((team) => team.abbreviation === gameData.teams.home.abbr));
+      division.teams.some(
+        (team) => team.abbreviation === gameData.teams.home.abbr
+      )
+    );
 
     setStandings([awayDivision, homeDivision]);
   }, [standingsData, gameData, standings]);
@@ -82,11 +88,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     }
 
     if (standingsError) {
-      return (
-        <ErrorBlock>
-          Failed to load standings
-        </ErrorBlock>
-      );
+      return <ErrorBlock>Failed to load standings</ErrorBlock>;
     }
 
     if (standings) {
@@ -100,23 +102,23 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
   return (
     <React.Fragment>
       <NextSeo
-        title='Game'
+        title="Game"
         openGraph={{
           title: 'Game',
         }}
       />
-      <Header league={league} activePage='game' />
+      <Header league={league} activePage="game" />
       {isLoading && !gameError && (
         <CenteredContent>
           <PulseLoader size={15} />
         </CenteredContent>
       )}
       <Container>
-        {gameError &&
+        {gameError && (
           <ErrorBlock>
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
-        }
+        )}
 
         {!isLoading && (
           <>
@@ -222,7 +224,7 @@ const MiddleColumn = styled.div`
   }
 
   @media screen and (max-width: 900px) {
-    margin: 0
+    margin: 0;
   }
 `;
 
@@ -264,6 +266,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const leagueId = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league as string);
 
   return { props: { league, leagueId, gameId, season } };
-}
+};
 
 export default GameResults;

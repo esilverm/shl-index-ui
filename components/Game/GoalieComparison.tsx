@@ -1,7 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GoalieStats, Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
-import { ComparisonHeader, FlexColumn, FlexRow, SectionTitle, TeamLogoSmall } from './common';
+import {
+  GoalieStats,
+  Matchup,
+} from '../../pages/api/v1/schedule/game/[gameId]';
+import {
+  ComparisonHeader,
+  FlexColumn,
+  FlexRow,
+  SectionTitle,
+  TeamLogoSmall,
+} from './common';
 
 interface Props {
   gameData: Matchup;
@@ -15,39 +24,50 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
     record: 'Record',
     GAA: 'GAA',
     savePct: 'SV%',
-    shutouts: 'SO'
+    shutouts: 'SO',
   };
 
-  const sortByGamesPlayed = (goalies: Array<GoalieStats>) => goalies.sort((a, b) => (a.wins + a.losses + a.OT > b.wins + b.losses + b.OT) ? -1 : 1);
+  const sortByGamesPlayed = (goalies: Array<GoalieStats>) =>
+    goalies.sort((a, b) =>
+      a.wins + a.losses + a.OT > b.wins + b.losses + b.OT ? -1 : 1
+    );
 
-  const renderGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map((goalie) => (
-    <>
-      <GoalieName>
-        {goalie.name}
-      </GoalieName>
-      <FlexRow>
-        <GoalieStat>
-          <span>{statLabels.record}</span>
-          <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
-        </GoalieStat>
-        {Object.keys(goalie).map((stat) => {
-          if (!Object.keys(statLabels).includes(stat)) return null;
-
-          return (
-            <GoalieStat key={stat}>
-              <span>{statLabels[stat]}</span>
-              <span>{stat === "savePct" ? goalie[stat].toFixed(3) : goalie[stat]}</span>
+  const renderGoalieStats = (team: 'away' | 'home') =>
+    Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map(
+      (goalie) => (
+        <>
+          <GoalieName>{goalie.name}</GoalieName>
+          <FlexRow>
+            <GoalieStat>
+              <span>{statLabels.record}</span>
+              <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
             </GoalieStat>
-          );
-        })}
-      </FlexRow>
-    </>
-  ));
+            {Object.keys(goalie).map((stat) => {
+              if (!Object.keys(statLabels).includes(stat)) return null;
+
+              return (
+                <GoalieStat key={stat}>
+                  <span>{statLabels[stat]}</span>
+                  <span>
+                    {stat === 'savePct'
+                      ? goalie[stat].toFixed(3)
+                      : goalie[stat]}
+                  </span>
+                </GoalieStat>
+              );
+            })}
+          </FlexRow>
+        </>
+      )
+    );
 
   const renderGoalieStatsWithSharedLabels = () => {
     const awayGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.away);
     const homeGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.home);
-    const maxNumGoalies = Math.max(awayGoaliesSorted.length, homeGoaliesSorted.length);
+    const maxNumGoalies = Math.max(
+      awayGoaliesSorted.length,
+      homeGoaliesSorted.length
+    );
 
     return new Array(maxNumGoalies).fill(0).map((_, index) => {
       const awayGoalie = awayGoaliesSorted[index];
@@ -58,33 +78,47 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
         <GoalieFlexColumn key={index}>
           <GoalieFlexRow>
             <div className={'away'}>
-              <GoalieName>
-                {awayGoalie && awayGoalie.name}
-              </GoalieName>
+              <GoalieName>{awayGoalie && awayGoalie.name}</GoalieName>
             </div>
             <span></span>
             <div className={'home'}>
-              <GoalieName>
-                {homeGoalie && homeGoalie.name}
-              </GoalieName>
+              <GoalieName>{homeGoalie && homeGoalie.name}</GoalieName>
             </div>
           </GoalieFlexRow>
           <GoalieFlexRow>
             <GoalieStat>
-              <span>{awayGoalie ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}` : ''}</span>
+              <span>
+                {awayGoalie
+                  ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}`
+                  : ''}
+              </span>
               <span>{statLabels.record}</span>
-              <span>{homeGoalie ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}` : ''}</span>
+              <span>
+                {homeGoalie
+                  ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}`
+                  : ''}
+              </span>
             </GoalieStat>
           </GoalieFlexRow>
           {Object.keys(statLabels).map((stat) => {
-            if (stat === "record") return null;
+            if (stat === 'record') return null;
 
             return (
               <GoalieFlexRow key={stat}>
                 <GoalieStat>
-                  <span>{awayGoalie && (stat === "savePct" ? awayGoalie[stat].toFixed(3) : awayGoalie[stat])}</span>
+                  <span>
+                    {awayGoalie &&
+                      (stat === 'savePct'
+                        ? awayGoalie[stat].toFixed(3)
+                        : awayGoalie[stat])}
+                  </span>
                   <span>{statLabels[stat]}</span>
-                  <span>{homeGoalie && (stat === "savePct" ? homeGoalie[stat].toFixed(3) : homeGoalie[stat])}</span>
+                  <span>
+                    {homeGoalie &&
+                      (stat === 'savePct'
+                        ? homeGoalie[stat].toFixed(3)
+                        : homeGoalie[stat])}
+                  </span>
                 </GoalieStat>
               </GoalieFlexRow>
             );
@@ -100,20 +134,14 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
         <TeamLogoSmall>
           <Sprites.Away />
         </TeamLogoSmall>
-        <SectionTitle>
-          Goaltender Comparison
-        </SectionTitle>
+        <SectionTitle>Goaltender Comparison</SectionTitle>
         <TeamLogoSmall>
           <Sprites.Home />
         </TeamLogoSmall>
       </ComparisonHeader>
       <GoalieStatsBlock>
-        <TeamGoaliesWide>
-          {renderGoalieStats('away')}
-        </TeamGoaliesWide>
-        <TeamGoaliesWide home>
-          {renderGoalieStats('home')}
-        </TeamGoaliesWide>
+        <TeamGoaliesWide>{renderGoalieStats('away')}</TeamGoaliesWide>
+        <TeamGoaliesWide home>{renderGoalieStats('home')}</TeamGoaliesWide>
         <TeamGoaliesNarrow>
           {renderGoalieStatsWithSharedLabels()}
         </TeamGoaliesNarrow>
@@ -161,11 +189,11 @@ const TeamGoaliesNarrow = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  
+
     > div:not(:last-child) {
       border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
     }
-  
+
     * > span {
       height: 20px;
     }
@@ -186,7 +214,8 @@ const GoalieFlexRow = styled.div<{
   align-items: center;
   justify-content: space-between;
 
-  div.away, div.home {
+  div.away,
+  div.home {
     width: 50%;
   }
 
@@ -215,7 +244,7 @@ const GoalieStat = styled.div`
   span:last-child {
     font-weight: 600;
   }
-  
+
   @media screen and (max-width: 900px) {
     width: 100%;
     font-weight: 600;

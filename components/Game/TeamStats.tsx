@@ -17,33 +17,50 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
         title: 'GF/GP',
         away: {
           total: 0,
-          perc: 0
+          perc: 0,
         },
         home: {
           total: 0,
-          perc: 0
-        }
+          perc: 0,
+        },
       },
       goalsAgainstPerGame: {
         title: 'GA/GP',
         away: {
           total: 0,
-          perc: 0
+          perc: 0,
         },
         home: {
           total: 0,
-          perc: 0
-        }
-      }
+          perc: 0,
+        },
+      },
     };
     const awayColor = gameData.teams.away.primaryColor;
     const homeColor = gameData.teams.home.primaryColor;
     Object.keys(gameData.teamStats).forEach((team) => {
-      stats.goalsForPerGame[team].total = parseFloat((gameData.teamStats[team].goalsFor / gameData.teamStats[team].gamesPlayed).toFixed(2));
-      stats.goalsAgainstPerGame[team].total = parseFloat((gameData.teamStats[team].goalsAgainst / gameData.teamStats[team].gamesPlayed).toFixed(2));
+      stats.goalsForPerGame[team].total = parseFloat(
+        (
+          gameData.teamStats[team].goalsFor /
+          gameData.teamStats[team].gamesPlayed
+        ).toFixed(2)
+      );
+      stats.goalsAgainstPerGame[team].total = parseFloat(
+        (
+          gameData.teamStats[team].goalsAgainst /
+          gameData.teamStats[team].gamesPlayed
+        ).toFixed(2)
+      );
     });
-    stats.goalsForPerGame.away.perc = stats.goalsForPerGame.away.total / (stats.goalsForPerGame.away.total + stats.goalsForPerGame.home.total) * 100;
-    stats.goalsAgainstPerGame.away.perc = stats.goalsAgainstPerGame.home.total / (stats.goalsAgainstPerGame.away.total + stats.goalsAgainstPerGame.home.total) * 100;
+    stats.goalsForPerGame.away.perc =
+      (stats.goalsForPerGame.away.total /
+        (stats.goalsForPerGame.away.total + stats.goalsForPerGame.home.total)) *
+      100;
+    stats.goalsAgainstPerGame.away.perc =
+      (stats.goalsAgainstPerGame.home.total /
+        (stats.goalsAgainstPerGame.away.total +
+          stats.goalsAgainstPerGame.home.total)) *
+      100;
 
     return (
       <>
@@ -52,15 +69,23 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
           <StatTitle>{stats.goalsForPerGame.title}</StatTitle>
           <StatValue home>{stats.goalsForPerGame.home.total}</StatValue>
         </TeamStatsRow>
-        <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsForPerGame.away.perc} homeColor={homeColor} />
+        <TeamStatsBar
+          awayColor={awayColor}
+          awayPerc={stats.goalsForPerGame.away.perc}
+          homeColor={homeColor}
+        />
         <TeamStatsRow>
           <StatValue>{stats.goalsAgainstPerGame.away.total}</StatValue>
           <StatTitle>{stats.goalsAgainstPerGame.title}</StatTitle>
           <StatValue home>{stats.goalsAgainstPerGame.home.total}</StatValue>
         </TeamStatsRow>
-        <TeamStatsBar awayColor={awayColor} awayPerc={stats.goalsAgainstPerGame.away.perc} homeColor={homeColor} />
+        <TeamStatsBar
+          awayColor={awayColor}
+          awayPerc={stats.goalsAgainstPerGame.away.perc}
+          homeColor={homeColor}
+        />
       </>
-    )
+    );
   };
 
   const titlePrefix = gameData.game.played ? 'Seasonal ' : '';
@@ -72,9 +97,7 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
           <TeamLogoSmall>
             <Sprites.Away />
           </TeamLogoSmall>
-          <SectionTitle>
-            {`${titlePrefix}Team Stats`}
-          </SectionTitle>
+          <SectionTitle>{`${titlePrefix}Team Stats`}</SectionTitle>
           <TeamLogoSmall>
             <Sprites.Home />
           </TeamLogoSmall>
@@ -111,13 +134,13 @@ const TeamStatsBar = styled.div<{
   homeColor: string;
 }>`
   border: 2px solid;
-  border-image: ${props => `
+  border-image: ${(props) => `
     linear-gradient(to right,
       ${props.awayColor} 0%,
       ${props.awayColor} ${props.awayPerc}%,
       ${props.theme.colors.grey100} ${props.awayPerc}%,
-      ${props.theme.colors.grey100} ${props.awayPerc+1}%,
-      ${props.homeColor} ${props.awayPerc+1}%,
+      ${props.theme.colors.grey100} ${props.awayPerc + 1}%,
+      ${props.homeColor} ${props.awayPerc + 1}%,
       ${props.homeColor} 100%
     ) 5`};
 `;
