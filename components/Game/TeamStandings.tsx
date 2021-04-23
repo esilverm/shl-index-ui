@@ -4,24 +4,24 @@ import { Standings } from '../../pages/api/v1/standings';
 import { SectionTitle, TeamLogoSmall } from './common';
 
 interface Props {
-  divisions: Array<Standings[number]>;
+  standings: Array<Standings[number]>;
   Sprites: {
     [index: string]: React.ComponentClass<any>;
   };
 }
 
-const TeamStandings = ({ divisions, Sprites }: Props): JSX.Element => {
-  const isSameDivision = divisions[0].name === divisions[1].name;
+const TeamStandings = ({ standings, Sprites }: Props): JSX.Element => {
+  const isSameDivision = standings[0].name === standings[1].name;
   const sortedStandings = [
     {
-      name: divisions[0].name,
-      teams: divisions[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      name: standings[0].name,
+      teams: standings[0].teams.sort((a, b) => a.position > b.position ? 1 : -1)
     },
   ];
   if (!isSameDivision) {
     sortedStandings.push({
-      name: divisions[1].name,
-      teams: divisions[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
+      name: standings[1].name,
+      teams: standings[1].teams.sort((a, b) => a.position > b.position ? 1 : -1)
     });
   }
 

@@ -63,6 +63,8 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
     )
   };
 
+  const titlePrefix = gameData.game.played ? 'Seasonal ' : '';
+
   return (
     <TeamStatsContainer>
       <TeamStatsHeader>
@@ -71,7 +73,7 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
             <Sprites.Away />
           </TeamLogoSmall>
           <SectionTitle>
-            Team Stats
+            {`${titlePrefix}Team Stats`}
           </SectionTitle>
           <TeamLogoSmall>
             <Sprites.Home />

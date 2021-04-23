@@ -25,7 +25,7 @@ interface Props {
 }
 
 function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
-  const [divisions, setDivisions] = useState<Array<Standings[number]>>();
+  const [standings, setStandings] = useState<Array<Standings[number]>>();
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [Sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
@@ -62,18 +62,18 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
   }, [gameData]);
 
   useEffect(() => {
-    if (!standingsData || !gameData || divisions) return;
+    if (!standingsData || !gameData || standings) return;
 
     const awayDivision = standingsData.find((division) =>
       division.teams.some((team) => team.abbreviation === gameData.teams.away.abbr));
     const homeDivision = standingsData.find((division) =>
       division.teams.some((team) => team.abbreviation === gameData.teams.home.abbr));
 
-    setDivisions([awayDivision, homeDivision]);
-  }, [standingsData, gameData, divisions]);
+    setStandings([awayDivision, homeDivision]);
+  }, [standingsData, gameData, standings]);
 
   const renderTeamStandings = () => {
-    if (!divisions && !standingsError) {
+    if (!standings && !standingsError) {
       return (
         <CenteredContent>
           <PulseLoader size={15} />
@@ -89,14 +89,13 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
       );
     }
 
-    if (divisions) {
-      return <TeamStandings divisions={divisions} Sprites={Sprites} />;
+    if (standings) {
+      return <TeamStandings standings={standings} Sprites={Sprites} />;
     }
   };
 
   const isLoading = isLoadingAssets || !gameData;
   const isRegularSeason = gameData && gameData.game.type === "Regular Season";
-  const isPlayed = gameData && gameData.game.played === 1;
 
   return (
     <React.Fragment>
@@ -122,7 +121,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
         {!isLoading && (
           <>
             <LeftColumn>
-              {!isPlayed && <TeamStats gameData={gameData} Sprites={Sprites} />}
+              <TeamStats gameData={gameData} Sprites={Sprites} />
               {isRegularSeason && renderTeamStandings()}
             </LeftColumn>
             <MiddleColumn>
