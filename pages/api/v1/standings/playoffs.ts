@@ -64,7 +64,33 @@ export default async (
     if (startdate in res) {
       return {
         ...res,
-        [startdate]: [...res[startdate], {
+        [startdate]: [
+          ...res[startdate],
+          {
+            league: matchup.LeagueID,
+            season: matchup.SeasonID,
+            team1: {
+              id: matchup.team1,
+              wins: matchup.team1Wins,
+              name: matchup.team1_Name,
+              nickname: matchup.team1_Nickname,
+              abbr: matchup.team1_Abbr,
+            },
+            team2: {
+              id: matchup.team2,
+              wins: matchup.team2Wins,
+              name: matchup.team2_Name,
+              nickname: matchup.team2_Nickname,
+              abbr: matchup.team2_Abbr,
+            },
+          },
+        ],
+      };
+    }
+    return {
+      ...res,
+      [startdate]: [
+        {
           league: matchup.LeagueID,
           season: matchup.SeasonID,
           team1: {
@@ -72,38 +98,17 @@ export default async (
             wins: matchup.team1Wins,
             name: matchup.team1_Name,
             nickname: matchup.team1_Nickname,
-            abbr: matchup.team1_Abbr
+            abbr: matchup.team1_Abbr,
           },
           team2: {
             id: matchup.team2,
             wins: matchup.team2Wins,
             name: matchup.team2_Name,
             nickname: matchup.team2_Nickname,
-            abbr: matchup.team2_Abbr
-          }
-        }],
-      };
-    }
-    return {
-      ...res,
-      [startdate]: [{
-        league: matchup.LeagueID,
-        season: matchup.SeasonID,
-        team1: {
-          id: matchup.team1,
-          wins: matchup.team1Wins,
-          name: matchup.team1_Name,
-          nickname: matchup.team1_Nickname,
-          abbr: matchup.team1_Abbr
+            abbr: matchup.team2_Abbr,
+          },
         },
-        team2: {
-          id: matchup.team2,
-          wins: matchup.team2Wins,
-          name: matchup.team2_Name,
-          nickname: matchup.team2_Nickname,
-          abbr: matchup.team2_Abbr
-        }
-      }],
+      ],
     };
   }, {});
 

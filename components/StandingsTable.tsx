@@ -42,7 +42,7 @@ interface Props {
       }
     | Array<{
         name: string;
-        teams: {
+        teams: Array<{
           position: number;
           id: number;
           name: string;
@@ -72,7 +72,7 @@ interface Props {
             wins: number;
             losses: number;
           };
-        };
+        }>;
       }>;
   isLoading: boolean;
   title?: string;
@@ -465,6 +465,7 @@ const TableBody = styled.tbody`
   position: relative;
 
   th {
+    font-family: Montserrat, sans-serif;
     display: table-cell;
     text-align: left;
     font-weight: 400;

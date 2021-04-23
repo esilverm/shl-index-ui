@@ -48,10 +48,8 @@ Props): JSX.Element {
           }
         }
       }
-      return columnData
-    }, []);
-
-
+    return columnData;
+  }, []);
 
   const initialState = useMemo(() => {
     if (players[0] && 'wins' in players[0]) {

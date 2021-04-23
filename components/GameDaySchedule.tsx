@@ -161,6 +161,7 @@ const TeamRow = styled.div<{ played: number; won: boolean; winNote: string }>`
     !!played && !won ? theme.colors.grey500 : theme.colors.grey900};
 
   .team {
+    font-family: Montserrat, sans-serif;
     font-size: 18px;
     display: flex;
     flex-direction: row;

@@ -165,10 +165,12 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            <SeasonSelector
-              seasons={getSeasonsList()}
-              loading={!seasonsData && !seasonsError}
-            />
+            {activePage !== 'game' && (
+              <SeasonSelector
+                seasons={getSeasonsList()}
+                loading={!seasonsData && !seasonsError}
+              />
+            )}
           </SelectorWrapper>
         </Container>
       </HeaderNav>
@@ -353,6 +355,7 @@ const SelectorWrapper = styled.div`
 
   @media screen and (max-width: 670px) {
     order: 3;
+    width: 55px;
   }
 `;
 
