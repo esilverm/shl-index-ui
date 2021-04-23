@@ -28,9 +28,9 @@ const PreviousMatchups = ({
         key={matchup.slug}
       >
         <MatchupRow isGame>
-          <SectionTitle>
+          <GameDate>
             {matchup.date} {matchup.played ? ' • Final' : ' • Not Played'}
-          </SectionTitle>
+          </GameDate>
           <MatchupTeamRow>
             <TeamLogoSmall>
               {matchup.awayTeam === gameData.game.awayTeam ? (
@@ -159,6 +159,10 @@ const MatchupRow = styled.div<{
     }
   `
       : ``}
+`;
+
+const GameDate = styled.span`
+  font-weight: 500;
 `;
 
 export default PreviousMatchups;
