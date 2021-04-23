@@ -128,7 +128,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
               {isRegularSeason && renderTeamStandings()}
             </LeftColumn>
             <MiddleColumn>
-              <TeamsBlock gameData={gameData} Sprites={Sprites} />
+              <TeamsBlock league={league} gameData={gameData} Sprites={Sprites} />
               <SkaterComparison gameData={gameData} Sprites={Sprites} />
               <GoalieComparison gameData={gameData} Sprites={Sprites} />
             </MiddleColumn>

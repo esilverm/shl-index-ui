@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import LinkWithSeason from '../LinkWithSeason';
 import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
 import { FlexColumn, FlexRow, SectionTitle } from './common';
 
@@ -8,9 +9,10 @@ interface Props {
   Sprites: {
     [index: string]: React.ComponentClass<any>;
   };
+  league: string;
 }
 
-const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
+const TeamsBlock = ({ league, gameData, Sprites }: Props): JSX.Element => {
   const { awayScore, homeScore, played, overtime, shootout } = gameData.game;
   const final = `Final${shootout ? ' (SO)' : overtime ? ' (OT)' : ''}`;
 
@@ -27,9 +29,15 @@ const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
               <Sprites.Away />
             </TeamLogo>
             <TeamInfo>
-              <TeamName>
-                {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
-              </TeamName>
+              <LinkWithSeason
+                href="/[league]/team/[teamid]"
+                as={`/${league}/team/${gameData.game.awayTeam}`}
+                passHref
+              >
+                <TeamName>
+                  {`${gameData.teams.away.name} ${gameData.teams.away.nickname}`}
+                </TeamName>
+              </LinkWithSeason>
               <TeamRecord>{gameData.teamStats.away.record}</TeamRecord>
             </TeamInfo>
             {!!played && (
@@ -41,9 +49,15 @@ const TeamsBlock = ({ gameData, Sprites }: Props): JSX.Element => {
               <Score lost={homeScore < awayScore}>{homeScore}</Score>
             )}
             <TeamInfo>
+            <LinkWithSeason
+                href="/[league]/team/[teamid]"
+                as={`/${league}/team/${gameData.game.homeTeam}`}
+                passHref
+              >
               <TeamName home>
                 {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
               </TeamName>
+              </LinkWithSeason>
               <TeamRecord home>{gameData.teamStats.home.record}</TeamRecord>
             </TeamInfo>
             <TeamLogo>
@@ -121,6 +135,7 @@ const TeamName = styled.span<{
   text-align: ${({ home }) => (home ? 'right' : 'left')};
   padding: 0 10px;
   font-weight: 600;
+  cursor: pointer;
 
   @media screen and (max-width: 670px) {
     text-align: left;
