@@ -95,7 +95,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
   };
 
   const isLoading = isLoadingAssets || !gameData;
-  const isRegularSeason = gameData && gameData.game.type === "Regular Season";
+  const isRegularSeason = gameData && gameData.game.type === 'Regular Season';
 
   return (
     <React.Fragment>
@@ -105,7 +105,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           title: 'Game',
         }}
       />
-      <Header league={league} />
+      <Header league={league} activePage='game' />
       {isLoading && !gameError && (
         <CenteredContent>
           <PulseLoader size={15} />
