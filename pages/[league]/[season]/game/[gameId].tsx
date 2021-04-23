@@ -84,7 +84,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     if (standingsError) {
       return (
         <ErrorBlock>
-          Failed to load divisional standings
+          Failed to load standings
         </ErrorBlock>
       );
     }

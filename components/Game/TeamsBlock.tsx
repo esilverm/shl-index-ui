@@ -79,7 +79,11 @@ const ResponsiveFlex = styled(FlexRow)`
 const TeamData = styled.div`
   display: flex;
   flex-direction: row;
-  text-align: center;
+  width: 45%;
+
+  @media screen and (max-width: 670px) {
+    width: 100%;
+  }
 `;
 
 const Score = styled.div<{
@@ -88,7 +92,6 @@ const Score = styled.div<{
   font-family: Montserrat, sans-serif;
   font-size: 32px;
   font-weight: 600;
-  width: 50px;
   ${({ lost, theme }) => lost && `color: ${theme.colors.grey500};`}
 
   @media screen and (max-width: 670px) {

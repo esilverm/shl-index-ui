@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
-  const renderPreviousMatchups = () => gameData.previousMatchups.map((matchup) => (
+  const renderPreviousMatchups = (previouslyPlayedMatchups) => previouslyPlayedMatchups.map((matchup) => (
     <MatchupRow key={matchup.slug}>
       <SectionTitle>
         {matchup.date}
@@ -42,7 +42,7 @@ const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
           {`${gameData.game.type} Series`}
         </SectionTitle>
       </MatchupsHeader>
-      {previouslyPlayedMatchups.length > 0 && renderPreviousMatchups()}
+      {previouslyPlayedMatchups.length > 0 && renderPreviousMatchups(previouslyPlayedMatchups)}
       {previouslyPlayedMatchups.length === 0 && (
         <MatchupRow>
           <div>
