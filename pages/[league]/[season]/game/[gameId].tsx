@@ -1,7 +1,3 @@
-// TODO
-// * Straigthen labels in goalie comp
-// * Center loader in narrow
-
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -78,7 +74,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
     if (divisionError) {
       return (
         <ErrorBlock>
-          Failed to load division standings
+          Failed to load divisional standings
         </ErrorBlock>
       );
     }
@@ -101,13 +97,17 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         }}
       />
       <Header league={league} />
+      {isLoading && !gameError && (
+        <CenteredContent>
+          <PulseLoader size={15} />
+        </CenteredContent>
+      )}
       <Container>
         {gameError &&
           <ErrorBlock>
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
         }
-        {isLoading && !gameError && <PulseLoader size={15} />}
 
         {!isLoading && (
           <>
@@ -231,6 +231,8 @@ const CenteredContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  margin-top: 10px;
 `;
 
 const ErrorBlock = styled.div`
