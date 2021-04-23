@@ -85,7 +85,7 @@ function PlayerPage({ league }: Props): JSX.Element {
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           </SelectorWrapper>
-
+          <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
               onClick={() => setDisplay(() => 'stats')}
               active={display === 'stats'}
@@ -104,7 +104,6 @@ function PlayerPage({ league }: Props): JSX.Element {
             >
               Adv Stats
             </DisplaySelectItem>
-          <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
               onClick={() => setDisplay(() => 'ratings')}
               active={display === 'ratings'}
