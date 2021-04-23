@@ -76,7 +76,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     );
 
     setStandings([awayDivision, homeDivision]);
-  }, [standingsData, gameData, standings]);
+  }, [standingsData, gameData, standings, gameId]);
 
   const renderTeamStandings = () => {
     if (!standings && !standingsError) {
@@ -132,7 +132,12 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
               <GoalieComparison gameData={gameData} Sprites={Sprites} />
             </MiddleColumn>
             <RightColumn>
-              <PreviousMatchups gameData={gameData} Sprites={Sprites} />
+              <PreviousMatchups
+                gameData={gameData}
+                Sprites={Sprites}
+                league={league}
+                season={season}
+              />
             </RightColumn>
           </>
         )}

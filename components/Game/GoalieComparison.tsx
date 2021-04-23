@@ -110,6 +110,8 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
                     {awayGoalie &&
                       (stat === 'savePct'
                         ? awayGoalie[stat].toFixed(3)
+                        : stat === 'GAA'
+                        ? awayGoalie[stat].toFixed(2)
                         : awayGoalie[stat])}
                   </span>
                   <span>{statLabels[stat]}</span>
@@ -117,6 +119,8 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
                     {homeGoalie &&
                       (stat === 'savePct'
                         ? homeGoalie[stat].toFixed(3)
+                        : stat === 'GAA'
+                        ? homeGoalie[stat].toFixed(2)
                         : homeGoalie[stat])}
                   </span>
                 </GoalieStat>

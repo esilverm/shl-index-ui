@@ -46,8 +46,6 @@ function ScoreBarItem({
     'Dec',
   ];
 
-  console.log(data);
-
   return (
     <>
       {isDate ? (

@@ -42,15 +42,19 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
   };
 
   Object.keys(gameData.skaterStats).forEach((team) => {
-    gameData.skaterStats[team].forEach((skater) => {
-      const points = skater.goals + skater.assists;
-      Object.keys(teamLeaders).forEach((stat) => {
-        const skaterValue = stat === 'points' ? points : skater[stat];
-        if (skaterValue > teamLeaders[stat][team].value) {
-          teamLeaders[stat][team].player = skater.name;
-          teamLeaders[stat][team].value = skaterValue;
+    Object.keys(teamLeaders).forEach((stat) => {
+      const leader = gameData.skaterStats[team].reduce((prev, skater) => {
+        if (stat === 'points') {
+          return skater.goals + skater.assists > prev.goals + prev.assists
+            ? skater
+            : prev;
         }
-      });
+        return skater[stat] > prev[stat] ? skater : prev;
+      }, gameData.skaterStats[team][0]);
+
+      teamLeaders[stat][team].player = leader.name;
+      teamLeaders[stat][team].value =
+        stat === 'points' ? leader.goals + leader.assists : leader[stat];
     });
   });
 

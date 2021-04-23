@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import LinkWithSeason from '../LinkWithSeason';
 import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
 import { SectionTitle, TeamLogoSmall } from './common';
 
@@ -8,48 +9,62 @@ interface Props {
   Sprites: {
     [index: string]: React.ComponentClass<any>;
   };
+  league: string;
+  season: string;
 }
 
-const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
+const PreviousMatchups = ({
+  gameData,
+  Sprites,
+  league,
+  season,
+}: Props): JSX.Element => {
   const renderPreviousMatchups = (previouslyPlayedMatchups) =>
     previouslyPlayedMatchups.map((matchup) => (
-      <MatchupRow key={matchup.slug}>
-        <SectionTitle>{matchup.date}</SectionTitle>
-        <MatchupTeamRow>
-          <TeamLogoSmall>
-            {matchup.awayTeam === gameData.game.awayTeam ? (
-              <Sprites.Away />
-            ) : (
-              <Sprites.Home />
-            )}
-          </TeamLogoSmall>
-          <span>
-            {matchup.awayTeam === gameData.game.awayTeam
-              ? gameData.teams.away.nickname
-              : gameData.teams.home.nickname}
-          </span>
-          <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>
-            {matchup.awayScore}
-          </MatchupRowScore>
-        </MatchupTeamRow>
-        <MatchupTeamRow>
-          <TeamLogoSmall>
-            {matchup.homeTeam === gameData.game.homeTeam ? (
-              <Sprites.Home />
-            ) : (
-              <Sprites.Away />
-            )}
-          </TeamLogoSmall>
-          <span>
-            {matchup.homeTeam === gameData.game.homeTeam
-              ? gameData.teams.home.nickname
-              : gameData.teams.away.nickname}
-          </span>
-          <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>
-            {matchup.homeScore}
-          </MatchupRowScore>
-        </MatchupTeamRow>
-      </MatchupRow>
+      <LinkWithSeason
+        href="/[league]/[season]/game/[gameid]"
+        as={`/${league}/${season}/game/${matchup.slug}`}
+        passHref
+        key={matchup.slug}
+      >
+        <MatchupRow isGame>
+          <SectionTitle>{matchup.date}</SectionTitle>
+          <MatchupTeamRow>
+            <TeamLogoSmall>
+              {matchup.awayTeam === gameData.game.awayTeam ? (
+                <Sprites.Away />
+              ) : (
+                <Sprites.Home />
+              )}
+            </TeamLogoSmall>
+            <span>
+              {matchup.awayTeam === gameData.game.awayTeam
+                ? gameData.teams.away.nickname
+                : gameData.teams.home.nickname}
+            </span>
+            <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>
+              {matchup.awayScore}
+            </MatchupRowScore>
+          </MatchupTeamRow>
+          <MatchupTeamRow>
+            <TeamLogoSmall>
+              {matchup.homeTeam === gameData.game.homeTeam ? (
+                <Sprites.Home />
+              ) : (
+                <Sprites.Away />
+              )}
+            </TeamLogoSmall>
+            <span>
+              {matchup.homeTeam === gameData.game.homeTeam
+                ? gameData.teams.home.nickname
+                : gameData.teams.away.nickname}
+            </span>
+            <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>
+              {matchup.homeScore}
+            </MatchupRowScore>
+          </MatchupTeamRow>
+        </MatchupRow>
+      </LinkWithSeason>
     ));
 
   const previouslyPlayedMatchups = gameData.previousMatchups.filter(
@@ -76,7 +91,6 @@ const PreviousMatchupsContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 0 15px;
 
   div:last-child {
     margin-bottom: 0;
@@ -110,14 +124,16 @@ const MatchupRowScore = styled.span<{
 const MatchupsHeader = styled.div`
   font-weight: 600;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
-  margin-bottom: 10px;
-  padding: 10px 0;
+  padding: 10px 15px;
 `;
 
-const MatchupRow = styled.div`
+const MatchupRow = styled.div<{
+  isGame?: boolean;
+}>`
   display: flex;
   flex-direction: column;
-  padding-bottom: 15px;
+  background-color: ${({ theme }) => theme.colors.grey100};
+  padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
 
@@ -130,6 +146,16 @@ const MatchupRow = styled.div`
     font-size: 14px;
     margin-bottom: 10px;
   }
+
+  ${({ isGame = false }) =>
+    isGame
+      ? `
+    cursor: pointer;
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `
+      : ``}
 `;
 
 export default PreviousMatchups;
