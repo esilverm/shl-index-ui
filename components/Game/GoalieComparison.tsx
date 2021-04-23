@@ -255,21 +255,24 @@ const GoalieStat = styled.div`
     font-weight: 600;
     margin-top: 5px;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 
     > span:first-child {
-      width: 50%;
+      width: 20%;
+      text-align: left;
+    }
+
+
+    > span:nth-child(2) {
+      text-align: center;
     }
 
     > span:last-child {
-      width: 50%;
+      width: 20%;
       text-align: right;
     }
 
-    > span:nth-child(2) {
-      width: 60px;
-      text-align: center;
-    }
   }
 `;
 
