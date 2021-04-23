@@ -1,7 +1,6 @@
 // TODO
 // * API endpoint to return dynamic season type player data
 // * Season type dynamic division standings
-// * Divionsla standings margin top in played view
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -16,10 +15,12 @@ import { Standings } from '../../../api/v1/standings';
 
 interface Props {
   league: string;
+  leagueId: number;
   gameId: string;
+  season: string;
 }
 
-function GameResults({ league, gameId }: Props): JSX.Element {
+function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
   const [divisions, setDivisions] = useState<Array<Standings[number]>>();
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [Sprites, setSprites] = useState<{
@@ -31,7 +32,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
   );
 
   const { data: divisionData, error: divisionError } = useSWR<Standings>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=division`
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=division&season=${season}&league=${leagueId}`
   );
 
   useEffect(() => {
@@ -255,8 +256,10 @@ const ErrorBlock = styled.div`
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { league, gameId } = params;
-  return { props: { league, gameId } };
+  const { league, gameId, season } = params;
+  const leagueId = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league as string);
+
+  return { props: { league, leagueId, gameId, season } };
 }
 
 export default GameResults;
