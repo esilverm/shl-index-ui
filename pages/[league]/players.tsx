@@ -65,7 +65,7 @@ function PlayerPage({ league }: Props): JSX.Element {
       ? (goalie.filter((player) => player.position === 'G') as Array<Goalie>)
       : [];
 
-  const [display, setDisplay] = useState('ratings');
+  const [display, setDisplay] = useState('stats');
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
     setFilterSeasonType(seasonType);
@@ -86,16 +86,6 @@ function PlayerPage({ league }: Props): JSX.Element {
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           </SelectorWrapper>
 
-          <DisplaySelectContainer role="tablist">
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => 'ratings')}
-              active={display === 'ratings'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'ratings'}
-            >
-              Ratings
-            </DisplaySelectItem>
             <DisplaySelectItem
               onClick={() => setDisplay(() => 'stats')}
               active={display === 'stats'}
@@ -113,6 +103,16 @@ function PlayerPage({ league }: Props): JSX.Element {
               aria-selected={display === ''}
             >
               Adv Stats
+            </DisplaySelectItem>
+          <DisplaySelectContainer role="tablist">
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
             </DisplaySelectItem>
           </DisplaySelectContainer>
         </Filters>
