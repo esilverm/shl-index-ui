@@ -100,11 +100,11 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
               </span>
             </GoalieStat>
           </GoalieFlexRow>
-          {Object.keys(statLabels).map((stat) => {
+          {Object.keys(statLabels).map((stat, i) => {
             if (stat === 'record') return null;
 
             return (
-              <GoalieFlexRow key={stat}>
+              <GoalieFlexRow key={`${stat}_${i}`}>
                 <GoalieStat>
                   <span>
                     {awayGoalie &&

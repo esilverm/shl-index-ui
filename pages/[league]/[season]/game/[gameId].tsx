@@ -59,10 +59,11 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
       }));
       setLoadingAssets(() => false);
     })();
+
   }, [gameData]);
 
   useEffect(() => {
-    if (!standingsData || !gameData || standings) return;
+    if (!standingsData || !gameData) return;
 
     const awayDivision = standingsData.find((division) =>
       division.teams.some(
@@ -76,7 +77,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     );
 
     setStandings([awayDivision, homeDivision]);
-  }, [standingsData, gameData, standings, gameId]);
+  }, [gameData, standingsData]);
 
   const renderTeamStandings = () => {
     if (!standings && !standingsError) {
