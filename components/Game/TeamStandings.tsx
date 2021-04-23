@@ -120,4 +120,4 @@ const StandingsTableHeader = styled(StandingsTableRow)`
   height: 40px;
 `;
 
-export default TeamStandings;
+export default React.memo(TeamStandings);
