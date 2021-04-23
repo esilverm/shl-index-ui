@@ -77,9 +77,10 @@ function TeamPage({
       : [];
 
   // ratings
-  const { ratings: skaterratings, isLoading: isLoadingPlayerRatings } = useRatings(
-    leaguename
-  );
+  const {
+    ratings: skaterratings,
+    isLoading: isLoadingPlayerRatings,
+  } = useRatings(leaguename);
 
   const getSkaterRatings = () =>
     skaterratings
@@ -87,7 +88,7 @@ function TeamPage({
           (player) => player.position !== 'G' && player.team == abbreviation
         ) as Array<PlayerRatings>)
       : [];
-      
+
   const {
     ratings: goalieratingdata,
     isLoading: isLoadingGoalieRatings,
@@ -167,13 +168,13 @@ function TeamPage({
             Advanced Stats
           </DisplaySelectItem>
           <DisplaySelectItem
-              onClick={() => setDisplay(() => 'ratings')}
-              active={display === 'ratings'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'ratings'}
-            >
-              Ratings
+            onClick={() => setDisplay(() => 'ratings')}
+            active={display === 'ratings'}
+            tabIndex={0}
+            role="tab"
+            aria-selected={display === 'ratings'}
+          >
+            Ratings
           </DisplaySelectItem>
         </DisplaySelectContainer>
         <TableWrapper>
@@ -181,8 +182,7 @@ function TeamPage({
             <TableContainer>
               {display === 'ratings' && !isLoadingPlayerRatings ? (
                 <SkaterRatingsTable data={getSkaterRatings()} teamPage />
-              )
-              : display === 'stats' ? (
+              ) : display === 'stats' ? (
                 <SkaterScoreTable data={getSkaters()} teamPage />
               ) : (
                 <SkaterAdvStatsTable data={getSkaters()} teamPage />
@@ -195,10 +195,10 @@ function TeamPage({
           {!isLoading && (
             <TableContainer>
               {display === 'ratings' && !isLoadingGoalieRatings ? (
-                  <GoalieRatingsTable data={getGoalieRating()} teamPage />
-                ) : (
-                  <GoalieScoreTable data={getGoalies()} teamPage />
-                )}
+                <GoalieRatingsTable data={getGoalieRating()} teamPage />
+              ) : (
+                <GoalieScoreTable data={getGoalies()} teamPage />
+              )}
             </TableContainer>
           )}
         </TableWrapper>

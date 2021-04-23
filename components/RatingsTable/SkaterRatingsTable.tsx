@@ -9,7 +9,11 @@ interface Props {
   teamPage?: boolean;
 }
 
-function PlayerRatingsTable({ data: players, pagination=false, teamPage=false }: Props): JSX.Element {
+function PlayerRatingsTable({
+  data: players,
+  pagination = false,
+  teamPage = false,
+}: Props): JSX.Element {
   const columnData = [
     {
       Header: 'Player Info',
@@ -193,7 +197,14 @@ function PlayerRatingsTable({ data: players, pagination=false, teamPage=false }:
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData} pagination={pagination} teamPage={teamPage} />;
+  return (
+    <RatingsTable
+      data={players}
+      columnData={columnData}
+      pagination={pagination}
+      teamPage={teamPage}
+    />
+  );
 }
 
 export default PlayerRatingsTable;

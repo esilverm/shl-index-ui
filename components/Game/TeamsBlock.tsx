@@ -49,14 +49,14 @@ const TeamsBlock = ({ league, gameData, Sprites }: Props): JSX.Element => {
               <Score lost={homeScore < awayScore}>{homeScore}</Score>
             )}
             <TeamInfo>
-            <LinkWithSeason
+              <LinkWithSeason
                 href="/[league]/team/[teamid]"
                 as={`/${league}/team/${gameData.game.homeTeam}`}
                 passHref
               >
-              <TeamName home>
-                {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
-              </TeamName>
+                <TeamName home>
+                  {`${gameData.teams.home.name} ${gameData.teams.home.nickname}`}
+                </TeamName>
               </LinkWithSeason>
               <TeamRecord home>{gameData.teamStats.home.record}</TeamRecord>
             </TeamInfo>

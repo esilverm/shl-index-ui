@@ -263,7 +263,6 @@ const GoalieStat = styled.div`
       text-align: left;
     }
 
-
     > span:nth-child(2) {
       text-align: center;
     }
@@ -272,7 +271,6 @@ const GoalieStat = styled.div`
       width: 20%;
       text-align: right;
     }
-
   }
 `;
 

@@ -39,16 +39,16 @@ Props): JSX.Element {
   // ! add loading state
   const columns = useMemo(() => {
     // handle logic with teamPage
-    if(teamPage && columnData) {
+    if (teamPage && columnData) {
       // loop through columns to find the team column and remove it from the columnData
-      let i = columnData[0]["columns"].length
-      while(i--) {
-        if (columnData[0]["columns"][i].Header == "Team") {
-          delete columnData[0]["columns"][i]
+      let i = columnData[0]['columns'].length;
+      while (i--) {
+        if (columnData[0]['columns'][i].Header == 'Team') {
+          delete columnData[0]['columns'][i];
         }
       }
     }
-    return columnData
+    return columnData;
   }, []);
 
   const initialState = useMemo(() => {
@@ -121,43 +121,43 @@ Props): JSX.Element {
             <TableBody {...getTableBodyProps()}>
               {hasData && pagination
                 ? page.map((row, i) => {
-                  prepareRow(row);
+                    prepareRow(row);
 
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
                 : rows.map((row, i) => {
-                  prepareRow(row);
+                    prepareRow(row);
 
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
             </TableBody>
           </Table>
         </TableContainer>

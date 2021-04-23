@@ -8,7 +8,11 @@ interface Props {
   teamPage?: boolean;
 }
 
-function GoalieRatingsTable({ data: players, pagination=false, teamPage=false}: Props): JSX.Element {
+function GoalieRatingsTable({
+  data: players,
+  pagination = false,
+  teamPage = false,
+}: Props): JSX.Element {
   const columnData = [
     {
       Header: 'Player Info',
@@ -119,7 +123,14 @@ function GoalieRatingsTable({ data: players, pagination=false, teamPage=false}: 
     },
   ];
 
-  return <RatingsTable data={players} columnData={columnData} pagination={pagination} teamPage={teamPage} />;
+  return (
+    <RatingsTable
+      data={players}
+      columnData={columnData}
+      pagination={pagination}
+      teamPage={teamPage}
+    />
+  );
 }
 
 export default GoalieRatingsTable;
