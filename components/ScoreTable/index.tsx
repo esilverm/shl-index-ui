@@ -39,7 +39,7 @@ Props): JSX.Element {
   // ! add loading state
   const columns = useMemo(() => {
       // handle logic with teamPage
-      if(teamPage) {
+      if(teamPage && columnData) {
         // loop through columns to find the team column and remove it from the columnData
         let i = columnData[0]["columns"].length
         while(i--) {
