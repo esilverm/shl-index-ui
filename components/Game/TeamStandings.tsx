@@ -10,7 +10,7 @@ interface Props {
   };
 }
 
-const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
+const TeamStandings = ({ divisions, Sprites }: Props): JSX.Element => {
   const isSameDivision = divisions[0].name === divisions[1].name;
   const sortedStandings = [
     {
@@ -27,11 +27,11 @@ const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
 
   return (
     <>
-      {sortedStandings.map((divisionStandings) => (
-        <DivisionStandingsContainer key={divisionStandings.name}>
+      {sortedStandings.map((TeamStandings) => (
+        <TeamStandingsContainer key={TeamStandings.name}>
           <StandingsTableRow>
             <SectionTitle>
-              {`${divisionStandings.name} Standings`}
+              {`${TeamStandings.name} Standings`}
             </SectionTitle>
           </StandingsTableRow>
           <StandingsTable>
@@ -43,7 +43,7 @@ const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
               <StandingsTableCell>L</StandingsTableCell>
               <StandingsTableCell>OT</StandingsTableCell>
             </StandingsTableHeader>
-            {divisionStandings.teams.map((team) => {
+            {TeamStandings.teams.map((team) => {
               const Logo = Sprites[team.abbreviation];
               return (
                 <StandingsTableRow key={team.abbreviation}>
@@ -64,13 +64,13 @@ const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
               );
             })}
           </StandingsTable>
-        </DivisionStandingsContainer>
+        </TeamStandingsContainer>
       ))}
     </>
   );
 };
 
-const DivisionStandingsContainer = styled.div`
+const TeamStandingsContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
   padding: 15px 15px 0 15px;
   width: 100%;
@@ -118,4 +118,4 @@ const StandingsTableHeader = styled(StandingsTableRow)`
   height: 40px;
 `;
 
-export default DivisionStandings;
+export default TeamStandings;

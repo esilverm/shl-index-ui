@@ -9,7 +9,14 @@ import styled from 'styled-components';
 import { PulseLoader } from 'react-spinners';
 
 import Header from '../../../../components/Header';
-import { DivisionStandings, GoalieComparison, PreviousMatchups, SkaterComparison, TeamsBlock, TeamStats } from '../../../../components/Game';
+import {
+  GoalieComparison,
+  PreviousMatchups,
+  SkaterComparison,
+  TeamsBlock,
+  TeamStandings,
+  TeamStats
+} from '../../../../components/Game';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
 
@@ -31,8 +38,9 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/game/${gameId}`
   );
 
-  const { data: divisionData, error: divisionError } = useSWR<Standings>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=division&season=${season}&league=${leagueId}`
+  const standingsType = league === 'shl' ? 'division' : 'conference';
+  const { data: standingsData, error: standingsError } = useSWR<Standings>(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=${standingsType}&season=${season}&league=${leagueId}`
   );
 
   useEffect(() => {
@@ -57,18 +65,18 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
   }, [gameData]);
 
   useEffect(() => {
-    if (!divisionData || !gameData || divisions) return;
+    if (!standingsData || !gameData || divisions) return;
 
-    const awayDivision = divisionData.find((division) =>
+    const awayDivision = standingsData.find((division) =>
       division.teams.some((team) => team.abbreviation === gameData.teams.away.abbr));
-    const homeDivision = divisionData.find((division) =>
+    const homeDivision = standingsData.find((division) =>
       division.teams.some((team) => team.abbreviation === gameData.teams.home.abbr));
 
     setDivisions([awayDivision, homeDivision]);
-  }, [divisionData, gameData, divisions]);
+  }, [standingsData, gameData, divisions]);
 
-  const renderDivisionStandings = () => {
-    if (!divisions && !divisionError) {
+  const renderTeamStandings = () => {
+    if (!divisions && !standingsError) {
       return (
         <CenteredContent>
           <PulseLoader size={15} />
@@ -76,7 +84,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
       );
     }
 
-    if (divisionError) {
+    if (standingsError) {
       return (
         <ErrorBlock>
           Failed to load divisional standings
@@ -85,7 +93,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
     }
 
     if (divisions) {
-      return <DivisionStandings divisions={divisions} Sprites={Sprites} />;
+      return <TeamStandings divisions={divisions} Sprites={Sprites} />;
     }
   };
 
@@ -118,7 +126,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           <>
             <LeftColumn>
               {!isPlayed && <TeamStats gameData={gameData} Sprites={Sprites} />}
-              {isRegularSeason && renderDivisionStandings()}
+              {isRegularSeason && renderTeamStandings()}
             </LeftColumn>
             <MiddleColumn>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
