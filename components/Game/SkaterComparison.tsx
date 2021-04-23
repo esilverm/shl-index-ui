@@ -54,6 +54,8 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
     });
   });
 
+  const title = gameData.game.played ? 'Team Leaders' : 'Players To Watch';
+
   return (
     <SkaterComparisonContainer>
       <ComparisonHeader>
@@ -61,7 +63,7 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
           <Sprites.Away />
         </TeamLogoSmall>
         <SectionTitle>
-          Players To Watch
+          {title}
         </SectionTitle>
         <TeamLogoSmall>
           <Sprites.Home />
