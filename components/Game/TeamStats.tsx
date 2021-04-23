@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
-import { FlexRow, SectionTitle, TeamLogoSmall } from './common';
+import { SectionTitle, TeamLogoSmall } from './common';
 
 interface Props {
   gameData: Matchup;
@@ -93,15 +93,13 @@ const TeamStats = ({ gameData, Sprites }: Props): JSX.Element => {
   return (
     <TeamStatsContainer>
       <TeamStatsHeader>
-        <FlexRow height={50}>
-          <TeamLogoSmall>
-            <Sprites.Away />
-          </TeamLogoSmall>
-          <SectionTitle>{`${titlePrefix}Team Stats`}</SectionTitle>
-          <TeamLogoSmall>
-            <Sprites.Home />
-          </TeamLogoSmall>
-        </FlexRow>
+        <TeamLogoSmall>
+          <Sprites.Away />
+        </TeamLogoSmall>
+        <SectionTitle>{`${titlePrefix}Team Stats`}</SectionTitle>
+        <TeamLogoSmall>
+          <Sprites.Home />
+        </TeamLogoSmall>
       </TeamStatsHeader>
       {renderTeamStats()}
     </TeamStatsContainer>
@@ -112,20 +110,25 @@ const TeamStatsContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px;
 `;
 
 const TeamStatsHeader = styled.div`
   font-weight: 600;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 15px;
+  padding: 15px 0;
 `;
 
 const TeamStatsRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-top: 15px;
-  padding-bottom: 5px;
+  // padding: 15px 0 5px 0;
+  margin: 15px 15px 5px 15px;
 `;
 
 const TeamStatsBar = styled.div<{
@@ -133,6 +136,7 @@ const TeamStatsBar = styled.div<{
   awayPerc: number;
   homeColor: string;
 }>`
+  margin: 0 15px 15px 15px;
   border: 2px solid;
   border-image: ${(props) => `
     linear-gradient(to right,

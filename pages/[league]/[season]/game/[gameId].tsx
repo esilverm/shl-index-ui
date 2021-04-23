@@ -108,7 +108,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           title: 'Game',
         }}
       />
-      <Header league={league} activePage="game" isSticky={false}/>
+      <Header league={league} activePage="game" isSticky={false} />
       {isLoading && !gameError && (
         <CenteredContent>
           <PulseLoader size={15} />
