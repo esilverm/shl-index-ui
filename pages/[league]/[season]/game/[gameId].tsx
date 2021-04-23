@@ -1,6 +1,5 @@
 // TODO
 // * API endpoint to return dynamic season type player data
-// * Season type dynamic division standings
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -130,8 +129,8 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
             </LeftColumn>
             <MiddleColumn>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
-              {!isPlayed && <SkaterComparison gameData={gameData} Sprites={Sprites} />}
-              {!isPlayed && <GoalieComparison gameData={gameData} Sprites={Sprites} />}
+              <SkaterComparison gameData={gameData} Sprites={Sprites} />
+              <GoalieComparison gameData={gameData} Sprites={Sprites} />
             </MiddleColumn>
             <RightColumn>
               <PreviousMatchups gameData={gameData} Sprites={Sprites} />

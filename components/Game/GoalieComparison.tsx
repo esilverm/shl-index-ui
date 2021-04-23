@@ -20,7 +20,7 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
 
   const sortByGamesPlayed = (goalies: Array<GoalieStats>) => goalies.sort((a, b) => (a.wins + a.losses + a.OT > b.wins + b.losses + b.OT) ? -1 : 1);
 
-  const renderAwayGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map((goalie) => (
+  const renderGoalieStats = (team: 'away' | 'home') => Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map((goalie) => (
     <>
       <GoalieName>
         {goalie.name}
@@ -36,7 +36,7 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
           return (
             <GoalieStat key={stat}>
               <span>{statLabels[stat]}</span>
-              <span>{goalie[stat]}</span>
+              <span>{stat === "savePct" ? goalie[stat].toFixed(3) : goalie[stat]}</span>
             </GoalieStat>
           );
         })}
@@ -47,8 +47,9 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
   const renderGoalieStatsWithSharedLabels = () => {
     const awayGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.away);
     const homeGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.home);
+    const maxNumGoalies = Math.max(awayGoaliesSorted.length, homeGoaliesSorted.length);
 
-    return [0, 1].map((index) => {
+    return new Array(maxNumGoalies).fill(0).map((_, index) => {
       const awayGoalie = awayGoaliesSorted[index];
       const homeGoalie = homeGoaliesSorted[index];
       if (!awayGoalie && !homeGoalie) return null;
@@ -75,15 +76,15 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
               <span>{homeGoalie ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}` : ''}</span>
             </GoalieStat>
           </GoalieFlexRow>
-          {Object.keys(awayGoalie).map((stat) => {
-            if (!Object.keys(statLabels).includes(stat)) return null;
+          {Object.keys(statLabels).map((stat) => {
+            if (stat === "record") return null;
 
             return (
               <GoalieFlexRow key={stat}>
                 <GoalieStat>
-                  <span>{awayGoalie && awayGoalie[stat]}</span>
+                  <span>{awayGoalie && (stat === "savePct" ? awayGoalie[stat].toFixed(3) : awayGoalie[stat])}</span>
                   <span>{statLabels[stat]}</span>
-                  <span>{homeGoalie && homeGoalie[stat]}</span>
+                  <span>{homeGoalie && (stat === "savePct" ? homeGoalie[stat].toFixed(3) : homeGoalie[stat])}</span>
                 </GoalieStat>
               </GoalieFlexRow>
             );
@@ -108,10 +109,10 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
       </ComparisonHeader>
       <GoalieStatsBlock>
         <TeamGoaliesWide>
-          {renderAwayGoalieStats('away')}
+          {renderGoalieStats('away')}
         </TeamGoaliesWide>
         <TeamGoaliesWide home>
-          {renderAwayGoalieStats('home')}
+          {renderGoalieStats('home')}
         </TeamGoaliesWide>
         <TeamGoaliesNarrow>
           {renderGoalieStatsWithSharedLabels()}
@@ -161,7 +162,7 @@ const TeamGoaliesNarrow = styled.div`
     align-items: center;
     justify-content: center;
   
-    > div:first-child {
+    > div:not(:last-child) {
       border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
     }
   
