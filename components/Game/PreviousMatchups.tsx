@@ -33,6 +33,8 @@ const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
     </MatchupRow>
   ));
 
+  const previouslyPlayedMatchups = gameData.previousMatchups.filter((game) => game.played === 1);
+
   return (
     <PreviousMatchupsContainer>
       <MatchupsHeader>
@@ -40,8 +42,8 @@ const PreviousMatchups = ({ gameData, Sprites }: Props): JSX.Element => {
           {`${gameData.game.type} Series`}
         </SectionTitle>
       </MatchupsHeader>
-      {gameData.previousMatchups.length > 0 && renderPreviousMatchups()}
-      {gameData.previousMatchups.length === 0 && (
+      {previouslyPlayedMatchups.length > 0 && renderPreviousMatchups()}
+      {previouslyPlayedMatchups.length === 0 && (
         <MatchupRow>
           <div>
             No previous games played
