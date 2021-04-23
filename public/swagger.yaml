@@ -353,7 +353,7 @@ paths:
         - name: type
           in: query
           type: string
-          default: rs
+          default: regular
       responses:
         '200':
           description: OK
@@ -429,7 +429,7 @@ paths:
         - name: type
           in: query
           type: string
-          default: rs
+          default: regular
       responses:
         '200':
           description: OK
@@ -2116,7 +2116,7 @@ definitions:
         example: 284
       name:
         type: string
-        example: 'Esa Parmberg'
+        example: 'Esa Parmborg'
       league:
         type: number
         example: 0

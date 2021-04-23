@@ -202,7 +202,7 @@ export default async (
       teams: hash[conference],
     }));
 
-    if (+league === 2 || +league === 3 ) {
+    if (+league === 2 || +league === 3) {
       conferenceList.reverse();
     }
 

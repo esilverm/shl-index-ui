@@ -17,14 +17,16 @@ export default async (
   const {
     league = 0,
     season: seasonid,
-    type: shorttype = 'rs',
+    type: longType = 'regular',
     limit = 10,
     desc = true,
   } = req.query;
 
   let type: string;
-  if (shorttype === 'po' || shorttype === 'ps' || shorttype === 'rs') {
-    type = shorttype;
+  if (longType === 'preseason') {
+    type = 'ps';
+  } else if (longType === 'playoffs') {
+    type = 'po';
   } else {
     type = 'rs';
   }
@@ -44,7 +46,7 @@ export default async (
 
   const sbLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.SB as ShotsBlocked
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.SB as ShotsBlocked
     FROM `
       .append(`player_skater_stats_${type} AS s`)
       .append(
@@ -53,6 +55,10 @@ export default async (
       ON s.SeasonID = p.SeasonID 
       AND s.LeagueID = p.LeagueID
       AND s.PlayerID = p.PlayerID
+    INNER JOIN team_data as t
+      ON s.TeamID = t.TeamID
+      AND s.SeasonID = t.SeasonID
+      AND s.LeagueID = t.LeagueID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     ORDER BY ShotsBlocked `
@@ -66,9 +72,15 @@ export default async (
     id: player.PlayerID,
     name: player.Name,
     league: player.LeagueID,
-    team: player.TeamID,
+    team: {
+      id: player.TeamID,
+      name: player.TeamName,
+      nickname: player.TeamNickname,
+      abbr: player.TeamAbbr,
+    },
     season: player.SeasonID,
-    shotsBlocked: player.ShotsBlocked,
+    stat: player.ShotsBlocked,
+    statName: 'Shots Blocked',
   }));
 
   res.status(200).json(parsed);

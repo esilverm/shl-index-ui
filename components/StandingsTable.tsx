@@ -186,7 +186,7 @@ function StandingsTable({
       Header: 'DIFF',
       accessor: 'goalDiff',
       Cell: ({ value }) => (
-        <GoalDiff positive={value > 0}>
+        <GoalDiff value={value}>
           {value > 0 && '+'}
           {value}
         </GoalDiff>
@@ -435,14 +435,14 @@ const TableHeader = styled.thead`
     background-color: ${({ theme }) => theme.colors.grey900};
     position: relative;
 
-    &.sorted--desc::before {
+    &.sorted--asc::before {
       content: '^';
       position: absolute;
       top: 3px;
       left: calc(100% / 2 - 4px);
     }
 
-    &.sorted--asc::after {
+    &.sorted--desc::after {
       content: 'v';
       font-size: 14px;
       position: absolute;
@@ -465,6 +465,7 @@ const TableBody = styled.tbody`
   position: relative;
 
   th {
+    font-family: Montserrat, sans-serif;
     display: table-cell;
     text-align: left;
     font-weight: 400;
@@ -537,8 +538,9 @@ const LogoWrapper = styled.div<{ abbr: string }>`
   }
 `;
 
-const GoalDiff = styled.span<{ positive: boolean }>`
-  color: ${({ positive }) => (positive ? '#48b400' : '#d60000')};
+const GoalDiff = styled.span<{ value: number }>`
+  color: ${({ value, theme }) =>
+    value === 0 ? theme.colors.grey900 : value > 0 ? '#48b400' : '#d60000'};
 `;
 
 const HomeAwayRecords = styled.div`

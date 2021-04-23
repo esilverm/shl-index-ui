@@ -14,12 +14,12 @@ function Stats({ league }: Props): JSX.Element {
   return (
     <React.Fragment>
       <NextSeo
-        title="Stats"
+        title="Leaders"
         openGraph={{
-          title: 'Stats',
+          title: 'Leaders',
         }}
       />
-      <Header league={league} activePage="stats" />
+      <Header league={league} activePage="leaders" />
       <Container>This is a placeholder</Container>
       <Footer />
     </React.Fragment>

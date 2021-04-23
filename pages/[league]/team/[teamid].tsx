@@ -142,9 +142,9 @@ function TeamPage({
           {!isLoading && (
             <TableContainer>
               {display ? (
-                <SkaterScoreTable data={getSkaters()} />
+                <SkaterScoreTable data={getSkaters()} teamPage />
               ) : (
-                <SkaterAdvStatsTable data={getSkaters()} />
+                <SkaterAdvStatsTable data={getSkaters()} teamPage />
               )}
             </TableContainer>
           )}
@@ -153,7 +153,7 @@ function TeamPage({
         <TableWrapper>
           {!isLoading && (
             <TableContainer>
-              <GoalieScoreTable data={getGoalies()} />
+              <GoalieScoreTable data={getGoalies()} teamPage/>
             </TableContainer>
           )}
         </TableWrapper>
@@ -250,6 +250,7 @@ const TeamName = styled.h1<{ bright: boolean }>`
   }
 
   span.first {
+    font-family: Montserrat, sans-serif;
     font-weight: 400;
     letter-spacing: 0.1rem;
   }

@@ -118,6 +118,7 @@ const TeamName = styled.h2<{ bright: boolean }>`
   }
 
   span.first {
+    font-family: Montserrat, sans-serif;
     font-weight: 400;
     letter-spacing: 0.1rem;
   }
@@ -130,8 +131,10 @@ const TeamName = styled.h2<{ bright: boolean }>`
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { query: { season, league: leaguename} } = ctx;
-  
+  const {
+    query: { season, league: leaguename },
+  } = ctx;
+
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );

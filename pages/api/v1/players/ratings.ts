@@ -8,6 +8,8 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export type SeasonType = string;
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -93,7 +95,7 @@ export default async (
       aggression: player.Aggression,
       bravery: player.Bravery,
       determination: player.Determination,
-      teamPlayer: player.TeamPlayer,
+      teamPlayer: player.Teamplayer,
       leadership: player.Leadership,
       temperament: player.Temperament,
       professionalism: player.Professionalism,
