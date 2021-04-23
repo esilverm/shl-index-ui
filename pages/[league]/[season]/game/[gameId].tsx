@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { PulseLoader } from 'react-spinners';
 
 import Header from '../../../../components/Header';
+import Footer from '../../../../components/Footer';
 import {
   GoalieComparison,
   PreviousMatchups,
@@ -59,7 +60,6 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
       }));
       setLoadingAssets(() => false);
     })();
-
   }, [gameData]);
 
   useEffect(() => {
@@ -143,6 +143,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           </>
         )}
       </Container>
+      <Footer />
     </React.Fragment>
   );
 }
