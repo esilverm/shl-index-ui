@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Standings } from '../../../pages/api/v1/standings';
-import { SectionTitle, TeamLogoSmall } from '../common';
+import { Standings } from '../../pages/api/v1/standings';
+import { SectionTitle, TeamLogoSmall } from './common';
 
 interface Props {
   divisions: Array<Standings[number]>;
@@ -72,7 +72,6 @@ const DivisionStandings = ({ divisions, Sprites }: Props): JSX.Element => {
 
 const DivisionStandingsContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
-  margin-top: 10px;
   padding: 15px 15px 0 15px;
   width: 100%;
 `;

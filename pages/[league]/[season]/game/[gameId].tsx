@@ -1,3 +1,7 @@
+// TODO
+// * API endpoint to return dynamic season type player data
+// * Season type dynamic division standings
+// * Divionsla standings margin top in played view
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -183,6 +187,10 @@ const LeftColumn = styled.div`
   justify-content: space-between;
   width: 300px;
   height: fit-content;
+
+  > div {
+    margin-bottom: 10px;
+  }
 
   @media screen and (max-width: 1200px) {
     grid-area: stats;

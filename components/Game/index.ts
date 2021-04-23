@@ -1,9 +1,9 @@
-import DivisionStandings from './Preview/DivisionStandings';
-import GoalieComparison from './Preview/GoalieComparison';
-import PreviousMatchups from './Preview/PreviousMatchups';
-import SkaterComparison from './Preview/SkaterComparison';
-import TeamsBlock from './Preview/TeamsBlock';
-import TeamStats from './Preview/TeamStats';
+import DivisionStandings from './DivisionStandings';
+import GoalieComparison from './GoalieComparison';
+import PreviousMatchups from './PreviousMatchups';
+import SkaterComparison from './SkaterComparison';
+import TeamsBlock from './TeamsBlock';
+import TeamStats from './TeamStats';
 
 export {
   DivisionStandings,
