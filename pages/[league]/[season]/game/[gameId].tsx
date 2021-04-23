@@ -1,3 +1,7 @@
+// TODO
+// * Straigthen labels in goalie comp
+// * Center loader in narrow
+
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -86,6 +90,7 @@ function GameResults({ league, gameId }: Props): JSX.Element {
 
   const isLoading = isLoadingAssets || !gameData;
   const isRegularSeason = gameData && gameData.game.type === "Regular Season";
+  const isPlayed = gameData && gameData.game.played === 1;
 
   return (
     <React.Fragment>
@@ -107,13 +112,13 @@ function GameResults({ league, gameId }: Props): JSX.Element {
         {!isLoading && (
           <>
             <LeftColumn>
-              <TeamStats gameData={gameData} Sprites={Sprites} />
+              {!isPlayed && <TeamStats gameData={gameData} Sprites={Sprites} />}
               {isRegularSeason && renderDivisionStandings()}
             </LeftColumn>
             <MiddleColumn>
               <TeamsBlock gameData={gameData} Sprites={Sprites} />
-              <SkaterComparison gameData={gameData} Sprites={Sprites} />
-              <GoalieComparison gameData={gameData} Sprites={Sprites} />
+              {!isPlayed && <SkaterComparison gameData={gameData} Sprites={Sprites} />}
+              {!isPlayed && <GoalieComparison gameData={gameData} Sprites={Sprites} />}
             </MiddleColumn>
             <RightColumn>
               <PreviousMatchups gameData={gameData} Sprites={Sprites} />
