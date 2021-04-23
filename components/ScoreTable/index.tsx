@@ -38,16 +38,16 @@ Props): JSX.Element {
 
   // ! add loading state
   const columns = useMemo(() => {
-    // handle logic with teamPage
-    if (teamPage) {
-      // loop through columns to find the team column and remove it from the columnData
-      let i = columnData[0]['columns'].length;
-      while (i--) {
-        if (columnData[0]['columns'][i].Header == 'Team') {
-          delete columnData[0]['columns'][i];
+      // handle logic with teamPage
+      if(teamPage && columnData) {
+        // loop through columns to find the team column and remove it from the columnData
+        let i = columnData[0]["columns"].length
+        while(i--) {
+          if (columnData[0]["columns"][i].Header == "Team") {
+            delete columnData[0]["columns"][i]
+          }
         }
       }
-    }
     return columnData;
   }, []);
 
