@@ -19,7 +19,7 @@ import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import SearchBar from '../../components/SearchBar/SearchBar'
 import SearchSelector from '../../components/Selector/SearchSelector'
 import searchBarFilterPlayers from '../../components/SearchBar/searchBarFilterPlayers'
-import { PlayerRatings, GoalieRatings, Player, Goalie, SearchTerm } from '../..';
+import { PlayerRatings, GoalieRatings, Player, Goalie, SearchType } from '../..';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/players/stats';
 
@@ -45,7 +45,7 @@ function PlayerPage({ league }: Props): JSX.Element {
   } = useGoalieRatings(league);
 
   // search functions
-  const searchTerms: Array<SearchTerm> = [
+  const searchTerms: Array<SearchType> = [
     {
       id: '0',
       term: "Name"

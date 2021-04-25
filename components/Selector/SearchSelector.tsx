@@ -8,16 +8,16 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { SearchTerm } from '../..'
+import { SearchType } from '../..'
 
 interface Props {
-  terms: Array<SearchTerm>;
+  terms: Array<SearchType>;
   onChange: (term: string) => void;
 }
 
 function SearchSelector({ terms, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedTerm, setSelectedTerm] = useState<SearchTerm>(terms[0]);
+  const [selectedTerm, setSelectedTerm] = useState<SearchType>(terms[0]);
   const selectorRef = useRef(null);
 
   const onMouseLeave = () => {
@@ -56,7 +56,7 @@ function SearchSelector({ terms, onChange }: Props): JSX.Element {
           {terms
             .sort((a, b) => (a > b ? 1 : -1))
             .map((term) => {
-              const termData: SearchTerm = {
+              const termData: SearchType = {
                 id: `${term.id}`,
                 term: term.term,
               };

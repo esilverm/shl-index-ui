@@ -154,7 +154,7 @@ export interface GoalieRatings {
   };
 }
 
-export interface SearchTerm {
+export interface SearchType {
   id: string;
   term: string;
 }
