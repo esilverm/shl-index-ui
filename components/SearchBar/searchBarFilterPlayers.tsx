@@ -20,19 +20,19 @@ const searchBarFilterPlayers = ({
   }: Props): Filtered => {
 
   // if nothing to filter, return the originals
-  if (!text || text == '' || !inputtedPlayers || !inputtedGoalies) {
+  if (!text || text === '' || !inputtedPlayers || !inputtedGoalies) {
     return {
       players: inputtedPlayers,
       goalies: inputtedGoalies
     };
   }
 
-  const filteredPlayers = searchType.toLowerCase() == 'name' ? inputtedPlayers.filter((player) => {
+  const filteredPlayers = searchType.toLowerCase() === 'name' ? inputtedPlayers.filter((player) => {
     return player.name.toLowerCase().includes(text.toLowerCase())
     }) : inputtedPlayers.filter((player) => { return player.position.toLowerCase().includes(text.toLowerCase())
     });
 
-  const filteredGoalies = searchType.toLowerCase() == 'name' ? inputtedGoalies.filter((player) => {
+  const filteredGoalies = searchType.toLowerCase() === 'name' ? inputtedGoalies.filter((player) => {
     return player.name.toLowerCase().includes(text.toLowerCase())
     }) : inputtedGoalies.filter((player) => { return player.position.toLowerCase().includes(text.toLowerCase())
     });
