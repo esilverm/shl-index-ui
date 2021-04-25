@@ -292,6 +292,7 @@ const SearchWrapper = styled.div`
   float: right;
   padding-top: 10px;
   padding-bottom: 10px;
+  display:none;
 `;
 
 const SearchSelectorWrapper = styled.div`
