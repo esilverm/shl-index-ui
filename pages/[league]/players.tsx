@@ -47,11 +47,11 @@ function PlayerPage({ league }: Props): JSX.Element {
   // search functions
   const searchTerms: Array<SearchType> = [
     {
-      id: '0',
+      id: 0,
       term: "Name"
     },
     {
-      id: '1',
+      id: 1,
       term: "Position"
     }]
 

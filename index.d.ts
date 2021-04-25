@@ -155,6 +155,6 @@ export interface GoalieRatings {
 }
 
 export interface SearchType {
-  id: string;
+  id: number;
   term: string;
 }
