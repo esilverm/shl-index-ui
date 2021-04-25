@@ -18,10 +18,7 @@ import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import SearchBar from '../../components/SearchBar/SearchBar'
 import SearchSelector from '../../components/Selector/SearchSelector'
-import searchBarFilterPlayerStatsByName from '../../components/SearchBar/searchBarFilterPlayerStatsByName'
-import searchBarFilterPlayerRatingsByName from '../../components/SearchBar/searchBarFilterPlayerRatingsByName'
-import searchBarFilterPlayerStatsByPosition from '../../components/SearchBar/searchBarFilterPlayerStatsByPosition'
-import searchBarFilterPlayerRatingsByPosition from '../../components/SearchBar/searchBarFilterPlayerRatingsByPosition'
+import searchBarFilterPlayers from '../../components/SearchBar/searchBarFilterPlayers'
 import { PlayerRatings, GoalieRatings, Player, Goalie, SearchTerm } from '../..';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/players/stats';
@@ -69,13 +66,19 @@ function PlayerPage({ league }: Props): JSX.Element {
     setSearchTerm(term.term)
   }
 
-  const { players: filteredPlayerRatings, goalies: filteredGoalieRatings } = searchTerm == 'Name' ? searchBarFilterPlayerRatingsByName(
-    {searchText: String(searchText), players: skaterratings, goalies: goalieratingdata}) : searchBarFilterPlayerRatingsByPosition(
-      {searchText: String(searchText), players: skaterratings, goalies: goalieratingdata})
+  const { players: filteredPlayerRatings, goalies: filteredGoalieRatings } = searchBarFilterPlayers({
+    searchText: searchText, 
+    searchType: searchTerm, 
+    players: skaterratings, 
+    goalies: goalieratingdata
+    })
 
-  const { players: filteredSkaters, goalies: filteredGoalies } = searchTerm == 'Name' ? searchBarFilterPlayerStatsByName(
-    {searchText: String(searchText), players: skater, goalies: goalie}) : searchBarFilterPlayerStatsByPosition(
-      {searchText: String(searchText), players: skater, goalies: goalie})
+  const { players: filteredSkaters, goalies: filteredGoalies } = searchBarFilterPlayers({
+    searchText: searchText, 
+    searchType: searchTerm, 
+    players: skater, 
+    goalies: goalie
+    })
 
   const getSkaters = () =>
     filteredPlayerRatings
