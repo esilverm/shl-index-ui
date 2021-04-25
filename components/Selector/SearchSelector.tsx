@@ -57,7 +57,7 @@ function SearchSelector({ terms, onChange }: Props): JSX.Element {
             .sort((a, b) => (a > b ? 1 : -1))
             .map((term) => {
               const termData: SearchType = {
-                id: `${term.id}`,
+                id: term.id,
                 term: term.term,
               };
               return (
