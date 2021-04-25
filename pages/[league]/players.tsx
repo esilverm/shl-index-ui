@@ -19,7 +19,7 @@ import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import SearchBar from '../../components/SearchBar/SearchBar'
 import SearchSelector from '../../components/Selector/SearchSelector'
 import searchBarFilterPlayers from '../../components/SearchBar/searchBarFilterPlayers'
-import { PlayerRatings, GoalieRatings, Player, Goalie, SearchType } from '../..';
+import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/players/stats';
 
@@ -45,37 +45,29 @@ function PlayerPage({ league }: Props): JSX.Element {
   } = useGoalieRatings(league);
 
   // search functions
-  const searchTerms: Array<SearchType> = [
-    {
-      id: 0,
-      term: "Name"
-    },
-    {
-      id: 1,
-      term: "Position"
-    }]
+  const searchTypes: Array<string> = ["Name", "Position"]
 
   const [searchText, setSearchText] = useState('')
-  const [searchTerm, setSearchTerm] = useState(searchTerms[0].term)
+  const [searchType, setSearchType] = useState(searchTypes[0])
 
   const updateSearchText = (text) => {
     setSearchText(text)
   }
 
-  const updateSearchTerm = (term) => {
-    setSearchTerm(term.term)
+  const updateSearchType = (searchType) => {
+    setSearchType(searchType)
   }
 
   const { players: filteredPlayerRatings, goalies: filteredGoalieRatings } = searchBarFilterPlayers({
     searchText: searchText, 
-    searchType: searchTerm, 
+    searchType: searchType, 
     players: skaterratings, 
     goalies: goalieratingdata
     })
 
   const { players: filteredSkaters, goalies: filteredGoalies } = searchBarFilterPlayers({
     searchText: searchText, 
-    searchType: searchTerm, 
+    searchType: searchType, 
     players: skater, 
     goalies: goalie
     })
@@ -122,7 +114,7 @@ function PlayerPage({ league }: Props): JSX.Element {
       <Container>
         <SearchWrapper>
           <SearchSelectorWrapper>
-            <SearchSelector terms={searchTerms} onChange={updateSearchTerm}/>
+            <SearchSelector searchTypes={searchTypes} onChange={updateSearchType}/>
           </SearchSelectorWrapper>
           <SearchBarWrapper>
             <SearchBar updateSearchText={updateSearchText}/>

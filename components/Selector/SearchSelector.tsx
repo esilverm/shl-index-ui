@@ -8,16 +8,15 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { SearchType } from '../..'
 
 interface Props {
-  terms: Array<SearchType>;
-  onChange: (term: string) => void;
+  searchTypes: Array<string>;
+  onChange: (searchType: string) => void;
 }
 
-function SearchSelector({ terms, onChange }: Props): JSX.Element {
+function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedTerm, setSelectedTerm] = useState<SearchType>(terms[0]);
+  const [selectedSearchType, setSelectedSearchType] = useState<string>(searchTypes[0]);
   const selectorRef = useRef(null);
 
   const onMouseLeave = () => {
@@ -34,11 +33,10 @@ function SearchSelector({ terms, onChange }: Props): JSX.Element {
   }, [selectorRef, isExpanded]);
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
-  const onTermSelect = (event) => {
-    const { term } = event.target.dataset;
-    const parsedTerm = JSON.parse(term);
-    onChange(parsedTerm);
-    setSelectedTerm(parsedTerm);
+  const onSearchTypeSelect = (event) => {
+    const parsedSearchType = event.target.dataset.searchtype;
+    onChange(parsedSearchType);
+    setSelectedSearchType(parsedSearchType);
     setIsExpanded(false);
   };
 
@@ -46,29 +44,24 @@ function SearchSelector({ terms, onChange }: Props): JSX.Element {
     <Container ref={selectorRef}>
       <DropdownButton onClick={onButtonClick} inverse>
         <ButtonContent>
-          {selectedTerm.term}
+          {selectedSearchType}
           <FarCaret className={isExpanded ? 'up' : 'down'} inverse />
         </ButtonContent>
       </DropdownButton>
       {isExpanded && (
         <DropdownList>
-          
-          {terms
+          {searchTypes
             .sort((a, b) => (a > b ? 1 : -1))
-            .map((term) => {
-              const termData: SearchType = {
-                id: term.id,
-                term: term.term,
-              };
+            .map((searchType) => {
               return (
                 <DropdownItem
-                  key={term.id}
+                  key={searchType}
                   align="left"
-                  data-term={JSON.stringify(termData)}
-                  onClick={onTermSelect}
-                  className={selectedTerm.id === termData.id && 'active'}
+                  data-searchtype={searchType}
+                  onClick={onSearchTypeSelect}
+                  className={selectedSearchType === searchType && 'active'}
                 >
-                  {term.term}
+                  {searchType}
                 </DropdownItem>
               );
             })}
