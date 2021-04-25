@@ -16,9 +16,6 @@ import GoalieRatingsTable from '../../components/RatingsTable/GoalieRatingsTable
 import SkaterAdvStatsTable from '../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
 import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
-import SearchBar from '../../components/SearchBar/SearchBar'
-import SearchSelector from '../../components/Selector/SearchSelector'
-import searchBarFilterPlayers from '../../components/SearchBar/searchBarFilterPlayers'
 import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/players/stats';
@@ -44,56 +41,28 @@ function PlayerPage({ league }: Props): JSX.Element {
     isLoading: isLoadingGoalies,
   } = useGoalieRatings(league);
 
-  // search functions
-  const searchTypes: Array<string> = ["Name", "Position"]
-
-  const [searchText, setSearchText] = useState('')
-  const [searchType, setSearchType] = useState(searchTypes[0])
-
-  const updateSearchText = (text) => {
-    setSearchText(text)
-  }
-
-  const updateSearchType = (searchType) => {
-    setSearchType(searchType)
-  }
-
-  const { players: filteredPlayerRatings, goalies: filteredGoalieRatings } = searchBarFilterPlayers({
-    searchText: searchText, 
-    searchType: searchType, 
-    players: skaterratings, 
-    goalies: goalieratingdata
-    })
-
-  const { players: filteredSkaters, goalies: filteredGoalies } = searchBarFilterPlayers({
-    searchText: searchText, 
-    searchType: searchType, 
-    players: skater, 
-    goalies: goalie
-    })
-
   const getSkaters = () =>
-    filteredPlayerRatings
+    skaterratings
       ? (skaterratings.filter(
           (player) => player.position !== 'G'
         ) as Array<PlayerRatings>)
       : [];
 
   const getGoalies = () =>
-    filteredGoalieRatings
+    goalieratingdata
       ? (goalieratingdata.filter(
           (player) => player.position === 'G'
         ) as Array<GoalieRatings>)
       : [];
   
   const getSkater = () =>
-    filteredSkaters
-      ? (filteredSkaters.filter((player) => player.position !== 'G') as Array<Player>)
+    skater
+      ? (skater.filter((player) => player.position !== 'G') as Array<Player>)
       : [];
 
   const getGoalie = () =>
-    filteredGoalies
-      ? (filteredGoalies.filter((player) => player.position === 'G') as Array<Goalie>)
+    goalie
+      ? (goalie.filter((player) => player.position === 'G') as Array<Goalie>)
       : [];
 
   const [display, setDisplay] = useState('stats');
@@ -112,14 +81,6 @@ function PlayerPage({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="players" />
       <Container>
-        <SearchWrapper>
-          <SearchSelectorWrapper>
-            <SearchSelector searchTypes={searchTypes} onChange={updateSearchType}/>
-          </SearchSelectorWrapper>
-          <SearchBarWrapper>
-            <SearchBar updateSearchText={updateSearchText}/>
-          </SearchBarWrapper>
-        </SearchWrapper>
         <Filters>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
@@ -285,23 +246,4 @@ const SelectorWrapper = styled.div`
   width: 250px;
   float: right;
   margin-right: 3%;
-`;
-
-const SearchWrapper = styled.div`
-  width: 100%;
-  float: right;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  display:none;
-`;
-
-const SearchSelectorWrapper = styled.div`
-  float: right;
-  width: 125px;
-  margin-right: 3%;
-  padding-left: 1%;
-`;
-
-const SearchBarWrapper = styled.div`
-  float: right;
 `;
