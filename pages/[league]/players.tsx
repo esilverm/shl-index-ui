@@ -120,8 +120,14 @@ function PlayerPage({ league }: Props): JSX.Element {
       />
       <Header league={league} activePage="players" />
       <Container>
-        <SearchBar updateSearchText={updateSearchText}/>
-        <SearchSelector terms={searchTerms} onChange={updateSearchTerm}/>
+        <SearchWrapper>
+          <SearchSelectorWrapper>
+            <SearchSelector terms={searchTerms} onChange={updateSearchTerm}/>
+          </SearchSelectorWrapper>
+          <SearchBarWrapper>
+            <SearchBar updateSearchText={updateSearchText}/>
+          </SearchBarWrapper>
+        </SearchWrapper>
         <Filters>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
@@ -287,4 +293,22 @@ const SelectorWrapper = styled.div`
   width: 250px;
   float: right;
   margin-right: 3%;
+`;
+
+const SearchWrapper = styled.div`
+  width: 100%;
+  float: right;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
+
+const SearchSelectorWrapper = styled.div`
+  float: right;
+  width: 125px;
+  margin-right: 3%;
+  padding-left: 1%;
+`;
+
+const SearchBarWrapper = styled.div`
+  float: right;
 `;

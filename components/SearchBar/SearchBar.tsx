@@ -18,8 +18,6 @@ function SearchBar ({
 export default SearchBar
 
 const SearchBarWrapper = styled.div`
-  width: 100%;
   font-size: 20px;
   font-weight: 700;
-  padding: 5px 50px 5px 5px;
 `;
