@@ -1,22 +1,22 @@
-import { PlayerRatings, GoalieRatings } from '../..'
+import { Player, Goalie } from '../..'
 
 interface Props {
   searchText: string,
-  players: Array<PlayerRatings>,
-  goalies: Array<GoalieRatings>
+  players: Array<Player>,
+  goalies: Array<Goalie>
 }
 
 interface Filtered {
-  players: Array<PlayerRatings>,
-  goalies: Array<GoalieRatings>
+  players: Array<Player>,
+  goalies: Array<Goalie>
 }
 
-const searchBarFilterPlayerRatings = ({
+const searchBarFilterPlayerStatsByPosition = ({
   searchText: text,
   players: inputtedPlayers,
   goalies: inputtedGoalies,
   }: Props): Filtered => {
-  
+
   // if nothing to filter, return the originals
   if (!text || text == '' || !inputtedPlayers || !inputtedGoalies) {
     return {
@@ -24,13 +24,13 @@ const searchBarFilterPlayerRatings = ({
       goalies: inputtedGoalies
     };
   }
-  
+
   const filteredPlayers = inputtedPlayers.filter((player) => {
-    return player.name.toLowerCase().includes(text.toLowerCase())
+    return player.position.toLowerCase().includes(text.toLowerCase())
   });
 
   const filteredGoalies = inputtedGoalies.filter((goalie) => {
-    return goalie.name.toLowerCase().includes(text.toLowerCase())
+    return goalie.position.toLowerCase().includes(text.toLowerCase())
   });
 
   return {
@@ -39,4 +39,4 @@ const searchBarFilterPlayerRatings = ({
   };
 }
 
-export default searchBarFilterPlayerRatings;
+export default searchBarFilterPlayerStatsByPosition;

@@ -153,3 +153,8 @@ export interface GoalieRatings {
     goalieStamina: number;
   };
 }
+
+export interface SearchTerm {
+  id: string;
+  term: string;
+}

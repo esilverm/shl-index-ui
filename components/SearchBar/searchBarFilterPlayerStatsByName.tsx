@@ -11,7 +11,7 @@ interface Filtered {
   goalies: Array<Goalie>
 }
 
-const searchBarFilterPlayerStats = ({
+const searchBarFilterPlayerStatsByName = ({
   searchText: text,
   players: inputtedPlayers,
   goalies: inputtedGoalies,
@@ -39,4 +39,4 @@ const searchBarFilterPlayerStats = ({
   };
 }
 
-export default searchBarFilterPlayerStats;
+export default searchBarFilterPlayerStatsByName;
