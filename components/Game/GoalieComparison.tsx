@@ -34,19 +34,19 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
 
   const renderGoalieStats = (team: 'away' | 'home') =>
     Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map(
-      (goalie) => (
-        <>
+      (goalie, i) => (
+        <React.Fragment key={`goalie_${goalie.name}_${i}`}>
           <GoalieName>{goalie.name}</GoalieName>
           <FlexRow>
             <GoalieStat>
               <span>{statLabels.record}</span>
               <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
             </GoalieStat>
-            {Object.keys(goalie).map((stat) => {
+            {Object.keys(goalie).map((stat, i) => {
               if (!Object.keys(statLabels).includes(stat)) return null;
 
               return (
-                <GoalieStat key={stat}>
+                <GoalieStat key={`${stat}_${i}_${goalie.name}`}>
                   <span>{statLabels[stat]}</span>
                   <span>
                     {stat === 'savePct'
@@ -57,19 +57,17 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
               );
             })}
           </FlexRow>
-        </>
+        </React.Fragment>
       )
     );
 
   const renderGoalieStatsWithSharedLabels = () => {
     const awayGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.away);
     const homeGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.home);
-    const maxNumGoalies = Math.max(
-      awayGoaliesSorted.length,
-      homeGoaliesSorted.length
-    );
 
-    return new Array(maxNumGoalies).fill(0).map((_, index) => {
+    return new Array(
+      Math.max(awayGoaliesSorted.length, homeGoaliesSorted.length)
+    ).map((_, index) => {
       const awayGoalie = awayGoaliesSorted[index];
       const homeGoalie = homeGoaliesSorted[index];
       if (!awayGoalie && !homeGoalie) return null;
@@ -80,7 +78,7 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
             <div className={'away'}>
               <GoalieName>{awayGoalie && awayGoalie.name}</GoalieName>
             </div>
-            <span></span>
+            <span />
             <div className={'home'}>
               <GoalieName>{homeGoalie && homeGoalie.name}</GoalieName>
             </div>

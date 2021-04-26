@@ -8,10 +8,12 @@ interface GameDayHeaderProps {
   date: string;
 }
 
-const GameDayHeader = ({ date }: GameDayHeaderProps): JSX.Element => (
-  <GameHeader>
-    <h2>{date}</h2>
-  </GameHeader>
+const GameDayHeader = React.memo(
+  ({ date }: GameDayHeaderProps): JSX.Element => (
+    <GameHeader>
+      <h2>{date}</h2>
+    </GameHeader>
+  )
 );
 
 interface GameDayMatchupProps {

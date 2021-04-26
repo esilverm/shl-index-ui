@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
@@ -92,62 +92,60 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
     setFilterSeasonType(seasonType);
   };
+
   const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
   const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
-
-  const sortGamesByDate = () => {
-    const unsortedGames = [...games];
-    return unsortedGames.sort(
-      (gameA, gameB) =>
-        new Date(gameA.date).valueOf() - new Date(gameB.date).valueOf()
-    );
-  };
 
   const hasFilteredTeam = (game) =>
     filterTeam === -1 ||
     game.awayTeam === filterTeam ||
     game.homeTeam === filterTeam;
 
-  const getDatesForRendering = (sortedGames) => {
-    let gameDates = [];
-    sortedGames.forEach((game) => {
-      if (!gameDates.includes(game.date) && hasFilteredTeam(game)) {
-        gameDates.push(game.date);
+  const getDatesForRendering = useCallback(
+    (sortedGames) => {
+      let gameDates = sortedGames.reduce((acc, game) => {
+        if (!acc.includes(game.date) && hasFilteredTeam(game)) {
+          return [...acc, game.date];
+        }
+        return acc;
+      }, []);
+
+      if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
+        setShowFullSchedule(true);
+      } else if (!showFullSchedule) {
+        gameDates = gameDates.slice(0, initialNumberOfGames);
       }
-    });
 
-    if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
-      setShowFullSchedule(true);
-    } else if (!showFullSchedule) {
-      gameDates = gameDates.slice(0, initialNumberOfGames);
-    }
-
-    return gameDates;
-  };
+      return gameDates;
+    },
+    [filterTeam]
+  );
 
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
 
-    const gameDaySchedules = [];
-    const sortedGames = sortGamesByDate();
+    const sortedGames = [...games].sort(
+      (gameA, gameB) => Date.parse(gameA.date) - Date.parse(gameB.date)
+    );
     const gameDates = getDatesForRendering(sortedGames);
 
-    gameDates.forEach((date) => {
+    const gameDaySchedules = gameDates.reduce((acc, date) => {
       const gamesOnDate = sortedGames.filter((game) => game.date === date);
       const filteredGamesOnDate = gamesOnDate.filter((game) =>
         hasFilteredTeam(game)
       );
 
-      gameDaySchedules.push(
+      return [
+        ...acc,
         <GameDaySchedule
           key={date}
           date={date}
           games={filteredGamesOnDate}
           teamlist={teamlist}
           sprites={sprites}
-        />
-      );
-    });
+        />,
+      ];
+    }, []);
 
     return gameDaySchedules.length > 0 ? gameDaySchedules : 'No games found';
   };
