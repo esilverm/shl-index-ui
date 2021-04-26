@@ -98,10 +98,15 @@ Props): JSX.Element {
   const hasData = rows.length > 0;
 
   // search logic
-  const searchTypes: Array<SearchType> = [
+  // no need for position for goalies
+  const searchTypes: Array<SearchType> = players[0] && 'wins' in players[0] ? [
     {text: 'Name', id: 'player-table-player'},
-    {text: 'Position', id: 'player-table-position'},
-  ]
+    ] : [
+      {text: 'Name', id: 'player-table-player'},
+      {text: 'Position', id: 'player-table-position'},
+    ]
+
+
   const [ searchType, setSearchType ] = useState(searchTypes[0].id);
   const [ searchText, setSearchText ] = useState('');
 
