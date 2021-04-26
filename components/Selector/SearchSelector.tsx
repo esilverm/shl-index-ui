@@ -55,18 +55,18 @@ function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
       {isExpanded && (
         <DropdownList>
           {searchTypes.map((searchType) => {
-              return (
-                <DropdownItem
-                  key={searchType.text}
-                  align="left"
-                  data-searchtype={JSON.stringify(searchType)}
-                  onClick={onSearchTypeSelect}
-                  className={selectedSearchType === searchType.text && 'active'}
-                >
-                  {searchType.text}
-                </DropdownItem>
-              );
-            })}
+            return (
+              <DropdownItem
+                key={searchType.text}
+                align="left"
+                data-searchtype={JSON.stringify(searchType)}
+                onClick={onSearchTypeSelect}
+                className={selectedSearchType === searchType.text && 'active'}
+              >
+                {searchType.text}
+              </DropdownItem>
+            );
+          })}
         </DropdownList>
       )}
     </Container>

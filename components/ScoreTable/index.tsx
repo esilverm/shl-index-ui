@@ -23,7 +23,7 @@ interface Props {
   columnData: Array<ColumnData>;
   pagination?: boolean;
   teamPage?: boolean;
-  searching?: boolean
+  searching?: boolean;
   // isLoading: boolean;
 }
 
@@ -112,38 +112,38 @@ Props): JSX.Element {
   const [searchType, setSearchType] = useState(searchTypes[0].id);
   const [searchText, setSearchText] = useState('');
 
-  const updateFilter = (text) => {
+  const updateFilter = (text, type) => {
     if (text === '') {
       // clears filters
       setAllFilters([]);
     } else {
-      setFilter(searchType, text);
+      setFilter(searchType, "");
+      setFilter(type ?? searchType, text);
     }
   };
 
   const updateSearchType = (value) => {
     setSearchType(value);
-    updateFilter(searchText);
+    updateFilter(searchText, value);
   };
 
   const updateSearchText = (event) => {
     // update the search text
     setSearchText(event.target.value);
     // pass the event target value directly because setting searchText is asynchronous
-    updateFilter(event.target.value);
+    updateFilter(event.target.value, null);
   };
 
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
-      {
-        searching && <SearchBar
+      {searching && (
+        <SearchBar
           searchTypeOnChange={updateSearchType}
           searchTextOnChange={updateSearchText}
           searchTypes={searchTypes}
         />
-      }
-      
+      )}
       {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>

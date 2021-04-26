@@ -134,13 +134,13 @@ Props): JSX.Element {
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
-      {
-        searching && <SearchBar
+      {searching && (
+        <SearchBar
           searchTypeOnChange={updateSearchType}
           searchTextOnChange={updateSearchText}
           searchTypes={searchTypes}
         />
-      }
+      )}
       {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>
