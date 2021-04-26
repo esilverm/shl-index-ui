@@ -28,6 +28,7 @@ function PlayerRatingsTable({
         {
           Header: 'Position',
           accessor: 'position',
+          id: 'player-table-position',
           title: 'Position',
         },
         {

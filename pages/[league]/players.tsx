@@ -54,7 +54,7 @@ function PlayerPage({ league }: Props): JSX.Element {
           (player) => player.position === 'G'
         ) as Array<GoalieRatings>)
       : [];
-
+  
   const getSkater = () =>
     skater
       ? (skater.filter((player) => player.position !== 'G') as Array<Player>)
