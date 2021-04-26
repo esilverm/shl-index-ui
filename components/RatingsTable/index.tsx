@@ -87,7 +87,6 @@ Props): JSX.Element {
     nextPage,
     previousPage,
     gotoPage,
-    allColumns,
 
     setAllFilters,
     setFilter,
@@ -109,7 +108,6 @@ Props): JSX.Element {
   const [ searchText, setSearchText ] = useState('');
 
   const updateFilter = (text) => {
-    console.log(allColumns);
     if (text === '') {
       // clears filters
       setAllFilters([]);
