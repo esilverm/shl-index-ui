@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import SearchSelector from '../Selector/SearchSelector';
 import { SearchType } from '../..';
+import React from 'react';
 
 interface Props {
-  searchTextOnChange: (event) => void;
+  searchTextOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchTypeOnChange: (type: string) => void;
   searchTypes: Array<SearchType>;
 }
@@ -29,7 +30,7 @@ function SearchBar({
     </SearchBarWrapper>
   );
 }
-export default SearchBar;
+
 
 const SearchBarWrapper = styled.div`
   display: flex;
@@ -50,3 +51,5 @@ const SearchBarInput = styled.input`
 const SearchSelectorWrapper = styled.div`
   width: 150px;
 `;
+
+export default SearchBar;

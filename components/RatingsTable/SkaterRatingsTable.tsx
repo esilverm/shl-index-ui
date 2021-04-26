@@ -7,12 +7,14 @@ interface Props {
   data: Array<PlayerRatings>;
   pagination?: boolean;
   teamPage?: boolean;
+  searching?: boolean;
 }
 
 function PlayerRatingsTable({
   data: players,
   pagination = false,
   teamPage = false,
+  searching = false,
 }: Props): JSX.Element {
   const columnData = [
     {
@@ -204,6 +206,7 @@ function PlayerRatingsTable({
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
+      searching={searching}
     />
   );
 }

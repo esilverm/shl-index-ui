@@ -7,12 +7,14 @@ interface Props {
   data: Array<Goalie>;
   pagination?: boolean;
   teamPage?: boolean;
+  searching?: boolean;
 }
 
 function GoalieScoreTable({
   data: players,
   pagination = false,
   teamPage = false,
+  searching = false,
 }: Props): JSX.Element {
   const columnData = [
     {
@@ -112,6 +114,7 @@ function GoalieScoreTable({
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
+      searching={searching}
     />
   );
 }

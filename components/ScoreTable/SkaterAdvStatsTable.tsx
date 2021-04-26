@@ -7,12 +7,14 @@ interface Props {
   data: Array<Player>;
   pagination?: boolean;
   teamPage?: boolean;
+  searching?: boolean;
 }
 
 function SkaterAdvStatsTable({
   data: players,
   pagination = false,
   teamPage = false,
+  searching = false,
 }: Props): JSX.Element {
   const columnData = [
     {
@@ -146,6 +148,7 @@ function SkaterAdvStatsTable({
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
+      searching={searching}
     />
   );
 }

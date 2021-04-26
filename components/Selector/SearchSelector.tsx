@@ -54,9 +54,7 @@ function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
       </DropdownButton>
       {isExpanded && (
         <DropdownList>
-          {searchTypes
-            .sort((a, b) => (a > b ? 1 : -1))
-            .map((searchType) => {
+          {searchTypes.map((searchType) => {
               return (
                 <DropdownItem
                   key={searchType.text}

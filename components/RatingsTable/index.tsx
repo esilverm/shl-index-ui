@@ -24,6 +24,7 @@ interface Props {
   columnData: Array<ColumnData>;
   pagination?: boolean;
   teamPage?: boolean;
+  searching?: boolean;
   // isLoading: boolean;
 }
 
@@ -32,6 +33,7 @@ function RatingsTable({
   columnData,
   pagination = false,
   teamPage = false,
+  searching = false,
 }: // isLoading
 Props): JSX.Element {
   // ! add loading state
@@ -132,11 +134,13 @@ Props): JSX.Element {
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
-      <SearchBar
-        searchTypeOnChange={updateSearchType}
-        searchTextOnChange={updateSearchText}
-        searchTypes={searchTypes}
-      />
+      {
+        searching && <SearchBar
+          searchTypeOnChange={updateSearchType}
+          searchTextOnChange={updateSearchText}
+          searchTypes={searchTypes}
+        />
+      }
       {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>
