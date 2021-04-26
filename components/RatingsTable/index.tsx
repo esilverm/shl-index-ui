@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import React, { useMemo, useState } from 'react';
+import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
-import { PlayerRatings, GoalieRatings } from '../..';
+import { PlayerRatings, GoalieRatings, SearchType } from '../..';
+import SearchBar from '../SearchBar/SearchBar'
 
 interface Columns {
   Header: string;
@@ -63,11 +64,12 @@ Props): JSX.Element {
         data,
         initialState: { pageIndex: 0, pageSize: 15, ...initialState },
       },
+      useFilters,
       useSortBy,
       usePagination
     );
   } else {
-    table = useTable({ columns, data, initialState }, useSortBy);
+    table = useTable({ columns, data, initialState }, useFilters, useSortBy);
   }
 
   const {
@@ -85,14 +87,49 @@ Props): JSX.Element {
     nextPage,
     previousPage,
     gotoPage,
+    allColumns,
+
+    setAllFilters,
+    setFilter,
     state: { pageIndex },
   } = table;
 
   const hasData = rows.length > 0;
 
+  // search logic
+  const searchTypes: Array<SearchType> = [
+    {text: 'Name', id: 'player-table-player'},
+    {text: 'Position', id: 'player-table-position'},
+  ]
+  const [ searchType, setSearchType ] = useState(searchTypes[0].id);
+  const [ searchText, setSearchText ] = useState('');
+
+  const updateFilter = (text) => {
+    console.log(allColumns);
+    if (text === '') {
+      // clears filters
+      setAllFilters([]);
+    } else {
+      setFilter(searchType, text);
+    }
+  }
+
+  const updateSearchType = (value) => {
+    setSearchType(value);
+    updateFilter(searchText);
+  }
+
+  const updateSearchText = (event) => {
+    // update the search text
+    setSearchText(event.target.value);
+    // pass the event target value directly because setting searchText is asynchronous
+    updateFilter(event.target.value);
+  }
+
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
+      <SearchBar searchTypeOnChange={updateSearchType} searchTextOnChange={updateSearchText} searchTypes={searchTypes} />
       {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>

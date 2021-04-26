@@ -24,6 +24,7 @@ function PlayerRatingsTable({ data: players, pagination=false, teamPage=false }:
         {
           Header: 'Position',
           accessor: 'position',
+          id: 'player-table-position',
           title: 'Position',
         },
         {
