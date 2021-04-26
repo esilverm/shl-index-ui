@@ -124,9 +124,18 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
 
-    const sortedGames = [...games].sort(
-      (gameA, gameB) => Date.parse(gameA.date) - Date.parse(gameB.date)
-    );
+    const sortedGames = [...games].sort((gameA, gameB) => {
+      const [aYear, aMonth, aDate] = gameA.date
+        .split('-')
+        .map((v) => parseInt(v));
+      const [bYear, bMonth, bDate] = gameB.date
+        .split('-')
+        .map((v) => parseInt(v));
+      return (
+        new Date(aYear, aMonth - 1, aDate).valueOf() -
+        new Date(bYear, bMonth - 1, bDate).valueOf()
+      );
+    });
     const gameDates = getDatesForRendering(sortedGames);
 
     const gameDaySchedules = gameDates.reduce((acc, date) => {

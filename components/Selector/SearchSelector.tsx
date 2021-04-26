@@ -17,7 +17,9 @@ interface Props {
 
 function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedSearchType, setSelectedSearchType] = useState<string>(searchTypes[0].text);
+  const [selectedSearchType, setSelectedSearchType] = useState<string>(
+    searchTypes[0].text
+  );
   const selectorRef = useRef(null);
 
   const onMouseLeave = () => {

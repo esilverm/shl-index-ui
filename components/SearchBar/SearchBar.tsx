@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import SearchSelector from '../Selector/SearchSelector'
+import SearchSelector from '../Selector/SearchSelector';
 import { SearchType } from '../..';
 
 interface Props {
@@ -8,22 +8,29 @@ interface Props {
   searchTypes: Array<SearchType>;
 }
 
-function SearchBar ({
+function SearchBar({
   searchTextOnChange,
   searchTypeOnChange,
   searchTypes,
-  }: Props): JSX.Element {
-
+}: Props): JSX.Element {
   return (
-      <SearchBarWrapper>
-          <input id='searchBar' type='text' onChange={searchTextOnChange} placeholder='Search'></input>
-          <SearchSelectorWrapper>
-            <SearchSelector searchTypes={searchTypes} onChange={searchTypeOnChange}/>
-          </SearchSelectorWrapper>
-      </SearchBarWrapper>
+    <SearchBarWrapper>
+      <input
+        id="searchBar"
+        type="text"
+        onChange={searchTextOnChange}
+        placeholder="Search"
+      ></input>
+      <SearchSelectorWrapper>
+        <SearchSelector
+          searchTypes={searchTypes}
+          onChange={searchTypeOnChange}
+        />
+      </SearchSelectorWrapper>
+    </SearchBarWrapper>
   );
 }
-export default SearchBar
+export default SearchBar;
 
 const SearchBarWrapper = styled.div`
   font-size: 20px;
