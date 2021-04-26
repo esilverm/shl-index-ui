@@ -8,15 +8,16 @@ import {
   DropdownList,
   Caret,
 } from './styles';
+import { SearchType } from '../..';
 
 interface Props {
-  searchTypes: Array<string>;
+  searchTypes: Array<SearchType>;
   onChange: (searchType: string) => void;
 }
 
 function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedSearchType, setSelectedSearchType] = useState<string>(searchTypes[0]);
+  const [selectedSearchType, setSelectedSearchType] = useState<string>(searchTypes[0].text);
   const selectorRef = useRef(null);
 
   const onMouseLeave = () => {
@@ -34,9 +35,10 @@ function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
 
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSearchTypeSelect = (event) => {
-    const parsedSearchType = event.target.dataset.searchtype;
-    onChange(parsedSearchType);
-    setSelectedSearchType(parsedSearchType);
+    const searchType = event.target.dataset.searchtype;
+    const parsedSearchType = JSON.parse(searchType);
+    onChange(parsedSearchType.id);
+    setSelectedSearchType(parsedSearchType.text);
     setIsExpanded(false);
   };
 
@@ -55,13 +57,13 @@ function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
             .map((searchType) => {
               return (
                 <DropdownItem
-                  key={searchType}
+                  key={searchType.text}
                   align="left"
-                  data-searchtype={searchType}
+                  data-searchtype={JSON.stringify(searchType)}
                   onClick={onSearchTypeSelect}
-                  className={selectedSearchType === searchType && 'active'}
+                  className={selectedSearchType === searchType.text && 'active'}
                 >
-                  {searchType}
+                  {searchType.text}
                 </DropdownItem>
               );
             })}

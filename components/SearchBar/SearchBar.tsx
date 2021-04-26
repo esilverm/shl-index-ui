@@ -1,17 +1,23 @@
 import styled from 'styled-components';
+import SearchSelector from '../Selector/SearchSelector'
+import { SearchType } from '../..';
+
+interface Props {
+  searchTextOnChange: (event) => void;
+  searchTypeOnChange: (type: string) => void;
+  searchTypes: Array<SearchType>;
+}
 
 function SearchBar ({
-    updateSearchText
-  }): JSX.Element {
-
-  // logic to update the search text
-  const handleChange = (event) => {
-    updateSearchText(event.target.value)
-  }
+  searchTextOnChange,
+  searchTypeOnChange,
+  searchTypes,
+  }: Props): JSX.Element {
 
   return (
       <SearchBarWrapper>
-          <input id='searchBar' type='text' onChange={handleChange} placeholder='Search'></input>
+          <input id='searchBar' type='text' onChange={searchTextOnChange} placeholder='Search'></input>
+          <SearchSelector searchTypes={searchTypes} onChange={searchTypeOnChange}/>
       </SearchBarWrapper>
   );
 }
