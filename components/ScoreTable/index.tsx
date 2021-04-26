@@ -103,18 +103,27 @@ Props): JSX.Element {
     {text: 'Position', id: 'player-table-position'},
   ]
   const [ searchType, setSearchType ] = useState(searchTypes[0].id);
+  const [ searchText, setSearchText ] = useState('');
+
+  const updateFilter = (text) => {
+    if (text === '') {
+      // clears filters
+      setAllFilters([]);
+    } else {
+      setFilter(searchType, text);
+    }
+  }
 
   const updateSearchType = (value) => {
-    setSearchType(value)
+    setSearchType(value);
+    updateFilter(searchText);
   }
 
   const updateSearchText = (event) => {
-    const searchText = event.target.value;
-    if (searchText != '') {
-      setFilter(searchType, searchText)
-    } else {
-      setAllFilters([]);
-    }
+    // update the search text
+    setSearchText(event.target.value);
+    // pass the event target value directly because setting searchText is asynchronous
+    updateFilter(event.target.value);
   }
 
   return (
