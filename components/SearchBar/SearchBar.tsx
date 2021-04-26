@@ -17,7 +17,9 @@ function SearchBar ({
   return (
       <SearchBarWrapper>
           <input id='searchBar' type='text' onChange={searchTextOnChange} placeholder='Search'></input>
-          <SearchSelector searchTypes={searchTypes} onChange={searchTypeOnChange}/>
+          <SearchSelectorWrapper>
+            <SearchSelector searchTypes={searchTypes} onChange={searchTypeOnChange}/>
+          </SearchSelectorWrapper>
       </SearchBarWrapper>
   );
 }
@@ -26,4 +28,14 @@ export default SearchBar
 const SearchBarWrapper = styled.div`
   font-size: 20px;
   font-weight: 700;
+  display: none;
+
+  input {
+    float:left;
+  }
+`;
+
+const SearchSelectorWrapper = styled.div`
+  width: 50px;
+  float:right;
 `;
