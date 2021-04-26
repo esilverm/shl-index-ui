@@ -29,13 +29,8 @@ const SearchBarWrapper = styled.div`
   font-size: 20px;
   font-weight: 700;
   display: none;
-
-  input {
-    float:left;
-  }
 `;
 
 const SearchSelectorWrapper = styled.div`
-  width: 50px;
-  float:right;
+  width: 150px;
 `;
