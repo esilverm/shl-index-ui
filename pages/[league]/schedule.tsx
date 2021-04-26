@@ -124,6 +124,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
 
+    // Parse our dates first since mobile browsers can't do so
     const sortedGames = [...games].sort((gameA, gameB) => {
       const [aYear, aMonth, aDate] = gameA.date
         .split('-')

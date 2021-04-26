@@ -269,7 +269,7 @@ const TableContainer = styled.div`
   border-top: none;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
 
   tr:not(:last-child) th,
   tr:not(:last-child) td {

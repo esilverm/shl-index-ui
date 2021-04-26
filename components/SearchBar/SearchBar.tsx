@@ -15,28 +15,37 @@ function SearchBar({
 }: Props): JSX.Element {
   return (
     <SearchBarWrapper>
-      <input
-        id="searchBar"
-        type="text"
-        onChange={searchTextOnChange}
-        placeholder="Search"
-      ></input>
       <SearchSelectorWrapper>
         <SearchSelector
           searchTypes={searchTypes}
           onChange={searchTypeOnChange}
         />
       </SearchSelectorWrapper>
+      <SearchBarInput
+        type="text"
+        onChange={searchTextOnChange}
+        placeholder="Search"
+      />
     </SearchBarWrapper>
   );
 }
 export default SearchBar;
 
 const SearchBarWrapper = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-  display: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 1rem 0;
 `;
+
+const SearchBarInput = styled.input`
+  font-family: Raleway, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 1rem;
+  padding: 0 8px;
+`;
+
 
 const SearchSelectorWrapper = styled.div`
   width: 150px;
