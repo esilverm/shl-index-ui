@@ -117,7 +117,7 @@ Props): JSX.Element {
       // clears filters
       setAllFilters([]);
     } else {
-      setFilter(searchType, "");
+      setFilter(searchType, '');
       setFilter(type ?? searchType, text);
     }
   };

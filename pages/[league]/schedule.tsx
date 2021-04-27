@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
 import styled from 'styled-components';
@@ -94,6 +94,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   };
 
   const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
+
   const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
   const hasFilteredTeam = (game) =>
@@ -101,25 +102,22 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     game.awayTeam === filterTeam ||
     game.homeTeam === filterTeam;
 
-  const getDatesForRendering = useCallback(
-    (sortedGames) => {
-      let gameDates = sortedGames.reduce((acc, game) => {
-        if (!acc.includes(game.date) && hasFilteredTeam(game)) {
-          return [...acc, game.date];
-        }
-        return acc;
-      }, []);
-
-      if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
-        setShowFullSchedule(true);
-      } else if (!showFullSchedule) {
-        gameDates = gameDates.slice(0, initialNumberOfGames);
+  const getDatesForRendering = (sortedGames) => {
+    let gameDates = sortedGames.reduce((acc, game) => {
+      if (!acc.includes(game.date) && hasFilteredTeam(game)) {
+        return [...acc, game.date];
       }
+      return acc;
+    }, []);
 
-      return gameDates;
-    },
-    [filterTeam]
-  );
+    if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
+      setShowFullSchedule(true);
+    } else if (!showFullSchedule) {
+      gameDates = gameDates.slice(0, initialNumberOfGames);
+    }
+
+    return gameDates;
+  };
 
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
