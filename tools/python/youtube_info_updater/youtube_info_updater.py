@@ -55,7 +55,7 @@ class YoutubeInfoUpdater():
         if response.status_code == 403 and 'quota' in response_payload['error']['message']:
             raise Exception(f'Failed to get video id because quota exceeded.')
         elif response.status_code != 200:
-            raise Exception(f'Failed to get video id for league [{league}]. Unknown error.')
+            raise Exception(f'Failed to get video id for league [{league}]. Unknown error: \n{json.dumps(response_payload, indent=2)}')
 
         return (response_payload['items'][0]['id']['videoId'], response_payload['items'][0]['snippet']['liveBroadcastContent'])
     
