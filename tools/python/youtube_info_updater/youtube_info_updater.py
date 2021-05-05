@@ -129,7 +129,7 @@ class YoutubeInfoUpdater():
 
         self.__mysql_connection.commit()
 
-        print(f'leage [{league}] updated to video id [{video_id}] if it exists.')
+        print(f'league [{league}] updated to video id [{video_id}] if it exists.')
 
 # setters/getters
 
@@ -151,7 +151,7 @@ class YoutubeInfoUpdater():
         """
         Function to run tests on the class
         """
-        self.__insert_row(args[0], args[1])
+        pass
 
 if __name__ == '__main__':
     video_updater = YoutubeInfoUpdater()
