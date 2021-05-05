@@ -59,7 +59,7 @@ function LeagueHome({ league }: Props): JSX.Element {
       <Header league={league} />
       <Container>
         <YoutubeEmbedContainer>
-          <LiveStream isSHL={league === 'shl'} />
+          <LiveStream currentLeague={league} />
         </YoutubeEmbedContainer>
         <HomepageLeadersContainer>
           <HomepageLeaders league={league} leaders={leaders} />
