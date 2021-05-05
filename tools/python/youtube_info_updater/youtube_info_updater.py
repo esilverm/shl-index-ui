@@ -57,7 +57,7 @@ class YoutubeInfoUpdater():
         elif response.status_code != 200:
             raise Exception(f'Failed to get video id for league [{league}]. Unknown error.')
 
-        return (response_payload['data']['id']['videoId'], response_payload['data']['snippet']['liveBroadcastContent'])
+        return (response_payload['items'][0]['id']['videoId'], response_payload['items'][0]['snippet']['liveBroadcastContent'])
     
     def set_api_url(self):
         """
@@ -168,8 +168,4 @@ if __name__ == '__main__':
     for league in ['shl', 'smjhl', 'wjc', 'iihf']:
         video_updater.update_league(league, league_data[league])
 
-    final_tables = json.dumps(video_updater.select_all(), indent=2)
-
-    # print out results
-    print('Update complete.')
-    print(final_tables)
+    print('Update complete')
