@@ -165,7 +165,7 @@ if __name__ == '__main__':
     }
     
     # update all the leagues
-    for league in ['shl', 'smjhl', 'wjc', 'iihf']:
+    for league in league_data.keys():
         video_updater.update_league(league, league_data[league])
 
     print('Update complete')
