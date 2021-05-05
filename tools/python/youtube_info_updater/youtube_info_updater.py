@@ -9,6 +9,7 @@ import requests
 
 # constants
 DEBUG = False
+LOG_NAME = 'updater.log'
 
 
 class YoutubeInfoUpdater():
@@ -45,7 +46,7 @@ class YoutubeInfoUpdater():
         # logging
         self.__logger = None
         
-        self.create_logger('updater.log')
+        self.create_logger(LOG_NAME)
         self.set_database_information()
         self.set_api_url()
         self.set_leagues()
