@@ -28,6 +28,10 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.venv
 
 # ides
 .vscode
+
+# python
+__pycache__

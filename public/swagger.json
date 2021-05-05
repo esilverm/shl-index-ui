@@ -42,6 +42,10 @@
     {
       "name": "results",
       "description": "Games played or to be played"
+    },
+    {
+      "name": "livestreams",
+      "description": "Lists all livestreams for each league."
     }
   ],
   "schemes": ["https", "http"],
@@ -1671,6 +1675,34 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/winLeaders"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/livestreams": {
+      "get": {
+        "tags": ["livestreams"],
+        "summary": "List of Livestream Information",
+        "description": "A listing of the livestreams information that our data provides, their video ids, and if they are live.",
+        "operationId": "getAllLivestreams",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Livestream"
               }
             }
           }
@@ -3471,6 +3503,26 @@
         "shutouts": {
           "type": "number",
           "example": 13
+        }
+      }
+    },
+    "Livestream": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "league": {
+          "type": "string",
+          "example": "shl"
+        },
+        "videoId": {
+          "type": "string",
+          "example": "asdFgdasd3"
+        },
+        "isLive": {
+          "type": "string",
+          "example": "live"
         }
       }
     }
