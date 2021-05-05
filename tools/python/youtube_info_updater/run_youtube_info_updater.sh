@@ -2,13 +2,16 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+# navigate to correct directory
+cd $SCRIPT_DIR
+
 # check if we need to install the virtual environment
-if [ ! -d "$SCRIPT_DIR/.venv" ]; then
+if [ ! -d ".venv" ]; then
     python3 -m venv .venv
-    source $SCRIPT_DIR/.venv/bin/activate
-    pip install -r $SCRIPT_DIR/requirements.txt
+    source .venv/bin/activate
+    pip install -r requirements.txt
 else
-    source $SCRIPT_DIR/.venv/bin/activate
+    source .venv/bin/activate
 fi
 
-python3 $SCRIPT_DIR/youtube_info_updater.py
+python3 youtube_info_updater.py
