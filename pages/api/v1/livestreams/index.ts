@@ -8,16 +8,16 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-type Data = Array<{
+export interface LivestreamData {
   id: number;
   league: string;
   videoId: string;
   isLive: string;
-}>;
+}
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Data | string>
+  res: NextApiResponse<Array<LivestreamData> | string>
 ): Promise<void> => {
   await use(req, res, cors);
 
