@@ -1,10 +1,15 @@
 #! /usr/bin/env python3
 from dotenv import dotenv_values
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 import mysql.connector
 from pathlib import Path
-from mysql.connector import cursor
 import requests
+
+# constants
+DEBUG = False
+LOG_NAME = 'updater.log'
 
 
 class YoutubeInfoUpdater():
@@ -38,6 +43,10 @@ class YoutubeInfoUpdater():
         self.__iihf_channel_id = None
         self.__google_api_url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=date&maxResults=1'
 
+        # logging
+        self.__logger = None
+        
+        self.create_logger(LOG_NAME)
         self.set_database_information()
         self.set_api_url()
         self.set_leagues()
@@ -48,14 +57,20 @@ class YoutubeInfoUpdater():
         """
         Gets the video ID for the specified league.
         """
+        self.__logger.debug(f'get_video_info executing, args [{league}]')
+
         league_id = self.__leagues[league.lower()]
         response = requests.get(f'{self.__google_api_url}&channelId={league_id}')
         response_payload = response.json()
 
         if response.status_code == 403 and 'quota' in response_payload['error']['message']:
+            self.__logger.critical(f'Quota error: {json.dumps(response_payload, indent=2)}')
             raise Exception(f'Failed to get video id because quota exceeded.')
         elif response.status_code != 200:
-            raise Exception(f'Failed to get video id for league [{league}]. Unknown error.')
+            self.__logger.critical(f'Unknown error: {json.dumps(response_payload, indent=2)}')
+            raise Exception(f'Failed to get video id for league [{league}]. Unknown error: \n{json.dumps(response_payload, indent=2)}')
+
+        self.__logger.debug(f"returning [({response_payload['items'][0]['id']['videoId'], response_payload['items'][0]['snippet']['liveBroadcastContent']})]")
 
         return (response_payload['items'][0]['id']['videoId'], response_payload['items'][0]['snippet']['liveBroadcastContent'])
     
@@ -63,12 +78,14 @@ class YoutubeInfoUpdater():
         """
         Sets the api url.
         """
+        self.__logger.debug('set_api_url executing')
         self.__google_api_url = f'{self.__google_api_url}&key={self.__youtube_api_key}'
 
     def set_leagues(self):
         """
         Sets the league dictionary.
         """
+        self.__logger.debug('set_leagues executing')
         self.__leagues = {
             'shl': self.__shl_channel_id,
             'smjhl': self.__smjhl_channel_id,
@@ -82,6 +99,7 @@ class YoutubeInfoUpdater():
         """
         Sets the data base information from a .env.local file in the path given.
         """
+        self.__logger.debug(f'set_database_information executing')
         config = dotenv_values(self.__env_file_path)
         self.__mysql_host = config['MYSQL_HOST']
         self.__mysql_database = config['MYSQL_DATABASE']
@@ -93,10 +111,14 @@ class YoutubeInfoUpdater():
         self.__wjc_channel_id = config['NEXT_PUBLIC_SMJHL_CHANNEL_ID']
         self.__iihf_channel_id = config['NEXT_PUBLIC_SMJHL_CHANNEL_ID']
 
+        self.__logger.info(f'imported config file {self.__env_file_path}')
+
     def connect_to_database(self):
         """
         Connect to the database.
         """
+        self.__logger.debug(f'connect_to_database executing')
+
         self.__mysql_connection = mysql.connector.connect(
             host=self.__mysql_host,
             user=self.__mysql_user,
@@ -104,10 +126,13 @@ class YoutubeInfoUpdater():
             database=self.__mysql_database
         )
 
+        self.__logger.info(f'connected to database')
+
     def select_all(self):
         """
         Select all from the database table.
         """
+        self.__logger.debug(f'select_all executing')
         cursor = self.__mysql_connection.cursor()
         cursor.execute('SELECT * FROM youtube_data')
         result = cursor.fetchall()
@@ -137,13 +162,39 @@ class YoutubeInfoUpdater():
         """
         Sets the env_file_path.
         """
+        self.__logger.debug(f'set_env_file_path executing, args [{env_file_path}]')
         self.__env_file_path = env_file_path
 
     def get_env_file_path(self):
         """
         Returns the env_file_path.
         """
+        self.__logger.debug('get_env_file_path executing')
         return self.__env_file_path
+
+# misc functions
+
+    def create_logger(self, logging_file_name):
+        """
+        Creates the rotating logger.
+        """
+        self.__logger = logging.getLogger('YoutubeInfoUpdater')
+
+        if DEBUG:
+            self.__logger.setLevel(logging.DEBUG)
+        else:
+            self.__logger.setLevel(logging.INFO)
+
+        log_path = Path(__file__).absolute().parent.joinpath(logging_file_name)
+
+        # rotating log with 10 Mb max file size, 2 backup files
+        handler = RotatingFileHandler(log_path, maxBytes=10000000,
+            backupCount= 2)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - [%(message)s]')
+        handler.setFormatter(formatter)
+
+        self.__logger.addHandler(handler)
 
 # testing functions
 
