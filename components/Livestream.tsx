@@ -16,7 +16,7 @@ function Livestream({ currentLeague = 'shl' }: { currentLeague: string }): JSX.E
   const videoID = livestreamData ? livestreamData[0].videoId : '';
 
   if (livestreamData) {
-    if (livestreamData[0].isLive === 'live' && isLive != true) {
+    if (livestreamData[0].isLive === 'live' && isLive !== true) {
       setIsLive(true);
     }
   }
