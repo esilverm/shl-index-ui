@@ -60,7 +60,8 @@ class YoutubeInfoUpdater():
         self.__logger.debug(f'get_video_info executing, args [{league}]')
 
         league_id = self.__leagues[league.lower()]
-        response = requests.get(f'{self.__google_api_url}&channelId={league_id}')
+        response = requests.get(f'{self.__google_api_url}&channelId={league_id}',
+            headers={"referer":"index.simulationhockey.com"})
         response_payload = response.json()
 
         if response.status_code == 403 and 'quota' in response_payload['error']['message']:
