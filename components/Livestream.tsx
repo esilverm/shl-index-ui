@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import { LivestreamData } from '../pages/api/v1/livestreams/index';
@@ -15,11 +15,11 @@ function Livestream({ currentLeague = 'shl' }: { currentLeague: string }): JSX.E
 
   const videoID = livestreamData ? livestreamData[0].videoId : '';
 
-  if (livestreamData) {
-    if (livestreamData[0].isLive === 'live' && isLive !== true) {
+  useEffect(() => {
+    if (livestreamData && livestreamData[0].isLive === 'live') {
       setIsLive(true);
     }
-  }
+  }, [livestreamData]);
 
   return (
     <>
