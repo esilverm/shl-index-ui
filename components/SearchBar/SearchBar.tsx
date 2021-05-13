@@ -40,6 +40,7 @@ function SearchBar({
 }
 
 const SearchBarWrapper = styled.div`
+  display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin: 1rem 0;
