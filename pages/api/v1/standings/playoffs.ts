@@ -57,6 +57,7 @@ export default async (
     AND po.SeasonID = td2.SeasonID
       WHERE po.LeagueID=${+league}
         AND po.SeasonID=${season.SeasonID}
+    ORDER BY po.startdate
   `
   );
 
