@@ -82,13 +82,13 @@ function ScoreBar({ data, loading, league }: Props): JSX.Element {
                       key={slug}
                       data={{
                         season: slug.substr(0, 2),
-                        homeTeam,
-                        homeScore,
-                        awayTeam,
-                        awayScore,
-                        overtime,
-                        shootout,
-                        played,
+                        homeTeam: homeTeam,
+                        homeScore: homeScore,
+                        awayTeam: awayTeam,
+                        awayScore: awayScore,
+                        overtime: overtime,
+                        shootout: shootout,
+                        played: played,
                       }}
                       league={league}
                       gameid={slug}
@@ -173,4 +173,4 @@ const Arrow = styled.div<{ right: boolean }>`
   }
 `;
 
-export default React.memo(ScoreBar);
+export default ScoreBar;

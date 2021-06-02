@@ -26,7 +26,7 @@ function Standings({ league }: Props): JSX.Element {
   const onSeasonTypeSelect = (type) => {
     setIsPlayoffs(type === 'Playoffs');
     setSeasonType(type);
-  }
+  };
 
   return (
     <React.Fragment>

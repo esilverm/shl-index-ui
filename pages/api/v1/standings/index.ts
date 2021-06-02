@@ -10,7 +10,7 @@ const cors = Cors({
 
 export type Standings = Array<{
   name: string;
-  teams: {
+  teams: Array<{
     position: number;
     id: number;
     name: string;
@@ -40,7 +40,7 @@ export type Standings = Array<{
       wins: number;
       losses: number;
     };
-  };
+  }>;
 }>;
 
 export default async (

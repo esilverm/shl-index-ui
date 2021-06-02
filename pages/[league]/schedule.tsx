@@ -92,16 +92,10 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
     setFilterSeasonType(seasonType);
   };
-  const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
-  const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
-  const sortGamesByDate = () => {
-    const unsortedGames = [...games];
-    return unsortedGames.sort(
-      (gameA, gameB) =>
-        new Date(gameA.date).valueOf() - new Date(gameB.date).valueOf()
-    );
-  };
+  const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
+
+  const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
 
   const hasFilteredTeam = (game) =>
     filterTeam === -1 ||
@@ -109,12 +103,12 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
     game.homeTeam === filterTeam;
 
   const getDatesForRendering = (sortedGames) => {
-    let gameDates = [];
-    sortedGames.forEach((game) => {
-      if (!gameDates.includes(game.date) && hasFilteredTeam(game)) {
-        gameDates.push(game.date);
+    let gameDates = sortedGames.reduce((acc, game) => {
+      if (!acc.includes(game.date) && hasFilteredTeam(game)) {
+        return [...acc, game.date];
       }
-    });
+      return acc;
+    }, []);
 
     if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
       setShowFullSchedule(true);
@@ -128,26 +122,38 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const renderGameDays = () => {
     if (isLoading || isLoadingAssets) return null;
 
-    const gameDaySchedules = [];
-    const sortedGames = sortGamesByDate();
+    // Parse our dates first since mobile browsers can't do so
+    const sortedGames = [...games].sort((gameA, gameB) => {
+      const [aYear, aMonth, aDate] = gameA.date
+        .split('-')
+        .map((v) => parseInt(v));
+      const [bYear, bMonth, bDate] = gameB.date
+        .split('-')
+        .map((v) => parseInt(v));
+      return (
+        new Date(aYear, aMonth - 1, aDate).valueOf() -
+        new Date(bYear, bMonth - 1, bDate).valueOf()
+      );
+    });
     const gameDates = getDatesForRendering(sortedGames);
 
-    gameDates.forEach((date) => {
+    const gameDaySchedules = gameDates.reduce((acc, date) => {
       const gamesOnDate = sortedGames.filter((game) => game.date === date);
       const filteredGamesOnDate = gamesOnDate.filter((game) =>
         hasFilteredTeam(game)
       );
 
-      gameDaySchedules.push(
+      return [
+        ...acc,
         <GameDaySchedule
           key={date}
           date={date}
           games={filteredGamesOnDate}
           teamlist={teamlist}
           sprites={sprites}
-        />
-      );
-    });
+        />,
+      ];
+    }, []);
 
     return gameDaySchedules.length > 0 ? gameDaySchedules : 'No games found';
   };

@@ -6,11 +6,15 @@ import { Player } from '../..';
 interface Props {
   data: Array<Player>;
   pagination?: boolean;
+  teamPage?: boolean;
+  searching?: boolean;
 }
 
 function SkaterAdvStatsTable({
   data: players,
   pagination = false,
+  teamPage = false,
+  searching = false,
 }: Props): JSX.Element {
   const columnData = [
     {
@@ -28,6 +32,11 @@ function SkaterAdvStatsTable({
           id: 'player-table-position',
           accessor: 'position',
           title: 'Position',
+        },
+        {
+          Header: 'Team',
+          accessor: 'team',
+          title: 'Team',
         },
         {
           Header: 'GP',
@@ -138,6 +147,8 @@ function SkaterAdvStatsTable({
       data={players}
       columnData={columnData}
       pagination={pagination}
+      teamPage={teamPage}
+      searching={searching}
     />
   );
 }

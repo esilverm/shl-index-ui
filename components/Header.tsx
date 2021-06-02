@@ -15,6 +15,7 @@ interface Props {
   activePage?: string;
   team?: number;
   days?: number;
+  isSticky?: boolean;
 }
 
 const defaultProps = {
@@ -28,6 +29,7 @@ function HeaderBar({
   activePage = '',
   team = null,
   days = null,
+  isSticky = true,
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -58,7 +60,7 @@ function HeaderBar({
     seasonsData ? seasonsData.map((leagueEntry) => leagueEntry.season) : [];
 
   return (
-    <HeaderWrapper sticky={!scheduleVisible || !showScoreBar}>
+    <HeaderWrapper sticky={(!scheduleVisible || !showScoreBar) && isSticky}>
       {showScoreBar && (
         <VisibilitySensor
           partialVisibility
@@ -73,7 +75,7 @@ function HeaderBar({
         </VisibilitySensor>
       )}
       <HeaderNav
-        sticky={!scheduleVisible || !showScoreBar}
+        sticky={(!scheduleVisible || !showScoreBar) && isSticky}
         role="navigation"
         aria-label="Main"
       >
@@ -165,10 +167,12 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            <SeasonSelector
-              seasons={getSeasonsList()}
-              loading={!seasonsData && !seasonsError}
-            />
+            {activePage !== 'game' && (
+              <SeasonSelector
+                seasons={getSeasonsList()}
+                loading={!seasonsData && !seasonsError}
+              />
+            )}
           </SelectorWrapper>
         </Container>
       </HeaderNav>
@@ -353,6 +357,7 @@ const SelectorWrapper = styled.div`
 
   @media screen and (max-width: 670px) {
     order: 3;
+    width: 55px;
   }
 `;
 

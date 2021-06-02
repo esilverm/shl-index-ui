@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import React, { useMemo, useState } from 'react';
+import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
-import { Player, Goalie } from '../..';
-
+import { Player, Goalie, SearchType } from '../..';
+import SearchBar from '../SearchBar/SearchBar';
 interface Columns {
   Header: string;
   id?: string;
@@ -22,6 +22,8 @@ interface Props {
   data: Array<Player | Goalie>;
   columnData: Array<ColumnData>;
   pagination?: boolean;
+  teamPage?: boolean;
+  searching?: boolean;
   // isLoading: boolean;
 }
 
@@ -29,13 +31,27 @@ function ScoreTable({
   data: players,
   pagination = false,
   columnData,
+  teamPage = false,
+  searching = false,
 }: // isLoading
 Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
   // ! add loading state
-  const columns = useMemo(() => columnData, []);
+  const columns = useMemo(() => {
+    // handle logic with teamPage
+    if (teamPage && columnData) {
+      // loop through columns to find the team column and remove it from the columnData
+      let i = columnData[0]['columns'].length;
+      while (i--) {
+        if (columnData[0]['columns'][i].Header == 'Team') {
+          delete columnData[0]['columns'][i];
+        }
+      }
+    }
+    return columnData;
+  }, []);
 
   const initialState = useMemo(() => {
     if (players[0] && 'wins' in players[0]) {
@@ -52,11 +68,12 @@ Props): JSX.Element {
         data,
         initialState: { pageIndex: 0, pageSize: 15, ...initialState },
       },
+      useFilters,
       useSortBy,
       usePagination
     );
   } else {
-    table = useTable({ columns, data, initialState }, useSortBy);
+    table = useTable({ columns, data, initialState }, useFilters, useSortBy);
   }
 
   const {
@@ -74,14 +91,59 @@ Props): JSX.Element {
     nextPage,
     previousPage,
     gotoPage,
+
+    setFilter,
+    setAllFilters,
     state: { pageIndex },
   } = table;
 
   const hasData = rows.length > 0;
 
+  // search logic
+  // no need for position for goalies
+  const searchTypes: Array<SearchType> =
+    players[0] && 'wins' in players[0]
+      ? [{ text: 'Name', id: 'player-table-player' }]
+      : [
+          { text: 'Name', id: 'player-table-player' },
+          { text: 'Position', id: 'player-table-position' },
+        ];
+
+  const [searchType, setSearchType] = useState(searchTypes[0].id);
+  const [searchText, setSearchText] = useState('');
+
+  const updateFilter = (text, type) => {
+    if (text === '') {
+      // clears filters
+      setAllFilters([]);
+    } else {
+      setFilter(searchType, '');
+      setFilter(type ?? searchType, text);
+    }
+  };
+
+  const updateSearchType = (value) => {
+    setSearchType(value);
+    updateFilter(searchText, value);
+  };
+
+  const updateSearchText = (event) => {
+    // update the search text
+    setSearchText(event.target.value);
+    // pass the event target value directly because setting searchText is asynchronous
+    updateFilter(event.target.value, null);
+  };
+
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
+      {searching && (
+        <SearchBar
+          searchTypeOnChange={updateSearchType}
+          searchTextOnChange={updateSearchText}
+          searchTypes={searchTypes}
+        />
+      )}
       {hasData && (
         <TableContainer>
           <Table {...getTableProps()}>
@@ -212,7 +274,7 @@ const TableContainer = styled.div`
   border-top: none;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
 
   tr:not(:last-child) th,
   tr:not(:last-child) td {

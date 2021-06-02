@@ -20,6 +20,7 @@ const theme = {
     grey300: '#DEE2E6',
     grey200: '#E9ECEF',
     grey100: '#F8F9FA',
+    red200: '#EF9A9A',
   },
 };
 

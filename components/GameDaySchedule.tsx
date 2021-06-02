@@ -8,10 +8,12 @@ interface GameDayHeaderProps {
   date: string;
 }
 
-const GameDayHeader = ({ date }: GameDayHeaderProps): JSX.Element => (
-  <GameHeader>
-    <h2>{date}</h2>
-  </GameHeader>
+const GameDayHeader = React.memo(
+  ({ date }: GameDayHeaderProps): JSX.Element => (
+    <GameHeader>
+      <h2>{date}</h2>
+    </GameHeader>
+  )
 );
 
 interface GameDayMatchupProps {
@@ -161,6 +163,7 @@ const TeamRow = styled.div<{ played: number; won: boolean; winNote: string }>`
     !!played && !won ? theme.colors.grey500 : theme.colors.grey900};
 
   .team {
+    font-family: Montserrat, sans-serif;
     font-size: 18px;
     display: flex;
     flex-direction: row;

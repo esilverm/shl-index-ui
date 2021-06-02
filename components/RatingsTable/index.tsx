@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import React, { useMemo, useState } from 'react';
+import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
-import { PlayerRatings, GoalieRatings } from '../..';
+import { PlayerRatings, GoalieRatings, SearchType } from '../..';
+import SearchBar from '../SearchBar/SearchBar';
 
 interface Columns {
   Header: string;
@@ -21,24 +22,63 @@ interface ColumnData {
 interface Props {
   data: Array<PlayerRatings | GoalieRatings>;
   columnData: Array<ColumnData>;
+  pagination?: boolean;
+  teamPage?: boolean;
+  searching?: boolean;
   // isLoading: boolean;
 }
 
 function RatingsTable({
   data: players,
   columnData,
+  pagination = false,
+  teamPage = false,
+  searching = false,
 }: // isLoading
 Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
   // ! add loading state
-  const columns = useMemo(() => columnData, []);
+  const columns = useMemo(() => {
+    // handle logic with teamPage
+    if (teamPage && columnData) {
+      // loop through columns to find the team column and remove it from the columnData
+      let i = columnData[0]['columns'].length;
+      while (i--) {
+        if (columnData[0]['columns'][i].Header == 'Team') {
+          delete columnData[0]['columns'][i];
+        }
+      }
+    }
+    return columnData;
+  }, []);
+
+  const initialState = useMemo(() => {
+    return { sortBy: [{ id: '', desc: true }] };
+  }, []);
+
+  let table;
+  if (pagination) {
+    table = useTable(
+      {
+        columns,
+        data,
+        initialState: { pageIndex: 0, pageSize: 15, ...initialState },
+      },
+      useFilters,
+      useSortBy,
+      usePagination
+    );
+  } else {
+    table = useTable({ columns, data, initialState }, useFilters, useSortBy);
+  }
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    rows,
     page,
     prepareRow,
 
@@ -49,112 +89,179 @@ Props): JSX.Element {
     nextPage,
     previousPage,
     gotoPage,
+
+    setAllFilters,
+    setFilter,
     state: { pageIndex },
-  } = useTable(
-    { columns, data, initialState: { pageIndex: 0, pageSize: 15 } },
-    useSortBy,
-    usePagination
-  );
+  } = table;
+
+  const hasData = rows.length > 0;
+
+  // search logic
+  // no need for position for goalies
+  const searchTypes: Array<SearchType> =
+    players[0] && 'blocker' in players[0]
+      ? [{ text: 'Name', id: 'player-table-player' }]
+      : [
+          { text: 'Name', id: 'player-table-player' },
+          { text: 'Position', id: 'player-table-position' },
+        ];
+
+  const [searchType, setSearchType] = useState(searchTypes[0].id);
+  const [searchText, setSearchText] = useState('');
+
+  const updateFilter = (text) => {
+    if (text === '') {
+      // clears filters
+      setAllFilters([]);
+    } else {
+      setFilter(searchType, text);
+    }
+  };
+
+  const updateSearchType = (value) => {
+    setSearchType(value);
+    updateFilter(searchText);
+  };
+
+  const updateSearchText = (event) => {
+    // update the search text
+    setSearchText(event.target.value);
+    // pass the event target value directly because setting searchText is asynchronous
+    updateFilter(event.target.value);
+  };
 
   return (
     <>
-      <TableContainer>
-        <Table {...getTableProps()}>
-          <TableHeader>
-            {headerGroups.map((headerGroup, i) => (
-              <tr {...headerGroup.getHeaderGroupProps()} key={i}>
-                {headerGroup.headers.map((column, i) => (
-                  <th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    title={column.title}
-                    key={`${i}_${column.id}`}
-                    className={
-                      column.isSorted
-                        ? column.isSortedDesc
-                          ? 'sorted--desc'
-                          : 'sorted--asc'
-                        : ''
-                    }
-                  >
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </TableHeader>
-          <TableBody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
+      {!hasData && <Notice>No results found</Notice>}
+      {searching && (
+        <SearchBar
+          searchTypeOnChange={updateSearchType}
+          searchTextOnChange={updateSearchText}
+          searchTypes={searchTypes}
+        />
+      )}
+      {hasData && (
+        <TableContainer>
+          <Table {...getTableProps()}>
+            <TableHeader>
+              {headerGroups.map((headerGroup, i) => (
+                <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                  {headerGroup.headers.map((column, i) => (
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      title={column.title}
+                      key={`${i}_${column.id}`}
+                      className={
+                        column.isSorted
+                          ? column.isSortedDesc
+                            ? 'sorted--desc'
+                            : 'sorted--asc'
+                          : ''
+                      }
+                    >
+                      {column.render('Header')}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </TableHeader>
+            <TableBody {...getTableBodyProps()}>
+              {hasData && pagination
+                ? page.map((row, i) => {
+                    prepareRow(row);
 
-              return (
-                <tr {...row.getRowProps()} key={i}>
-                  {row.cells.map((cell, i) => {
                     return (
-                      <td
-                        {...cell.getCellProps()}
-                        key={i}
-                        className={cell.column.isSorted ? 'sorted' : ''}
-                      >
-                        {cell.render('Cell')}
-                      </td>
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
+                : rows.map((row, i) => {
+                    prepareRow(row);
+
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
                     );
                   })}
-                </tr>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Pagination>
-        <button
-          className="-next"
-          onClick={() => gotoPage(0)}
-          disabled={!canPreviousPage}
-        >
-          {'<<'}
-        </button>{' '}
-        <button
-          className="-next"
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-        >
-          {'<'}
-        </button>
-        <div className="pagenav">
-          <span>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </span>
-          <span className="mediahide">
-            | Go to page:{' '}
-            <input
-              type="number"
-              defaultValue={pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                gotoPage(page);
-              }}
-              style={{ width: '40px' }}
-            />
-          </span>
-        </div>
-        <button
-          className="-next"
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-        >
-          {'>'}
-        </button>{' '}
-        <button
-          className="-next"
-          onClick={() => gotoPage(pageCount - 1)}
-          disabled={!canNextPage}
-        >
-          {'>>'}
-        </button>{' '}
-      </Pagination>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      {hasData && pagination && (
+        <Pagination>
+          <button
+            className="-next"
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+          >
+            {'<<'}
+          </button>{' '}
+          <button
+            className="-next"
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            {'<'}
+          </button>
+          <div className="pagenav">
+            <span>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span className="mediahide">
+              | Go to page:{' '}
+              <input
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  gotoPage(page);
+                }}
+                style={{ width: '40px' }}
+              />
+            </span>
+          </div>
+          <button
+            className="-next"
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+          >
+            {'>'}
+          </button>{' '}
+          <button
+            className="-next"
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {'>>'}
+          </button>{' '}
+        </Pagination>
+      )}
     </>
   );
 }
@@ -248,6 +355,14 @@ const TableBody = styled.tbody`
       background-color: rgba(1, 131, 218, 0.1);
     }
   }
+`;
+
+const Notice = styled.div`
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
 `;
 
 const Pagination = styled.div`

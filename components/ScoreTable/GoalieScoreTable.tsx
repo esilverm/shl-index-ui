@@ -6,11 +6,15 @@ import { Goalie } from '../..';
 interface Props {
   data: Array<Goalie>;
   pagination?: boolean;
+  teamPage?: boolean;
+  searching?: boolean;
 }
 
 function GoalieScoreTable({
   data: players,
   pagination = false,
+  teamPage = false,
+  searching = false,
 }: Props): JSX.Element {
   const columnData = [
     {
@@ -22,6 +26,11 @@ function GoalieScoreTable({
           id: 'player-table-player',
           accessor: 'name',
           // Create cell which contains link to player
+        },
+        {
+          Header: 'Team',
+          accessor: 'team',
+          title: 'Team',
         },
         {
           Header: 'GP',
@@ -104,6 +113,8 @@ function GoalieScoreTable({
       data={players}
       columnData={columnData}
       pagination={pagination}
+      teamPage={teamPage}
+      searching={searching}
     />
   );
 }
