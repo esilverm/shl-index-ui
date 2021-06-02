@@ -8,8 +8,10 @@ import HAM from './Hamilton.svg?sprite';
 import LAP from './Los_Angeles.svg?sprite';
 import MAN from './Manhattan.svg?sprite';
 import MIN from './Minnesota.svg?sprite';
+import MTL from './Montreal.svg?sprite';
 import NEW from './New_England.svg?sprite';
 import NOL from './New_Orleans.svg?sprite';
+import PHI from './Philadelphia.svg?sprite';
 import SFP from './San_Francisco.svg?sprite';
 import SEA from './Seattle.svg?sprite';
 import TBB from './Tampa_Bay.svg?sprite';
@@ -29,8 +31,10 @@ export default {
   LAP,
   MAN,
   MIN,
+  MTL,
   NEW,
   NOL,
+  PHI,
   SFP,
   SEA,
   TBB,
