@@ -46,6 +46,10 @@
     {
       "name": "livestreams",
       "description": "Lists all livestreams for each league."
+    },
+    {
+      "name": "fantasy",
+      "description": "Lists all fantasy points for SHl players."
     }
   ],
   "schemes": ["https", "http"],
@@ -1703,6 +1707,46 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Livestream"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fantasy": {
+      "get": {
+        "tags": ["fantasy"],
+        "summary": "List of Fantasy Information",
+        "description": "A listing of the fantasy information about SHl players.",
+        "operationId": "getFantastyInformation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number",
+            "default": null
+          },
+          {
+            "name": "position",
+            "in": "query",
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Fantasy"
               }
             }
           }
@@ -3523,6 +3567,27 @@
         "isLive": {
           "type": "string",
           "example": "live"
+        }
+      }
+    },
+    "Fantasy": {
+      "type": "object",
+      "properties": {
+        "seasonID": {
+          "type": "number",
+          "example": 59
+        },
+        "position": {
+          "type": "string",
+          "example": "D"
+        },
+        "name": {
+          "type": "string",
+          "example": "Lyle Odelein III"
+        },
+        "fantasyPoints": {
+          "type": "number",
+          "example": 588.2
         }
       }
     }
