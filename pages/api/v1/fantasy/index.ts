@@ -35,13 +35,13 @@ export default async (
 
   const search = SQL`SELECT * FROM fantasypoints WHERE seasonID=${seasonid.SeasonID}`
     .append(
-      position
+      position != null
         ? SQL`
          AND position=${position}
         `
         : ''
     ).append(
-      name
+      name != null
         ? SQL`
          AND name=${name}
         `
