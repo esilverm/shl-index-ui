@@ -21,23 +21,23 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { seasonID = null, position = null, name = null} = req.query;
+  const { season = null, position = null, name = null} = req.query;
 
   const search = SQL`SELECT * FROM fantasypoints`
     .append(
-      seasonID != null || position != null || name != null
+      season != null || position != null || name != null
         ? SQL`
         WHERE  
         `
         : ''
     ).append(
-      seasonID != null
+      season != null
         ? SQL`
-        seasonID=${seasonID}
+        seasonID=${season}
         `
         : ''
     ).append(
-      seasonID != null && position != null
+      season != null && position != null
         ? SQL`
          AND 
         `
@@ -49,7 +49,7 @@ export default async (
         `
         : ''
     ).append(
-      (seasonID != null || position != null) && (name != null)
+      (season != null || position != null) && (name != null)
         ? SQL`
          AND 
         `
