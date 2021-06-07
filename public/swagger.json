@@ -1717,27 +1717,24 @@
       "get": {
         "tags": ["fantasy"],
         "summary": "List of Fantasy Information",
-        "description": "A listing of the fantasy information about SHl players.",
+        "description": "A listing of the fantasy information about SHL players.",
         "operationId": "getFantastyInformation",
         "produces": ["application/json"],
         "parameters": [
           {
             "name": "season",
             "in": "query",
-            "type": "number",
-            "default": null
+            "type": "number"
           },
           {
             "name": "position",
             "in": "query",
-            "type": "string",
-            "default": null
+            "type": "string"
           },
           {
             "name": "name",
             "in": "query",
-            "type": "string",
-            "default": null
+            "type": "string"
           }
         ],
         "responses": {
