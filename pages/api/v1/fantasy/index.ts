@@ -21,43 +21,29 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { season = null, position = null, name = null} = req.query;
+  const { season, position, name } = req.query;
 
-  const search = SQL`SELECT * FROM fantasypoints`
+  const [seasonid] =
+    (!Number.isNaN(+season) && [{ SeasonID: +season }]) ||
+    (await query(SQL`
+      SELECT DISTINCT SeasonID
+      FROM player_master
+      WHERE LeagueID=0
+      ORDER BY SeasonID DESC
+      LIMIT 1
+  `));
+
+  const search = SQL`SELECT * FROM fantasypoints WHERE seasonID=${seasonid.SeasonID}`
     .append(
-      season != null || position != null || name != null
+      position
         ? SQL`
-        WHERE  
+         AND position=${position}
         `
         : ''
     ).append(
-      season != null
+      name
         ? SQL`
-        seasonID=${season}
-        `
-        : ''
-    ).append(
-      season != null && position != null
-        ? SQL`
-         AND 
-        `
-        : ''
-    ).append(
-      position != null
-        ? SQL`
-        position=${position}
-        `
-        : ''
-    ).append(
-      (season != null || position != null) && (name != null)
-        ? SQL`
-         AND 
-        `
-        : ''
-    ).append(
-      name != null
-        ? SQL`
-        name=${name}
+         AND name=${name}
         `
         : ''
     );
