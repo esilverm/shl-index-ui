@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
@@ -15,18 +15,18 @@ const PLAYER_TYPES = {
 };
 type PlayerTypes = typeof PLAYER_TYPES[keyof typeof PLAYER_TYPES];
 
-// const skaterLeaderboards = {
-//   'points': 'Points',
-//   'goals': 'Goals',
-//   'assists': 'Assists',
-//   'plusminus': 'Plus Minus',
-//   'penaltyminutes': 'PIM',
-//   'ppg': 'Power Play Goals',
-//   'shg': 'Shorthanded Goals',
-//   'shots': 'Shots',
-//   'shotpct': 'Shot %',
-//   'shotsblocked': 'Shots Blocked'
-// };
+const skaterLeaderboards = {
+  'points': 'Points',
+  'goals': 'Goals',
+  'assists': 'Assists',
+  'plusminus': 'Plus Minus',
+  'penaltyminutes': 'Penalty Minutes',
+  'ppg': 'Power Play Goals',
+  'shg': 'Shorthanded Goals',
+  'shots': 'Shots',
+  'shotpct': 'Shot %',
+  'shotsblocked': 'Shots Blocked'
+};
 
 interface Props {
   league: string;
@@ -35,8 +35,26 @@ interface Props {
 function Stats({ league }: Props): JSX.Element {
   const [playerType, setPlayerType] = useState<PlayerTypes>(PLAYER_TYPES.SKATER);
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
+  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
+  const [sprites, setSprites] = useState<{
+    [index: string]: React.ComponentClass<any>;
+  }>({});
+
+  useEffect(() => {
+    // Dynamically import svg icons based on the league chosen
+    (async () => {
+      const { default: s } = await import(
+        `../../public/team_logos/${league.toUpperCase()}/`
+      );
+
+      setSprites(() => s);
+      setLoadingAssets(() => false);
+    })();
+  }, []);
 
   const onSeasonTypeSelect = (type) => setSeasonType(type);
+
+  if (isLoadingAssets || !sprites) return null;
 
   return (
     <React.Fragment>
@@ -74,10 +92,19 @@ function Stats({ league }: Props): JSX.Element {
           </DisplaySelectContainer>
         </Filters>
         <LeaderBoards>
-          <Leaderboard league={league} playerType={playerType} stat={{
-            id: 'points',
-            label: 'Points'
-          }} seasonType={seasonType} />
+          {Object.entries(skaterLeaderboards).map(([statId, statLabel]) => (
+            <Leaderboard
+              key={statId}
+              league={league}
+              playerType={playerType}
+              stat={{
+                id: statId,
+                label: statLabel
+              }}
+              seasonType={seasonType}
+              Sprites={sprites}
+            />
+          ))}
         </LeaderBoards>
       </Container>
       <Footer />
@@ -138,8 +165,15 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 `;
 
 const LeaderBoards = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   margin: 28px auto;
   width: 95%;
+
+  > * {
+    padding: 15px;
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

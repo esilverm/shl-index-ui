@@ -2,21 +2,6 @@ import useSWR from 'swr';
 
 import { getQuerySeason } from '../utils/season';
 
-export interface PlayerWithStat {
-  id: number;
-  name: string;
-  league: number;
-  team: {
-    id: number;
-    name: string;
-    nickname: string;
-    abbr: string;
-  };
-  season: number;
-  stat: number | string;
-  statName: string;
-}
-
 const useLeaders = (
   league: string,
   playerType = 'skater',
@@ -24,7 +9,20 @@ const useLeaders = (
   seasonType = 'Regular Season',
   limit = 10
 ): {
-  leaders: Array<PlayerWithStat>;
+  leaders: Array<{
+    id: number;
+    name: string;
+    league: number;
+    team: {
+      id: number;
+      name: string;
+      nickname: string;
+      abbr: string;
+    };
+    season: number;
+    stat: number | string;
+    statName: string;
+  }>;
   isLoading: boolean;
   isError: boolean;
 } => {
