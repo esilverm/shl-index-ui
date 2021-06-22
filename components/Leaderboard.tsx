@@ -20,9 +20,14 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
   const { leaders, isError, isLoading } = useLeaders(league, playerType, stat.id, seasonType);
 
   const convertStatValue = (value: string | number) => {
-    if (stat.id !== 'shotpct' || typeof value === 'string') return value;
+    if (typeof value === "string") return value;
 
-    return (value * 100).toFixed(2);
+    if (stat.id === 'shotpct') {
+      return (value * 100).toFixed(2);
+    } else if (stat.id === 'gsaa') {
+      return value.toFixed(2);
+    }
+    return value;
   };
 
   if (!leaders || isError || isLoading) {
@@ -30,6 +35,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
   }
 
   const renderLeaders = () => {
+    console.log(stat.label, leaders);
     const LeaderLogo = Sprites[leaders[0].team.abbr];
 
     return (
@@ -80,17 +86,17 @@ const SkeletonLeaderboard = ({
 }): JSX.Element => (
   <SkeletonTheme color='#ADB5BD' highlightColor='#CED4DA'>
     {isError && (
-      <div style={{ width: '330px' }}>
+      <Container>
         <strong>
           A technical error occurred. Please reload the page to try again.
         </strong>
-      </div>
+      </Container>
     )}
     {!isError && 
       <Container>
         <Skeleton width={150} height={30} />
         <TopTen>
-          {new Array(10).fill(0).map((i) => (
+          {new Array(10).fill(0).map((_, i) => (
             <Skeleton key={i} height={30} />
           ))}
         </TopTen>
@@ -107,7 +113,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.span`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   height: 30px;
   min-width: 50px;
@@ -142,7 +148,7 @@ const TeamLogo = styled.div<{
 }>`
   height: ${({ large }) => large ? '30' : '20'}px;
   width: ${({ large }) => large ? '30' : '20'}px;
-  margin-right: 10px;
+  margin-right: 5px;
 `;
 
 const TopTen = styled.div`

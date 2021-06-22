@@ -16,16 +16,29 @@ const PLAYER_TYPES = {
 type PlayerTypes = typeof PLAYER_TYPES[keyof typeof PLAYER_TYPES];
 
 const skaterLeaderboards = {
-  'points': 'Points',
-  'goals': 'Goals',
-  'assists': 'Assists',
-  'plusminus': 'Plus Minus',
-  'penaltyminutes': 'Penalty Minutes',
-  'ppg': 'Power Play Goals',
-  'shg': 'Shorthanded Goals',
-  'shots': 'Shots',
-  'shotpct': 'Shot %',
-  'shotsblocked': 'Shots Blocked'
+  goals: 'Goals',
+  assists: 'Assists',
+  points: 'Points',
+  plusminus: 'Plus Minus',
+  shots: 'Shots',
+  shotpct: 'Shot %',
+  shotsblocked: 'Shots Blocked',
+  penaltyminutes: 'Penalty Minutes',
+  ppg: 'Power Play Goals',
+  shg: 'Shorthanded Goals'
+};
+
+const goalieLeaderboards = {
+  wins: 'Wins',
+  losses: 'Losses',
+  otl: 'Ties/OT Losses',
+  ga: 'Goals Against',
+  gaa: 'Goals Against Average',
+  gsaa: 'Goals Saved Above Average',
+  saves: 'Saves',
+  savepct: 'Save %',
+  shutouts: 'Shutouts',
+  gamesplayed: 'Games Played'
 };
 
 interface Props {
@@ -55,6 +68,24 @@ function Stats({ league }: Props): JSX.Element {
   const onSeasonTypeSelect = (type) => setSeasonType(type);
 
   if (isLoadingAssets || !sprites) return null;
+
+  const renderLeaderboards = () => {
+    const leaderboards = playerType === PLAYER_TYPES.SKATER ? skaterLeaderboards : goalieLeaderboards;
+
+    return Object.entries(leaderboards).map(([statId, statLabel]) => (
+      <Leaderboard
+        key={statId}
+        league={league}
+        playerType={playerType}
+        stat={{
+          id: statId,
+          label: statLabel
+        }}
+        seasonType={seasonType}
+        Sprites={sprites}
+      />
+    ))
+  };
 
   return (
     <React.Fragment>
@@ -92,19 +123,7 @@ function Stats({ league }: Props): JSX.Element {
           </DisplaySelectContainer>
         </Filters>
         <LeaderBoards>
-          {Object.entries(skaterLeaderboards).map(([statId, statLabel]) => (
-            <Leaderboard
-              key={statId}
-              league={league}
-              playerType={playerType}
-              stat={{
-                id: statId,
-                label: statLabel
-              }}
-              seasonType={seasonType}
-              Sprites={sprites}
-            />
-          ))}
+          {renderLeaderboards()}
         </LeaderBoards>
       </Container>
       <Footer />

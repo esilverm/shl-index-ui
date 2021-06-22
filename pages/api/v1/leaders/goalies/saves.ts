@@ -72,7 +72,7 @@ export default async (
     id: player.PlayerID,
     name: player.Name,
     league: player.LeagueID,
-    eam: {
+    team: {
       id: player.TeamID,
       name: player.TeamName,
       nickname: player.TeamNickname,
