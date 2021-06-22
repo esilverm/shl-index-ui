@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
-import Leaderboard from '../../components/LeaderBoard';
+import Leaderboard from '../../components/Leaderboard';
 
 const PLAYER_TYPES = {
   SKATER: 'skater',
@@ -168,11 +168,12 @@ const LeaderBoards = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 28px auto;
   width: 95%;
 
   > * {
-    padding: 15px;
+    padding: 15px 25px;
   }
 `;
 

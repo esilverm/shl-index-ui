@@ -18,6 +18,12 @@ interface Props {
 const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): JSX.Element => {
   const { leaders, isError, isLoading } = useLeaders(league, playerType, stat.id, seasonType);
 
+  const convertStatValue = (value: string | number) => {
+    if (stat.id !== "shotpct" || typeof value === "string") return value;
+
+    return (value * 100).toFixed(2);
+  };
+
   if (!leaders || isError || isLoading) return null;
 
   const renderLeaders = () => {
@@ -33,7 +39,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
             </TeamLogo>
             <span>{leaders[0].name}</span>
           </PlayerName>
-          <span>{leaders[0].stat}</span>
+          <span>{convertStatValue(leaders[0].stat)}</span>
         </Leader>
         {leaders.map((player, i) => {
           if (player.id === leaders[0].id) return null;
@@ -48,7 +54,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
                 </TeamLogo>
                 <span>{player.name}</span>
               </PlayerName>
-              <span>{player.stat}</span>
+              <span>{convertStatValue(player.stat)}</span>
             </LeaderRow>
           );
         })}
@@ -67,7 +73,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 330px;
 `;
 
 const Title = styled.span`
