@@ -171,10 +171,6 @@ const LeaderBoards = styled.div`
   justify-content: center;
   margin: 28px auto;
   width: 95%;
-
-  > * {
-    padding: 15px 25px;
-  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {
