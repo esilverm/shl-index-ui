@@ -108,14 +108,19 @@ const SkeletonLeaderboard = ({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 330px;
+  min-width: 250px;
+  width: 450px;
   padding: 15px 25px;
+
+  @media screen and (max-width: 600px) {
+    width: 95%;
+  }
 `;
 
 const Title = styled.span`
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  height: 30px;
+  min-height: 30px;
   min-width: 50px;
 `;
 
@@ -124,6 +129,7 @@ const LeaderRow = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  font-size: 18px;
   min-height: 30px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
   padding: 3px;
@@ -158,7 +164,7 @@ const TopTen = styled.div`
 
 const Leader = styled(LeaderRow)`
   text-shadow: 0px 0px 1px black;
-  font-size: 18px;
+  font-size: 20px;
 `;
 
 export default Leaderboard;
