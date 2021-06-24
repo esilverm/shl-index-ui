@@ -129,7 +129,7 @@ const LeaderRow = styled.div`
   padding: 3px;
 
   &:hover {
-    font-weight: 600;
+    text-shadow: 0px 0px 1px black;
   }
 
   > span:last-child {
@@ -157,7 +157,7 @@ const TopTen = styled.div`
 `;
 
 const Leader = styled(LeaderRow)`
-  font-weight: 600;
+  text-shadow: 0px 0px 1px black;
   font-size: 18px;
 `;
 
