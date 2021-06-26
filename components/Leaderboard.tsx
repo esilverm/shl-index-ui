@@ -49,7 +49,6 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
   }
 
   const renderLeaders = () => {
-    console.log(stat.label, leaders);
     const LeaderLogo = Sprites[leaders[0].team.abbr];
 
     return (
