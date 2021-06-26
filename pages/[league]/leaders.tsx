@@ -188,8 +188,12 @@ const LeaderBoards = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 28px auto;
+  margin: auto;
   width: 95%;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export const getStaticPaths: GetStaticPaths = async () => {

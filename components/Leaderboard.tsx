@@ -30,6 +30,20 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
     return value;
   };
 
+  const getPctOfLeader = (currentValue: string | number, leaderValue: string | number) => {
+    let current = parseFloat(`${convertStatValue(currentValue)}`);
+    let leader = parseFloat(`${convertStatValue(leaderValue)}`);
+
+    // For the scenario that occurs early in seasons where a goalie can have 0 GAA
+    if (leader === 0) {
+      current += 1;
+      leader += 1;
+    }
+
+    const isDesc = current <= leader;
+    return (isDesc ? current / leader : leader / current) * 100;
+  };
+
   if (!leaders || isError || isLoading) {
     return <SkeletonLeaderboard isError={isError} />;
   }
@@ -41,6 +55,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
     return (
       <TopTen>
         <Leader>
+          <StatVisualizer width={100} />
           <PlayerName>
             <span style={{ width: '20px'}}>1.</span>
             <TeamLogo large>
@@ -56,6 +71,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): 
 
           return (
             <LeaderRow key={player.id}>
+              <StatVisualizer width={getPctOfLeader(player.stat, leaders[0].stat)} />
               <PlayerName>
                 <span style={{ width: '20px'}}>{`${i+1}.`}</span>
                 <TeamLogo>
@@ -113,7 +129,7 @@ const Container = styled.div`
   padding: 15px 25px;
 
   @media screen and (max-width: 600px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 
@@ -125,6 +141,7 @@ const Title = styled.span`
 `;
 
 const LeaderRow = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -141,6 +158,17 @@ const LeaderRow = styled.div`
   > span:last-child {
     font-family: Montserrat, sans-serif;
   }
+`;
+
+const StatVisualizer = styled.span<{
+  width: number;
+}>`
+  position: absolute;
+  width: ${({ width }) => width}%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.grey700};
+  opacity: 0.1;
+  left: -1px;
 `;
 
 const PlayerName = styled.div`
