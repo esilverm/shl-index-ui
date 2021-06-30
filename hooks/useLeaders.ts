@@ -7,6 +7,7 @@ const useLeaders = (
   playerType = 'skater',
   stat = 'goals',
   seasonType = 'Regular Season',
+  position = 'all',
   limit = 10
 ): {
   leaders: Array<{
@@ -39,7 +40,7 @@ const useLeaders = (
   const endpoint =
     playerType.toLowerCase() === 'goalie'
       ? `/goalies/${stat}`
-      : `/skaters/${stat}`;
+      : `/skaters/${stat}?position=${position}&`;
 
   const { data, error } = useSWR(
     () =>
