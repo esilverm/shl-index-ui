@@ -13,7 +13,13 @@ const PLAYER_TYPES = {
   SKATER: 'skater',
   GOALIE: 'goalie'
 };
+const SKATER_POSITIONS = {
+  ALL: 'all',
+  DEFENSE: 'd',
+  FORWARD: 'f'
+};
 type PlayerTypes = typeof PLAYER_TYPES[keyof typeof PLAYER_TYPES];
+type SkaterPositions = typeof SKATER_POSITIONS[keyof typeof SKATER_POSITIONS];
 
 const skaterLeaderboards = {
   goals: 'Goals',
@@ -47,6 +53,7 @@ interface Props {
 
 function Stats({ league }: Props): JSX.Element {
   const [playerType, setPlayerType] = useState<PlayerTypes>(PLAYER_TYPES.SKATER);
+  const [skaterPosition, setSkaterPosition] = useState<SkaterPositions>(SKATER_POSITIONS.ALL);
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
@@ -70,7 +77,7 @@ function Stats({ league }: Props): JSX.Element {
   if (isLoadingAssets || !sprites) return null;
 
   const renderLeaderboards = () => {
-    const leaderboards = playerType === PLAYER_TYPES.SKATER ? skaterLeaderboards : goalieLeaderboards;
+    const leaderboards = playerType === PLAYER_TYPES.SKATER? skaterLeaderboards : goalieLeaderboards;
 
     return Object.entries(leaderboards).map(([statId, statLabel]) => (
       <Leaderboard
@@ -83,6 +90,7 @@ function Stats({ league }: Props): JSX.Element {
         }}
         seasonType={seasonType}
         Sprites={sprites}
+        position={skaterPosition}
       />
     ))
   };
@@ -103,8 +111,11 @@ function Stats({ league }: Props): JSX.Element {
           </SelectorWrapper>
           <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
-              onClick={() => setPlayerType(() => PLAYER_TYPES.SKATER)}
-              active={playerType === PLAYER_TYPES.SKATER}
+              onClick={() => {
+                setPlayerType(() => PLAYER_TYPES.SKATER);
+                setSkaterPosition(() => SKATER_POSITIONS.ALL);
+              }}
+              active={playerType === PLAYER_TYPES.SKATER && skaterPosition === SKATER_POSITIONS.ALL}
               tabIndex={0}
               role="tab"
               aria-selected={playerType === PLAYER_TYPES.SKATER}
@@ -112,7 +123,34 @@ function Stats({ league }: Props): JSX.Element {
               Skaters
             </DisplaySelectItem>
             <DisplaySelectItem
-              onClick={() => setPlayerType(() => PLAYER_TYPES.GOALIE)}
+              onClick={() => {
+                setPlayerType(() => PLAYER_TYPES.SKATER);
+                setSkaterPosition(() => SKATER_POSITIONS.FORWARD);
+              }}
+              active={skaterPosition === SKATER_POSITIONS.FORWARD}
+              tabIndex={0}
+              role="tab"
+              aria-selected={skaterPosition === SKATER_POSITIONS.FORWARD}
+            >
+              Forwards
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => {
+                setPlayerType(() => PLAYER_TYPES.SKATER);
+                setSkaterPosition(() => SKATER_POSITIONS.DEFENSE);
+              }}
+              active={skaterPosition === SKATER_POSITIONS.DEFENSE}
+              tabIndex={0}
+              role="tab"
+              aria-selected={skaterPosition === SKATER_POSITIONS.DEFENSE}
+            >
+              Defensemen
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => {
+                setPlayerType(() => PLAYER_TYPES.GOALIE);
+                setSkaterPosition(() => SKATER_POSITIONS.ALL);
+              }}
               active={playerType === PLAYER_TYPES.GOALIE}
               tabIndex={0}
               role="tab"

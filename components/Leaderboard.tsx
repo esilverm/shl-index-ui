@@ -14,10 +14,11 @@ interface Props {
   Sprites: {
     [index: string]: React.ComponentClass<any>;
   };
+  position?: string;
 }
 
-const Leaderboard = ({ league, playerType, stat, seasonType, Sprites }: Props): JSX.Element => {
-  const { leaders, isError, isLoading } = useLeaders(league, playerType, stat.id, seasonType);
+const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }: Props): JSX.Element => {
+  const { leaders, isError, isLoading } = useLeaders(league, playerType, stat.id, seasonType, position);
 
   const convertStatValue = (value: string | number) => {
     if (typeof value === "string") return value;
