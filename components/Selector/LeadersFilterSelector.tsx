@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import {
   Container,
@@ -44,7 +44,7 @@ function LeadersFilterSelector({ activeFilter, onChange }: Props): JSX.Element {
 
   useEffect(() => setSelectedLeadersFilter(activeFilter), [activeFilter]);
 
-  const onButtonClick = () => setIsExpanded(!isExpanded);
+  const onButtonClick = useCallback(() => setIsExpanded((expanded) => !expanded), [setIsExpanded]);
   const onLeadersFilterSelect = (event) => {
     const { leadersfilter } = event.target.dataset;
     onChange(leadersfilter);

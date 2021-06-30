@@ -37,14 +37,15 @@ const useLeaders = (
       : '&type=regular';
   const seasonParam = season ? `&season=${season}` : '';
   const limitParam = limit ? `&limit=${limit}` : '';
+  const positionParam = position ? `&position=${position}` : '';
   const endpoint =
     playerType.toLowerCase() === 'goalie'
       ? `/goalies/${stat}`
-      : `/skaters/${stat}?position=${position}&`;
+      : `/skaters/${stat}`;
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leaders${endpoint}?league=${leagueid}${seasonParam}${limitParam}${seasonTypeParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leaders${endpoint}?league=${leagueid}${seasonParam}${limitParam}${seasonTypeParam}${positionParam}`
   );
 
   return {

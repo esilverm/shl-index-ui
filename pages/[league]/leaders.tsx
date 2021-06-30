@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
@@ -60,8 +60,8 @@ function Stats({ league }: Props): JSX.Element {
     })();
   }, []);
 
-  const onSeasonTypeSelect = (type) => setSeasonType(type);
-  const onLeadersFilterSelect = (filter) => setFilter(filter);
+  const onSeasonTypeSelect = useCallback((type) => setSeasonType(type), [setSeasonType]);
+  const onLeadersFilterSelect = useCallback((filter) => setFilter(filter), [setFilter]);
 
   if (isLoadingAssets || !sprites) return null;
 
