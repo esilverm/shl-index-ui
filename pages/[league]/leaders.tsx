@@ -158,14 +158,14 @@ const Container = styled.div`
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1050px) {
     width: 100%;
     padding: 2.5%;
   }
 `;
 
 const Filters = styled.div`
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1050px) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,7 +188,7 @@ const DisplaySelectContainer = styled.div`
   width: 95%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1050px) {
     display: none;
   }
 `;
@@ -210,7 +210,7 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
 const SmallScreenFilters = styled.div`
   display: none;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1050px) {
     display: block;
   }
 `;
