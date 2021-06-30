@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
@@ -6,14 +6,9 @@ import { NextSeo } from 'next-seo';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import LeadersFilterSelector, { LeadersFilter } from '../../components/Selector/LeadersFilterSelector';
 import { SeasonType } from '../api/v1/schedule';
 import Leaderboard from '../../components/Leaderboard';
-
-const PLAYER_TYPES = {
-  SKATER: 'skater',
-  GOALIE: 'goalie'
-};
-type PlayerTypes = typeof PLAYER_TYPES[keyof typeof PLAYER_TYPES];
 
 const skaterLeaderboards = {
   goals: 'Goals',
@@ -46,7 +41,7 @@ interface Props {
 }
 
 function Stats({ league }: Props): JSX.Element {
-  const [playerType, setPlayerType] = useState<PlayerTypes>(PLAYER_TYPES.SKATER);
+  const [filter, setFilter] = useState<LeadersFilter>('Skaters');
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
@@ -65,12 +60,15 @@ function Stats({ league }: Props): JSX.Element {
     })();
   }, []);
 
-  const onSeasonTypeSelect = (type) => setSeasonType(type);
+  const onSeasonTypeSelect = useCallback((type) => setSeasonType(type), [setSeasonType]);
+  const onLeadersFilterSelect = useCallback((filter) => setFilter(filter), [setFilter]);
 
   if (isLoadingAssets || !sprites) return null;
 
   const renderLeaderboards = () => {
-    const leaderboards = playerType === PLAYER_TYPES.SKATER ? skaterLeaderboards : goalieLeaderboards;
+    const leaderboards = filter === 'Goalies' ? goalieLeaderboards : skaterLeaderboards;
+    const playerType = filter === 'Goalies' ? 'goalie' : 'skater';
+    const skaterPosition = filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
 
     return Object.entries(leaderboards).map(([statId, statLabel]) => (
       <Leaderboard
@@ -83,6 +81,7 @@ function Stats({ league }: Props): JSX.Element {
         }}
         seasonType={seasonType}
         Sprites={sprites}
+        position={skaterPosition}
       />
     ))
   };
@@ -100,23 +99,44 @@ function Stats({ league }: Props): JSX.Element {
         <Filters>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+            <SmallScreenFilters>
+              <LeadersFilterSelector activeFilter={filter} onChange={onLeadersFilterSelect} />
+            </SmallScreenFilters>
           </SelectorWrapper>
           <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
-              onClick={() => setPlayerType(() => PLAYER_TYPES.SKATER)}
-              active={playerType === PLAYER_TYPES.SKATER}
+              onClick={() => setFilter('Skaters')}
+              active={filter === 'Skaters'}
               tabIndex={0}
               role="tab"
-              aria-selected={playerType === PLAYER_TYPES.SKATER}
+              aria-selected={filter === 'Skaters'}
             >
               Skaters
             </DisplaySelectItem>
             <DisplaySelectItem
-              onClick={() => setPlayerType(() => PLAYER_TYPES.GOALIE)}
-              active={playerType === PLAYER_TYPES.GOALIE}
+              onClick={() => setFilter('Forwards')}
+              active={filter === 'Forwards'}
               tabIndex={0}
               role="tab"
-              aria-selected={playerType === PLAYER_TYPES.GOALIE}
+              aria-selected={filter === 'Forwards'}
+            >
+              Forwards
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setFilter('Defensemen')}
+              active={filter === 'Defensemen'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={filter === 'Defensemen'}
+            >
+              Defensemen
+            </DisplaySelectItem>
+            <DisplaySelectItem
+              onClick={() => setFilter('Goalies')}
+              active={filter === 'Goalies'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={filter === 'Goalies'}
             >
               Goalies
             </DisplaySelectItem>
@@ -138,14 +158,14 @@ const Container = styled.div`
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1050px) {
     width: 100%;
     padding: 2.5%;
   }
 `;
 
 const Filters = styled.div`
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1050px) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -167,6 +187,10 @@ const DisplaySelectContainer = styled.div`
   margin: 28px auto;
   width: 95%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
+
+  @media screen and (max-width: 1050px) {
+    display: none;
+  }
 `;
 
 const DisplaySelectItem = styled.div<{ active: boolean }>`
@@ -181,6 +205,14 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
   position: relative;
   border-bottom: none;
   bottom: -1px;
+`;
+
+const SmallScreenFilters = styled.div`
+  display: none;
+
+  @media screen and (max-width: 1050px) {
+    display: block;
+  }
 `;
 
 const LeaderBoards = styled.div`
