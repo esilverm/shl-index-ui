@@ -27,5 +27,4 @@ jobs:
         run: yarn install --frozen-lockfile
       
       - name: run eslint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
-
+        run: yarn lint
