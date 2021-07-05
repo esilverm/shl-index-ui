@@ -8,9 +8,9 @@
     "build": "next build",
     "start": "next start -p 8000",
     "next": "next",
-    "type-check": "tsc --pretty --noEmit",
+    "types:check": "tsc --pretty --noEmit",
     "lint": "eslint .",
-    "lint-fix": "eslint --fix .",
+    "lint:fix": "eslint --fix .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {
