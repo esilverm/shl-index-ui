@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
 // import useSWR from 'swr';
-import Header from '../../components/Header';
+import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
 import Footer from '../../components/Footer';
-import useRatings from '../../hooks/useRatings';
-import useSkaterStats from '../../hooks/useSkaterStats';
-import useGoalieStats from '../../hooks/useGoalieStats';
-import useGoalieRatings from '../../hooks/useGoalieRatings';
-import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
+import Header from '../../components/Header';
 import GoalieRatingsTable from '../../components/RatingsTable/GoalieRatingsTable';
+import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
+import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
 import SkaterAdvStatsTable from '../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
-import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
-import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import useGoalieRatings from '../../hooks/useGoalieRatings';
+import useGoalieStats from '../../hooks/useGoalieStats';
+import useRatings from '../../hooks/useRatings';
+import useSkaterStats from '../../hooks/useSkaterStats';
 import { SeasonType } from '../api/v1/players/stats';
 
 interface Props {

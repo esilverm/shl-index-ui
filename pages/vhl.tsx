@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
+import { NextSeo } from 'next-seo';
 import React from 'react';
 import styled from 'styled-components';
-import { NextSeo } from 'next-seo';
 
 export default function VHL(): JSX.Element {
   return (

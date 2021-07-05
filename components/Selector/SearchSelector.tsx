@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { SearchType } from '../..';
+
 import {
   Container,
   ButtonContent,
@@ -8,7 +11,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { SearchType } from '../..';
 
 interface Props {
   searchTypes: Array<SearchType>;

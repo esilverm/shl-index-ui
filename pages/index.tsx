@@ -1,12 +1,12 @@
+import { NextSeo } from 'next-seo';
+import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
-import { NextSeo } from 'next-seo';
 
 //
+const IIHFLogo = require('../public/league_logos/IIHF.svg?sprite');
 const SHLLogo = require('../public/league_logos/SHL.svg?sprite');
 const SMJHLLogo = require('../public/league_logos/SMJHL.svg?sprite');
-const IIHFLogo = require('../public/league_logos/IIHF.svg?sprite');
 const WJCLogo = require('../public/league_logos/WJC.svg?sprite');
 
 export default function Home(): JSX.Element {

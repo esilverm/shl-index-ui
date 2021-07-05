@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useTable, usePagination } from 'react-table';
 import styled from 'styled-components';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { Game } from '../pages/api/v1/schedule';
+
 import { Team } from '..';
+import { Game } from '../pages/api/v1/schedule';
 
 interface Columns {
   Header: string;

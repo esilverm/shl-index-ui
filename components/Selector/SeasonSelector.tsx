@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
 import { DotLoader } from 'react-spinners';
+
+import { getLatestSeason, getQuerySeason } from '../../utils/season';
+
 import {
   Container,
   ButtonContent,
@@ -10,7 +13,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { getLatestSeason, getQuerySeason } from '../../utils/season';
 
 interface Props {
   seasons: number[];

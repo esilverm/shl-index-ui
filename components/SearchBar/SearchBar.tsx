@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import SearchSelector from '../Selector/SearchSelector';
+
 import { SearchType } from '../..';
+import SearchSelector from '../Selector/SearchSelector';
 
 interface Props {
   searchTextOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

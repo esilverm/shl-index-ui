@@ -1,6 +1,8 @@
 import React from 'react';
-import RatingsTable from '.';
+
 import { GoalieRatings } from '../..';
+
+import RatingsTable from '.';
 
 interface Props {
   data: Array<GoalieRatings>;

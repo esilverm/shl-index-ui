@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import LinkWithSeason from '../LinkWithSeason';
+
 import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
+import LinkWithSeason from '../LinkWithSeason';
+
 import { FlexColumn, FlexRow, SectionTitle } from './common';
 
 interface Props {

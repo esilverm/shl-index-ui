@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { SeasonType } from '../../pages/api/v1/schedule';
+
 import {
   Container,
   ButtonContent,
@@ -8,7 +11,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { SeasonType } from '../../pages/api/v1/schedule';
 
 interface Props {
   onChange: (type: SeasonType) => void;

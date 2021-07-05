@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
+import styled from 'styled-components';
 
-import Header from '../../components/Header';
+import { Team } from '../..';
 import Footer from '../../components/Footer';
 import GameDaySchedule from '../../components/GameDaySchedule';
-import { Team } from '../..';
-import useSchedule from '../../hooks/useSchedule';
-import { getQuerySeason } from '../../utils/season';
+import Header from '../../components/Header';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import TeamSelector, {
   MinimalTeam,
 } from '../../components/Selector/TeamSelector';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import useSchedule from '../../hooks/useSchedule';
+import { getQuerySeason } from '../../utils/season';
 import { SeasonType } from '../api/v1/schedule';
 
 enum SCHEDULE_STATES {

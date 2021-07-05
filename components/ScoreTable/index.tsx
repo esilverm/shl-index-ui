@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
+
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
 import { Player, Goalie, SearchType } from '../..';

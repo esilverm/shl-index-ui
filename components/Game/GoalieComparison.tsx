@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import {
   GoalieStats,
   Matchup,
 } from '../../pages/api/v1/schedule/game/[gameId]';
+
 import {
   ComparisonHeader,
   FlexColumn,

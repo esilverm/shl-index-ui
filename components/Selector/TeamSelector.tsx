@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { Team } from '../..';
+
 import {
   Container,
   ButtonContent,
@@ -8,7 +11,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { Team } from '../..';
 
 export interface MinimalTeam {
   id: string;

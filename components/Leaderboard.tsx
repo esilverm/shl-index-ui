@@ -1,6 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import styled from 'styled-components';
+
 import useLeaders from '../hooks/useLeaders';
 
 interface Props {

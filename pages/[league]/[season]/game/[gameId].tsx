@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import useSWR from 'swr';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
+import styled from 'styled-components';
+import useSWR from 'swr';
 
-import Header from '../../../../components/Header';
 import Footer from '../../../../components/Footer';
 import {
   GoalieComparison,
@@ -15,6 +14,7 @@ import {
   TeamStandings,
   TeamStats,
 } from '../../../../components/Game';
+import Header from '../../../../components/Header';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
 

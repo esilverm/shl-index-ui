@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import { Standings } from '../pages/api/v1/standings';
 import { PlayoffsRound } from '../pages/api/v1/standings/playoffs';
 import { getQuerySeason } from '../utils/season';
