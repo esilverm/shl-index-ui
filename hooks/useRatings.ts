@@ -1,7 +1,6 @@
 import useSWR from 'swr';
-
-import { PlayerRatings } from '../';
 import { getQuerySeason } from '../utils/season';
+import { PlayerRatings } from '../';
 
 const useRatings = (
   league: string
