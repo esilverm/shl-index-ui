@@ -37,6 +37,7 @@
       }
     ],
     "jsx-a11y/no-onchange": 0,
+    "import/no-extraneous-dependencies": "off",
     "import/order": [
       "error",
       {

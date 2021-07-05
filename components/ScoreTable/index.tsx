@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
 
@@ -123,17 +123,17 @@ Props): JSX.Element {
     }
   };
 
-  const updateSearchType = (value) => {
+  const updateSearchType = useCallback((value) => {
     setSearchType(value);
     updateFilter(searchText, value);
-  };
+  }, [searchText, setSearchType, updateFilter]);
 
-  const updateSearchText = (event) => {
+  const updateSearchText = useCallback((event) => {
     // update the search text
     setSearchText(event.target.value);
     // pass the event target value directly because setting searchText is asynchronous
     updateFilter(event.target.value, null);
-  };
+  }, [setSearchText, updateFilter]);
 
   return (
     <>
@@ -225,7 +225,7 @@ Props): JSX.Element {
           </button>{' '}
           <button
             className="-next"
-            onClick={() => previousPage()}
+            onClick={previousPage}
             disabled={!canPreviousPage}
           >
             {'<'}
@@ -252,14 +252,14 @@ Props): JSX.Element {
           </div>
           <button
             className="-next"
-            onClick={() => nextPage()}
+            onClick={nextPage}
             disabled={!canNextPage}
           >
             {'>'}
           </button>{' '}
           <button
             className="-next"
-            onClick={() => gotoPage(pageCount - 1)}
+            onClick={useCallback(() => gotoPage(pageCount - 1), [pageCount])}
             disabled={!canNextPage}
           >
             {'>>'}

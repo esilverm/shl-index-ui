@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { SearchType } from '../..';
@@ -24,12 +24,12 @@ function SearchSelector({ searchTypes, onChange }: Props): JSX.Element {
   );
   const selectorRef = useRef(null);
 
-  const onMouseLeave = () => {
+  const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
     }
-  };
+  }, [selectorRef.current]);
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {

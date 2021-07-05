@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { Team } from '../..';
@@ -29,14 +29,15 @@ const defaultOption = {
 
 function TeamSelector({ teams, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedTeam, setselectedTeam] = useState<MinimalTeam>(defaultOption);
+  const [selectedTeam, setSelectedTeam] = useState<MinimalTeam>(defaultOption);
   const selectorRef = useRef(null);
-  const onMouseLeave = () => {
+
+  const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
     }
-  };
+  }, [selectorRef.current]);
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {
@@ -49,7 +50,7 @@ function TeamSelector({ teams, onChange }: Props): JSX.Element {
     const { team } = event.target.dataset;
     const parsedTeam = JSON.parse(team);
     onChange(parsedTeam);
-    setselectedTeam(parsedTeam);
+    setSelectedTeam(parsedTeam);
     setIsExpanded(false);
   };
 
