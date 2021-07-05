@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import React from 'react';
+import styled from 'styled-components';
 
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import LiveStream from '../../components/Livestream';
+import Header from '../../components/Header';
 import HomepageLeaders from '../../components/HomepageLeaders';
+import LiveStream from '../../components/Livestream';
 import useLeaders from '../../hooks/useLeaders';
 
 interface Props {

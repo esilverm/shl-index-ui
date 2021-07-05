@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
+
 import { query } from '../../../../lib/db';
 
 export default async (

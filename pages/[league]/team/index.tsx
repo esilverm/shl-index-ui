@@ -1,11 +1,11 @@
-import React from 'react';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
+import React from 'react';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
 
-import Footer from '../../../components/Footer';
 import { Team } from '../../..';
+import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
 import Link from '../../../components/LinkWithSeason';
 

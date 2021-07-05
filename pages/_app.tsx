@@ -1,7 +1,7 @@
-import React from 'react';
-import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
 import { DefaultSeo } from 'next-seo';
+import type { AppProps } from 'next/app';
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { SWRConfig } from 'swr';
 
 import SEO from '../next-seo.config';

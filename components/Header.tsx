@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { HamburgerCollapse } from 'react-animated-burgers';
+import VisibilitySensor from 'react-visibility-sensor';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import VisibilitySensor from 'react-visibility-sensor';
-import { HamburgerCollapse } from 'react-animated-burgers';
 
 import Link from './LinkWithSeason';
 import ScoreBar from './ScoreBar';

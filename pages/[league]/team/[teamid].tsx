@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
-import Error from 'next/error';
-import styled from 'styled-components';
 import { NextSeo } from 'next-seo';
+import Error from 'next/error';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
 
 // import useSWR from 'swr';
-import Header from '../../../components/Header';
+import { PlayerRatings, GoalieRatings, Goalie, Player } from '../../..';
 import Footer from '../../../components/Footer';
-import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
-import useRatings from '../../../hooks/useRatings';
-import useGoalieRatings from '../../../hooks/useGoalieRatings';
+import Header from '../../../components/Header';
+import GoalieRatingsTable from '../../../components/RatingsTable/GoalieRatingsTable';
+import SkaterRatingsTable from '../../../components/RatingsTable/SkaterRatingsTable';
+import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
 import SkaterAdvStatsTable from '../../../components/ScoreTable/SkaterAdvStatsTable';
 import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
-import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
-import SkaterRatingsTable from '../../../components/RatingsTable/SkaterRatingsTable';
-import GoalieRatingsTable from '../../../components/RatingsTable/GoalieRatingsTable';
-import { PlayerRatings, GoalieRatings, Goalie, Player } from '../../..';
 import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
+import useGoalieRatings from '../../../hooks/useGoalieRatings';
+import useRatings from '../../../hooks/useRatings';
+import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
 import { SeasonType } from '../../api/v1/teams/[id]/roster/stats';
 
 interface Props {

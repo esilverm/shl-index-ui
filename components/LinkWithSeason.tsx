@@ -1,5 +1,6 @@
-import React from 'react';
 import Link, { LinkProps } from 'next/link';
+import React from 'react';
+
 import { getQuerySeason } from '../utils/season';
 
 function LinkWithSeason(

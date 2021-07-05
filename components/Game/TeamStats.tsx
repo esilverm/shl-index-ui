@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
+
 import { SectionTitle, TeamLogoSmall } from './common';
 
 interface Props {

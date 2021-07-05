@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import React, { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
-import LeadersFilterSelector, { LeadersFilter } from '../../components/Selector/LeadersFilterSelector';
-import { SeasonType } from '../api/v1/schedule';
+import Header from '../../components/Header';
 import Leaderboard from '../../components/Leaderboard';
+import LeadersFilterSelector, { LeadersFilter } from '../../components/Selector/LeadersFilterSelector';
+import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { SeasonType } from '../api/v1/schedule';
 
 const skaterLeaderboards = {
   goals: 'Goals',

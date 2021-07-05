@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import StandingsTable from '../../components/StandingsTable';
+import Header from '../../components/Header';
 import PlayoffsBracket from '../../components/PlayoffsBracket';
-import useStandings from '../../hooks/useStandings';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import StandingsTable from '../../components/StandingsTable';
+import useStandings from '../../hooks/useStandings';
 import { SeasonType } from '../api/v1/schedule';
-import { PlayoffsRound } from '../api/v1/standings/playoffs';
 import { Standings as StandingsData } from '../api/v1/standings';
+import { PlayoffsRound } from '../api/v1/standings/playoffs';
 
 interface Props {
   league: string;

@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useTable, usePagination } from 'react-table';
 import styled from 'styled-components';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { Game } from '../pages/api/v1/schedule';
+
 import { Team } from '..';
+import { Game } from '../pages/api/v1/schedule';
 
 interface Columns {
   Header: string;
@@ -127,10 +128,10 @@ function ScheduleTable({ games, teamlist, isLoading }: Props): JSX.Element {
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
       <Pagination>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button onClick={previousPage} disabled={!canPreviousPage}>
           <BsChevronLeft size="20px" aria-label="Arrow Pointing Left" />
         </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button onClick={nextPage} disabled={!canNextPage}>
           <BsChevronRight size="20px" aria-label="Arrow Pointing Right" />
         </button>
         <span>
