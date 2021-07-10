@@ -17,6 +17,7 @@ const skaterLeaderboards = {
   plusminus: 'Plus Minus',
   shots: 'Shots',
   shotpct: 'Shot %',
+  hits: 'Hits',
   shotsblocked: 'Shots Blocked',
   penaltyminutes: 'Penalty Minutes',
   ppg: 'Power Play Goals',
