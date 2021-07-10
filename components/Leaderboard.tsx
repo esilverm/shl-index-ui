@@ -7,10 +7,7 @@ import useLeaders from '../hooks/useLeaders';
 interface Props {
   league: string;
   playerType: string;
-  stat: {
-    id: string;
-    label: string;
-  };
+  stat: string;
   seasonType: string;
   Sprites: {
     [index: string]: React.ComponentClass<any>;
@@ -19,14 +16,14 @@ interface Props {
 }
 
 const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }: Props): JSX.Element => {
-  const { leaders, isError, isLoading } = useLeaders(league, playerType, stat.id, seasonType, position);
+  const { leaders, isError, isLoading } = useLeaders(league, playerType, stat, seasonType, position);
 
   const convertStatValue = (value: string | number) => {
     if (typeof value === "string") return value;
 
-    if (stat.id === 'shotpct') {
+    if (stat === 'shotpct') {
       return (value * 100).toFixed(2);
-    } else if (stat.id === 'gsaa') {
+    } else if (stat === 'gsaa') {
       return value.toFixed(2);
     }
     return value;
@@ -88,9 +85,10 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }
     );
   };
 
+  const title = leaders[0].statName;
   return (
     <Container>
-      <Title>{stat.label}</Title>
+      <Title>{title}</Title>
       {renderLeaders()}
     </Container>
   );

@@ -10,33 +10,33 @@ import LeadersFilterSelector, { LeadersFilter } from '../../components/Selector/
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
 
-const skaterLeaderboards = {
-  goals: 'Goals',
-  assists: 'Assists',
-  points: 'Points',
-  plusminus: 'Plus Minus',
-  shots: 'Shots',
-  shotpct: 'Shot %',
-  hits: 'Hits',
-  shotsblocked: 'Shots Blocked',
-  penaltyminutes: 'Penalty Minutes',
-  fightswon: 'Fights Won',
-  ppg: 'Power Play Goals',
-  shg: 'Shorthanded Goals'
-};
+const skaterLeaderboards = [
+  'goals',
+  'assists',
+  'points',
+  'plusminus',
+  'shots',
+  'shotpct',
+  'hits',
+  'fightswon',
+  'penaltyminutes',
+  'shotsblocked',
+  'ppg',
+  'shg'
+];
 
-const goalieLeaderboards = {
-  wins: 'Wins',
-  losses: 'Losses',
-  otl: 'Ties/OT Losses',
-  ga: 'Goals Against',
-  gaa: 'Goals Against Average',
-  gsaa: 'Goals Saved Above Average',
-  saves: 'Saves',
-  savepct: 'Save %',
-  shutouts: 'Shutouts',
-  gamesplayed: 'Games Played'
-};
+const goalieLeaderboards = [
+  'wins',
+  'losses',
+  'otl',
+  'ga',
+  'gaa',
+  'gsaa',
+  'saves',
+  'savepct',
+  'shutouts',
+  'gamesplayed'
+];
 
 interface Props {
   league: string;
@@ -72,15 +72,12 @@ function Stats({ league }: Props): JSX.Element {
     const playerType = filter === 'Goalies' ? 'goalie' : 'skater';
     const skaterPosition = filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
 
-    return Object.entries(leaderboards).map(([statId, statLabel]) => (
+    return leaderboards.map((statId) => (
       <Leaderboard
         key={statId}
         league={league}
         playerType={playerType}
-        stat={{
-          id: statId,
-          label: statLabel
-        }}
+        stat={statId}
         seasonType={seasonType}
         Sprites={sprites}
         position={skaterPosition}
