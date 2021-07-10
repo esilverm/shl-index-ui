@@ -20,6 +20,7 @@ const skaterLeaderboards = {
   hits: 'Hits',
   shotsblocked: 'Shots Blocked',
   penaltyminutes: 'Penalty Minutes',
+  fightswon: 'Fights Won',
   ppg: 'Power Play Goals',
   shg: 'Shorthanded Goals'
 };
