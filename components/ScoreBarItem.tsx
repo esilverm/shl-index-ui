@@ -52,7 +52,7 @@ function ScoreBarItem({
       {isDate ? (
         <Date role="presentation" aria-label="Score Bar Date">
           <span aria-label="Date">
-            {months[+gameid.split('-')[1]]} {gameid.split('-')[2]}
+            {months[+gameid.split('-')[1]]}<br />{gameid.split('-')[2]}
           </span>
         </Date>
       ) : (
