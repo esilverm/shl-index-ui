@@ -128,10 +128,10 @@ function ScheduleTable({ games, teamlist, isLoading }: Props): JSX.Element {
   return (
     <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
       <Pagination>
-        <button onClick={previousPage} disabled={!canPreviousPage}>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           <BsChevronLeft size="20px" aria-label="Arrow Pointing Left" />
         </button>
-        <button onClick={nextPage} disabled={!canNextPage}>
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
           <BsChevronRight size="20px" aria-label="Arrow Pointing Right" />
         </button>
         <span>
