@@ -2,8 +2,8 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
-import { query } from '../../../../lib/db';
-import use from '../../../../lib/middleware';
+import { query } from '../../../../../lib/db';
+import use from '../../../../../lib/middleware';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -63,8 +63,8 @@ export default async (
     AND s.LeagueID = team_data.LeagueID  
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
-	AND r.G<19
-	AND p.TeamID>=0;
+    AND r.G<19
+    AND p.TeamID>=0;
   `)
   );
 
