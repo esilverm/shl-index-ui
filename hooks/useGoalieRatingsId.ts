@@ -14,7 +14,7 @@ const useGoalieRatingsId = (
 
   const { data, error } = useSWR(
     () =>
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/goalies/ratings/${id}?league=${leagueid}${seasonParam}`
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/goalies/ratings/${id}?league=${leagueid}`
   );
 
   return {
