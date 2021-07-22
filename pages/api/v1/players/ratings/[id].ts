@@ -62,7 +62,12 @@ export default async (
         };
     });
 
-    const parsed = combinedPlayerData.map((player) => {
+    // remove 0 season
+    const filtered = combinedPlayerData.filter((item) => {
+        return item.SeasonID !== 0;
+    });
+
+    const parsed = filtered.map((player) => {
         return {
             id: player.PlayerID,
             league: player.LeagueID,
