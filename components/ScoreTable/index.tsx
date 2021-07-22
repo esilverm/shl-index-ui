@@ -285,8 +285,7 @@ function ScoreTable({
             {'>>'}
           </button>{' '}
         </Pagination>
-      )
-      }
+      )}
     </>
   );
 }
