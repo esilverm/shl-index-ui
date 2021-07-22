@@ -57,6 +57,8 @@ export default async (
             AND s.SeasonID=${+seasonid}
           `
         : ''
+    ).append(
+      SQL`ORDER BY s.SeasonID DESC`
     )
   );
 

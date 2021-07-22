@@ -42,6 +42,8 @@ export default async (
                 AND corrected_player_ratings.SeasonID=${+seasonid}
               `
             : ''
+    ).append(
+        SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
     ));
 
     const combinedPlayerData = basePlayerData.map((player) => {

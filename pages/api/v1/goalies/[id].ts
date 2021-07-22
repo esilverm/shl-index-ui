@@ -49,6 +49,8 @@ const getBasePlayerData = async (id, league, season) =>
     season != null ?
       SQL`AND corrected_player_ratings.SeasonID=${season}` :
       ''
+  ).append(
+    SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
   ));
 
 const getPlayerInfo = (player: MasterPlayer) => ({

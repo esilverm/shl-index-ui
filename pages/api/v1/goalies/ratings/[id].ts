@@ -38,6 +38,8 @@ export default async (
           AND corrected_player_ratings.SeasonID=${+seasonid}
         `
       : ''
+  ).append(
+    SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
   ));
 
   // remove 0 season
