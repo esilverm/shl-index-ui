@@ -256,7 +256,7 @@ const ErrorBlock = styled.div`
 `;
 
 const PlayerInfo = styled.div`
-  font-size: 2.2rem;
+  font-size: 1.1rem;
   text-transform: uppercase;
   text-align: center;
   font-weight: bold;
