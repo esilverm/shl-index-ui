@@ -99,72 +99,74 @@ function PlayerPage({ league, id }: Props): JSX.Element {
         }}
       />
       <Header league={league} activePage="players" isSticky={false} />
-      {isLoading && !playerError && (
-        <CenteredContent>
-          <PulseLoader size={15} />
-        </CenteredContent>
-      )}
-      <Main>
-        {playerError && (
-          <ErrorBlock>
-            Failed to load player info. Please reload the page to try again.
-          </ErrorBlock>
+      <Container>
+        {isLoading && !playerError && (
+          <CenteredContent>
+            <PulseLoader size={15} />
+          </CenteredContent>
         )}
-        <SelectorWrapper>
-          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-        </SelectorWrapper>
-        {!isLoading && (
-          <>
-            <CenteredContent>
-              <PlayerInfo>{playerName} | {playerPosition} | {playerTeam}</PlayerInfo>
-            </CenteredContent>
-            {!isSkater && (
-              <>
-                <TableHeading>Stats</TableHeading>
-                <TableWrapper>
-                  <TableContainer>
-                    {goalieStats && (
-                      <SingleGoalieScoreTable data={goalieStats} />
-                    )}
-                  </TableContainer>
-                </TableWrapper>
-              </>
-            )}
-            {isSkater && (
-              <>
-                <TableHeading>Stats</TableHeading>
-                <TableWrapper>
-                  <TableContainer>
-                    {skaterStats && (
-                      <SingleSkaterScoreTable data={skaterStats} />
-                    )}
-                  </TableContainer>
-                </TableWrapper>
-                <TableHeading>Advanced Stats</TableHeading>
-                <TableWrapper>
-                  <TableContainer>
-                    {skaterStats && (
-                      <SingleSkaterAdvStatsTable data={skaterStats} />
-                    )}
-                  </TableContainer>
-                </TableWrapper>
-              </>
-            )}
-            <TableHeading>Ratings</TableHeading>
-            <TableWrapper>
-              <TableContainer>
-                {!isSkater && (
-                  <SingleGoalieRatingsTable data={goalieRatings} />
-                )}
-                {isSkater && (
-                  <SinglePlayerRatingsTable data={skaterRatings} />
-                )}
-              </TableContainer>
-            </TableWrapper>
-          </>
-        )
-        }
-      </Main >
+        <Main>
+          {playerError && (
+            <ErrorBlock>
+              Failed to load player info. Please reload the page to try again.
+            </ErrorBlock>
+          )}
+          <SelectorWrapper>
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+          </SelectorWrapper>
+          {!isLoading && (
+            <>
+              <CenteredContent>
+                <PlayerInfo>{playerName} | {playerPosition} | {playerTeam}</PlayerInfo>
+              </CenteredContent>
+              {!isSkater && (
+                <>
+                  <TableHeading>Stats</TableHeading>
+                  <TableWrapper>
+                    <TableContainer>
+                      {goalieStats && (
+                        <SingleGoalieScoreTable data={goalieStats} />
+                      )}
+                    </TableContainer>
+                  </TableWrapper>
+                </>
+              )}
+              {isSkater && (
+                <>
+                  <TableHeading>Stats</TableHeading>
+                  <TableWrapper>
+                    <TableContainer>
+                      {skaterStats && (
+                        <SingleSkaterScoreTable data={skaterStats} />
+                      )}
+                    </TableContainer>
+                  </TableWrapper>
+                  <TableHeading>Advanced Stats</TableHeading>
+                  <TableWrapper>
+                    <TableContainer>
+                      {skaterStats && (
+                        <SingleSkaterAdvStatsTable data={skaterStats} />
+                      )}
+                    </TableContainer>
+                  </TableWrapper>
+                </>
+              )}
+              <TableHeading>Ratings</TableHeading>
+              <TableWrapper>
+                <TableContainer>
+                  {!isSkater && (
+                    <SingleGoalieRatingsTable data={goalieRatings} />
+                  )}
+                  {isSkater && (
+                    <SinglePlayerRatingsTable data={skaterRatings} />
+                  )}
+                </TableContainer>
+              </TableWrapper>
+            </>
+          )
+          }
+        </Main >
+      </Container>
       <Footer />
     </React.Fragment >
   );
@@ -208,7 +210,7 @@ const TableHeading = styled.h2`
 const SelectorWrapper = styled.div`
   width: 250px;
   float: right;
-  margin-right: 3%;
+  margin: 3%;
 `;
 
 const CenteredContent = styled.div`
@@ -232,9 +234,22 @@ const ErrorBlock = styled.div`
 `;
 
 const PlayerInfo = styled.div`
+  font-size: 2.2rem;
   text-transform: uppercase;
   text-align: center;
   font-weight: bold;
+`;
+
+const Container = styled.div`
+  width: 75%;
+  padding: 1px 0 40px 0;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.grey100};
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    padding: 2.5%;
+  }
 `;
 
 export default PlayerPage;
