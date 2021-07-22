@@ -51,10 +51,7 @@ function SingleScoreTable({
   }, []);
 
   const initialState = useMemo(() => {
-    if (players[0] && 'wins' in players[0]) {
-      return { sortBy: [{ id: 'wins', desc: true }] };
-    }
-    return { sortBy: [{ id: 'points', desc: true }] };
+    return { sortBy: [{ id: 'player-table-season', desc: true }] };
   }, []);
 
   let table;

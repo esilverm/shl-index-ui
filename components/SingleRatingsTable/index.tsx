@@ -51,7 +51,7 @@ function SingleRatingsTable({
   }, []);
 
   const initialState = useMemo(() => {
-    return { sortBy: [{ id: '', desc: true }] };
+    return { sortBy: [{ id: 'player-table-season', desc: true }] };
   }, []);
 
   let table;
