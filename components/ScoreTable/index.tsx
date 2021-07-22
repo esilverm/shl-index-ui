@@ -233,61 +233,59 @@ function ScoreTable({
             </TableBody>
           </Table>
         </TableContainer>
+      )}
+      {hasData && pagination && (
+        <Pagination>
+          <button
+            className="-next"
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+          >
+            {'<<'}
+          </button>{' '}
+          <button
+            className="-next"
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            {'<'}
+          </button>
+          <div className="pagenav">
+            <span>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span className="mediahide">
+              | Go to page:{' '}
+              <input
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  gotoPage(page);
+                }}
+                style={{ width: '40px' }}
+              />
+            </span>
+          </div>
+          <button
+            className="-next"
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+          >
+            {'>'}
+          </button>{' '}
+          <button
+            className="-next"
+            onClick={goToLastPage}
+            disabled={!canNextPage}
+          >
+            {'>>'}
+          </button>{' '}
+        </Pagination>
       )
-      }
-      {
-        hasData && pagination && (
-          <Pagination>
-            <button
-              className="-next"
-              onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}
-            >
-              {'<<'}
-            </button>{' '}
-            <button
-              className="-next"
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-            >
-              {'<'}
-            </button>
-            <div className="pagenav">
-              <span>
-                Page{' '}
-                <strong>
-                  {pageIndex + 1} of {pageOptions.length}
-                </strong>{' '}
-              </span>
-              <span className="mediahide">
-                | Go to page:{' '}
-                <input
-                  type="number"
-                  defaultValue={pageIndex + 1}
-                  onChange={(e) => {
-                    const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                    gotoPage(page);
-                  }}
-                  style={{ width: '40px' }}
-                />
-              </span>
-            </div>
-            <button
-              className="-next"
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-            >
-              {'>'}
-            </button>{' '}
-            <button
-              className="-next"
-              onClick={goToLastPage}
-              disabled={!canNextPage}
-            >
-              {'>>'}
-            </button>{' '}
-          </Pagination>
-        )
       }
     </>
   );
