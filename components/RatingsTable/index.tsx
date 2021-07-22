@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
@@ -36,7 +37,7 @@ function RatingsTable({
   teamPage = false,
   searching = false,
 }: // isLoading
-Props): JSX.Element {
+  Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
@@ -104,9 +105,9 @@ Props): JSX.Element {
     players[0] && 'blocker' in players[0]
       ? [{ text: 'Name', id: 'player-table-player' }]
       : [
-          { text: 'Name', id: 'player-table-player' },
-          { text: 'Position', id: 'player-table-position' },
-        ];
+        { text: 'Name', id: 'player-table-player' },
+        { text: 'Position', id: 'player-table-position' },
+      ];
 
   const [searchType, setSearchType] = useState(searchTypes[0].id);
   const [searchText, setSearchText] = useState('');
@@ -131,6 +132,15 @@ Props): JSX.Element {
     // pass the event target value directly because setting searchText is asynchronous
     updateFilter(event.target.value);
   }, [setSearchText, updateFilter]);
+
+  const getPlayerInfo = ((name) => {
+    const matchedPlayer = data.filter((player) => {
+      return player.name === name;
+    });
+
+    const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
+    return [leagues[matchedPlayer[0].league], matchedPlayer[0].id]
+  });
 
   return (
     <>
@@ -170,9 +180,12 @@ Props): JSX.Element {
             <TableBody {...getTableBodyProps()}>
               {hasData && pagination
                 ? page.map((row, i) => {
-                    prepareRow(row);
+                  prepareRow(row);
+                  const info = getPlayerInfo(row.cells[0]['value']);
+                  const url = '/' + info[0] + '/player/' + info[1];
 
-                    return (
+                  return (
+                    <Link href={url} key={i}>
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
                           return (
@@ -186,12 +199,16 @@ Props): JSX.Element {
                           );
                         })}
                       </tr>
-                    );
-                  })
+                    </Link>
+                  );
+                })
                 : rows.map((row, i) => {
-                    prepareRow(row);
+                  prepareRow(row);
+                  const info = getPlayerInfo(row.cells[0]['value']);
+                  const url = '/' + info[0] + '/player/' + info[1];
 
-                    return (
+                  return (
+                    <Link href={url} key={i}>
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
                           return (
@@ -205,8 +222,9 @@ Props): JSX.Element {
                           );
                         })}
                       </tr>
-                    );
-                  })}
+                    </Link>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>

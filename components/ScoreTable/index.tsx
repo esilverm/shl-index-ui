@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
@@ -35,7 +36,7 @@ function ScoreTable({
   teamPage = false,
   searching = false,
 }: // isLoading
-Props): JSX.Element {
+  Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
@@ -106,9 +107,9 @@ Props): JSX.Element {
     players[0] && 'wins' in players[0]
       ? [{ text: 'Name', id: 'player-table-player' }]
       : [
-          { text: 'Name', id: 'player-table-player' },
-          { text: 'Position', id: 'player-table-position' },
-        ];
+        { text: 'Name', id: 'player-table-player' },
+        { text: 'Position', id: 'player-table-position' },
+      ];
 
   const [searchType, setSearchType] = useState(searchTypes[0].id);
   const [searchText, setSearchText] = useState('');
@@ -136,6 +137,15 @@ Props): JSX.Element {
   }, [setSearchText, updateFilter]);
 
   const goToLastPage = useCallback(() => gotoPage(pageCount - 1), [pageCount]);
+
+  const getPlayerInfo = ((name) => {
+    const matchedPlayer = data.filter((player) => {
+      return player.name === name;
+    });
+
+    const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
+    return [leagues[matchedPlayer[0].league], matchedPlayer[0].id]
+  });
 
   return (
     <>
@@ -175,9 +185,12 @@ Props): JSX.Element {
             <TableBody {...getTableBodyProps()}>
               {hasData && pagination
                 ? page.map((row, i) => {
-                    prepareRow(row);
+                  prepareRow(row);
+                  const info = getPlayerInfo(row.cells[0]['value']);
+                  const url = '/' + info[0] + '/player/' + info[1];
 
-                    return (
+                  return (
+                    <Link href={url} key={i}>
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
                           return (
@@ -191,12 +204,16 @@ Props): JSX.Element {
                           );
                         })}
                       </tr>
-                    );
-                  })
+                    </Link>
+                  );
+                })
                 : rows.map((row, i) => {
-                    prepareRow(row);
+                  prepareRow(row);
+                  const info = getPlayerInfo(row.cells[0]['value']);
+                  const url = '/' + info[0] + '/player/' + info[1];
 
-                    return (
+                  return (
+                    <Link href={url} key={i}>
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
                           return (
@@ -210,64 +227,68 @@ Props): JSX.Element {
                           );
                         })}
                       </tr>
-                    );
-                  })}
+                    </Link>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
-      )}
-      {hasData && pagination && (
-        <Pagination>
-          <button
-            className="-next"
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-          >
-            {'<<'}
-          </button>{' '}
-          <button
-            className="-next"
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-          >
-            {'<'}
-          </button>
-          <div className="pagenav">
-            <span>
-              Page{' '}
-              <strong>
-                {pageIndex + 1} of {pageOptions.length}
-              </strong>{' '}
-            </span>
-            <span className="mediahide">
-              | Go to page:{' '}
-              <input
-                type="number"
-                defaultValue={pageIndex + 1}
-                onChange={(e) => {
-                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                  gotoPage(page);
-                }}
-                style={{ width: '40px' }}
-              />
-            </span>
-          </div>
-          <button
-            className="-next"
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-          >
-            {'>'}
-          </button>{' '}
-          <button
-            className="-next"
-            onClick={goToLastPage}
-            disabled={!canNextPage}
-          >
-            {'>>'}
-          </button>{' '}
-        </Pagination>
-      )}
+      )
+      }
+      {
+        hasData && pagination && (
+          <Pagination>
+            <button
+              className="-next"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              {'<<'}
+            </button>{' '}
+            <button
+              className="-next"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              {'<'}
+            </button>
+            <div className="pagenav">
+              <span>
+                Page{' '}
+                <strong>
+                  {pageIndex + 1} of {pageOptions.length}
+                </strong>{' '}
+              </span>
+              <span className="mediahide">
+                | Go to page:{' '}
+                <input
+                  type="number"
+                  defaultValue={pageIndex + 1}
+                  onChange={(e) => {
+                    const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                    gotoPage(page);
+                  }}
+                  style={{ width: '40px' }}
+                />
+              </span>
+            </div>
+            <button
+              className="-next"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              {'>'}
+            </button>{' '}
+            <button
+              className="-next"
+              onClick={goToLastPage}
+              disabled={!canNextPage}
+            >
+              {'>>'}
+            </button>{' '}
+          </Pagination>
+        )
+      }
     </>
   );
 }
