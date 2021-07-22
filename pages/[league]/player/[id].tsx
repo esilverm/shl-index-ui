@@ -12,9 +12,11 @@ import SinglePlayerRatingsTable from '../../../components/SingleRatingsTable/Sin
 import SingleGoalieScoreTable from '../../../components/SingleScoreTable/SingleGoalieScoreTable';
 import SingleSkaterAdvStatsTable from '../../../components/SingleScoreTable/SingleSkaterAdvStatsTable';
 import SingleSkaterScoreTable from '../../../components/SingleScoreTable/SingleSkaterScoreTable';
+import useGoalieInfo from '../../../hooks/useGoalieInfo';
 import useGoalieRatingsId from '../../../hooks/useGoalieRatingsId';
 import useGoalieStatsId from '../../../hooks/useGoalieStatsId';
 import useRatingsId from '../../../hooks/useRatingsId';
+import useSkaterInfo from '../../../hooks/useSkaterInfo';
 import useSkaterStatsId from '../../../hooks/useSkaterStatsId';
 import { SeasonType } from '../../api/v1/players/stats';
 
@@ -33,6 +35,8 @@ function PlayerPage({ league, id }: Props): JSX.Element {
   const [playerName, setPlayerName] = useState('');
   const [playerPosition, setPlayerPosition] = useState('');
   const [playerTeam, setPlayerTeam] = useState('');
+  const [playerWeight, setPlayerWeight] = useState('');
+  const [playerHeight, setPlayerHeight] = useState('');
 
   // ratings
   const {
@@ -60,27 +64,45 @@ function PlayerPage({ league, id }: Props): JSX.Element {
     isError: isErrorSkaterStats,
   } = useSkaterStatsId(id, league, filterSeasonType);
 
+  // player info
+  const {
+    ratings: goalieInfo,
+    isLoading: isLoadingGoalieInfo,
+    isError: isErrorGoalieInfo,
+  } = useGoalieInfo(id, league)
+
+  const {
+    ratings: skaterInfo,
+    isLoading: isLoadingSkaterInfo,
+    isError: isErrorSkaterInfo,
+  } = useSkaterInfo(id, league)
+
   // wait for all loads to complete
   useEffect(() => {
     setIsLoading(isLoadingGoalieRating || isLoadingPlayerRating || isLoadingGoalieStats
-      || isLoadingSkaterStats);
+      || isLoadingSkaterStats || isLoadingGoalieInfo || isLoadingSkaterInfo);
     if (!isLoading) {
       if (isErrorGoalieRating || isErrorPlayerRating || isErrorGoalieStats
-        || isErrorSkaterStats) {
+        || isErrorSkaterStats || isErrorSkaterInfo || isErrorGoalieInfo) {
         setPlayerError(true);
       } else {
-        if (skaterStats !== undefined) {
+        if (skaterStats !== undefined && skaterInfo !== undefined) {
           if (skaterStats.length > 0) {
             setIsSkater(true);
             setPlayerName(skaterStats[0].name);
             setPlayerPosition(skaterStats[0].position);
             setPlayerTeam(skaterStats[0].team.toString());
+            setPlayerHeight(skaterInfo[0].height.toString());
+            setPlayerWeight(skaterInfo[0].weight.toString());
           } else {
             setIsSkater(false);
             setPlayerName(goalieStats[0].name);
             setPlayerPosition('G');
             setPlayerTeam(goalieStats[0].team.toString());
+            setPlayerHeight(goalieInfo[0].height.toString());
+            setPlayerWeight(goalieInfo[0].weight.toString());
           }
+
         }
       }
     }
@@ -117,7 +139,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
           {!isLoading && (
             <>
               <CenteredContent>
-                <PlayerInfo>{playerName} | {playerPosition} | {playerTeam}</PlayerInfo>
+                <PlayerInfo>{playerName} | {playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
               </CenteredContent>
               {!isSkater && (
                 <>
