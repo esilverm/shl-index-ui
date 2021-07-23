@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
@@ -30,6 +31,8 @@ function PlayerPage({ league, id }: Props): JSX.Element {
   const [isSkater, setIsSkater] = useState<boolean>(true);
   const [playerError, setPlayerError] = useState<boolean>(false);
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
+
+  const router = useRouter();
 
   // player info
   const [playerName, setPlayerName] = useState('');
@@ -102,7 +105,6 @@ function PlayerPage({ league, id }: Props): JSX.Element {
             setPlayerHeight(goalieInfo[0].height.toString());
             setPlayerWeight(goalieInfo[0].weight.toString());
           }
-
         }
       }
     }
@@ -133,9 +135,22 @@ function PlayerPage({ league, id }: Props): JSX.Element {
               Failed to load player info. Please reload the page to try again.
             </ErrorBlock>
           )}
-          <SelectorWrapper>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-          </SelectorWrapper>
+          <Table>
+            <TableRow>
+              <TableData>
+                <Button onClick={() => router.back()} inverse>
+                  <ButtonContent>
+                    Go Back
+                  </ButtonContent>
+                </Button>
+              </TableData>
+              <TableData>
+                <SelectorWrapper>
+                  <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+                </SelectorWrapper>
+              </TableData>
+            </TableRow>
+          </Table>
           {!isLoading && (
             <>
               <CenteredContent>
@@ -232,7 +247,6 @@ const TableHeading = styled.h2`
 const SelectorWrapper = styled.div`
   width: 250px;
   float: right;
-  margin: 3%;
 `;
 
 const CenteredContent = styled.div`
@@ -273,5 +287,51 @@ const Container = styled.div`
     padding: 2.5%;
   }
 `;
+
+const ButtonContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  background-color: transparent;
+  padding: 6px 16px;
+  border: 1px solid
+    ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
+  color: ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
+  cursor: pointer;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.blue600};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.colors.blue700};
+  }
+
+  @media screen and (max-width: 700px) {
+    padding: 6px 8px;
+  }
+`;
+
+const Table = styled.table`
+  width: 100%;
+`;
+
+const TableRow = styled.tr`
+`;
+
+const TableData = styled.td`
+  padding: 10px;
+`;
+
+interface StyleProps {
+  align?: 'left' | 'center' | 'right';
+  inverse?: boolean;
+}
 
 export default PlayerPage;
