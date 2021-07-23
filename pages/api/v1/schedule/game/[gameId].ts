@@ -1,9 +1,10 @@
+import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
-import Cors from 'cors';
+
+import { Game, convertGameRowToGame, GameRow } from '..';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
-import { Game, convertGameRowToGame, GameRow } from '..';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],

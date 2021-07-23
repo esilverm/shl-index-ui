@@ -1,7 +1,8 @@
 // Serve API Documentation
-import { NextApiRequest, NextApiResponse } from 'next';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default (_req: NextApiRequest, res: NextApiResponse): void => {
   const filePath = path.resolve('./public/docs.html');

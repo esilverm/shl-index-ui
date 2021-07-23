@@ -1,6 +1,7 @@
+import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
-import Cors from 'cors';
+
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
 
@@ -61,6 +62,15 @@ export default async (
       AND s.LeagueID = t.LeagueID
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
+    AND s.GP >= (
+      SELECT MAX(GP) FROM `
+      )
+      .append(`player_goalie_stats_${type}`)
+      .append(
+        SQL`
+      WHERE LeagueID=${+league}
+      AND SeasonID=${season.SeasonID}
+    ) / 5
     ORDER BY s.GoalsAgainst `
       )
       .append(desc ? `DESC` : `ASC`).append(`

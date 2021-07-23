@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import { GoalieRatings } from '../';
 import { getQuerySeason } from '../utils/season';
 

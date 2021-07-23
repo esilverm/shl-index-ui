@@ -1,8 +1,9 @@
+import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
-import Cors from 'cors';
-import { query } from '../../../../lib/db';
-import use from '../../../../lib/middleware';
+
+import { query } from '../../../../../lib/db';
+import use from '../../../../../lib/middleware';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -18,6 +19,7 @@ export default async (
     league = 0,
     type: longType = 'regular',
     season: seasonid,
+    id,
   } = req.query;
 
   let type: string;
@@ -28,19 +30,6 @@ export default async (
   } else {
     type = 'rs';
   }
-
-  const [season] =
-    (seasonid !== undefined &&
-      !Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
-    (await query(
-      SQL`
-      SELECT DISTINCT SeasonID
-      FROM `.append(`player_goalie_stats_${type}`).append(SQL`
-      WHERE LeagueID=${+league}
-      ORDER BY SeasonID DESC
-      LIMIT 1
-  `)
-    ));
 
   const goalieStats = await query(
     SQL`
@@ -59,10 +48,16 @@ export default async (
     AND s.SeasonID = team_data.SeasonID
     AND s.LeagueID = team_data.LeagueID  
     WHERE s.LeagueID=${+league}
-    AND s.SeasonID=${season.SeasonID}
     AND r.G=20
-	AND p.TeamID>=0;
-  `)
+	  AND p.TeamID>=0
+    AND s.PlayerID=${+id}
+  `).append(
+      seasonid != null
+        ? SQL`
+            AND s.SeasonID=${+seasonid}
+          `
+        : ''
+    )
   );
 
   const parsed = [...goalieStats].map((player) => {

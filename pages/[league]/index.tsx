@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
+import React from 'react';
+import styled from 'styled-components';
 
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import LiveStream from '../../components/Livestream';
+import Header from '../../components/Header';
 import HomepageLeaders from '../../components/HomepageLeaders';
+import LiveStream from '../../components/Livestream';
 import useLeaders from '../../hooks/useLeaders';
 
 interface Props {
@@ -19,6 +19,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     'skater',
     'goals',
     null,
+    'all',
     1
   );
   const { leaders: pointLeader, isLoading: isLoadingPL } = useLeaders(
@@ -26,6 +27,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     'skater',
     'points',
     null,
+    'all',
     1
   );
   const { leaders: winLeader, isLoading: isLoadingWL } = useLeaders(
@@ -33,6 +35,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     'goalie',
     'wins',
     null,
+    'all',
     1
   );
   const { leaders: shutoutLeader, isLoading: isLoadingSL } = useLeaders(
@@ -40,6 +43,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     'goalie',
     'shutouts',
     null,
+    'all',
     1
   );
 

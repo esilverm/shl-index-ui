@@ -1,7 +1,9 @@
 import React from 'react';
+
 // import Link from '../../components/LinkWithSeason';
-import ScoreTable from '.';
 import { Goalie } from '../..';
+
+import ScoreTable from '.';
 
 interface Props {
   data: Array<Goalie>;

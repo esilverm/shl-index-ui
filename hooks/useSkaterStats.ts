@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import { Player } from '..';
 import { getQuerySeason } from '../utils/season';
 

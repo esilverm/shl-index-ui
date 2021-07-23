@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useTable, useSortBy } from 'react-table';
 import styled from 'styled-components';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+
 import Link from '../components/LinkWithSeason';
 
 interface Props {

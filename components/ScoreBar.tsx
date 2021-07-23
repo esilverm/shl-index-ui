@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { PulseLoader } from 'react-spinners';
+import styled from 'styled-components';
 
 import ScoreBarItem from './ScoreBarItem';
 

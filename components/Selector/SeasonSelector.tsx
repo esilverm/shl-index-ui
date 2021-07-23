@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { DotLoader } from 'react-spinners';
+
+import { getLatestSeason, getQuerySeason } from '../../utils/season';
+
 import {
   Container,
   ButtonContent,
@@ -10,7 +13,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { getLatestSeason, getQuerySeason } from '../../utils/season';
 
 interface Props {
   seasons: number[];
@@ -23,12 +25,13 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState('');
   const selectorRef = useRef(null);
-  const onMouseLeave = () => {
+  
+  const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
     }
-  };
+  }, [selectorRef.current]);
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {

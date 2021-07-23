@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { Standings } from '../../pages/api/v1/standings';
+
 import { SectionTitle, TeamLogoSmall } from './common';
 
 interface Props {

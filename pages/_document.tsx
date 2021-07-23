@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react';
 import Document, {
   Html,
   Head,
@@ -7,6 +6,7 @@ import Document, {
   NextScript,
   DocumentContext,
 } from 'next/document';
+import React from 'react';
 // import GoogleFonts from 'next-google-fonts';
 import { ServerStyleSheet } from 'styled-components';
 import sprite from 'svg-sprite-loader/runtime/sprite.build';

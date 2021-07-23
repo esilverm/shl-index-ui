@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { SeasonType } from '../../pages/api/v1/schedule';
+
 import {
   Container,
   ButtonContent,
@@ -8,7 +11,6 @@ import {
   DropdownList,
   Caret,
 } from './styles';
-import { SeasonType } from '../../pages/api/v1/schedule';
 
 interface Props {
   onChange: (type: SeasonType) => void;
@@ -24,16 +26,17 @@ const SEASON_TYPE: {
 
 function SeasonTypeSelector({ onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedSeasonType, setselectedSeasonType] = useState<SeasonType>(
+  const [selectedSeasonType, setSelectedSeasonType] = useState<SeasonType>(
     SEASON_TYPE.REGULAR
   );
   const selectorRef = useRef(null);
-  const onMouseLeave = () => {
+
+  const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {
       selectorRef.current.removeEventListener('mouseleave', onMouseLeave);
     }
-  };
+  }, [selectorRef.current]);
 
   useEffect(() => {
     if (isExpanded && selectorRef.current) {
@@ -45,7 +48,7 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
   const onSeasonTypeSelect = (event) => {
     const { seasontype } = event.target.dataset;
     onChange(seasontype);
-    setselectedSeasonType(seasontype);
+    setSelectedSeasonType(seasontype);
     setIsExpanded(false);
   };
 

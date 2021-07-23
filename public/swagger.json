@@ -46,6 +46,10 @@
     {
       "name": "livestreams",
       "description": "Lists all livestreams for each league."
+    },
+    {
+      "name": "fantasy",
+      "description": "Lists all fantasy points for SHl players."
     }
   ],
   "schemes": ["https", "http"],
@@ -511,6 +515,51 @@
         }
       }
     },
+    "/players/stats/{id}": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List Single Player Stats",
+        "description": "Returns Single Player's Stats for a League, NOTE: type options are rs, ps, po",
+        "operationId": "getPlayerStatsByID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "default": "regular"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/playerstats"
+              }
+            }
+          }
+        }
+      }
+    },
     "/players/ratings": {
       "get": {
         "tags": ["players"],
@@ -519,6 +568,45 @@
         "operationId": "getPlayerRatingsByLeague",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/playerratings"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/ratings/{id}": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List Single Player Ratings",
+        "description": "Returns Single Player's Ratings for a League",
+        "operationId": "getPlayerRatingsByID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
           {
             "name": "league",
             "in": "query",
@@ -616,6 +704,51 @@
         }
       }
     },
+    "/goalies/stats/{id}": {
+      "get": {
+        "tags": ["goalies"],
+        "summary": "List Single Goalie Stats",
+        "description": "Returns Single Goalie's Stats for a League, NOTE: type options are rs, ps, po",
+        "operationId": "getGoalieStatsByID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "default": "regular"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goaliestats"
+              }
+            }
+          }
+        }
+      }
+    },
     "/goalies/ratings": {
       "get": {
         "tags": ["goalies"],
@@ -624,6 +757,45 @@
         "operationId": "getGoalieRatingsByLeague",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goalieratings"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goalies/ratings/{id}": {
+      "get": {
+        "tags": ["goalies"],
+        "summary": "List Single Goalie Ratings",
+        "description": "Returns Single Goalie's Ratings for a League",
+        "operationId": "getGoalieRatingsByID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
           {
             "name": "league",
             "in": "query",
@@ -1703,6 +1875,43 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Livestream"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fantasy": {
+      "get": {
+        "tags": ["fantasy"],
+        "summary": "List of Fantasy Information",
+        "description": "A listing of the fantasy information about SHL players.",
+        "operationId": "getFantastyInformation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "position",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Fantasy"
               }
             }
           }
@@ -3523,6 +3732,27 @@
         "isLive": {
           "type": "string",
           "example": "live"
+        }
+      }
+    },
+    "Fantasy": {
+      "type": "object",
+      "properties": {
+        "seasonID": {
+          "type": "number",
+          "example": 59
+        },
+        "position": {
+          "type": "string",
+          "example": "D"
+        },
+        "name": {
+          "type": "string",
+          "example": "Lyle Odelein III"
+        },
+        "fantasyPoints": {
+          "type": "number",
+          "example": 588.2
         }
       }
     }

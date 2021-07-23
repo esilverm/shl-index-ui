@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary  */
 import React from 'react';
 import styled from 'styled-components';
+
 import Link from '../components/LinkWithSeason';
 
 // Determine prop types when actually implementing in conjunction with backend
@@ -51,7 +52,7 @@ function ScoreBarItem({
       {isDate ? (
         <Date role="presentation" aria-label="Score Bar Date">
           <span aria-label="Date">
-            {months[+gameid.split('-')[1]]} {gameid.split('-')[2]}
+            {months[+gameid.split('-')[1]]}<br />{gameid.split('-')[2]}
           </span>
         </Date>
       ) : (

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
 import useSWR from 'swr';
+
 import { LivestreamData } from '../pages/api/v1/livestreams/index';
-import { PulseLoader } from 'react-spinners';
 
 function Livestream({ currentLeague = 'shl' }: { currentLeague: string }): JSX.Element {
   const [isLive, setIsLive] = useState(false);

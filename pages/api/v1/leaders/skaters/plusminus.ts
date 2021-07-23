@@ -1,6 +1,7 @@
+import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
-import Cors from 'cors';
+
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
 
@@ -18,6 +19,7 @@ export default async (
     league = 0,
     season: seasonid,
     type: longType = 'regular',
+    position = 'all',
     limit = 10,
     desc = true,
   } = req.query;
@@ -59,6 +61,15 @@ export default async (
       ON s.TeamID = t.TeamID
       AND s.SeasonID = t.SeasonID
       AND s.LeagueID = t.LeagueID
+    INNER JOIN corrected_player_ratings as r
+      ON s.SeasonID = r.SeasonID 
+      AND s.LeagueID = r.LeagueID
+      AND s.PlayerID = r.PlayerID `
+      ).append(
+        position === 'd' ? 'AND ( r.LD = 20 OR r.RD = 20 )' :
+        position === 'f' ? 'AND NOT ( r.LD = 20 OR r.RD = 20 )' : ''
+      ).append(
+        SQL`
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
     ORDER BY plusMinus `
