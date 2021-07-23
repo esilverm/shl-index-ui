@@ -222,7 +222,7 @@ Props): JSX.Element {
           </button>{' '}
           <button
             className="-next"
-            onClick={previousPage}
+            onClick={() => previousPage()}
             disabled={!canPreviousPage}
           >
             {'<'}
@@ -249,7 +249,7 @@ Props): JSX.Element {
           </div>
           <button
             className="-next"
-            onClick={nextPage}
+            onClick={() => nextPage()}
             disabled={!canNextPage}
           >
             {'>'}
