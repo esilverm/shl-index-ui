@@ -1,7 +1,7 @@
 import React from 'react';
 
-// import Link from '../../components/LinkWithSeason';
 import { Goalie } from '../..';
+import Link from '../../components/LinkWithSeason';
 
 import ScoreTable from '.';
 
@@ -18,6 +18,7 @@ function GoalieScoreTable({
   teamPage = false,
   searching = false,
 }: Props): JSX.Element {
+  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
   const columnData = [
     {
       Header: '',
@@ -26,8 +27,23 @@ function GoalieScoreTable({
         {
           Header: 'Player',
           id: 'player-table-player',
-          accessor: 'name',
+          accessor: ({ name, league, id }) => [
+            name,
+            league,
+            id,
+          ],
           // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <Link
+                href="/[league]/player/[id]"
+                as={`/${leagues[value[1]]}/player/${value[2]}`}
+                passHref
+              >
+                {value[0]}
+              </Link>
+            );
+          },
         },
         {
           Header: 'Team',

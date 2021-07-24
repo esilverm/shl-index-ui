@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table';
 import styled from 'styled-components';
@@ -133,15 +132,6 @@ function RatingsTable({
     updateFilter(event.target.value);
   }, [setSearchText, updateFilter]);
 
-  const getPlayerInfo = ((name) => {
-    const matchedPlayer = data.filter((player) => {
-      return player.name === name;
-    });
-
-    const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
-    return [leagues[matchedPlayer[0].league], matchedPlayer[0].id]
-  });
-
   return (
     <>
       {!hasData && <Notice>No results found</Notice>}
@@ -181,48 +171,39 @@ function RatingsTable({
               {hasData && pagination
                 ? page.map((row, i) => {
                   prepareRow(row);
-                  const info = getPlayerInfo(row.cells[0]['value']);
-                  const url = '/' + info[0] + '/player/' + info[1];
-
                   return (
-                    <Link href={url} key={i}>
-                      <tr {...row.getRowProps()} key={i}>
-                        {row.cells.map((cell, i) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              key={i}
-                              className={cell.column.isSorted ? 'sorted' : ''}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    </Link>
+                    <tr {...row.getRowProps()} key={i}>
+                      {row.cells.map((cell, i) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            key={i}
+                            className={cell.column.isSorted ? 'sorted' : ''}
+                          >
+                            {cell.render('Cell')}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   );
                 })
                 : rows.map((row, i) => {
                   prepareRow(row);
-                  const info = getPlayerInfo(row.cells[0]['value']);
-                  const url = '/' + info[0] + '/player/' + info[1];
 
                   return (
-                    <Link href={url} key={i}>
-                      <tr {...row.getRowProps()} key={i}>
-                        {row.cells.map((cell, i) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              key={i}
-                              className={cell.column.isSorted ? 'sorted' : ''}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    </Link>
+                    <tr {...row.getRowProps()} key={i}>
+                      {row.cells.map((cell, i) => {
+                        return (
+                          <td
+                            {...cell.getCellProps()}
+                            key={i}
+                            className={cell.column.isSorted ? 'sorted' : ''}
+                          >
+                            {cell.render('Cell')}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   );
                 })}
             </TableBody>

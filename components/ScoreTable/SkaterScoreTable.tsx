@@ -1,7 +1,7 @@
 import React from 'react';
 
-// import Link from '../../components/LinkWithSeason';
 import { Player } from '../..';
+import Link from '../../components/LinkWithSeason';
 
 import ScoreTable from '.';
 
@@ -18,9 +18,10 @@ function SkaterScoreTable({
   teamPage = false,
   searching = false,
 }: Props): JSX.Element {
+  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
+
   const calculateTimeOnIce = (toi: number, gamesPlayed: number) =>
-    `${(toi / gamesPlayed / 60) >> 0}:${
-      (toi / gamesPlayed) % 60 >> 0 < 10 ? '0' : ''
+    `${(toi / gamesPlayed / 60) >> 0}:${(toi / gamesPlayed) % 60 >> 0 < 10 ? '0' : ''
     }${(toi / gamesPlayed) % 60 >> 0}`;
 
   const columnData = [
@@ -31,8 +32,23 @@ function SkaterScoreTable({
         {
           Header: 'Player',
           id: 'player-table-player',
-          accessor: 'name',
+          accessor: ({ name, league, id }) => [
+            name,
+            league,
+            id,
+          ],
           // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <Link
+                href="/[league]/player/[id]"
+                as={`/${leagues[value[1]]}/player/${value[2]}`}
+                passHref
+              >
+                {value[0]}
+              </Link>
+            );
+          },
         },
         {
           Header: 'Pos',
