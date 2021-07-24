@@ -135,22 +135,16 @@ function PlayerPage({ league, id }: Props): JSX.Element {
               Failed to load player info. Please reload the page to try again.
             </ErrorBlock>
           )}
-          <Table>
-            <TableRow>
-              <TableData>
-                <Button onClick={() => router.back()} inverse>
-                  <ButtonContent>
-                    Go Back
-                  </ButtonContent>
-                </Button>
-              </TableData>
-              <TableData>
-                <SelectorWrapper>
-                  <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-                </SelectorWrapper>
-              </TableData>
-            </TableRow>
-          </Table>
+          <ControlWrapper>
+            <Button onClick={() => router.back()} inverse>
+              <ButtonContent>
+                Go Back
+              </ButtonContent>
+            </Button>
+            <SelectorWrapper>
+              <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+            </SelectorWrapper>
+          </ControlWrapper>
           {!isLoading && (
             <>
               <CenteredContent>
@@ -296,7 +290,7 @@ const ButtonContent = styled.div`
 `;
 
 const Button = styled.button`
-  width: 100%;
+  width: 250px;
   background-color: transparent;
   padding: 6px 16px;
   border: 1px solid
@@ -304,6 +298,7 @@ const Button = styled.button`
   color: ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
   cursor: pointer;
   border-radius: 5px;
+  float:left;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue600};
@@ -318,15 +313,9 @@ const Button = styled.button`
   }
 `;
 
-const Table = styled.table`
-  width: 100%;
-`;
-
-const TableRow = styled.tr`
-`;
-
-const TableData = styled.td`
-  padding: 10px;
+const ControlWrapper = styled.div`
+  margin: 3%;
+  height: 25px;
 `;
 
 interface StyleProps {
