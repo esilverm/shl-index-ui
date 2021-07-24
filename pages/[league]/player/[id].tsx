@@ -194,8 +194,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
                 </TableContainer>
               </TableWrapper>
             </>
-          )
-          }
+          )}
         </Main >
       </Container>
       <Footer />
