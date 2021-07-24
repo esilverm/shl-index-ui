@@ -108,7 +108,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
         }
       }
     }
-  }, [skaterStats, skaterInfo, goalieStats, goalieInfo]);
+  });
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
     setFilterSeasonType(seasonType);
