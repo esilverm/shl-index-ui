@@ -290,7 +290,7 @@ const ButtonContent = styled.div`
 `;
 
 const Button = styled.button`
-  width: 250px;
+  width: 125px;
   background-color: transparent;
   padding: 6px 16px;
   border: 1px solid
