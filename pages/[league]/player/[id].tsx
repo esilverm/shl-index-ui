@@ -150,19 +150,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
               <CenteredContent>
                 <PlayerInfo>{playerName} | {playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
               </CenteredContent>
-              {!isSkater && (
-                <>
-                  <TableHeading>Stats</TableHeading>
-                  <TableWrapper>
-                    <TableContainer>
-                      {goalieStats && (
-                        <SingleGoalieScoreTable data={goalieStats} />
-                      )}
-                    </TableContainer>
-                  </TableWrapper>
-                </>
-              )}
-              {isSkater && (
+              {isSkater === true ? (
                 <>
                   <TableHeading>Stats</TableHeading>
                   <TableWrapper>
@@ -181,15 +169,25 @@ function PlayerPage({ league, id }: Props): JSX.Element {
                     </TableContainer>
                   </TableWrapper>
                 </>
+              ) : (
+                <>
+                  <TableHeading>Stats</TableHeading>
+                  <TableWrapper>
+                    <TableContainer>
+                      {goalieStats && (
+                        <SingleGoalieScoreTable data={goalieStats} />
+                      )}
+                    </TableContainer>
+                  </TableWrapper>
+                </>
               )}
               <TableHeading>Ratings</TableHeading>
               <TableWrapper>
                 <TableContainer>
-                  {!isSkater && (
-                    <SingleGoalieRatingsTable data={goalieRatings} />
-                  )}
-                  {isSkater && (
+                  {isSkater === true ? (
                     <SinglePlayerRatingsTable data={skaterRatings} />
+                  ) : (
+                    <SingleGoalieRatingsTable data={goalieRatings} />
                   )}
                 </TableContainer>
               </TableWrapper>
