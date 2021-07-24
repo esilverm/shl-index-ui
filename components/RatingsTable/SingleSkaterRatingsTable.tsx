@@ -2,8 +2,7 @@ import React from 'react';
 
 // import Link from '../../components/LinkWithSeason';
 import { PlayerRatings } from '../..';
-
-import SingleRatingsTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<PlayerRatings>;
@@ -202,12 +201,13 @@ function SinglePlayerRatingsTable({
   ];
 
   return (
-    <SingleRatingsTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
       searching={searching}
+      sortBySeason={true}
     />
   );
 }

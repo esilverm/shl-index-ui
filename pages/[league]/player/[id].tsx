@@ -7,12 +7,12 @@ import styled from 'styled-components';
 
 import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
+import SingleGoalieRatingsTable from '../../../components/RatingsTable/SingleGoalieRatingsTable';
+import SinglePlayerRatingsTable from '../../../components/RatingsTable/SingleSkaterRatingsTable';
+import SingleGoalieScoreTable from '../../../components/ScoreTable/SingleGoalieScoreTable';
+import SingleSkaterAdvStatsTable from '../../../components/ScoreTable/SingleSkaterAdvStatsTable';
+import SingleSkaterScoreTable from '../../../components/ScoreTable/SingleSkaterScoreTable';
 import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
-import SingleGoalieRatingsTable from '../../../components/SingleRatingsTable/SingleGoalieRatingsTable';
-import SinglePlayerRatingsTable from '../../../components/SingleRatingsTable/SingleSkaterRatingsTable';
-import SingleGoalieScoreTable from '../../../components/SingleScoreTable/SingleGoalieScoreTable';
-import SingleSkaterAdvStatsTable from '../../../components/SingleScoreTable/SingleSkaterAdvStatsTable';
-import SingleSkaterScoreTable from '../../../components/SingleScoreTable/SingleSkaterScoreTable';
 import useGoalieInfo from '../../../hooks/useGoalieInfo';
 import useGoalieRatingsId from '../../../hooks/useGoalieRatingsId';
 import useGoalieStatsId from '../../../hooks/useGoalieStatsId';

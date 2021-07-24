@@ -2,8 +2,7 @@ import React from 'react';
 
 // import Link from '../../components/LinkWithSeason';
 import { Player } from '../..';
-
-import SingleScoreTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<Player>;
@@ -145,12 +144,13 @@ function SingleSkaterAdvStatsTable({
   ];
 
   return (
-    <SingleScoreTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
       searching={searching}
+      sortBySeason={true}
     />
   );
 }

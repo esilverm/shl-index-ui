@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Player } from '../..';
 import Link from '../../components/LinkWithSeason';
-
-import ScoreTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<Player>;
@@ -163,7 +162,7 @@ function SkaterAdvStatsTable({
   ];
 
   return (
-    <ScoreTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}

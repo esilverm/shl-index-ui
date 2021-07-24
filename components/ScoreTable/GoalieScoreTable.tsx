@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Goalie } from '../..';
 import Link from '../../components/LinkWithSeason';
-
-import ScoreTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<Goalie>;
@@ -127,7 +126,7 @@ function GoalieScoreTable({
   ];
 
   return (
-    <ScoreTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}

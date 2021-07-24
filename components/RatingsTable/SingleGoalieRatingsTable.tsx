@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { GoalieRatings } from '../..';
-
-import SingleRatingsTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<GoalieRatings>;
@@ -127,12 +126,13 @@ function SingleGoalieRatingsTable({
   ];
 
   return (
-    <SingleRatingsTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}
       teamPage={teamPage}
       searching={searching}
+      sortBySeason={true}
     />
   );
 }

@@ -2,8 +2,7 @@ import React from 'react';
 
 import { GoalieRatings } from '../..';
 import Link from '../../components/LinkWithSeason';
-
-import RatingsTable from '.';
+import PlayerTable from '../PlayerTable';
 
 interface Props {
   data: Array<GoalieRatings>;
@@ -146,7 +145,7 @@ function GoalieRatingsTable({
   ];
 
   return (
-    <RatingsTable
+    <PlayerTable
       data={players}
       columnData={columnData}
       pagination={pagination}

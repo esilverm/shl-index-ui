@@ -4,13 +4,15 @@ import styled from 'styled-components';
 
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
-import { Player, Goalie, SearchType } from '../..';
-import SearchBar from '../SearchBar/SearchBar';
+import { Player, Goalie, PlayerRatings, GoalieRatings, SearchType } from '../';
+
+import SearchBar from './SearchBar/SearchBar';
 interface Columns {
   Header: string;
   id?: string;
   title?: string;
   accessor: string | ((stats: Player) => string);
+  Cell?: string;
 }
 
 interface ColumnData {
@@ -20,20 +22,21 @@ interface ColumnData {
 }
 
 interface Props {
-  data: Array<Player | Goalie>;
+  data: Array<Player | Goalie | PlayerRatings | GoalieRatings>;
   columnData: Array<ColumnData>;
   pagination?: boolean;
   teamPage?: boolean;
   searching?: boolean;
-  // isLoading: boolean;
+  sortBySeason?: boolean;
 }
 
-function ScoreTable({
+function PlayerTable({
   data: players,
   pagination = false,
   columnData,
   teamPage = false,
   searching = false,
+  sortBySeason = false,
 }: // isLoading
   Props): JSX.Element {
   // ! add loading state
@@ -55,10 +58,15 @@ function ScoreTable({
   }, []);
 
   const initialState = useMemo(() => {
-    if (players[0] && 'wins' in players[0]) {
+    if (sortBySeason === true) {
+      return { sortBy: [{ id: 'player-table-season', desc: true }] };
+    } else if (players[0] && 'wins' in players[0]) {
       return { sortBy: [{ id: 'wins', desc: true }] };
+    } else if (players[0] && 'points' in players[0]) {
+      return { sortBy: [{ id: 'points', desc: true }] };
+    } else {
+      return { sortBy: [{ id: '', desc: true }] };
     }
-    return { sortBy: [{ id: 'points', desc: true }] };
   }, []);
 
   let table;
@@ -103,7 +111,7 @@ function ScoreTable({
   // search logic
   // no need for position for goalies
   const searchTypes: Array<SearchType> =
-    players[0] && 'wins' in players[0]
+    (players[0] && 'wins' in players[0]) || (players[0] && 'blocker' in players[0])
       ? [{ text: 'Name', id: 'player-table-player' }]
       : [
         { text: 'Name', id: 'player-table-player' },
@@ -429,4 +437,4 @@ const Pagination = styled.div`
   }
 `;
 
-export default ScoreTable;
+export default PlayerTable;
