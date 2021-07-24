@@ -89,26 +89,37 @@ function PlayerPage({ league, id }: Props): JSX.Element {
         || isErrorSkaterStats || isErrorSkaterInfo || isErrorGoalieInfo) {
         setPlayerError(true);
       } else {
-        if (skaterStats !== undefined && skaterInfo !== undefined) {
-          if (skaterStats.length > 0) {
-            setIsSkater(true);
-            setPlayerName(skaterStats[0].name);
-            setPlayerPosition(skaterStats[0].position);
-            setPlayerTeam(skaterStats[0].team.toString());
-            setPlayerHeight(skaterInfo[0].height.toString());
-            setPlayerWeight(skaterInfo[0].weight.toString());
-          } else {
-            setIsSkater(false);
-            setPlayerName(goalieStats[0].name);
-            setPlayerPosition('G');
-            setPlayerTeam(goalieStats[0].team.toString());
-            setPlayerHeight(goalieInfo[0].height.toString());
-            setPlayerWeight(goalieInfo[0].weight.toString());
-          }
+        if (skaterStats.length > 0) {
+          setIsSkater(true);
+          setPlayerName(skaterStats[0].name);
+          setPlayerPosition(skaterStats[0].position);
+          setPlayerTeam(skaterStats[0].team.toString());
+          setPlayerHeight(skaterInfo[0].height.toString());
+          setPlayerWeight(skaterInfo[0].weight.toString());
+        } else {
+          setIsSkater(false);
+          setPlayerName(goalieStats[0].name);
+          setPlayerPosition('G');
+          setPlayerTeam(goalieStats[0].team.toString());
+          setPlayerHeight(goalieInfo[0].height.toString());
+          setPlayerWeight(goalieInfo[0].weight.toString());
         }
+
       }
     }
-  });
+  }, [
+    isLoadingGoalieRating,
+    isLoadingPlayerRating,
+    isLoadingGoalieStats,
+    isLoadingSkaterStats,
+    isLoadingGoalieInfo,
+    isLoadingSkaterInfo,
+    skaterStats,
+    skaterInfo,
+    goalieStats,
+    goalieInfo,
+    isLoading
+  ]);
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
     setFilterSeasonType(seasonType);
