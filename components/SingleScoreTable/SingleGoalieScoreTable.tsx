@@ -27,7 +27,6 @@ function SingleGoalieScoreTable({
           Header: 'Season',
           id: 'player-table-season',
           accessor: 'season',
-          // Create cell which contains link to player
         },
         {
           Header: 'Team',
