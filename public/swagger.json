@@ -839,6 +839,13 @@
             "name": "season",
             "in": "query",
             "type": "number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "default": "Regular Season",
+            "description": "'Pre-Season', 'Regular Season', or 'Playoffs'"
           }
         ],
         "responses": {
@@ -857,7 +864,7 @@
     "/standings": {
       "get": {
         "tags": ["results"],
-        "summary": "List standings",
+        "summary": "List Standings",
         "description": "Returns Standings by League",
         "operationId": "getStandingsByLeague",
         "produces": ["application/json"],
