@@ -839,6 +839,13 @@
             "name": "season",
             "in": "query",
             "type": "number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "default": "Regular Season",
+            "description": "'Pre-Season', 'Regular Season', or 'Playoffs'"
           }
         ],
         "responses": {
