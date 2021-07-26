@@ -864,7 +864,7 @@
     "/standings": {
       "get": {
         "tags": ["results"],
-        "summary": "List standings",
+        "summary": "List Standings",
         "description": "Returns Standings by League",
         "operationId": "getStandingsByLeague",
         "produces": ["application/json"],
