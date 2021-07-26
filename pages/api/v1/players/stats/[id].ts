@@ -57,10 +57,17 @@ export default async (
             AND s.SeasonID=${+seasonid}
           `
                 : ''
+        ).append(
+            SQL`ORDER BY s.SeasonID DESC`
         )
     );
 
-    const parsed = [...playerStats].map((player) => {
+    // remove 0 season
+    const filtered = playerStats.filter((item) => {
+        return item.SeasonID !== 0;
+    });
+
+    const parsed = [...filtered].map((player) => {
         const position = ['LD', 'RD', 'LW', 'C', 'RW'][
             [+player.LD, +player.RD, +player.LW, +player.C, +player.RW].indexOf(20)
         ];
