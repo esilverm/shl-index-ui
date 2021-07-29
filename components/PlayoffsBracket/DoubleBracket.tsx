@@ -22,6 +22,11 @@ const LEAGUE_WIN_CONDITION = {
   wjc: 1,
 };
 
+const CONFERENCE = {
+  EASTERN: 0,
+  WESTERN: 1
+};
+
 function DoubleBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
@@ -111,7 +116,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
             lost={hasHomeTeamWon}
           >
             <AwayLogo />
-            <span>{awayTeam.name}</span>
+            <span>{awayTeam.abbr}</span>
             <SeriesScore>{awayTeam.wins}</SeriesScore>
           </SeriesTeam>
         </Link>
@@ -126,7 +131,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
             lost={hasAwayTeamWon}
           >
             <HomeLogo />
-            <span>{homeTeam.name}</span>
+            <span>{homeTeam.abbr}</span>
             <SeriesScore>{homeTeam.wins}</SeriesScore>
           </SeriesTeam>
         </Link>
@@ -173,17 +178,20 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     );
   };
 
-  const renderBracket = (conference) => {
+  const renderBracket = (bracketConference) => {
     const totalConferenceRounds = 3;
-    const rounds = [];
     const seriesPerRound = [4, 2, 1];
+    const rounds = [];
 
     for (let i = 0; i < totalConferenceRounds; i++) {
       if (i < data.length) {
-        const playedRound = conference === 0 ? data[i].slice(0, seriesPerRound[i]) : data[i].slice(-seriesPerRound[i]);
-        rounds.push(renderRound(playedRound, conference, i));
+        const conferenceRound = data[i].filter(series =>
+          series.team1.conference === series.team2.conference &&
+          series.team1.conference === bracketConference
+        ).sort((a, b) => a.team1.division + a.team2.division > b.team1.division + b.team2.division ? 1 : -1);
+        rounds.push(renderRound(conferenceRound, bracketConference, i));
       } else {
-        rounds.push(renderPlaceholderRound(seriesPerRound[i], conference, i));
+        rounds.push(renderPlaceholderRound(seriesPerRound[i], bracketConference, i));
       }
     }
 
@@ -192,9 +200,9 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
   return (
     <Container>
-      <Bracket conference={0}>{renderBracket(0)}</Bracket>
+      <Bracket conference={CONFERENCE.WESTERN}>{renderBracket(CONFERENCE.WESTERN)}</Bracket>
       {renderPlaceholderRound(1, -1, 3)}
-      <Bracket conference={1}>{renderBracket(1)}</Bracket>
+      <Bracket conference={CONFERENCE.EASTERN}>{renderBracket(CONFERENCE.EASTERN)}</Bracket>
     </Container>
   );
 }
@@ -278,7 +286,7 @@ const Bracket = styled.div<{
 }>`
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row${({ conference }) => conference === 1 && '-reverse'};
+  flex-direction: row${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
   align-items: center;
 `;
 
@@ -289,7 +297,7 @@ const Round = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 160px;
-  margin${({ conference }) => conference === -1 ? '' : conference === 1 ? '-left' : '-right'}: 20px;
+  margin${({ conference }) => conference === -1 ? '' : conference === CONFERENCE.EASTERN ? '-left' : '-right'}: 20px;
 
   h2 {
     margin-bottom: 10px;
