@@ -5,7 +5,8 @@ import styled from 'styled-components';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
-import PlayoffsBracket from '../../components/PlayoffsBracket';
+// import PlayoffsBracket from '../../components/PlayoffsBracket/SingleBracket';
+import PlayoffsBracket from '../../components/PlayoffsBracket/DoubleBracket';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
@@ -19,8 +20,8 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
-  const [isPlayoffs, setIsPlayoffs] = useState(false);
+  const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs'); // TODO
+  const [isPlayoffs, setIsPlayoffs] = useState(true); // TODO
   const { data, isLoading } = useStandings(league, display, seasonType);
 
   const onSeasonTypeSelect = (type) => {

@@ -7,9 +7,8 @@ import tinycolor from 'tinycolor2';
 import {
   PlayoffsRound,
   PlayoffsSeries,
-} from '../pages/api/v1/standings/playoffs';
-
-import Link from './LinkWithSeason';
+} from '../../pages/api/v1/standings/playoffs';
+import Link from '../LinkWithSeason';
 
 interface Props {
   data: Array<PlayoffsRound>;
@@ -23,7 +22,7 @@ const LEAGUE_WIN_CONDITION = {
   wjc: 1,
 };
 
-function PlayoffsBracket({ data, league }: Props): JSX.Element {
+function SingleBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
@@ -43,7 +42,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     // Dynamically import svg icons based on the league chosen
     (async () => {
       const { default: s } = await import(
-        `../public/team_logos/${league.toUpperCase()}/`
+        `../../public/team_logos/${league.toUpperCase()}/`
       );
 
       setSprites(() => s);
@@ -303,4 +302,4 @@ const SeriesScore = styled.div`
   margin-left: auto;
 `;
 
-export default React.memo(PlayoffsBracket);
+export default React.memo(SingleBracket);
