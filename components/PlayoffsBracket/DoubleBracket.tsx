@@ -69,10 +69,12 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !teamData);
   }, [isLoadingAssets, teamData]);
 
-  const lastRoundInData = useCallback(() => data.splice(-1), [data]);
+  const lastRoundInData = useCallback(() => data ? [data[data.length - 1]] : [], [data]);
 
   const hasFinalsRoundData = useCallback(() => {
     const lastRound = lastRoundInData();
+    if (lastRound.length === 0) return false;
+
     const series = lastRound[0];
     const isSingleSeries = series.length === 1;
     const hasMixedConferences = series[0].team1.conference !== series[0].team2.conference;
@@ -184,7 +186,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
         return {
           ...winningTeam,
-          wins: 0 // Show 0 wins as placeholder series hasn't started yet
+          wins: undefined // Don't show any wins as placeholder series hasn't started yet
         };
       });
       series.push(
