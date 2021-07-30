@@ -17,13 +17,13 @@ export interface PlayoffsSeries {
 }
 
 interface PlayoffTeam {
-  id: number;
-  wins: number;
-  name: string;
-  nickname: string;
-  abbr: string;
-  conference: number;
-  division: number;
+  id?: number;
+  wins?: number;
+  name?: string;
+  nickname?: string;
+  abbr?: string;
+  conference?: number;
+  division?: number;
 }
 
 export type PlayoffsRound = Array<PlayoffsSeries>;

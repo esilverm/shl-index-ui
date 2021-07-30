@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
@@ -24,8 +24,18 @@ const LEAGUE_WIN_CONDITION = {
 
 const CONFERENCE = {
   EASTERN: 0,
-  WESTERN: 1
+  WESTERN: 1,
+  MIXED: -1
 };
+
+const getSeriesByConference = (round, bracketConference) => round.filter(series =>
+  series.team1.conference === series.team2.conference &&
+  series.team1.conference === bracketConference
+);
+
+const sortByDivision = round => round.sort((a, b) =>
+  a.team1.division + a.team2.division > b.team1.division + b.team2.division ? 1 : -1
+);
 
 function DoubleBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
@@ -59,10 +69,21 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !teamData);
   }, [isLoadingAssets, teamData]);
 
+  const lastRoundInData = useCallback(() => data.splice(-1), [data]);
+
+  const hasFinalsRoundData = useCallback(() => {
+    const lastRound = lastRoundInData();
+    const series = lastRound[0];
+    const isSingleSeries = series.length === 1;
+    const hasMixedConferences = series[0].team1.conference !== series[0].team2.conference;
+
+    return isSingleSeries && hasMixedConferences;
+  }, [lastRoundInData]);
+
   if (teamError || isLoading || !data)
     return <PlayoffsBracketSkeleton isError={teamError} />;
 
-  const renderSeries = (series: PlayoffsSeries) => {
+  const renderSeries = (series: Omit<PlayoffsSeries, 'league' | 'season'>) => {
     const isInternationalLeague = league === 'iihf' || league === 'wjc';
     const primaryColors = {
       away:
@@ -74,11 +95,11 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     };
     const awayTeam = {
       id: series.team1.id >= 0 ? series.team1.id : -1,
-      abbr: series.team1.abbr ?? 'TEST',
+      abbr: series.team1.abbr ?? '',
       name: isInternationalLeague
         ? series.team1.nickname ?? 'Away Team'
         : series.team1.name ?? 'Away Team',
-      wins: series.team1.wins ?? 0,
+      wins: series.team1.wins ?? '',
       color: {
         background: primaryColors.away,
         isDark: tinycolor(primaryColors.away).isDark(),
@@ -86,11 +107,11 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     };
     const homeTeam = {
       id: series.team2.id >= 0 ? series.team2.id : -1,
-      abbr: series.team2.abbr ?? 'TEST',
+      abbr: series.team2.abbr ?? '',
       name: isInternationalLeague
         ? series.team2.nickname ?? 'Home Team'
         : series.team2.name ?? 'Home Team',
-      wins: series.team2.wins ?? 0,
+      wins: series.team2.wins ?? '',
       color: {
         background: primaryColors.home,
         isDark: tinycolor(primaryColors.home).isDark(),
@@ -139,23 +160,6 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     );
   };
 
-  const renderPlaceholderSeries = (index) => (
-      <Series key={index}>
-        <SeriesTeam
-          color={'#CCC'}
-          isDark={false}
-          lost={false}
-        >
-        </SeriesTeam>
-        <SeriesTeam
-          color={'#DDD'}
-          isDark={false}
-          lost={false}
-        >
-        </SeriesTeam>
-      </Series>
-  );
-
   const renderRound = (round, conference, index) => (
     <Round key={index} conference={conference}>
       <h2>{round.length === 1 ? 'Finals' : `Round ${index + 1}`}</h2>
@@ -163,16 +167,37 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     </Round>
   );
 
-  const renderPlaceholderRound = (numSeries, conference, index) => {
+  const renderPlaceholderRound = (numSeries, previousRound, conference, index) => {
     const series = [];
 
-    for (let i = 1; i <= numSeries; i++) {
-      series.push(renderPlaceholderSeries(i));
+    for (let i = 0; i <= numSeries; i+=2) {
+      const previousSeries = [previousRound[i], previousRound[i+1]];
+      const previousWinners = previousSeries.map(series => {
+        if (!series) return {};
+        let winningTeam = {};
+
+        if (series.team1.wins === LEAGUE_WIN_CONDITION[league]) {
+          winningTeam = series.team1;
+        } else if (series.team2.wins === LEAGUE_WIN_CONDITION[league]) {
+          winningTeam = series.team2;
+        }
+
+        return {
+          ...winningTeam,
+          wins: 0 // Show 0 wins as placeholder series hasn't started yet
+        };
+      });
+      series.push(
+        renderSeries({
+          team1: previousWinners[0],
+          team2: previousWinners[1]
+        })
+      );
     }
 
     return (
       <Round key={index} conference={conference}>
-        <h2>{numSeries === 1 && conference === -1 ? 'Finals' : `Round ${index + 1}`}</h2>
+        <h2>{numSeries === 1 && conference === CONFERENCE.MIXED ? 'Finals' : `Round ${index + 1}`}</h2>
         {series}
       </Round>
     );
@@ -185,23 +210,26 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
     for (let i = 0; i < totalConferenceRounds; i++) {
       if (i < data.length) {
-        const conferenceRound = data[i].filter(series =>
-          series.team1.conference === series.team2.conference &&
-          series.team1.conference === bracketConference
-        ).sort((a, b) => a.team1.division + a.team2.division > b.team1.division + b.team2.division ? 1 : -1);
-        rounds.push(renderRound(conferenceRound, bracketConference, i));
+        const conferenceRound = getSeriesByConference(data[i], bracketConference);
+        const sortedRound = sortByDivision(conferenceRound);
+        rounds.push(renderRound(sortedRound, bracketConference, i));
       } else {
-        rounds.push(renderPlaceholderRound(seriesPerRound[i], bracketConference, i));
+        const previousRound = data[i-1] ? getSeriesByConference(data[i-1], bracketConference) : [];
+        const sortedRound = sortByDivision(previousRound);
+        rounds.push(renderPlaceholderRound(seriesPerRound[i], sortedRound, bracketConference, i));
       }
     }
 
     return rounds;
   };
 
+  const hasFinalsRound = hasFinalsRoundData();
+
   return (
     <Container>
       <Bracket conference={CONFERENCE.WESTERN}>{renderBracket(CONFERENCE.WESTERN)}</Bracket>
-      {renderPlaceholderRound(1, -1, 3)}
+      {!hasFinalsRound && renderPlaceholderRound(1, [], CONFERENCE.MIXED, 3)}
+      {hasFinalsRound && renderRound(1, lastRoundInData(), CONFERENCE.MIXED)}
       <Bracket conference={CONFERENCE.EASTERN}>{renderBracket(CONFERENCE.EASTERN)}</Bracket>
     </Container>
   );
