@@ -256,7 +256,7 @@ function PlayoffsBracketSkeleton({
         <div style={{ marginLeft: '5px' }}></div>
         <Skeleton width={45} height={45} />
         <span>
-          <Skeleton width={100} />
+          <Skeleton width={60} />
         </span>
         <SeriesScore>
           <Skeleton />
@@ -266,7 +266,7 @@ function PlayoffsBracketSkeleton({
         <div style={{ marginLeft: '5px' }}></div>
         <Skeleton width={45} height={45} />
         <span>
-          <Skeleton width={100} />
+          <Skeleton width={60} />
         </span>
         <SeriesScore>
           <Skeleton />
@@ -275,18 +275,18 @@ function PlayoffsBracketSkeleton({
     </Series>
   );
 
-  const renderSkeletonBracket = () => (
-    <Bracket>
+  const renderSkeletonBracket = (conference) => (
+    <Bracket conference={conference}>
       <Round>
-        <Skeleton width={150} height={30} />
+        <Skeleton width={100} height={30} />
         {fakeArray(4).map((_, i) => renderSkeletonSeries(i))}
       </Round>
       <Round>
-        <Skeleton width={150} height={30} />
+        <Skeleton width={100} height={30} />
         {fakeArray(2).map((_, i) => renderSkeletonSeries(i))}
       </Round>
       <Round>
-        <Skeleton width={150} height={30} />
+        <Skeleton width={100} height={30} />
         <Series>{renderSkeletonSeries(0)}</Series>
       </Round>
     </Bracket>
@@ -300,7 +300,8 @@ function PlayoffsBracketSkeleton({
             A technical error occurred. Please reload the page to try again.
           </strong>
         )}
-        {renderSkeletonBracket()}
+        {renderSkeletonBracket(CONFERENCE.WESTERN)}
+        {renderSkeletonBracket(CONFERENCE.EASTERN)}
       </Container>
     </SkeletonTheme>
   );
