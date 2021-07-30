@@ -120,6 +120,8 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
       },
     };
 
+    const isAwayTeamPlaceholder = awayTeam.id === -1;
+    const isHomeTeamPlaceholder = homeTeam.id === -1;
     const hasAwayTeamWon = awayTeam.wins === LEAGUE_WIN_CONDITION[league];
     const hasHomeTeamWon = homeTeam.wins === LEAGUE_WIN_CONDITION[league];
     const temp = () => <div></div>;
@@ -132,11 +134,13 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
           href="/[league]/team/[id]"
           as={`/${league}/team/${awayTeam.id}`}
           passHref
+          disabled={isAwayTeamPlaceholder}
         >
           <SeriesTeam
             color={awayTeam.color.background}
             isDark={awayTeam.color.isDark}
             lost={hasHomeTeamWon}
+            disabled={isAwayTeamPlaceholder}
           >
             <AwayLogo />
             <span>{awayTeam.abbr}</span>
@@ -147,11 +151,13 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
           href="/[league]/team/[id]"
           as={`/${league}/team/${homeTeam.id}`}
           passHref
+          disabled={isHomeTeamPlaceholder}
         >
           <SeriesTeam
             color={homeTeam.color.background}
             isDark={homeTeam.color.isDark}
             lost={hasAwayTeamWon}
+            disabled={isHomeTeamPlaceholder}
           >
             <HomeLogo />
             <span>{homeTeam.abbr}</span>
@@ -206,12 +212,12 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
   };
 
   const renderBracket = (bracketConference) => {
-    const totalConferenceRounds = 3;
+    const totalBracketRounds = 3;
     const seriesPerRound = [4, 2, 1];
     const rounds = [];
 
-    for (let i = 0; i < totalConferenceRounds; i++) {
-      if (i < data.length) {
+    for (let i = 0; i < totalBracketRounds; i++) {
+      if (i < data.length) { // If we have data from FHM for the given round
         const conferenceRound = getSeriesByConference(data[i], bracketConference);
         const sortedRound = sortByDivision(conferenceRound);
         rounds.push(renderRound(sortedRound, bracketConference, i));
@@ -347,17 +353,18 @@ const SeriesTeam = styled.div<{
   color: string;
   isDark: boolean;
   lost: boolean;
+  disabled?: boolean;
 }>`
   display: flex;
   align-items: center;
   height: 55px;
   width: 160px;
-  background-color: ${(props) => props.color};
-  cursor: pointer;
+  background-color: ${({ color }) => color};
+  cursor: ${({ disabled }) => disabled ? 'default' : 'pointer'};
   letter-spacing: 0.05rem;
   font-size: 18px;
   font-weight: 600;
-  ${(props) => props.lost && 'opacity: 0.5;'}
+  ${({ lost }) => lost && 'opacity: 0.5;'}
 
   svg {
     width: 55px;
@@ -371,8 +378,8 @@ const SeriesTeam = styled.div<{
   }
 
   &:hover {
-    background-color: ${(props) =>
-      tinycolor(props.color).setAlpha(0.85).toRgbString()};
+    background-color: ${({ color, disabled }) =>
+      disabled ? color : tinycolor(color).setAlpha(0.85).toRgbString()};
   }
 `;
 
