@@ -9,6 +9,7 @@ import {
 } from '../../pages/api/v1/standings/playoffs';
 import Link from '../LinkWithSeason';
 
+import { SeriesScore } from './SingleBracket';
 import PlayoffsBracketSkeleton from './Skeleton';
 
 interface Props {
@@ -253,10 +254,6 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
-  @media screen and (max-width: 1370px) {
-    justify-content: center;
-  }
 `;
 
 const Bracket = styled.div<{
@@ -266,10 +263,6 @@ const Bracket = styled.div<{
   flex-wrap: wrap;
   flex-direction: row${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
   align-items: center;
-
-  @media screen and (max-width: 1370px) {
-    flex-direction: column;
-  }
 `;
 
 const Round = styled.div<{
@@ -327,22 +320,6 @@ const SeriesTeam = styled.div<{
     background-color: ${({ color, disabled }) =>
       disabled ? color : tinycolor(color).setAlpha(0.85).toRgbString()};
   }
-`;
-
-const SeriesScore = styled.div`
-  background-color: ${({ theme }) => theme.colors.grey900}80;
-  color: ${({ theme }) => theme.colors.grey100};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 20px;
-  padding: 0 15px;
-  font-family: Montserrat, Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 25px;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  margin-left: auto;
 `;
 
 export default React.memo(DoubleBracket);

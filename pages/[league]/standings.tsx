@@ -22,8 +22,8 @@ interface Props {
 function Standings({ league }: Props): JSX.Element {
   const containerRef = useRef(null);
   const [display, setDisplay] = useState('league');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs'); // TODO
-  const [isPlayoffs, setIsPlayoffs] = useState(true); // TODO
+  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
+  const [isPlayoffs, setIsPlayoffs] = useState(false);
   const { data, isLoading } = useStandings(league, display, seasonType);
   const windowSize = useWindowSize();
 
@@ -32,8 +32,10 @@ function Standings({ league }: Props): JSX.Element {
     setSeasonType(type);
   };
 
-  const renderDoublePlayoffsBracket = useCallback(() => 
-    data && (data[0] as PlayoffsRound).length > 4 && windowSize.width >= 1370
+  const renderDoublePlayoffsBracket = useCallback(() =>
+    // The double bracket needs enough space to properly render
+    // We fall back to the single bracket in case the window is too small
+    data && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
   , [windowSize, data]);
 
   return (
