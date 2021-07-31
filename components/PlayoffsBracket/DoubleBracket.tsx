@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
@@ -9,6 +8,8 @@ import {
   PlayoffsSeries,
 } from '../../pages/api/v1/standings/playoffs';
 import Link from '../LinkWithSeason';
+
+import PlayoffsBracketSkeleton from './Skeleton';
 
 interface Props {
   data: Array<PlayoffsRound>;
@@ -243,70 +244,6 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
   );
 }
 
-function PlayoffsBracketSkeleton({
-  isError,
-}: {
-  isError: boolean;
-}): JSX.Element {
-  const fakeArray = (length) => new Array(length).fill(0);
-
-  const renderSkeletonSeries = (i) => (
-    <Series key={i}>
-      <SeriesTeam color={'#CCC'} isDark={false} lost={false}>
-        <div style={{ marginLeft: '5px' }}></div>
-        <Skeleton width={45} height={45} />
-        <span>
-          <Skeleton width={60} />
-        </span>
-        <SeriesScore>
-          <Skeleton />
-        </SeriesScore>
-      </SeriesTeam>
-      <SeriesTeam color={'#EEE'} isDark={false} lost={false}>
-        <div style={{ marginLeft: '5px' }}></div>
-        <Skeleton width={45} height={45} />
-        <span>
-          <Skeleton width={60} />
-        </span>
-        <SeriesScore>
-          <Skeleton />
-        </SeriesScore>
-      </SeriesTeam>
-    </Series>
-  );
-
-  const renderSkeletonBracket = (conference) => (
-    <Bracket conference={conference}>
-      <Round>
-        <Skeleton width={100} height={30} />
-        {fakeArray(4).map((_, i) => renderSkeletonSeries(i))}
-      </Round>
-      <Round>
-        <Skeleton width={100} height={30} />
-        {fakeArray(2).map((_, i) => renderSkeletonSeries(i))}
-      </Round>
-      <Round>
-        <Skeleton width={100} height={30} />
-        <Series>{renderSkeletonSeries(0)}</Series>
-      </Round>
-    </Bracket>
-  );
-
-  return (
-    <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
-      <Container>
-        {isError && (
-          <strong>
-            A technical error occurred. Please reload the page to try again.
-          </strong>
-        )}
-        {renderSkeletonBracket(CONFERENCE.WESTERN)}
-        {renderSkeletonBracket(CONFERENCE.EASTERN)}
-      </Container>
-    </SkeletonTheme>
-  );
-}
-
 const Container = styled.div`
   width: 95%;
   height: 100%;
@@ -316,6 +253,10 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  @media screen and (max-width: 1370px) {
+    justify-content: center;
+  }
 `;
 
 const Bracket = styled.div<{
@@ -325,6 +266,10 @@ const Bracket = styled.div<{
   flex-wrap: wrap;
   flex-direction: row${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
   align-items: center;
+
+  @media screen and (max-width: 1370px) {
+    flex-direction: column;
+  }
 `;
 
 const Round = styled.div<{
