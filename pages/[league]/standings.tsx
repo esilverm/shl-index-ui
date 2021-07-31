@@ -1,15 +1,16 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
-// import PlayoffsBracket from '../../components/PlayoffsBracket/SingleBracket';
-import PlayoffsBracket from '../../components/PlayoffsBracket/DoubleBracket';
+import DoubleBracket from '../../components/PlayoffsBracket/DoubleBracket';
+import SingleBracket from '../../components/PlayoffsBracket/SingleBracket';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
+import useWindowSize from '../../hooks/useWindowSize';
 import { SeasonType } from '../api/v1/schedule';
 import { Standings as StandingsData } from '../api/v1/standings';
 import { PlayoffsRound } from '../api/v1/standings/playoffs';
@@ -19,15 +20,21 @@ interface Props {
 }
 
 function Standings({ league }: Props): JSX.Element {
+  const containerRef = useRef(null);
   const [display, setDisplay] = useState('league');
   const [seasonType, setSeasonType] = useState<SeasonType>('Playoffs'); // TODO
   const [isPlayoffs, setIsPlayoffs] = useState(true); // TODO
   const { data, isLoading } = useStandings(league, display, seasonType);
+  const windowSize = useWindowSize();
 
   const onSeasonTypeSelect = (type) => {
     setIsPlayoffs(type === 'Playoffs');
     setSeasonType(type);
   };
+
+  const renderDoublePlayoffsBracket = useCallback(() => 
+    data && (data[0] as PlayoffsRound).length > 4 && windowSize.width >= 1370
+  , [windowSize, data]);
 
   return (
     <React.Fragment>
@@ -38,7 +45,7 @@ function Standings({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} activePage="standings" />
-      <Container>
+      <Container ref={containerRef}>
         <Filters hideTabList={isPlayoffs}>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
@@ -76,8 +83,14 @@ function Standings({ league }: Props): JSX.Element {
           </DisplaySelectContainer>
         </Filters>
         <Main>
-          {isPlayoffs && (
-            <PlayoffsBracket
+          {isPlayoffs && !renderDoublePlayoffsBracket() && (
+            <SingleBracket
+              data={data as Array<PlayoffsRound>}
+              league={league}
+            />
+          )}
+          {isPlayoffs && renderDoublePlayoffsBracket() && (
+            <DoubleBracket
               data={data as Array<PlayoffsRound>}
               league={league}
             />
@@ -122,9 +135,16 @@ const Container = styled.div`
   padding: 1px 0 40px 0;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
+  
+  @media screen and (max-width: 1820px) {
+    width: 85%;
+  }
+  
+  @media screen and (max-width: 1610px) {
+    width: 100%;
+  }
 
   @media screen and (max-width: 1024px) {
-    width: 100%;
     padding: 2.5%;
   }
 `;
