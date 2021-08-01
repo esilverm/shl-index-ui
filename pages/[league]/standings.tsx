@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Footer from '../../components/Footer';
@@ -20,7 +20,6 @@ interface Props {
 }
 
 function Standings({ league }: Props): JSX.Element {
-  const containerRef = useRef(null);
   const [display, setDisplay] = useState('league');
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
@@ -34,7 +33,7 @@ function Standings({ league }: Props): JSX.Element {
 
   const renderDoublePlayoffsBracket = useCallback(() =>
     // The double bracket needs enough space to properly render
-    // We fall back to the single bracket in case the window is too small
+    // We use the single bracket when the window is too small or if we have too few series in the first round
     data && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
   , [windowSize, data]);
 
@@ -47,7 +46,7 @@ function Standings({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} activePage="standings" />
-      <Container ref={containerRef}>
+      <Container>
         <Filters hideTabList={isPlayoffs}>
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />

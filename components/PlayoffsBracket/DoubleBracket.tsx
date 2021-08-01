@@ -181,15 +181,16 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     const series = [];
 
     for (let i = 0; i <= numSeries; i+=2) {
+      // If a team from the previous round has reached the win condition show them in the next round instead of a gray placeholder
       const previousSeries = [previousRound[i], previousRound[i+1]];
-      const previousWinners = previousSeries.map(series => {
-        if (!series) return {};
+      const previousWinners = previousSeries.map(prevSeries => {
+        if (!prevSeries) return {};
         let winningTeam = {};
 
-        if (series.team1.wins === LEAGUE_WIN_CONDITION[league]) {
-          winningTeam = series.team1;
-        } else if (series.team2.wins === LEAGUE_WIN_CONDITION[league]) {
-          winningTeam = series.team2;
+        if (prevSeries.team1.wins === LEAGUE_WIN_CONDITION[league]) {
+          winningTeam = prevSeries.team1;
+        } else if (prevSeries.team2.wins === LEAGUE_WIN_CONDITION[league]) {
+          winningTeam = prevSeries.team2;
         }
 
         return {
@@ -197,6 +198,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
           wins: undefined // Don't show any wins as placeholder series hasn't started yet
         };
       });
+
       series.push(
         renderSeries({
           team1: previousWinners[0],
