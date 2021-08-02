@@ -8,20 +8,20 @@ interface SeasonLinkProps extends LinkProps {
 }
 
 function LinkWithSeason(
-  props: React.PropsWithChildren<SeasonLinkProps>
+  { as, children, disabled, ...props }: React.PropsWithChildren<SeasonLinkProps>
 ): JSX.Element {
-  if (props.disabled) {
-    return <div>{props.children}</div>;
+  if (disabled) {
+    return <div>{children}</div>;
   }
 
   const querySeason = getQuerySeason();
   const seasonParam = querySeason ? `?season=${querySeason}` : '';
   const updatedProps = {
     ...props,
-    as: `${props.as}${seasonParam}`,
+    as: `${as}${seasonParam}`,
   };
 
-  return <Link {...updatedProps}>{props.children}</Link>;
+  return <Link {...updatedProps}>{children}</Link>;
 }
 
 export default React.memo(LinkWithSeason);
