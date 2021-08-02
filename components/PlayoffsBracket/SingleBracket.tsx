@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import tinycolor from 'tinycolor2';
@@ -7,9 +6,10 @@ import tinycolor from 'tinycolor2';
 import {
   PlayoffsRound,
   PlayoffsSeries,
-} from '../pages/api/v1/standings/playoffs';
+} from '../../pages/api/v1/standings/playoffs';
+import Link from '../LinkWithSeason';
 
-import Link from './LinkWithSeason';
+import PlayoffsBracketSkeleton from './Skeleton';
 
 interface Props {
   data: Array<PlayoffsRound>;
@@ -23,7 +23,7 @@ const LEAGUE_WIN_CONDITION = {
   wjc: 1,
 };
 
-function PlayoffsBracket({ data, league }: Props): JSX.Element {
+function SingleBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
@@ -43,7 +43,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
     // Dynamically import svg icons based on the league chosen
     (async () => {
       const { default: s } = await import(
-        `../public/team_logos/${league.toUpperCase()}/`
+        `../../public/team_logos/${league.toUpperCase()}/`
       );
 
       setSprites(() => s);
@@ -151,70 +151,7 @@ function PlayoffsBracket({ data, league }: Props): JSX.Element {
   );
 }
 
-function PlayoffsBracketSkeleton({
-  isError,
-}: {
-  isError: boolean;
-}): JSX.Element {
-  const fakeArray = (length) => new Array(length).fill(0);
-
-  const renderSkeletonSeries = (i) => (
-    <Series key={i}>
-      <SeriesTeam color={'#CCC'} isDark={false} lost={false}>
-        <div style={{ marginLeft: '5px' }}></div>
-        <Skeleton width={45} height={45} />
-        <span>
-          <Skeleton width={100} />
-        </span>
-        <SeriesScore>
-          <Skeleton />
-        </SeriesScore>
-      </SeriesTeam>
-      <SeriesTeam color={'#EEE'} isDark={false} lost={false}>
-        <div style={{ marginLeft: '5px' }}></div>
-        <Skeleton width={45} height={45} />
-        <span>
-          <Skeleton width={100} />
-        </span>
-        <SeriesScore>
-          <Skeleton />
-        </SeriesScore>
-      </SeriesTeam>
-    </Series>
-  );
-
-  const renderSkeletonBracket = () => (
-    <Bracket>
-      <Round>
-        <Skeleton width={150} height={30} />
-        {fakeArray(4).map((_, i) => renderSkeletonSeries(i))}
-      </Round>
-      <Round>
-        <Skeleton width={150} height={30} />
-        {fakeArray(2).map((_, i) => renderSkeletonSeries(i))}
-      </Round>
-      <Round>
-        <Skeleton width={150} height={30} />
-        <Series>{renderSkeletonSeries(0)}</Series>
-      </Round>
-    </Bracket>
-  );
-
-  return (
-    <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
-      <Container>
-        {isError && (
-          <strong>
-            A technical error occurred. Please reload the page to try again.
-          </strong>
-        )}
-        {renderSkeletonBracket()}
-      </Container>
-    </SkeletonTheme>
-  );
-}
-
-const Container = styled.div`
+export const Container = styled.div`
   width: 95%;
   height: 100%;
   margin-top: 25px;
@@ -224,7 +161,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Bracket = styled.div`
+export const Bracket = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -234,7 +171,7 @@ const Bracket = styled.div`
   padding: 0 3%;
 `;
 
-const Round = styled.div`
+export const Round = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -245,7 +182,7 @@ const Round = styled.div`
   }
 `;
 
-const Series = styled.div`
+export const Series = styled.div`
   display: flex;
   flex-direction: column;
   width: 230px;
@@ -254,7 +191,7 @@ const Series = styled.div`
   padding: 20px;
 `;
 
-const SeriesTeam = styled.div<{
+export const SeriesTeam = styled.div<{
   color: string;
   isDark: boolean;
   lost: boolean;
@@ -287,7 +224,7 @@ const SeriesTeam = styled.div<{
   }
 `;
 
-const SeriesScore = styled.div`
+export const SeriesScore = styled.div`
   background-color: ${({ theme }) => theme.colors.grey900}80;
   color: ${({ theme }) => theme.colors.grey100};
   display: flex;
@@ -303,4 +240,4 @@ const SeriesScore = styled.div`
   margin-left: auto;
 `;
 
-export default React.memo(PlayoffsBracket);
+export default React.memo(SingleBracket);

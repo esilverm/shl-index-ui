@@ -3,17 +3,25 @@ import React from 'react';
 
 import { getQuerySeason } from '../utils/season';
 
+interface SeasonLinkProps extends LinkProps {
+  disabled?: boolean;
+}
+
 function LinkWithSeason(
-  props: React.PropsWithChildren<LinkProps>
+  { as, children, disabled, ...props }: React.PropsWithChildren<SeasonLinkProps>
 ): JSX.Element {
+  if (disabled) {
+    return <div>{children}</div>;
+  }
+
   const querySeason = getQuerySeason();
   const seasonParam = querySeason ? `?season=${querySeason}` : '';
   const updatedProps = {
     ...props,
-    as: `${props.as}${seasonParam}`,
+    as: `${as}${seasonParam}`,
   };
 
-  return <Link {...updatedProps}>{props.children}</Link>;
+  return <Link {...updatedProps}>{children}</Link>;
 }
 
 export default React.memo(LinkWithSeason);
