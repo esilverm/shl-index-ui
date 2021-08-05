@@ -172,7 +172,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
   const renderRound = (round, conference, index) => (
     <Round key={index} conference={conference}>
-      <h2>{round.length === 1 ? 'Finals' : `Round ${index + 1}`}</h2>
+      <h2>{round.length === 1 && conference === CONFERENCE.MIXED ? 'Finals' : `Round ${index + 1}`}</h2>
       {round.map((series) => renderSeries(series))}
     </Round>
   );
