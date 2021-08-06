@@ -71,15 +71,12 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !teamData);
   }, [isLoadingAssets, teamData]);
 
-  const lastRoundInData = useCallback(() => data ? [data[data.length - 1]] : [], [data]);
+  const lastRoundInData = useCallback(() => data ? data[data.length - 1] : [], [data]);
 
   const hasFinalsRoundData = useCallback(() => {
     const lastRound = lastRoundInData();
-    if (lastRound.length === 0) return false;
-
-    const series = lastRound[0];
-    const isSingleSeries = series.length === 1;
-    const hasMixedConferences = series[0].team1.conference !== series[0].team2.conference;
+    const isSingleSeries = lastRound.length === 1;
+    const hasMixedConferences = lastRound[0].team1.conference !== lastRound[0].team2.conference;
 
     return isSingleSeries && hasMixedConferences;
   }, [lastRoundInData]);
@@ -241,7 +238,7 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     <Container>
       <Bracket conference={CONFERENCE.WESTERN}>{renderBracket(CONFERENCE.WESTERN)}</Bracket>
       {!hasFinalsRound && renderPlaceholderRound(1, [], CONFERENCE.MIXED, 3)}
-      {hasFinalsRound && renderRound(1, lastRoundInData(), CONFERENCE.MIXED)}
+      {hasFinalsRound && renderRound(lastRoundInData(), CONFERENCE.MIXED, 3)}
       <Bracket conference={CONFERENCE.EASTERN}>{renderBracket(CONFERENCE.EASTERN)}</Bracket>
     </Container>
   );
