@@ -144,6 +144,14 @@ function SingleBracket({ data, league }: Props): JSX.Element {
 
   const renderBracket = () => data.map((round, i) => renderRound(round, i));
 
+  if (data.length === 0) {
+    return (
+      <Container>
+        <Notice>Playoffs bracket is not yet available</Notice>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Bracket>{renderBracket()}</Bracket>
@@ -238,6 +246,14 @@ export const SeriesScore = styled.div`
   font-size: 25px;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   margin-left: auto;
+`;
+
+const Notice = styled.div`
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
 `;
 
 export default React.memo(SingleBracket);
