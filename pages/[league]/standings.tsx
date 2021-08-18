@@ -34,7 +34,7 @@ function Standings({ league }: Props): JSX.Element {
   const renderDoublePlayoffsBracket = useCallback(() =>
     // The double bracket needs enough space to properly render
     // We use the single bracket when the window is too small or if we have too few series in the first round
-    data && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
+    data && data[0] && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
   , [windowSize, data]);
 
   return (
