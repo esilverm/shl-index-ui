@@ -17,11 +17,13 @@ export interface PlayoffsSeries {
 }
 
 interface PlayoffTeam {
-  id: number;
-  wins: number;
-  name: string;
-  nickname: string;
-  abbr: string;
+  id?: number;
+  wins?: number;
+  name?: string;
+  nickname?: string;
+  abbr?: string;
+  conference?: number;
+  division?: number;
 }
 
 export type PlayoffsRound = Array<PlayoffsSeries>;
@@ -46,7 +48,7 @@ export default async (
 
   const playoffs = await query(
     SQL`
-    SELECT po.startdate, po.team1, po.team2, po.LeagueID, po.SeasonID, po.team1Wins, po.team2Wins, td1.Name as team1_Name, td1.Nickname as team1_Nickname, td1.Abbr as team1_Abbr, td2.Name as team2_Name, td2.Nickname as team2_Nickname, td2.Abbr as team2_Abbr
+    SELECT po.startdate, po.team1, po.team2, po.LeagueID, po.SeasonID, po.team1Wins, po.team2Wins, td1.Name as team1_Name, td1.Nickname as team1_Nickname, td1.Abbr as team1_Abbr, td1.ConferenceID as team1_Conference, td1.DivisionID as team1_Division, td2.Name as team2_Name, td2.Nickname as team2_Nickname, td2.Abbr as team2_Abbr, td2.ConferenceID as team2_Conference, td2.DivisionID as team2_Division
     FROM playofftree as po
     INNER JOIN team_data as td1
     ON po.Team1 = td1.TeamID
@@ -77,6 +79,8 @@ export default async (
               name: matchup.team1_Name,
               nickname: matchup.team1_Nickname,
               abbr: matchup.team1_Abbr,
+              conference: matchup.team1_Conference,
+              division: matchup.team1_Division,
             },
             team2: {
               id: matchup.team2,
@@ -84,6 +88,8 @@ export default async (
               name: matchup.team2_Name,
               nickname: matchup.team2_Nickname,
               abbr: matchup.team2_Abbr,
+              conference: matchup.team2_Conference,
+              division: matchup.team2_Division,
             },
           },
         ],
@@ -101,6 +107,8 @@ export default async (
             name: matchup.team1_Name,
             nickname: matchup.team1_Nickname,
             abbr: matchup.team1_Abbr,
+            conference: matchup.team1_Conference,
+            division: matchup.team1_Division,
           },
           team2: {
             id: matchup.team2,
@@ -108,6 +116,8 @@ export default async (
             name: matchup.team2_Name,
             nickname: matchup.team2_Nickname,
             abbr: matchup.team2_Abbr,
+            conference: matchup.team2_Conference,
+            division: matchup.team2_Division,
           },
         },
       ],

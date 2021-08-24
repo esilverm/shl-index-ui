@@ -2,8 +2,8 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
-import { query } from '../../../../../lib/db';
-import use from '../../../../../lib/middleware';
+import { query } from '../../../../lib/db';
+import use from '../../../../lib/middleware';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -15,7 +15,7 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = 0, season: seasonid, id } = req.query;
+  const { id, league = 0, season } = req.query;
 
   const basePlayerData = await query(SQL`
   SELECT *
@@ -29,21 +29,32 @@ export default async (
   AND corrected_player_ratings.SeasonID = team_data.SeasonID
   AND corrected_player_ratings.LeagueID = team_data.LeagueID
   WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.G=20
+  AND corrected_player_ratings.G<19
   AND player_master.TeamID>=0
-  AND corrected_player_ratings.PlayerID = ${+id}
+  AND corrected_player_ratings.PlayerID=${+id}
 `.append(
-    seasonid != null
-      ? SQL`
-          AND corrected_player_ratings.SeasonID=${+seasonid}
-        `
-      : ''
+    season != null ?
+      SQL`AND corrected_player_ratings.SeasonID=${season}` :
+      ''
   ).append(
     SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
   ));
 
+  const combinedPlayerData = [...basePlayerData].map((player) => {
+    const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
+      [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
+        20
+      )
+    ];
+
+    return {
+      ...player,
+      position,
+    };
+  });
+
   // remove 0 season
-  const filtered = basePlayerData.filter((item) => {
+  const filtered = combinedPlayerData.filter((item) => {
     return item.SeasonID !== 0;
   });
 
@@ -54,25 +65,9 @@ export default async (
       season: player.SeasonID,
       name: player['Last Name'],
       team: player.Abbr,
-      position: 'G',
-      blocker: player.Blocker,
-      glove: player.Glove,
-      passing: player.GPassing,
-      pokeCheck: player.GPokecheck,
-      positioning: player.GPositioning,
-      rebound: player.Rebound,
-      recovery: player.Recovery,
-      puckhandling: player.GPuckhandling,
-      lowShots: player.LowShots,
-      reflexes: player.Reflexes,
-      skating: player.GSkating,
-      aggression: player.Aggression,
-      mentalToughness: player.MentalToughness,
-      determination: player.Determination,
-      teamPlayer: player.Teamplayer,
-      leadership: player.Leadership,
-      goalieStamina: player.GoalieStamina,
-      professionalism: player.Professionalism,
+      position: player.position,
+      height: player.Height,
+      weight: player.Weight,
     };
   });
 

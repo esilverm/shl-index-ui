@@ -1,14 +1,16 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
-import PlayoffsBracket from '../../components/PlayoffsBracket';
+import DoubleBracket from '../../components/PlayoffsBracket/DoubleBracket';
+import SingleBracket from '../../components/PlayoffsBracket/SingleBracket';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
+import useWindowSize from '../../hooks/useWindowSize';
 import { SeasonType } from '../api/v1/schedule';
 import { Standings as StandingsData } from '../api/v1/standings';
 import { PlayoffsRound } from '../api/v1/standings/playoffs';
@@ -22,11 +24,18 @@ function Standings({ league }: Props): JSX.Element {
   const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
   const { data, isLoading } = useStandings(league, display, seasonType);
+  const windowSize = useWindowSize();
 
   const onSeasonTypeSelect = (type) => {
     setIsPlayoffs(type === 'Playoffs');
     setSeasonType(type);
   };
+
+  const renderDoublePlayoffsBracket = useCallback(() =>
+    // The double bracket needs enough space to properly render
+    // We use the single bracket when the window is too small or if we have too few series in the first round
+    data && data[0] && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
+  , [windowSize, data]);
 
   return (
     <React.Fragment>
@@ -75,8 +84,14 @@ function Standings({ league }: Props): JSX.Element {
           </DisplaySelectContainer>
         </Filters>
         <Main>
-          {isPlayoffs && (
-            <PlayoffsBracket
+          {isPlayoffs && !renderDoublePlayoffsBracket() && (
+            <SingleBracket
+              data={data as Array<PlayoffsRound>}
+              league={league}
+            />
+          )}
+          {isPlayoffs && renderDoublePlayoffsBracket() && (
+            <DoubleBracket
               data={data as Array<PlayoffsRound>}
               league={league}
             />
@@ -121,9 +136,16 @@ const Container = styled.div`
   padding: 1px 0 40px 0;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
+  
+  @media screen and (max-width: 1820px) {
+    width: 85%;
+  }
+  
+  @media screen and (max-width: 1610px) {
+    width: 100%;
+  }
 
   @media screen and (max-width: 1024px) {
-    width: 100%;
     padding: 2.5%;
   }
 `;

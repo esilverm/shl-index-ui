@@ -57,10 +57,17 @@ export default async (
             AND s.SeasonID=${+seasonid}
           `
         : ''
+    ).append(
+      SQL`ORDER BY s.SeasonID DESC`
     )
   );
 
-  const parsed = [...goalieStats].map((player) => {
+  // remove 0 season
+  const filtered = goalieStats.filter((item) => {
+    return item.SeasonID !== 0;
+  });
+
+  const parsed = [...filtered].map((player) => {
     return {
       id: player.PlayerID,
       name: player.Name,
