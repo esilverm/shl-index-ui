@@ -1,9 +1,11 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import React, { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
 
+import { Team } from '../../..';
 import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
 import SingleGoalieRatingsTable from '../../../components/RatingsTable/SingleGoalieRatingsTable';
@@ -22,9 +24,10 @@ import { SeasonType } from '../../api/v1/players/stats';
 
 interface Props {
   league: string;
+  teamList: Array<Team>;
   id: number;
 }
-function PlayerPage({ league, id }: Props): JSX.Element {
+function PlayerPage({ league, teamList, id }: Props): JSX.Element {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSkater, setIsSkater] = useState<boolean>(true);
@@ -37,6 +40,9 @@ function PlayerPage({ league, id }: Props): JSX.Element {
   const [playerTeam, setPlayerTeam] = useState('');
   const [playerWeight, setPlayerWeight] = useState('');
   const [playerHeight, setPlayerHeight] = useState('');
+
+  // team image
+  const [logo, setLogo] = useState('');
 
   // ratings
   const {
@@ -104,6 +110,19 @@ function PlayerPage({ league, id }: Props): JSX.Element {
           }
         }
       }
+      if (playerTeam) {
+        const location = teamList.find((team) => {
+          if(team.abbreviation.toUpperCase() === playerTeam.toUpperCase()) {
+            return true;
+          }
+        }).location;
+        setLogo(require(`../../../public/team_logos/${league.toUpperCase()}/${location
+          .replace('.', '')
+          .replace(/white|blue/i, '')
+          .trim()
+          .split(' ')
+          .join('_')}.svg`));
+      }
     }
   }, [
     isLoadingGoalieRating,
@@ -116,7 +135,8 @@ function PlayerPage({ league, id }: Props): JSX.Element {
     skaterInfo,
     goalieStats,
     goalieInfo,
-    isLoading
+    isLoading,
+    playerTeam,
   ]);
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
@@ -154,7 +174,14 @@ function PlayerPage({ league, id }: Props): JSX.Element {
           {!isLoading && (
             <>
               <CenteredContent>
-                <PlayerInfo>{playerName} | {playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
+                <ImageWrapper>
+                {logo ? (
+                  <Logo width={150} height={150} src={logo} />
+                ) : (
+                  <Skeleton circle width={150} height={150}/>
+                )}
+                </ImageWrapper> <br />
+                <PlayerInfo><PlayerName>{playerName}</PlayerName><br />{playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
               </CenteredContent>
               <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
@@ -247,9 +274,19 @@ function PlayerPage({ league, id }: Props): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
-    const { league, id } = ctx.query;
+    const { league, id, season } = ctx.query;
 
-    return { props: { league, id } };
+    const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
+      typeof league === 'string' ? league : 'shl'
+    );
+
+    const seasonParam = season ? `&season=${season}` : '';
+
+    const teamlist = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}${seasonParam}`
+    ).then((res) => res.json());
+
+    return { props: { league: league, teamList: teamlist, id: id } };
   } catch (error) {
     ctx.res.statusCode = 404;
 
@@ -309,8 +346,16 @@ const PlayerInfo = styled.div`
   font-size: 1.1rem;
   text-transform: uppercase;
   text-align: center;
+`;
+
+const PlayerName = styled.div`
+  font-size: 1.6rem;
   font-weight: bold;
 `;
+
+const ImageWrapper = styled.div`
+  padding: 10px;
+  `;
 
 const Container = styled.div`
   width: 75%;
@@ -348,5 +393,7 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
   border-bottom: none;
   bottom: -1px;
 `;
+
+const Logo = styled.img``;
 
 export default PlayerPage;
