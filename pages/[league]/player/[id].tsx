@@ -86,7 +86,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
         || isErrorSkaterStats || isErrorSkaterInfo || isErrorGoalieInfo) {
         setPlayerError(true);
       } else {
-        if (skaterStats.length > 0) {
+        if (skaterStats && skaterStats.length > 0) {
           setIsSkater(true);
           setPlayerName(skaterStats[0].name);
           setPlayerPosition(skaterStats[0].position);
@@ -94,14 +94,15 @@ function PlayerPage({ league, id }: Props): JSX.Element {
           setPlayerHeight(skaterInfo[0].height.toString());
           setPlayerWeight(skaterInfo[0].weight.toString());
         } else {
-          setIsSkater(false);
-          setPlayerName(goalieStats[0].name);
-          setPlayerPosition('G');
-          setPlayerTeam(goalieStats[0].team.toString());
-          setPlayerHeight(goalieInfo[0].height.toString());
-          setPlayerWeight(goalieInfo[0].weight.toString());
+          if (goalieStats) {
+            setIsSkater(false);
+            setPlayerName(goalieStats[0].name);
+            setPlayerPosition('G');
+            setPlayerTeam(goalieStats[0].team.toString());
+            setPlayerHeight(goalieInfo[0].height.toString());
+            setPlayerWeight(goalieInfo[0].weight.toString());
+          }
         }
-
       }
     }
   }, [
