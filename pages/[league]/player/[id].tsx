@@ -166,7 +166,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
             >
               Stats
             </DisplaySelectItem>
-            {isSkater === true ? (
+            {isSkater === true && (
               <DisplaySelectItem
               onClick={() => setDisplay(() => '')}
               active={display === ''}
@@ -176,7 +176,7 @@ function PlayerPage({ league, id }: Props): JSX.Element {
             >
               Adv Stats
             </DisplaySelectItem>
-            ) : ('')}
+            )}
             <DisplaySelectItem
               onClick={() => setDisplay(() => 'ratings')}
               active={display === 'ratings'}
