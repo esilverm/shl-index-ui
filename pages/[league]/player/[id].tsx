@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
@@ -31,8 +30,6 @@ function PlayerPage({ league, id }: Props): JSX.Element {
   const [isSkater, setIsSkater] = useState<boolean>(true);
   const [playerError, setPlayerError] = useState<boolean>(false);
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-
-  const router = useRouter();
 
   // player info
   const [playerName, setPlayerName] = useState('');
@@ -125,6 +122,8 @@ function PlayerPage({ league, id }: Props): JSX.Element {
     setFilterSeasonType(seasonType);
   };
 
+  const [display, setDisplay] = useState('stats');
+
   return (
     <React.Fragment>
       <NextSeo
@@ -147,11 +146,6 @@ function PlayerPage({ league, id }: Props): JSX.Element {
             </ErrorBlock>
           )}
           <ControlWrapper>
-            <Button onClick={() => router.back()} inverse>
-              <ButtonContent>
-                Go Back
-              </ButtonContent>
-            </Button>
             <SelectorWrapper>
               <SeasonTypeSelector onChange={onSeasonTypeSelect} />
             </SelectorWrapper>
@@ -161,26 +155,66 @@ function PlayerPage({ league, id }: Props): JSX.Element {
               <CenteredContent>
                 <PlayerInfo>{playerName} | {playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
               </CenteredContent>
+              <DisplaySelectContainer role="tablist">
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'stats')}
+              active={display === 'stats'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'stats'}
+            >
+              Stats
+            </DisplaySelectItem>
+            {isSkater === true ? (
+              <DisplaySelectItem
+              onClick={() => setDisplay(() => '')}
+              active={display === ''}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === ''}
+            >
+              Adv Stats
+            </DisplaySelectItem>
+            ) : ('')}
+            <DisplaySelectItem
+              onClick={() => setDisplay(() => 'ratings')}
+              active={display === 'ratings'}
+              tabIndex={0}
+              role="tab"
+              aria-selected={display === 'ratings'}
+            >
+              Ratings
+            </DisplaySelectItem>
+          </DisplaySelectContainer>
               {isSkater === true ? (
-                <>
-                  <TableHeading>Stats</TableHeading>
-                  <TableWrapper>
-                    <TableContainer>
-                      {skaterStats && (
-                        <SingleSkaterScoreTable data={skaterStats} />
-                      )}
-                    </TableContainer>
-                  </TableWrapper>
-                  <TableHeading>Advanced Stats</TableHeading>
-                  <TableWrapper>
-                    <TableContainer>
-                      {skaterStats && (
-                        <SingleSkaterAdvStatsTable data={skaterStats} />
-                      )}
-                    </TableContainer>
-                  </TableWrapper>
+                <>{display === 'stats' ? (<>
+                <TableHeading>Stats</TableHeading>
+                <TableWrapper>
+                  <TableContainer>
+                    {skaterStats && (
+                      <SingleSkaterScoreTable data={skaterStats} />
+                    )}
+                  </TableContainer>
+                </TableWrapper>
+                </>) : display === '' ? ( <>
+                <TableHeading>Advanced Stats</TableHeading>
+                <TableWrapper>
+                  <TableContainer>
+                    {skaterStats && (
+                      <SingleSkaterAdvStatsTable data={skaterStats} />
+                    )}
+                  </TableContainer>
+                </TableWrapper>
+                </>) : (<>
+                  <TableHeading>Ratings</TableHeading>
+              <TableWrapper>
+                <TableContainer>
+                    <SinglePlayerRatingsTable data={skaterRatings} />
+                </TableContainer>
+              </TableWrapper>
+                </>)}
                 </>
-              ) : (
+              ) : ( display === 'stats' ? (
                 <>
                   <TableHeading>Stats</TableHeading>
                   <TableWrapper>
@@ -190,18 +224,17 @@ function PlayerPage({ league, id }: Props): JSX.Element {
                       )}
                     </TableContainer>
                   </TableWrapper>
-                </>
+                </>) : (
+                  <>
+                  <TableHeading>Ratings</TableHeading>
+                  <TableWrapper>
+                    <TableContainer>
+                        <SingleGoalieRatingsTable data={goalieRatings} />
+                    </TableContainer>
+                  </TableWrapper>
+                  </>
+                )
               )}
-              <TableHeading>Ratings</TableHeading>
-              <TableWrapper>
-                <TableContainer>
-                  {isSkater === true ? (
-                    <SinglePlayerRatingsTable data={skaterRatings} />
-                  ) : (
-                    <SingleGoalieRatingsTable data={goalieRatings} />
-                  )}
-                </TableContainer>
-              </TableWrapper>
             </>
           )}
         </Main >
@@ -290,45 +323,29 @@ const Container = styled.div`
   }
 `;
 
-const ButtonContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  font-size: 14px;
-  font-weight: 700;
-`;
-
-const Button = styled.button`
-  width: 125px;
-  background-color: transparent;
-  padding: 6px 16px;
-  border: 1px solid
-    ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
-  color: ${(props: StyleProps) => (props.inverse ? 'black' : 'white')};
-  cursor: pointer;
-  border-radius: 5px;
-  float:left;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blue600};
-  }
-
-  &:active {
-    background-color: ${({ theme }) => theme.colors.blue700};
-  }
-
-  @media screen and (max-width: 700px) {
-    padding: 6px 8px;
-  }
-`;
-
 const ControlWrapper = styled.div`
   margin: 3%;
   height: 25px;
 `;
 
-interface StyleProps {
-  align?: 'left' | 'center' | 'right';
-  inverse?: boolean;
-}
+const DisplaySelectContainer = styled.div`
+  margin: 28px auto;
+  width: 95%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
+`;
+
+const DisplaySelectItem = styled.div<{ active: boolean }>`
+  display: inline-block;
+  padding: 8px 24px;
+  border: 1px solid
+    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.grey100 : 'transparent'};
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  border-bottom: none;
+  bottom: -1px;
+`;
 
 export default PlayerPage;
