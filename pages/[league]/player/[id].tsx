@@ -176,7 +176,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
               <CenteredContent>
                 <ImageWrapper>
                 {logo ? (
-                  <Logo width={150} height={150} src={logo} />
+                  <Logo src={logo} />
                 ) : (
                   <Skeleton circle width={150} height={150}/>
                 )}
@@ -394,6 +394,9 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
   bottom: -1px;
 `;
 
-const Logo = styled.img``;
+const Logo = styled.img`
+  height: 150px;
+  width: 150px;
+`;
 
 export default PlayerPage;
