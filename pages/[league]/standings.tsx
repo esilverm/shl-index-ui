@@ -31,11 +31,16 @@ function Standings({ league }: Props): JSX.Element {
     setSeasonType(type);
   };
 
-  const renderDoublePlayoffsBracket = useCallback(() =>
-    // The double bracket needs enough space to properly render
-    // We use the single bracket when the window is too small or if we have too few series in the first round
-    data && data[0] && (data[0] as PlayoffsRound).length > 4 && windowSize.width > 1370
-  , [windowSize, data]);
+  const renderDoublePlayoffsBracket = useCallback(
+    () =>
+      // The double bracket needs enough space to properly render
+      // We use the single bracket when the window is too small or if we have too few series in the first round
+      data &&
+      data[0] &&
+      (data[0] as PlayoffsRound).length > 4 &&
+      windowSize.width > 1370,
+    [windowSize, data]
+  );
 
   return (
     <React.Fragment>
@@ -136,11 +141,11 @@ const Container = styled.div`
   padding: 1px 0 40px 0;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.grey100};
-  
+
   @media screen and (max-width: 1820px) {
     width: 85%;
   }
-  
+
   @media screen and (max-width: 1610px) {
     width: 100%;
   }

@@ -28,7 +28,6 @@ interface Props {
   id: number;
 }
 function PlayerPage({ league, teamList, id }: Props): JSX.Element {
-
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSkater, setIsSkater] = useState<boolean>(true);
   const [playerError, setPlayerError] = useState<boolean>(false);
@@ -75,21 +74,33 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
     ratings: goalieInfo,
     isLoading: isLoadingGoalieInfo,
     isError: isErrorGoalieInfo,
-  } = useGoalieInfo(id, league)
+  } = useGoalieInfo(id, league);
 
   const {
     ratings: skaterInfo,
     isLoading: isLoadingSkaterInfo,
     isError: isErrorSkaterInfo,
-  } = useSkaterInfo(id, league)
+  } = useSkaterInfo(id, league);
 
   // wait for all loads to complete
   useEffect(() => {
-    setIsLoading(isLoadingGoalieRating || isLoadingPlayerRating || isLoadingGoalieStats
-      || isLoadingSkaterStats || isLoadingGoalieInfo || isLoadingSkaterInfo);
+    setIsLoading(
+      isLoadingGoalieRating ||
+        isLoadingPlayerRating ||
+        isLoadingGoalieStats ||
+        isLoadingSkaterStats ||
+        isLoadingGoalieInfo ||
+        isLoadingSkaterInfo
+    );
     if (!isLoading) {
-      if (isErrorGoalieRating || isErrorPlayerRating || isErrorGoalieStats
-        || isErrorSkaterStats || isErrorSkaterInfo || isErrorGoalieInfo) {
+      if (
+        isErrorGoalieRating ||
+        isErrorPlayerRating ||
+        isErrorGoalieStats ||
+        isErrorSkaterStats ||
+        isErrorSkaterInfo ||
+        isErrorGoalieInfo
+      ) {
         setPlayerError(true);
       } else {
         if (skaterStats && skaterStats.length > 0) {
@@ -112,16 +123,18 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
       }
       if (playerTeam) {
         const location = teamList.find((team) => {
-          if(team.abbreviation.toUpperCase() === playerTeam.toUpperCase()) {
+          if (team.abbreviation.toUpperCase() === playerTeam.toUpperCase()) {
             return true;
           }
         }).location;
-        setLogo(require(`../../../public/team_logos/${league.toUpperCase()}/${location
-          .replace('.', '')
-          .replace(/white|blue/i, '')
-          .trim()
-          .split(' ')
-          .join('_')}.svg`));
+        setLogo(
+          require(`../../../public/team_logos/${league.toUpperCase()}/${location
+            .replace('.', '')
+            .replace(/white|blue/i, '')
+            .trim()
+            .split(' ')
+            .join('_')}.svg`)
+        );
       }
     }
   }, [
@@ -175,74 +188,87 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
             <>
               <CenteredContent>
                 <ImageWrapper>
-                {logo ? (
-                  <Logo src={logo} />
-                ) : (
-                  <Skeleton circle width={150} height={150}/>
-                )}
-                </ImageWrapper> <br />
-                <PlayerInfo><PlayerName>{playerName}</PlayerName><br />{playerPosition} | {playerHeight} in | {playerWeight} lbs | {playerTeam}</PlayerInfo>
+                  {logo ? (
+                    <Logo src={logo} />
+                  ) : (
+                    <Skeleton circle width={150} height={150} />
+                  )}
+                </ImageWrapper>{' '}
+                <br />
+                <PlayerInfo>
+                  <PlayerName>{playerName}</PlayerName>
+                  <br />
+                  {playerPosition} | {playerHeight} in | {playerWeight} lbs |{' '}
+                  {playerTeam}
+                </PlayerInfo>
               </CenteredContent>
               <DisplaySelectContainer role="tablist">
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => 'stats')}
-              active={display === 'stats'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'stats'}
-            >
-              Stats
-            </DisplaySelectItem>
-            {isSkater === true && (
-              <DisplaySelectItem
-              onClick={() => setDisplay(() => '')}
-              active={display === ''}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === ''}
-            >
-              Adv Stats
-            </DisplaySelectItem>
-            )}
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => 'ratings')}
-              active={display === 'ratings'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'ratings'}
-            >
-              Ratings
-            </DisplaySelectItem>
-          </DisplaySelectContainer>
+                <DisplaySelectItem
+                  onClick={() => setDisplay(() => 'stats')}
+                  active={display === 'stats'}
+                  tabIndex={0}
+                  role="tab"
+                  aria-selected={display === 'stats'}
+                >
+                  Stats
+                </DisplaySelectItem>
+                {isSkater === true && (
+                  <DisplaySelectItem
+                    onClick={() => setDisplay(() => '')}
+                    active={display === ''}
+                    tabIndex={0}
+                    role="tab"
+                    aria-selected={display === ''}
+                  >
+                    Adv Stats
+                  </DisplaySelectItem>
+                )}
+                <DisplaySelectItem
+                  onClick={() => setDisplay(() => 'ratings')}
+                  active={display === 'ratings'}
+                  tabIndex={0}
+                  role="tab"
+                  aria-selected={display === 'ratings'}
+                >
+                  Ratings
+                </DisplaySelectItem>
+              </DisplaySelectContainer>
               {isSkater === true ? (
-                <>{display === 'stats' ? (<>
-                <TableHeading>Stats</TableHeading>
-                <TableWrapper>
-                  <TableContainer>
-                    {skaterStats && (
-                      <SingleSkaterScoreTable data={skaterStats} />
-                    )}
-                  </TableContainer>
-                </TableWrapper>
-                </>) : display === '' ? ( <>
-                <TableHeading>Advanced Stats</TableHeading>
-                <TableWrapper>
-                  <TableContainer>
-                    {skaterStats && (
-                      <SingleSkaterAdvStatsTable data={skaterStats} />
-                    )}
-                  </TableContainer>
-                </TableWrapper>
-                </>) : (<>
-                  <TableHeading>Ratings</TableHeading>
-              <TableWrapper>
-                <TableContainer>
-                    <SinglePlayerRatingsTable data={skaterRatings} />
-                </TableContainer>
-              </TableWrapper>
-                </>)}
+                <>
+                  {display === 'stats' ? (
+                    <>
+                      <TableHeading>Stats</TableHeading>
+                      <TableWrapper>
+                        <TableContainer>
+                          {skaterStats && (
+                            <SingleSkaterScoreTable data={skaterStats} />
+                          )}
+                        </TableContainer>
+                      </TableWrapper>
+                    </>
+                  ) : display === '' ? (
+                    <>
+                      <TableHeading>Advanced Stats</TableHeading>
+                      <TableWrapper>
+                        <TableContainer>
+                          {skaterStats && (
+                            <SingleSkaterAdvStatsTable data={skaterStats} />
+                          )}
+                        </TableContainer>
+                      </TableWrapper>
+                    </>
+                  ) : (
+                    <>
+                      <TableHeading>Ratings</TableHeading>
+                      <TableWrapper>
+                        <TableContainer>
+                          <SinglePlayerRatingsTable data={skaterRatings} />
+                        </TableContainer>
+                      </TableWrapper>
+                    </>
+                  )}
                 </>
-              ) : ( display === 'stats' ? (
+              ) : display === 'stats' ? (
                 <>
                   <TableHeading>Stats</TableHeading>
                   <TableWrapper>
@@ -252,23 +278,23 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
                       )}
                     </TableContainer>
                   </TableWrapper>
-                </>) : (
-                  <>
+                </>
+              ) : (
+                <>
                   <TableHeading>Ratings</TableHeading>
                   <TableWrapper>
                     <TableContainer>
-                        <SingleGoalieRatingsTable data={goalieRatings} />
+                      <SingleGoalieRatingsTable data={goalieRatings} />
                     </TableContainer>
                   </TableWrapper>
-                  </>
-                )
+                </>
               )}
             </>
           )}
-        </Main >
+        </Main>
       </Container>
       <Footer />
-    </React.Fragment >
+    </React.Fragment>
   );
 }
 
@@ -355,7 +381,7 @@ const PlayerName = styled.div`
 
 const ImageWrapper = styled.div`
   padding: 10px;
-  `;
+`;
 
 const Container = styled.div`
   width: 75%;

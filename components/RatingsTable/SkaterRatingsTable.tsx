@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { PlayerRatings } from '../..';
 import Link from '../../components/LinkWithSeason';
@@ -26,11 +27,7 @@ function PlayerRatingsTable({
         {
           Header: 'Player',
           id: 'player-table-player',
-          accessor: ({ name, league, id }) => [
-            name,
-            league,
-            id,
-          ],
+          accessor: ({ name, league, id }) => [name, league, id],
           // Create cell which contains link to player
           Cell: ({ value }) => {
             return (
@@ -39,7 +36,7 @@ function PlayerRatingsTable({
                 as={`/${leagues[value[1]]}/player/${value[2]}`}
                 passHref
               >
-                {value[0]}
+                <PlayerNameWrapper>{value[0]}</PlayerNameWrapper>
               </Link>
             );
           },
@@ -229,3 +226,9 @@ function PlayerRatingsTable({
 }
 
 export default PlayerRatingsTable;
+
+const PlayerNameWrapper = styled.span`
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.blue600};
+`;

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { Goalie } from '../..';
 import Link from '../../components/LinkWithSeason';
@@ -26,11 +27,7 @@ function GoalieScoreTable({
         {
           Header: 'Player',
           id: 'player-table-player',
-          accessor: ({ name, league, id }) => [
-            name,
-            league,
-            id,
-          ],
+          accessor: ({ name, league, id }) => [name, league, id],
           // Create cell which contains link to player
           Cell: ({ value }) => {
             return (
@@ -39,7 +36,7 @@ function GoalieScoreTable({
                 as={`/${leagues[value[1]]}/player/${value[2]}`}
                 passHref
               >
-                {value[0]}
+                <PlayerNameWrapper>{value[0]}</PlayerNameWrapper>
               </Link>
             );
           },
@@ -137,3 +134,9 @@ function GoalieScoreTable({
 }
 
 export default GoalieScoreTable;
+
+const PlayerNameWrapper = styled.span`
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.blue600};
+`;

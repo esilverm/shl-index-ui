@@ -17,7 +17,8 @@ export default async (
 
   const { league = 0, season: seasonid, id } = req.query;
 
-  const basePlayerData = await query(SQL`
+  const basePlayerData = await query(
+    SQL`
   SELECT *
   FROM corrected_player_ratings
   INNER JOIN player_master
@@ -32,15 +33,16 @@ export default async (
   AND corrected_player_ratings.G=20
   AND player_master.TeamID>=0
   AND corrected_player_ratings.PlayerID = ${+id}
-`.append(
-    seasonid != null
-      ? SQL`
+`
+      .append(
+        seasonid != null
+          ? SQL`
           AND corrected_player_ratings.SeasonID=${+seasonid}
         `
-      : ''
-  ).append(
-    SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
-  ));
+          : ''
+      )
+      .append(SQL`ORDER BY corrected_player_ratings.SeasonID DESC`)
+  );
 
   // remove 0 season
   const filtered = basePlayerData.filter((item) => {

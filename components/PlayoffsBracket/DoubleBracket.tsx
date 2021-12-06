@@ -27,17 +27,22 @@ const LEAGUE_WIN_CONDITION = {
 const CONFERENCE = {
   EASTERN: 0,
   WESTERN: 1,
-  MIXED: -1
+  MIXED: -1,
 };
 
-const getSeriesByConference = (round, bracketConference) => round.filter(series =>
-  series.team1.conference === series.team2.conference &&
-  series.team1.conference === bracketConference
-);
+const getSeriesByConference = (round, bracketConference) =>
+  round.filter(
+    (series) =>
+      series.team1.conference === series.team2.conference &&
+      series.team1.conference === bracketConference
+  );
 
-const sortByDivision = round => round.sort((a, b) =>
-  a.team1.division + a.team2.division > b.team1.division + b.team2.division ? 1 : -1
-);
+const sortByDivision = (round) =>
+  round.sort((a, b) =>
+    a.team1.division + a.team2.division > b.team1.division + b.team2.division
+      ? 1
+      : -1
+  );
 
 function DoubleBracket({ data, league }: Props): JSX.Element {
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
@@ -71,12 +76,16 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     setIsLoading(isLoadingAssets || !teamData);
   }, [isLoadingAssets, teamData]);
 
-  const lastRoundInData = useCallback(() => data ? data[data.length - 1] : [], [data]);
+  const lastRoundInData = useCallback(
+    () => (data ? data[data.length - 1] : []),
+    [data]
+  );
 
   const hasFinalsRoundData = useCallback(() => {
     const lastRound = lastRoundInData();
     const isSingleSeries = lastRound.length === 1;
-    const hasMixedConferences = lastRound[0].team1.conference !== lastRound[0].team2.conference;
+    const hasMixedConferences =
+      lastRound[0].team1.conference !== lastRound[0].team2.conference;
 
     return isSingleSeries && hasMixedConferences;
   }, [lastRoundInData]);
@@ -169,18 +178,27 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
   const renderRound = (round, conference, index) => (
     <Round key={index} conference={conference}>
-      <h2>{round.length === 1 && conference === CONFERENCE.MIXED ? 'Finals' : `Round ${index + 1}`}</h2>
+      <h2>
+        {round.length === 1 && conference === CONFERENCE.MIXED
+          ? 'Finals'
+          : `Round ${index + 1}`}
+      </h2>
       {round.map((series) => renderSeries(series))}
     </Round>
   );
 
-  const renderPlaceholderRound = (numSeries, previousRound, conference, index) => {
+  const renderPlaceholderRound = (
+    numSeries,
+    previousRound,
+    conference,
+    index
+  ) => {
     const series = [];
 
-    for (let i = 0; i <= numSeries; i+=2) {
+    for (let i = 0; i <= numSeries; i += 2) {
       // If a team from the previous round has reached the win condition show them in the next round instead of a gray placeholder
-      const previousSeries = [previousRound[i], previousRound[i+1]];
-      const previousWinners = previousSeries.map(prevSeries => {
+      const previousSeries = [previousRound[i], previousRound[i + 1]];
+      const previousWinners = previousSeries.map((prevSeries) => {
         if (!prevSeries) return {};
         let winningTeam = {};
 
@@ -192,21 +210,25 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
         return {
           ...winningTeam,
-          wins: undefined // Don't show any wins as placeholder series hasn't started yet
+          wins: undefined, // Don't show any wins as placeholder series hasn't started yet
         };
       });
 
       series.push(
         renderSeries({
           team1: previousWinners[0],
-          team2: previousWinners[1]
+          team2: previousWinners[1],
         })
       );
     }
 
     return (
       <Round key={index} conference={conference}>
-        <h2>{numSeries === 1 && conference === CONFERENCE.MIXED ? 'Finals' : `Round ${index + 1}`}</h2>
+        <h2>
+          {numSeries === 1 && conference === CONFERENCE.MIXED
+            ? 'Finals'
+            : `Round ${index + 1}`}
+        </h2>
         {series}
       </Round>
     );
@@ -218,14 +240,27 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
     const rounds = [];
 
     for (let i = 0; i < totalBracketRounds; i++) {
-      if (i < data.length) { // If we have data from FHM for the given round
-        const conferenceRound = getSeriesByConference(data[i], bracketConference);
+      if (i < data.length) {
+        // If we have data from FHM for the given round
+        const conferenceRound = getSeriesByConference(
+          data[i],
+          bracketConference
+        );
         const sortedRound = sortByDivision(conferenceRound);
         rounds.push(renderRound(sortedRound, bracketConference, i));
       } else {
-        const previousRound = data[i-1] ? getSeriesByConference(data[i-1], bracketConference) : [];
+        const previousRound = data[i - 1]
+          ? getSeriesByConference(data[i - 1], bracketConference)
+          : [];
         const sortedRound = sortByDivision(previousRound);
-        rounds.push(renderPlaceholderRound(seriesPerRound[i], sortedRound, bracketConference, i));
+        rounds.push(
+          renderPlaceholderRound(
+            seriesPerRound[i],
+            sortedRound,
+            bracketConference,
+            i
+          )
+        );
       }
     }
 
@@ -236,10 +271,14 @@ function DoubleBracket({ data, league }: Props): JSX.Element {
 
   return (
     <Container>
-      <Bracket conference={CONFERENCE.WESTERN}>{renderBracket(CONFERENCE.WESTERN)}</Bracket>
+      <Bracket conference={CONFERENCE.WESTERN}>
+        {renderBracket(CONFERENCE.WESTERN)}
+      </Bracket>
       {!hasFinalsRound && renderPlaceholderRound(1, [], CONFERENCE.MIXED, 3)}
       {hasFinalsRound && renderRound(lastRoundInData(), CONFERENCE.MIXED, 3)}
-      <Bracket conference={CONFERENCE.EASTERN}>{renderBracket(CONFERENCE.EASTERN)}</Bracket>
+      <Bracket conference={CONFERENCE.EASTERN}>
+        {renderBracket(CONFERENCE.EASTERN)}
+      </Bracket>
     </Container>
   );
 }
@@ -260,7 +299,8 @@ const Bracket = styled.div<{
 }>`
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
+  flex-direction: row
+    ${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
   align-items: center;
 `;
 
@@ -271,7 +311,12 @@ const Round = styled.div<{
   flex-direction: column;
   align-items: center;
   width: 160px;
-  margin${({ conference }) => conference === -1 ? '' : conference === CONFERENCE.EASTERN ? '-left' : '-right'}: 20px;
+  margin${({ conference }) =>
+    conference === -1
+      ? ''
+      : conference === CONFERENCE.EASTERN
+      ? '-left'
+      : '-right'}: 20px;
 
   h2 {
     margin-bottom: 10px;
@@ -298,7 +343,7 @@ const SeriesTeam = styled.div<{
   height: 55px;
   width: 160px;
   background-color: ${({ color }) => color};
-  cursor: ${({ disabled }) => disabled ? 'default' : 'pointer'};
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   letter-spacing: 0.05rem;
   font-size: 18px;
   font-weight: 600;

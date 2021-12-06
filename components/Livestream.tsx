@@ -5,12 +5,18 @@ import useSWR from 'swr';
 
 import { LivestreamData } from '../pages/api/v1/livestreams/index';
 
-function Livestream({ currentLeague = 'shl' }: { currentLeague: string }): JSX.Element {
+function Livestream({
+  currentLeague = 'shl',
+}: {
+  currentLeague: string;
+}): JSX.Element {
   const [isLive, setIsLive] = useState(false);
 
   const league = currentLeague;
 
-  const { data: livestreamData, error: livestreamError } = useSWR<Array<LivestreamData>>(
+  const { data: livestreamData, error: livestreamError } = useSWR<
+    Array<LivestreamData>
+  >(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/livestreams?league=${league}`
   );
 
@@ -26,19 +32,19 @@ function Livestream({ currentLeague = 'shl' }: { currentLeague: string }): JSX.E
     <>
       <Title>{isLive ? 'Current' : 'Most Recent'} Livestream</Title>
       <Container>
-      {!livestreamData && !livestreamError && (
-        <CenteredContent>
-          <PulseLoader size={15} />
-        </CenteredContent>
-      )}
-      {livestreamData && !livestreamError && (
+        {!livestreamData && !livestreamError && (
+          <CenteredContent>
+            <PulseLoader size={15} />
+          </CenteredContent>
+        )}
+        {livestreamData && !livestreamError && (
           <LivestreamIFrame
             src={`https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=1&color=white&rel=0`}
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
-      )}
+        )}
       </Container>
     </>
   );

@@ -25,7 +25,7 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState('');
   const selectorRef = useRef(null);
-  
+
   const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {

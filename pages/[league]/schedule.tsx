@@ -34,9 +34,8 @@ interface Props {
 
 function Schedule({ league, teamlist }: Props): JSX.Element {
   const [scheduleHeight, setScheduleHeight] = useState(0);
-  const [scheduleState, setScheduleState] = useState<ScheduleState>(
-    'INITIAL_LOADING'
-  );
+  const [scheduleState, setScheduleState] =
+    useState<ScheduleState>('INITIAL_LOADING');
   const [showFullSchedule, setShowFullSchedule] = useState(false);
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
   const [filterTeam, setFilterTeam] = useState<number>(-1);

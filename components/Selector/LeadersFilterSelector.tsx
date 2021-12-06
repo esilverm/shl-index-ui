@@ -23,14 +23,15 @@ const FILTERS: {
   SKATERS: 'Skaters',
   FORWARDS: 'Forwards',
   DEFENSEMEN: 'Defensemen',
-  GOALIES: 'Goalies'
+  GOALIES: 'Goalies',
 };
 
 function LeadersFilterSelector({ activeFilter, onChange }: Props): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedLeadersFilter, setSelectedLeadersFilter] = useState(activeFilter);
+  const [selectedLeadersFilter, setSelectedLeadersFilter] =
+    useState(activeFilter);
   const selectorRef = useRef(null);
-  
+
   const onMouseLeave = useCallback(() => {
     setIsExpanded(false);
     if (selectorRef.current) {
@@ -46,8 +47,11 @@ function LeadersFilterSelector({ activeFilter, onChange }: Props): JSX.Element {
 
   useEffect(() => setSelectedLeadersFilter(activeFilter), [activeFilter]);
 
-  const onButtonClick = useCallback(() => setIsExpanded((expanded) => !expanded), [setIsExpanded]);
-  
+  const onButtonClick = useCallback(
+    () => setIsExpanded((expanded) => !expanded),
+    [setIsExpanded]
+  );
+
   const onLeadersFilterSelect = (event) => {
     const { leadersfilter } = event.target.dataset;
     onChange(leadersfilter);

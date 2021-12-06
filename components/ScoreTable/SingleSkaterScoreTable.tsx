@@ -18,7 +18,8 @@ function SingleSkaterScoreTable({
   searching = false,
 }: Props): JSX.Element {
   const calculateTimeOnIce = (toi: number, gamesPlayed: number) =>
-    `${(toi / gamesPlayed / 60) >> 0}:${(toi / gamesPlayed) % 60 >> 0 < 10 ? '0' : ''
+    `${(toi / gamesPlayed / 60) >> 0}:${
+      (toi / gamesPlayed) % 60 >> 0 < 10 ? '0' : ''
     }${(toi / gamesPlayed) % 60 >> 0}`;
 
   const columnData = [

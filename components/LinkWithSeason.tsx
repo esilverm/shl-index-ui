@@ -7,9 +7,12 @@ interface SeasonLinkProps extends LinkProps {
   disabled?: boolean;
 }
 
-function LinkWithSeason(
-  { as, children, disabled, ...props }: React.PropsWithChildren<SeasonLinkProps>
-): JSX.Element {
+function LinkWithSeason({
+  as,
+  children,
+  disabled,
+  ...props
+}: React.PropsWithChildren<SeasonLinkProps>): JSX.Element {
   if (disabled) {
     return <div>{children}</div>;
   }

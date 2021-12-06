@@ -1,7 +1,14 @@
 import React from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
-import { Series, SeriesTeam, SeriesScore, Bracket, Round, Container } from './SingleBracket';
+import {
+  Series,
+  SeriesTeam,
+  SeriesScore,
+  Bracket,
+  Round,
+  Container,
+} from './SingleBracket';
 
 function PlayoffsBracketSkeleton({
   isError,

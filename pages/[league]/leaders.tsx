@@ -6,7 +6,9 @@ import styled from 'styled-components';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Leaderboard from '../../components/Leaderboard';
-import LeadersFilterSelector, { LeadersFilter } from '../../components/Selector/LeadersFilterSelector';
+import LeadersFilterSelector, {
+  LeadersFilter,
+} from '../../components/Selector/LeadersFilterSelector';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import { SeasonType } from '../api/v1/schedule';
 
@@ -22,7 +24,7 @@ const skaterLeaderboards = [
   'penaltyminutes',
   'shotsblocked',
   'ppg',
-  'shg'
+  'shg',
 ];
 
 const goalieLeaderboards = [
@@ -35,7 +37,7 @@ const goalieLeaderboards = [
   'saves',
   'savepct',
   'shutouts',
-  'gamesplayed'
+  'gamesplayed',
 ];
 
 interface Props {
@@ -62,15 +64,23 @@ function Stats({ league }: Props): JSX.Element {
     })();
   }, []);
 
-  const onSeasonTypeSelect = useCallback((type) => setSeasonType(type), [setSeasonType]);
-  const onLeadersFilterSelect = useCallback((filter) => setFilter(filter), [setFilter]);
+  const onSeasonTypeSelect = useCallback(
+    (type) => setSeasonType(type),
+    [setSeasonType]
+  );
+  const onLeadersFilterSelect = useCallback(
+    (filter) => setFilter(filter),
+    [setFilter]
+  );
 
   if (isLoadingAssets || !sprites) return null;
 
   const renderLeaderboards = () => {
-    const leaderboards = filter === 'Goalies' ? goalieLeaderboards : skaterLeaderboards;
+    const leaderboards =
+      filter === 'Goalies' ? goalieLeaderboards : skaterLeaderboards;
     const playerType = filter === 'Goalies' ? 'goalie' : 'skater';
-    const skaterPosition = filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
+    const skaterPosition =
+      filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
 
     return leaderboards.map((statId) => (
       <Leaderboard
@@ -82,7 +92,7 @@ function Stats({ league }: Props): JSX.Element {
         Sprites={sprites}
         position={skaterPosition}
       />
-    ))
+    ));
   };
 
   return (
@@ -99,7 +109,10 @@ function Stats({ league }: Props): JSX.Element {
           <SelectorWrapper>
             <SeasonTypeSelector onChange={onSeasonTypeSelect} />
             <SmallScreenFilters>
-              <LeadersFilterSelector activeFilter={filter} onChange={onLeadersFilterSelect} />
+              <LeadersFilterSelector
+                activeFilter={filter}
+                onChange={onLeadersFilterSelect}
+              />
             </SmallScreenFilters>
           </SelectorWrapper>
           <DisplaySelectContainer role="tablist">
@@ -141,9 +154,7 @@ function Stats({ league }: Props): JSX.Element {
             </DisplaySelectItem>
           </DisplaySelectContainer>
         </Filters>
-        <LeaderBoards>
-          {renderLeaderboards()}
-        </LeaderBoards>
+        <LeaderBoards>{renderLeaderboards()}</LeaderBoards>
       </Container>
       <Footer />
     </React.Fragment>

@@ -11,8 +11,8 @@ interface Columns {
   Header: string;
   id?: string;
   title?: string;
-  accessor: string | ((stats: Player) => string);
-  Cell?: string;
+  accessor: string | ((row: any) => any);
+  Cell?: React.FC<{ value: any }>;
 }
 
 interface ColumnData {
@@ -38,7 +38,7 @@ function PlayerTable({
   searching = false,
   sortBySeason = false,
 }: // isLoading
-  Props): JSX.Element {
+Props): JSX.Element {
   // ! add loading state
   const data = useMemo(() => players, [players]);
 
@@ -111,12 +111,13 @@ function PlayerTable({
   // search logic
   // no need for position for goalies
   const searchTypes: Array<SearchType> =
-    (players[0] && 'wins' in players[0]) || (players[0] && 'blocker' in players[0])
+    (players[0] && 'wins' in players[0]) ||
+    (players[0] && 'blocker' in players[0])
       ? [{ text: 'Name', id: 'player-table-player' }]
       : [
-        { text: 'Name', id: 'player-table-player' },
-        { text: 'Position', id: 'player-table-position' },
-      ];
+          { text: 'Name', id: 'player-table-player' },
+          { text: 'Position', id: 'player-table-position' },
+        ];
 
   const [searchType, setSearchType] = useState(searchTypes[0].id);
   const [searchText, setSearchText] = useState('');
@@ -131,17 +132,23 @@ function PlayerTable({
     }
   };
 
-  const updateSearchType = useCallback((value) => {
-    setSearchType(value);
-    updateFilter(searchText, value);
-  }, [searchText, setSearchType, updateFilter]);
+  const updateSearchType = useCallback(
+    (value) => {
+      setSearchType(value);
+      updateFilter(searchText, value);
+    },
+    [searchText, setSearchType, updateFilter]
+  );
 
-  const updateSearchText = useCallback((event) => {
-    // update the search text
-    setSearchText(event.target.value);
-    // pass the event target value directly because setting searchText is asynchronous
-    updateFilter(event.target.value, null);
-  }, [setSearchText, updateFilter]);
+  const updateSearchText = useCallback(
+    (event) => {
+      // update the search text
+      setSearchText(event.target.value);
+      // pass the event target value directly because setting searchText is asynchronous
+      updateFilter(event.target.value, null);
+    },
+    [setSearchText, updateFilter]
+  );
 
   const goToLastPage = useCallback(() => gotoPage(pageCount - 1), [pageCount]);
 
@@ -183,41 +190,41 @@ function PlayerTable({
             <TableBody {...getTableBodyProps()}>
               {hasData && pagination
                 ? page.map((row, i) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })
+                    prepareRow(row);
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
                 : rows.map((row, i) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()} key={i}>
-                      {row.cells.map((cell, i) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={i}
-                            className={cell.column.isSorted ? 'sorted' : ''}
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+                    prepareRow(row);
+                    return (
+                      <tr {...row.getRowProps()} key={i}>
+                        {row.cells.map((cell, i) => {
+                          return (
+                            <td
+                              {...cell.getCellProps()}
+                              key={i}
+                              className={cell.column.isSorted ? 'sorted' : ''}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
             </TableBody>
           </Table>
         </TableContainer>

@@ -15,11 +15,24 @@ interface Props {
   position?: string;
 }
 
-const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }: Props): JSX.Element => {
-  const { leaders, isError, isLoading } = useLeaders(league, playerType, stat, seasonType, position);
+const Leaderboard = ({
+  league,
+  playerType,
+  stat,
+  seasonType,
+  Sprites,
+  position,
+}: Props): JSX.Element => {
+  const { leaders, isError, isLoading } = useLeaders(
+    league,
+    playerType,
+    stat,
+    seasonType,
+    position
+  );
 
   const convertStatValue = (value: string | number) => {
-    if (typeof value === "string") return value;
+    if (typeof value === 'string') return value;
 
     if (stat === 'shotpct') {
       return (value * 100).toFixed(2);
@@ -29,7 +42,10 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }
     return value;
   };
 
-  const getPctOfLeader = (currentValue: string | number, leaderValue: string | number) => {
+  const getPctOfLeader = (
+    currentValue: string | number,
+    leaderValue: string | number
+  ) => {
     let current = parseFloat(`${convertStatValue(currentValue)}`);
     let leader = parseFloat(`${convertStatValue(leaderValue)}`);
 
@@ -55,7 +71,7 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }
         <Leader>
           <StatVisualizer width={100} />
           <PlayerName>
-            <span style={{ width: '20px'}}>1.</span>
+            <span style={{ width: '20px' }}>1.</span>
             <TeamLogo large>
               <LeaderLogo />
             </TeamLogo>
@@ -69,9 +85,11 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }
 
           return (
             <LeaderRow key={player.id}>
-              <StatVisualizer width={getPctOfLeader(player.stat, leaders[0].stat)} />
+              <StatVisualizer
+                width={getPctOfLeader(player.stat, leaders[0].stat)}
+              />
               <PlayerName>
-                <span style={{ width: '20px'}}>{`${i+1}.`}</span>
+                <span style={{ width: '20px' }}>{`${i + 1}.`}</span>
                 <TeamLogo>
                   <Logo />
                 </TeamLogo>
@@ -92,14 +110,14 @@ const Leaderboard = ({ league, playerType, stat, seasonType, Sprites, position }
       {renderLeaders()}
     </Container>
   );
-}
+};
 
 const SkeletonLeaderboard = ({
-  isError
+  isError,
 }: {
   isError: boolean;
 }): JSX.Element => (
-  <SkeletonTheme color='#ADB5BD' highlightColor='#CED4DA'>
+  <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
     {isError && (
       <Container>
         <strong>
@@ -107,7 +125,7 @@ const SkeletonLeaderboard = ({
         </strong>
       </Container>
     )}
-    {!isError && 
+    {!isError && (
       <Container>
         <Skeleton width={150} height={30} />
         <TopTen>
@@ -116,9 +134,9 @@ const SkeletonLeaderboard = ({
           ))}
         </TopTen>
       </Container>
-    }
+    )}
   </SkeletonTheme>
-)
+);
 
 const Container = styled.div`
   display: flex;
@@ -179,8 +197,8 @@ const PlayerName = styled.div`
 const TeamLogo = styled.div<{
   large?: boolean;
 }>`
-  height: ${({ large }) => large ? '30' : '20'}px;
-  width: ${({ large }) => large ? '30' : '20'}px;
+  height: ${({ large }) => (large ? '30' : '20')}px;
+  width: ${({ large }) => (large ? '30' : '20')}px;
   margin-right: 5px;
 `;
 

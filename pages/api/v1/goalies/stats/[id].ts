@@ -34,7 +34,10 @@ export default async (
   const goalieStats = await query(
     SQL`
     SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, p.\`Last Name\` AS Name, s.GP, s.Minutes, s.Wins, s.Losses, s.OT, s.ShotsAgainst, s.Saves, s.GoalsAgainst, s.GAA, s.Shutouts, s.SavePct, s.GameRating, team_data.Abbr, team_data.LeagueID, team_data.TeamID, team_data.SeasonID
-    FROM `.append(`player_goalie_stats_${type} AS s`).append(SQL`
+    FROM `
+      .append(`player_goalie_stats_${type} AS s`)
+      .append(
+        SQL`
     INNER JOIN player_master as p
     ON s.SeasonID = p.SeasonID 
     AND s.LeagueID = p.LeagueID
@@ -51,15 +54,16 @@ export default async (
     AND r.G=20
 	  AND p.TeamID>=0
     AND s.PlayerID=${+id}
-  `).append(
-      seasonid != null
-        ? SQL`
+  `
+      )
+      .append(
+        seasonid != null
+          ? SQL`
             AND s.SeasonID=${+seasonid}
           `
-        : ''
-    ).append(
-      SQL`ORDER BY s.SeasonID DESC`
-    )
+          : ''
+      )
+      .append(SQL`ORDER BY s.SeasonID DESC`)
   );
 
   // remove 0 season
