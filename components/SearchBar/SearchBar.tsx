@@ -51,15 +51,13 @@ const SearchBarWrapper = styled.div`
   }
 `;
 
-const Table = styled.table`
-`
+const Table = styled.table``;
 
-const TableRow = styled.tr`
-`
+const TableRow = styled.tr``;
 
 const TableData = styled.td`
   padding: 2px;
-`
+`;
 
 const SearchBarInput = styled.input`
   font-family: Montserrat, sans-serif;

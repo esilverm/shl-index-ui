@@ -77,10 +77,8 @@ function TeamPage({
       : [];
 
   // ratings
-  const {
-    ratings: skaterratings,
-    isLoading: isLoadingPlayerRatings,
-  } = useRatings(leaguename);
+  const { ratings: skaterratings, isLoading: isLoadingPlayerRatings } =
+    useRatings(leaguename);
 
   const getSkaterRatings = () =>
     skaterratings
@@ -89,10 +87,8 @@ function TeamPage({
         ) as Array<PlayerRatings>)
       : [];
 
-  const {
-    ratings: goalieratingdata,
-    isLoading: isLoadingGoalieRatings,
-  } = useGoalieRatings(leaguename);
+  const { ratings: goalieratingdata, isLoading: isLoadingGoalieRatings } =
+    useGoalieRatings(leaguename);
 
   const getGoalieRating = () =>
     goalieratingdata

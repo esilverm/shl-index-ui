@@ -4,14 +4,15 @@ import styled from 'styled-components';
 
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 // import Link from '../../components/LinkWithSeason';
-import { PlayerRatings, GoalieRatings, SearchType } from '../..';
-import SearchBar from '../SearchBar/SearchBar';
+import { Player, Goalie, PlayerRatings, GoalieRatings, SearchType } from '../';
 
+import SearchBar from './SearchBar/SearchBar';
 interface Columns {
   Header: string;
   id?: string;
   title?: string;
-  accessor: string | ((stats: PlayerRatings) => string);
+  accessor: string | ((row: any) => any);
+  Cell?: React.FC<{ value: any }>;
 }
 
 interface ColumnData {
@@ -21,20 +22,21 @@ interface ColumnData {
 }
 
 interface Props {
-  data: Array<PlayerRatings | GoalieRatings>;
+  data: Array<Player | Goalie | PlayerRatings | GoalieRatings>;
   columnData: Array<ColumnData>;
   pagination?: boolean;
   teamPage?: boolean;
   searching?: boolean;
-  // isLoading: boolean;
+  sortBySeason?: boolean;
 }
 
-function RatingsTable({
+function PlayerTable({
   data: players,
-  columnData,
   pagination = false,
+  columnData,
   teamPage = false,
   searching = false,
+  sortBySeason = false,
 }: // isLoading
 Props): JSX.Element {
   // ! add loading state
@@ -56,7 +58,15 @@ Props): JSX.Element {
   }, []);
 
   const initialState = useMemo(() => {
-    return { sortBy: [{ id: '', desc: true }] };
+    if (sortBySeason === true) {
+      return { sortBy: [{ id: 'player-table-season', desc: true }] };
+    } else if (players[0] && 'wins' in players[0]) {
+      return { sortBy: [{ id: 'wins', desc: true }] };
+    } else if (players[0] && 'points' in players[0]) {
+      return { sortBy: [{ id: 'points', desc: true }] };
+    } else {
+      return { sortBy: [{ id: '', desc: true }] };
+    }
   }, []);
 
   let table;
@@ -91,8 +101,8 @@ Props): JSX.Element {
     previousPage,
     gotoPage,
 
-    setAllFilters,
     setFilter,
+    setAllFilters,
     state: { pageIndex },
   } = table;
 
@@ -101,7 +111,8 @@ Props): JSX.Element {
   // search logic
   // no need for position for goalies
   const searchTypes: Array<SearchType> =
-    players[0] && 'blocker' in players[0]
+    (players[0] && 'wins' in players[0]) ||
+    (players[0] && 'blocker' in players[0])
       ? [{ text: 'Name', id: 'player-table-player' }]
       : [
           { text: 'Name', id: 'player-table-player' },
@@ -111,26 +122,35 @@ Props): JSX.Element {
   const [searchType, setSearchType] = useState(searchTypes[0].id);
   const [searchText, setSearchText] = useState('');
 
-  const updateFilter = (text) => {
+  const updateFilter = (text, type) => {
     if (text === '') {
       // clears filters
       setAllFilters([]);
     } else {
-      setFilter(searchType, text);
+      setFilter(searchType, '');
+      setFilter(type ?? searchType, text);
     }
   };
 
-  const updateSearchType = useCallback((value) => {
-    setSearchType(value);
-    updateFilter(searchText);
-  }, [searchText, setSearchType, updateFilter]);
+  const updateSearchType = useCallback(
+    (value) => {
+      setSearchType(value);
+      updateFilter(searchText, value);
+    },
+    [searchText, setSearchType, updateFilter]
+  );
 
-  const updateSearchText = useCallback((event) => {
-    // update the search text
-    setSearchText(event.target.value);
-    // pass the event target value directly because setting searchText is asynchronous
-    updateFilter(event.target.value);
-  }, [setSearchText, updateFilter]);
+  const updateSearchText = useCallback(
+    (event) => {
+      // update the search text
+      setSearchText(event.target.value);
+      // pass the event target value directly because setting searchText is asynchronous
+      updateFilter(event.target.value, null);
+    },
+    [setSearchText, updateFilter]
+  );
+
+  const goToLastPage = useCallback(() => gotoPage(pageCount - 1), [pageCount]);
 
   return (
     <>
@@ -171,7 +191,6 @@ Props): JSX.Element {
               {hasData && pagination
                 ? page.map((row, i) => {
                     prepareRow(row);
-
                     return (
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
@@ -190,7 +209,6 @@ Props): JSX.Element {
                   })
                 : rows.map((row, i) => {
                     prepareRow(row);
-
                     return (
                       <tr {...row.getRowProps()} key={i}>
                         {row.cells.map((cell, i) => {
@@ -256,7 +274,7 @@ Props): JSX.Element {
           </button>{' '}
           <button
             className="-next"
-            onClick={useCallback(() => gotoPage(pageCount - 1), [pageCount])}
+            onClick={goToLastPage}
             disabled={!canNextPage}
           >
             {'>>'}
@@ -426,4 +444,4 @@ const Pagination = styled.div`
   }
 `;
 
-export default RatingsTable;
+export default PlayerTable;

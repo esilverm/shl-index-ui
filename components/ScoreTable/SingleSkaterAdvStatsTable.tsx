@@ -1,8 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 
+// import Link from '../../components/LinkWithSeason';
 import { Player } from '../..';
-import Link from '../../components/LinkWithSeason';
 import PlayerTable from '../PlayerTable';
 
 interface Props {
@@ -12,36 +11,22 @@ interface Props {
   searching?: boolean;
 }
 
-function SkaterAdvStatsTable({
+function SingleSkaterAdvStatsTable({
   data: players,
   pagination = false,
   teamPage = false,
   searching = false,
 }: Props): JSX.Element {
-  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
-
   const columnData = [
     {
       Header: 'Advanced Stats',
       id: 'player-table',
       columns: [
         {
-          Header: 'Player',
-          id: 'player-table-player',
-          title: 'Player Name',
-          accessor: ({ name, league, id }) => [name, league, id],
-          // Create cell which contains link to player
-          Cell: ({ value }) => {
-            return (
-              <Link
-                href="/[league]/player/[id]"
-                as={`/${leagues[value[1]]}/player/${value[2]}`}
-                passHref
-              >
-                <PlayerNameWrapper>{value[0]}</PlayerNameWrapper>
-              </Link>
-            );
-          },
+          Header: 'Season',
+          id: 'player-table-season',
+          accessor: 'season',
+          title: 'Season',
         },
         {
           Header: 'Pos',
@@ -165,14 +150,9 @@ function SkaterAdvStatsTable({
       pagination={pagination}
       teamPage={teamPage}
       searching={searching}
+      sortBySeason={true}
     />
   );
 }
 
-export default SkaterAdvStatsTable;
-
-const PlayerNameWrapper = styled.span`
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.colors.blue600};
-`;
+export default SingleSkaterAdvStatsTable;

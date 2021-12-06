@@ -17,7 +17,8 @@ export default async (
 
   const { id, league = 0, season } = req.query;
 
-  const basePlayerData = await query(SQL`
+  const basePlayerData = await query(
+    SQL`
   SELECT *
   FROM corrected_player_ratings
   INNER JOIN player_master
@@ -32,13 +33,14 @@ export default async (
   AND corrected_player_ratings.G<19
   AND player_master.TeamID>=0
   AND corrected_player_ratings.PlayerID=${+id}
-`.append(
-    season != null ?
-      SQL`AND corrected_player_ratings.SeasonID=${season}` :
-      ''
-  ).append(
-    SQL`ORDER BY corrected_player_ratings.SeasonID DESC`
-  ));
+`
+      .append(
+        season != null
+          ? SQL`AND corrected_player_ratings.SeasonID=${season}`
+          : ''
+      )
+      .append(SQL`ORDER BY corrected_player_ratings.SeasonID DESC`)
+  );
 
   const combinedPlayerData = [...basePlayerData].map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][

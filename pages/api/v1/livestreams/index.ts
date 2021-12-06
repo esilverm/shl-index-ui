@@ -22,22 +22,21 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { league = null} = req.query;
+  const { league = null } = req.query;
 
-  const search = SQL`SELECT * FROM youtube_data`
-    .append(
-        league != null
-        ? SQL`
+  const search = SQL`SELECT * FROM youtube_data`.append(
+    league != null
+      ? SQL`
         WHERE league=${league}
         `
-        : ''
-    );
+      : ''
+  );
 
   const youtube_data: Array<{
-      id: number,
-      league: string,
-      videoId: string,
-      isLive: string
+    id: number;
+    league: string;
+    videoId: string;
+    isLive: string;
   }> = await query(search);
 
   if (youtube_data.length === 0) {
@@ -51,7 +50,7 @@ export default async (
     id: data.id,
     league: data.league,
     videoId: data.videoId,
-    isLive: data.isLive
+    isLive: data.isLive,
   }));
 
   res.status(200).json(parsed);

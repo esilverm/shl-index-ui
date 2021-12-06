@@ -26,9 +26,8 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const { ratings: skaterratings, isLoading: isLoadingPlayers } = useRatings(
-    league
-  );
+  const { ratings: skaterratings, isLoading: isLoadingPlayers } =
+    useRatings(league);
   const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
   const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats(
     league,
@@ -36,10 +35,8 @@ function PlayerPage({ league }: Props): JSX.Element {
   );
   const { ratings: goalie } = useGoalieStats(league, filterSeasonType);
 
-  const {
-    ratings: goalieratingdata,
-    isLoading: isLoadingGoalies,
-  } = useGoalieRatings(league);
+  const { ratings: goalieratingdata, isLoading: isLoadingGoalies } =
+    useGoalieRatings(league);
 
   const getSkaters = () =>
     skaterratings

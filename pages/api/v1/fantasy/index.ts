@@ -34,26 +34,28 @@ export default async (
       LIMIT 1
   `));
 
-  const search = SQL`SELECT * FROM fantasypoints WHERE seasonID=${seasonid.SeasonID}`
-    .append(
-      position != null
-        ? SQL`
+  const search =
+    SQL`SELECT * FROM fantasypoints WHERE seasonID=${seasonid.SeasonID}`
+      .append(
+        position != null
+          ? SQL`
          AND position=${position}
         `
-        : ''
-    ).append(
-      name != null
-        ? SQL`
+          : ''
+      )
+      .append(
+        name != null
+          ? SQL`
          AND name=${name}
         `
-        : ''
-    );
+          : ''
+      );
 
   const fantasy_data: Array<{
-    seasonID: number,
-    position: string,
-    name: string,
-    fantasyPoints: number,
+    seasonID: number;
+    position: string;
+    name: string;
+    fantasyPoints: number;
   }> = await query(search);
 
   if (fantasy_data.length === 0) {
@@ -67,7 +69,7 @@ export default async (
     seasonID: data.seasonID,
     position: data.position,
     name: data.name,
-    fantasyPoints: data.fantasyPoints
+    fantasyPoints: data.fantasyPoints,
   }));
 
   res.status(200).json(parsed);

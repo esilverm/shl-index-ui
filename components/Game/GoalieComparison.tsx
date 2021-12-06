@@ -66,7 +66,10 @@ const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
   const renderGoalieStatsWithSharedLabels = () => {
     const awayGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.away);
     const homeGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.home);
-    const maxNumGoalies = Math.max(awayGoaliesSorted.length, homeGoaliesSorted.length);
+    const maxNumGoalies = Math.max(
+      awayGoaliesSorted.length,
+      homeGoaliesSorted.length
+    );
 
     return new Array(maxNumGoalies).fill(0).map((_, index) => {
       const awayGoalie = awayGoaliesSorted[index];

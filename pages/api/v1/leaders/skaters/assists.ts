@@ -65,10 +65,15 @@ export default async (
       ON s.SeasonID = r.SeasonID 
       AND s.LeagueID = r.LeagueID
       AND s.PlayerID = r.PlayerID `
-      ).append(
-        position === 'd' ? 'AND ( r.LD = 20 OR r.RD = 20 )' :
-        position === 'f' ? 'AND NOT ( r.LD = 20 OR r.RD = 20 )' : ''
-      ).append(
+      )
+      .append(
+        position === 'd'
+          ? 'AND ( r.LD = 20 OR r.RD = 20 )'
+          : position === 'f'
+          ? 'AND NOT ( r.LD = 20 OR r.RD = 20 )'
+          : ''
+      )
+      .append(
         SQL`
     WHERE s.LeagueID=${+league}
     AND s.SeasonID=${season.SeasonID}
