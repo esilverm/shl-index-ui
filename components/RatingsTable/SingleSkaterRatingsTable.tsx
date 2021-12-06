@@ -1,7 +1,7 @@
 import React from 'react';
 
+// import Link from '../../components/LinkWithSeason';
 import { PlayerRatings } from '../..';
-import Link from '../../components/LinkWithSeason';
 import PlayerTable from '../PlayerTable';
 
 interface Props {
@@ -11,38 +11,21 @@ interface Props {
   searching?: boolean;
 }
 
-function PlayerRatingsTable({
+function SinglePlayerRatingsTable({
   data: players,
   pagination = false,
   teamPage = false,
   searching = false,
 }: Props): JSX.Element {
-  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
   const columnData = [
     {
       Header: 'Player Info',
       id: 'player-table-basic-info',
       columns: [
         {
-          Header: 'Player',
-          id: 'player-table-player',
-          accessor: ({ name, league, id }) => [
-            name,
-            league,
-            id,
-          ],
-          // Create cell which contains link to player
-          Cell: ({ value }) => {
-            return (
-              <Link
-                href="/[league]/player/[id]"
-                as={`/${leagues[value[1]]}/player/${value[2]}`}
-                passHref
-              >
-                {value[0]}
-              </Link>
-            );
-          },
+          Header: 'Season',
+          id: 'player-table-season',
+          accessor: 'season',
         },
         {
           Header: 'Position',
@@ -224,8 +207,9 @@ function PlayerRatingsTable({
       pagination={pagination}
       teamPage={teamPage}
       searching={searching}
+      sortBySeason={true}
     />
   );
 }
 
-export default PlayerRatingsTable;
+export default SinglePlayerRatingsTable;

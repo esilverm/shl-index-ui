@@ -476,6 +476,45 @@
         }
       }
     },
+    "/players/{id}": {
+      "get": {
+        "tags": ["players"],
+        "summary": "List of Player Information By ID",
+        "description": "Returns all Player information by id",
+        "operationId": "getPlayerById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/players"
+              }
+            }
+          }
+        }
+      }
+    },
     "/players/stats": {
       "get": {
         "tags": ["players"],
@@ -640,6 +679,45 @@
         "operationId": "getGoaliesByLeague",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "league",
+            "in": "query",
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/goalies"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goalies/{id}": {
+      "get": {
+        "tags": ["goalies"],
+        "summary": "List Goalie Information by ID",
+        "description": "Returns Goalie based on id",
+        "operationId": "getGoalieById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
           {
             "name": "league",
             "in": "query",
