@@ -299,8 +299,8 @@ const Bracket = styled.div<{
 }>`
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row
-    ${({ conference }) => conference === CONFERENCE.EASTERN && '-reverse'};
+  flex-direction: ${({ conference }) =>
+    conference === CONFERENCE.EASTERN ? 'row-reverse' : 'row'};
   align-items: center;
 `;
 
