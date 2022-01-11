@@ -4,6 +4,8 @@ import React from 'react';
 import { PlayerRatings } from '../..';
 import PlayerTable from '../PlayerTable';
 
+import { calculateSkaterTPE } from './SkaterRatingsTable';
+
 interface Props {
   data: Array<PlayerRatings>;
   pagination?: boolean;
@@ -198,6 +200,74 @@ function SinglePlayerRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: ({
+            screening,
+            gettingOpen,
+            passing,
+            puckHandling,
+            shootingAccuracy,
+            shootingRange,
+            offensiveRead,
+            checking,
+            hitting,
+            positioning,
+            stickChecking,
+            shotBlocking,
+            faceoffs,
+            defensiveRead,
+            acceleration,
+            agility,
+            balance,
+            speed,
+            stamina,
+            strength,
+            fighting,
+            aggression,
+            bravery
+          }) => [
+              // Stamina up front since it is different
+              stamina,
+              screening,
+              gettingOpen,
+              passing,
+              puckHandling,
+              shootingAccuracy,
+              shootingRange,
+              offensiveRead,
+              checking,
+              hitting,
+              positioning,
+              stickChecking,
+              shotBlocking,
+              faceoffs,
+              defensiveRead,
+              acceleration,
+              agility,
+              balance,
+              speed,
+              strength,
+              fighting,
+              aggression,
+              bravery
+            ],
+          title: 'Applied TPE',
+          // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <>
+              {calculateSkaterTPE(value)}
+              </>
+            );
+          },
+          sortDescFirst: true
+        }
+      ]
+    }
   ];
 
   return (

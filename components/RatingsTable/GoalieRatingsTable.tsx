@@ -12,6 +12,34 @@ interface Props {
   searching?: boolean;
 }
 
+const GoalieTPECost = {
+  '-1': 0,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 6,
+  5: 11,
+  6: 16,
+  7: 24,
+  8: 32,
+  9: 47,
+  10: 62,
+  11: 87,
+  12: 112,
+  13: 152,
+  14: 192,
+  15: 232
+}
+
+export function calculateGoalieTPE(columns: Array<number>): number {
+  let totalTPE = 0;
+  for (let x = 0; x < columns.length; x++) {
+    totalTPE += GoalieTPECost[columns[x] - 5]
+  }
+  return totalTPE;
+}
+
 function GoalieRatingsTable({
   data: players,
   pagination = false,
@@ -139,6 +167,53 @@ function GoalieRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: ({
+            blocker,
+            glove,
+            passing,
+            pokeCheck,
+            positioning,
+            rebound,
+            recovery,
+            puckhandling,
+            lowShots,
+            reflexes,
+            skating,
+            mentalToughness,
+            goalieStamina,
+          }) => [
+              blocker,
+              glove,
+              passing,
+              pokeCheck,
+              positioning,
+              rebound,
+              recovery,
+              puckhandling,
+              lowShots,
+              reflexes,
+              skating,
+              mentalToughness,
+              goalieStamina,
+            ],
+          title: 'Applied TPE',
+          // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <>
+                {calculateGoalieTPE(value)}
+              </>
+            );
+          },
+          sortDescFirst: true
+        }
+      ]
+    }
   ];
 
   return (
