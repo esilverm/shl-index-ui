@@ -3,6 +3,8 @@ import React from 'react';
 import { GoalieRatings } from '../..';
 import PlayerTable from '../PlayerTable';
 
+import { calculateGoalieTPE } from './GoalieRatingsTable';
+
 interface Props {
   data: Array<GoalieRatings>;
   pagination?: boolean;
@@ -123,6 +125,53 @@ function SingleGoalieRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: ({
+            blocker,
+            glove,
+            passing,
+            pokeCheck,
+            positioning,
+            rebound,
+            recovery,
+            puckhandling,
+            lowShots,
+            reflexes,
+            skating,
+            mentalToughness,
+            goalieStamina,
+          }) => [
+              blocker,
+              glove,
+              passing,
+              pokeCheck,
+              positioning,
+              rebound,
+              recovery,
+              puckhandling,
+              lowShots,
+              reflexes,
+              skating,
+              mentalToughness,
+              goalieStamina,
+            ],
+          title: 'Applied TPE',
+          // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <>
+                {calculateGoalieTPE(value)}
+              </>
+            );
+          },
+          sortDescFirst: true
+        }
+      ]
+    }
   ];
 
   return (

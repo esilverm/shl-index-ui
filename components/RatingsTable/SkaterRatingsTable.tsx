@@ -12,6 +12,41 @@ interface Props {
   searching?: boolean;
 }
 
+const SkaterTPECost = {
+  '-1': 0,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 6,
+  6: 8,
+  7: 13,
+  8: 18,
+  9: 30,
+  10: 42,
+  11: 67,
+  12: 97,
+  13: 137,
+  14: 187,
+  15: 242
+}
+
+export function calculateSkaterTPE(columns: Array<number>): number {
+  let totalTPE = 0;
+  for (let x = 0; x < columns.length; x++) {
+    const difference = columns[x] - 5;
+    if(x === 0) {
+      // stamina default is 12
+      totalTPE += SkaterTPECost[difference] - SkaterTPECost[7];
+    } else {
+      totalTPE += SkaterTPECost[difference];
+    }
+
+  }
+  return totalTPE;
+}
+
 function PlayerRatingsTable({
   data: players,
   pagination = false,
@@ -212,6 +247,74 @@ function PlayerRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: ({
+            screening,
+            gettingOpen,
+            passing,
+            puckHandling,
+            shootingAccuracy,
+            shootingRange,
+            offensiveRead,
+            checking,
+            hitting,
+            positioning,
+            stickChecking,
+            shotBlocking,
+            faceoffs,
+            defensiveRead,
+            acceleration,
+            agility,
+            balance,
+            speed,
+            stamina,
+            strength,
+            fighting,
+            aggression,
+            bravery
+          }) => [
+              // Stamina up front since it is different
+              stamina,
+              screening,
+              gettingOpen,
+              passing,
+              puckHandling,
+              shootingAccuracy,
+              shootingRange,
+              offensiveRead,
+              checking,
+              hitting,
+              positioning,
+              stickChecking,
+              shotBlocking,
+              faceoffs,
+              defensiveRead,
+              acceleration,
+              agility,
+              balance,
+              speed,
+              strength,
+              fighting,
+              aggression,
+              bravery
+            ],
+          title: 'Applied TPE',
+          // Create cell which contains link to player
+          Cell: ({ value }) => {
+            return (
+              <>
+              {calculateSkaterTPE(value)}
+              </>
+            );
+          },
+          sortDescFirst: true
+        }
+      ]
+    }
   ];
 
   return (
