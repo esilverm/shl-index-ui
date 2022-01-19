@@ -32,17 +32,29 @@ const SkaterTPECost = {
   15: 242
 }
 
-export function calculateSkaterTPE(columns: Array<number>): number {
+export function calculateSkaterTPE(players: PlayerRatings): number {
+  const SKIP = [
+    'id',
+    'appliedTPE',
+    'name',
+    'position',
+    'league',
+    'season',
+    'team',
+    'determination',
+    'teamPlayer',
+    'leadership',
+    'temperament',
+    'professionalism',
+  ];
   let totalTPE = 0;
-  for (let x = 0; x < columns.length; x++) {
-    const difference = columns[x] - 5;
-    if(x === 0) {
-      // stamina default is 12
-      totalTPE += SkaterTPECost[difference] - SkaterTPECost[7];
+  for (const[key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue
+    if (key === 'stamina') {
+      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[7]
     } else {
-      totalTPE += SkaterTPECost[difference];
+     totalTPE += SkaterTPECost[value - 5]
     }
-
   }
   return totalTPE;
 }
@@ -252,70 +264,18 @@ function PlayerRatingsTable({
       columns: [
         {
           Header: 'Applied',
-          accessor: ({
-            screening,
-            gettingOpen,
-            passing,
-            puckHandling,
-            shootingAccuracy,
-            shootingRange,
-            offensiveRead,
-            checking,
-            hitting,
-            positioning,
-            stickChecking,
-            shotBlocking,
-            faceoffs,
-            defensiveRead,
-            acceleration,
-            agility,
-            balance,
-            speed,
-            stamina,
-            strength,
-            fighting,
-            aggression,
-            bravery
-          }) => [
-              // Stamina up front since it is different
-              stamina,
-              screening,
-              gettingOpen,
-              passing,
-              puckHandling,
-              shootingAccuracy,
-              shootingRange,
-              offensiveRead,
-              checking,
-              hitting,
-              positioning,
-              stickChecking,
-              shotBlocking,
-              faceoffs,
-              defensiveRead,
-              acceleration,
-              agility,
-              balance,
-              speed,
-              strength,
-              fighting,
-              aggression,
-              bravery
-            ],
+          accessor: 'appliedTPE',
           title: 'Applied TPE',
-          // Create cell which contains link to player
-          Cell: ({ value }) => {
-            return (
-              <>
-              {calculateSkaterTPE(value)}
-              </>
-            );
-          },
-          sortDescFirst: true
+          sortDescFirst: true,
         }
       ]
     }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateSkaterTPE(players[x])
+  }
 
   return (
     <PlayerTable

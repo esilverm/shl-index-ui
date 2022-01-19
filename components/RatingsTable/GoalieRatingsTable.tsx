@@ -32,10 +32,25 @@ const GoalieTPECost = {
   15: 232
 }
 
-export function calculateGoalieTPE(columns: Array<number>): number {
+export function calculateGoalieTPE(players: GoalieRatings): number {
+  const SKIP = [
+    'id',
+    'appliedTPE',
+    'name',
+    'position',
+    'league',
+    'season',
+    'team',
+    'aggression',
+    'determination',
+    'teamPlayer',
+    'leadership',
+    'professionalism'
+  ];
   let totalTPE = 0;
-  for (let x = 0; x < columns.length; x++) {
-    totalTPE += GoalieTPECost[columns[x] - 5]
+  for (const[key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue
+    totalTPE += GoalieTPECost[value - 5]
   }
   return totalTPE;
 }
@@ -172,49 +187,18 @@ function GoalieRatingsTable({
       columns: [
         {
           Header: 'Applied',
-          accessor: ({
-            blocker,
-            glove,
-            passing,
-            pokeCheck,
-            positioning,
-            rebound,
-            recovery,
-            puckhandling,
-            lowShots,
-            reflexes,
-            skating,
-            mentalToughness,
-            goalieStamina,
-          }) => [
-              blocker,
-              glove,
-              passing,
-              pokeCheck,
-              positioning,
-              rebound,
-              recovery,
-              puckhandling,
-              lowShots,
-              reflexes,
-              skating,
-              mentalToughness,
-              goalieStamina,
-            ],
+          accessor: 'appliedTPE',
           title: 'Applied TPE',
-          // Create cell which contains link to player
-          Cell: ({ value }) => {
-            return (
-              <>
-                {calculateGoalieTPE(value)}
-              </>
-            );
-          },
-          sortDescFirst: true
+          sortDescFirst: true,
         }
       ]
     }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateGoalieTPE(players[x])
+  }
 
   return (
     <PlayerTable

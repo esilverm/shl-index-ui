@@ -130,49 +130,18 @@ function SingleGoalieRatingsTable({
       columns: [
         {
           Header: 'Applied',
-          accessor: ({
-            blocker,
-            glove,
-            passing,
-            pokeCheck,
-            positioning,
-            rebound,
-            recovery,
-            puckhandling,
-            lowShots,
-            reflexes,
-            skating,
-            mentalToughness,
-            goalieStamina,
-          }) => [
-              blocker,
-              glove,
-              passing,
-              pokeCheck,
-              positioning,
-              rebound,
-              recovery,
-              puckhandling,
-              lowShots,
-              reflexes,
-              skating,
-              mentalToughness,
-              goalieStamina,
-            ],
+          accessor: 'appliedTPE',
           title: 'Applied TPE',
-          // Create cell which contains link to player
-          Cell: ({ value }) => {
-            return (
-              <>
-                {calculateGoalieTPE(value)}
-              </>
-            );
-          },
-          sortDescFirst: true
+          sortDescFirst: true,
         }
       ]
     }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateGoalieTPE(players[x])
+  }
 
   return (
     <PlayerTable
