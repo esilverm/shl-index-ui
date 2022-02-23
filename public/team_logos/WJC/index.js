@@ -3,6 +3,7 @@ import CAN from './Canada.svg?sprite';
 import CANR from './Canada_Red.svg?sprite';
 import DCH from './DACH.svg?sprite';
 import FIN from './Finland.svg?sprite';
+import ICE from './Iceland.svg?sprite'
 import NA from './North_America.svg?sprite';
 import SWE from './Sweden.svg?sprite';
 import RCL from './UCORCAL.svg?sprite';
@@ -18,6 +19,7 @@ export default {
   CNW: CANR,
   DCH,
   FIN,
+  ICE,
   NA,
   RCL,
   SWE,
