@@ -3,6 +3,8 @@ import React from 'react';
 import { GoalieRatings } from '../..';
 import PlayerTable from '../PlayerTable';
 
+import { calculateGoalieTPE } from './GoalieRatingsTable';
+
 interface Props {
   data: Array<GoalieRatings>;
   pagination?: boolean;
@@ -123,7 +125,23 @@ function SingleGoalieRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: 'appliedTPE',
+          title: 'Applied TPE',
+          sortDescFirst: true,
+        }
+      ]
+    }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateGoalieTPE(players[x])
+  }
 
   return (
     <PlayerTable

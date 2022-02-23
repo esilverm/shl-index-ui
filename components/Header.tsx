@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { HamburgerCollapse } from 'react-animated-burgers';
@@ -33,6 +34,7 @@ function HeaderBar({
 }: Props & typeof defaultProps): JSX.Element {
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   const { data: scheduleData, error: scheduleError } = useSWR(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
@@ -167,12 +169,13 @@ function HeaderBar({
             buttonWidth={24}
           />
           <SelectorWrapper>
-            {activePage !== 'game' && (
-              <SeasonSelector
-                seasons={getSeasonsList()}
-                loading={!seasonsData && !seasonsError}
-              />
-            )}
+            {activePage !== 'game' &&
+              router.pathname.indexOf('/player/') === -1 && (
+                <SeasonSelector
+                  seasons={getSeasonsList()}
+                  loading={!seasonsData && !seasonsError}
+                />
+              )}
           </SelectorWrapper>
         </Container>
       </HeaderNav>

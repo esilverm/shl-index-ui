@@ -4,6 +4,8 @@ import React from 'react';
 import { PlayerRatings } from '../..';
 import PlayerTable from '../PlayerTable';
 
+import { calculateSkaterTPE } from './SkaterRatingsTable';
+
 interface Props {
   data: Array<PlayerRatings>;
   pagination?: boolean;
@@ -198,7 +200,23 @@ function SinglePlayerRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: 'appliedTPE',
+          title: 'Applied TPE',
+          sortDescFirst: true,
+        }
+      ]
+    }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateSkaterTPE(players[x])
+  }
 
   return (
     <PlayerTable

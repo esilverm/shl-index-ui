@@ -12,6 +12,49 @@ interface Props {
   searching?: boolean;
 }
 
+const GoalieTPECost = {
+  '-1': 0,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 6,
+  5: 11,
+  6: 16,
+  7: 24,
+  8: 32,
+  9: 47,
+  10: 62,
+  11: 87,
+  12: 112,
+  13: 152,
+  14: 192,
+  15: 232
+}
+
+export function calculateGoalieTPE(players: GoalieRatings): number {
+  const SKIP = [
+    'id',
+    'appliedTPE',
+    'name',
+    'position',
+    'league',
+    'season',
+    'team',
+    'aggression',
+    'determination',
+    'teamPlayer',
+    'leadership',
+    'professionalism'
+  ];
+  let totalTPE = 0;
+  for (const[key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue
+    totalTPE += GoalieTPECost[value - 5]
+  }
+  return totalTPE;
+}
+
 function GoalieRatingsTable({
   data: players,
   pagination = false,
@@ -139,7 +182,23 @@ function GoalieRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: 'appliedTPE',
+          title: 'Applied TPE',
+          sortDescFirst: true,
+        }
+      ]
+    }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateGoalieTPE(players[x])
+  }
 
   return (
     <PlayerTable

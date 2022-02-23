@@ -12,6 +12,53 @@ interface Props {
   searching?: boolean;
 }
 
+const SkaterTPECost = {
+  '-1': 0,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 6,
+  6: 8,
+  7: 13,
+  8: 18,
+  9: 30,
+  10: 42,
+  11: 67,
+  12: 97,
+  13: 137,
+  14: 187,
+  15: 242
+}
+
+export function calculateSkaterTPE(players: PlayerRatings): number {
+  const SKIP = [
+    'id',
+    'appliedTPE',
+    'name',
+    'position',
+    'league',
+    'season',
+    'team',
+    'determination',
+    'teamPlayer',
+    'leadership',
+    'temperament',
+    'professionalism',
+  ];
+  let totalTPE = 0;
+  for (const[key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue
+    if (key === 'stamina') {
+      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[7]
+    } else {
+     totalTPE += SkaterTPECost[value - 5]
+    }
+  }
+  return totalTPE;
+}
+
 function PlayerRatingsTable({
   data: players,
   pagination = false,
@@ -212,7 +259,23 @@ function PlayerRatingsTable({
         },
       ],
     },
+    {
+      Header: 'TPE',
+      columns: [
+        {
+          Header: 'Applied',
+          accessor: 'appliedTPE',
+          title: 'Applied TPE',
+          sortDescFirst: true,
+        }
+      ]
+    }
   ];
+
+  // format data for TPE
+  for (let x = 0; x < players.length; x++) {
+    players[x]['appliedTPE'] = calculateSkaterTPE(players[x])
+  }
 
   return (
     <PlayerTable

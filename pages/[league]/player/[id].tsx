@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
+import Error from 'next/error';
 import React, { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { PulseLoader } from 'react-spinners';
@@ -111,7 +112,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
           setPlayerHeight(skaterInfo[0].height.toString());
           setPlayerWeight(skaterInfo[0].weight.toString());
         } else {
-          if (goalieStats) {
+          if (goalieStats && goalieStats.length > 0) {
             setIsSkater(false);
             setPlayerName(goalieStats[0].name);
             setPlayerPosition('G');
@@ -157,6 +158,15 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
   };
 
   const [display, setDisplay] = useState('stats');
+
+  if (
+    skaterStats &&
+    skaterStats.length === 0 &&
+    goalieStats &&
+    goalieStats.length === 0
+  ) {
+    return <Error statusCode={404} />;
+  }
 
   return (
     <React.Fragment>
