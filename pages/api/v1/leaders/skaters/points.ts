@@ -48,7 +48,7 @@ export default async (
 
   const pointLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr,  p.\`Last Name\` AS Name, (s.G + s.A) as Points
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr,  p.\`Last Name\` AS Name, (s.G + s.A) as Points, s.GP
     FROM `
       .append(`player_skater_stats_${type} AS s`)
       .append(
@@ -95,6 +95,7 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
+    gamesPlayed: player.GP,
     stat: player.Points,
     statName: 'Points',
   }));

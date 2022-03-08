@@ -91,33 +91,6 @@ function LeagueHome({ league }: Props): JSX.Element {
           </ScoresContainer>
           <NewsContainer>
             <NewsHeader>{leagueNames[league]} News</NewsHeader>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-              proin sagittis nisl rhoncus mattis rhoncus urna neque. Sed libero
-              enim sed faucibus turpis in eu. Sodales ut eu sem integer vitae.
-              Tellus elementum sagittis vitae et leo. Eu volutpat odio facilisis
-              mauris sit amet massa. Aliquam ultrices sagittis orci a
-              scelerisque. Lobortis scelerisque fermentum dui faucibus. Donec
-              ultrices tincidunt arcu non sodales neque sodales ut. Phasellus
-              faucibus scelerisque eleifend donec pretium vulputate. Vitae
-              congue eu consequat ac.
-            </p>
-            <p>
-              Risus at ultrices mi tempus imperdiet nulla malesuada
-              pellentesque. Lacus vestibulum sed arcu non odio. Urna porttitor
-              rhoncus dolor purus non enim praesent. Integer malesuada nunc vel
-              risus commodo viverra maecenas accumsan lacus. Consequat mauris
-              nunc congue nisi vitae suscipit tellus. Bibendum neque egestas
-              congue quisque egestas diam in arcu. A iaculis at erat
-              pellentesque adipiscing commodo elit. Tellus pellentesque eu
-              tincidunt tortor. Sem fringilla ut morbi tincidunt augue interdum
-              velit euismod. Nibh tortor id aliquet lectus proin. Nunc consequat
-              interdum varius sit amet mattis vulputate enim nulla. Tincidunt
-              nunc pulvinar sapien et ligula ullamcorper malesuada proin.
-              Tristique senectus et netus et malesuada. Sed viverra tellus in
-              hac habitasse platea dictumst vestibulum rhoncus.
-            </p>
 
             <h2>Latest Trade, Waiver, Injury & Suspension Transactions</h2>
             <p>
@@ -231,11 +204,6 @@ const ScoreBox = styled.div`
 const NewsContainer = styled.div`
   grid-column: 2 / 6;
   grid-row: 1 / 7;
-
-  & p:not(:last-child) {
-    display: inline-block;
-    margin-top: 30px;
-  }
 
   & p:last-child {
     margin-top: 10px;

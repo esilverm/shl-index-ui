@@ -47,7 +47,7 @@ export default async (
 
   const gaaLeaders = await query(
     SQL`
-    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.GAA
+    SELECT s.PlayerID, s.LeagueID, s.SeasonID, s.TeamID, t.Name as TeamName, t.Nickname as TeamNickname, t.Abbr as TeamAbbr, p.\`Last Name\` AS Name, s.GAA, s.GP
     FROM `
       .append(`player_goalie_stats_${type} AS s`)
       .append(
@@ -89,6 +89,7 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
+    gamesPlayed: player.GP,
     stat: player.GAA.toFixed(2),
     statName: 'GAA',
   }));
