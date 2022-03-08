@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.ShotsBlocked,
     statName: 'Shots Blocked',
+    statNameAbbr: 'SB',
   }));
 
   res.status(200).json(parsed);

@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.Points,
     statName: 'Points',
+    statNameAbbr: 'P',
   }));
 
   res.status(200).json(parsed);

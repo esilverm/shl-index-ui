@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.ShotPct,
     statName: 'Shot%',
+    statNameAbbr: 'SH%',
   }));
 
   res.status(200).json(parsed);

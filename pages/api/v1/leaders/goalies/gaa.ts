@@ -91,7 +91,8 @@ export default async (
     season: player.SeasonID,
     gamesPlayed: player.GP,
     stat: player.GAA.toFixed(2),
-    statName: 'GAA',
+    statName: 'Goals Against Average',
+    statNameAbbr: 'GAA',
   }));
 
   res.status(200).json(parsed);

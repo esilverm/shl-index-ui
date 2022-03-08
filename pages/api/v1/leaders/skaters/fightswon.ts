@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.FightsWon,
     statName: 'Fights Won',
+    statNameAbbr: 'FW',
   }));
 
   res.status(200).json(parsed);

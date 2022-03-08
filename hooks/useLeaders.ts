@@ -23,6 +23,8 @@ const useLeaders = (
     season: number;
     stat: number | string;
     statName: string;
+    gamesPlayed?: number;
+    statNameAbbr: string;
   }>;
   isLoading: boolean;
   isError: boolean;

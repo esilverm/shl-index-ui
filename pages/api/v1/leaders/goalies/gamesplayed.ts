@@ -81,7 +81,8 @@ export default async (
     },
     season: player.SeasonID,
     stat: player.GP,
-    statName: 'GP',
+    statName: 'Games Played',
+    statNameAbbr: 'GP',
   }));
 
   res.status(200).json(parsed);

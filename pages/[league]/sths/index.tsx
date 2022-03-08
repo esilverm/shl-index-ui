@@ -52,6 +52,7 @@ function LeagueHome({ league }: Props): JSX.Element {
     5
   );
 
+  console.log(pointLeaders);
   return (
     <React.Fragment>
       <NextSeo
@@ -115,14 +116,16 @@ function LeagueHome({ league }: Props): JSX.Element {
             <SideHeader>Top 5 Goal</SideHeader>
             <LeadersBox>
               <div className="name header">Name</div>
-              <div className="stat header">G</div>
+              <div className="stat header">GP - G</div>
               {!isLoadingGL &&
-                goalLeaders.map(({ id, name, team, stat }) => (
+                goalLeaders.map(({ id, name, team, stat, gamesPlayed }) => (
                   <React.Fragment key={id}>
                     <div className="name">
                       {name} ({team.abbr})
                     </div>
-                    <div className="stat">{stat}</div>
+                    <div className="stat">
+                      {gamesPlayed} - {stat}
+                    </div>
                   </React.Fragment>
                 ))}
             </LeadersBox>

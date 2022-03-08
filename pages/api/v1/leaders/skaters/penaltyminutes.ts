@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.PenaltyMinutes,
     statName: 'Penalty Minutes',
+    statNameAbbr: 'PIM',
   }));
 
   res.status(200).json(parsed);

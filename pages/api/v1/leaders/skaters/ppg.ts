@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.PowerPlayGoals,
     statName: 'Power Play Goals',
+    statNameAbbr: 'PPG',
   }));
 
   res.status(200).json(parsed);

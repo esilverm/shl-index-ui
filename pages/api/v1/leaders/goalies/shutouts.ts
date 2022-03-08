@@ -83,6 +83,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.Shutouts,
     statName: 'Shutouts',
+    statNameAbbr: 'SO',
   }));
 
   res.status(200).json(parsed);

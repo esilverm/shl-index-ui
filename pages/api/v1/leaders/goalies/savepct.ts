@@ -93,6 +93,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.SavePct.toFixed(3),
     statName: 'Save%',
+    statNameAbbr: 'SV%',
   }));
 
   res.status(200).json(parsed);

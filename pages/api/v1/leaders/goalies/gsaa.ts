@@ -100,7 +100,8 @@ export default async (
     season: player.SeasonID,
     gamesPlayed: player.GP,
     stat: player.GSAA,
-    statName: 'GSAA',
+    statName: 'Goals Saved Against Average',
+    statNameAbbr: 'GSAA',
   }));
 
   res.status(200).json(parsed);

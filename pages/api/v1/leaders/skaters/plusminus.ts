@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.plusMinus,
     statName: 'Plus Minus',
+    statNameAbbr: '+/-',
   }));
 
   res.status(200).json(parsed);

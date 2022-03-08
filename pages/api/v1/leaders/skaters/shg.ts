@@ -98,6 +98,7 @@ export default async (
     gamesPlayed: player.GP,
     stat: player.ShorthandedGoals,
     statName: 'Shorthanded Goals',
+    statNameAbbr: 'SHG',
   }));
 
   res.status(200).json(parsed);
