@@ -18,7 +18,7 @@ export default async (
     `);
 
   const search = SQL`
-    SELECT s.Slug, s.Date, t1.Abbr as 'Home', s.HomeScore, t2.Abbr as 'Away', s.AwayScore, s.Overtime, s.Shootout, s.Played
+    SELECT s.Slug, s.Date, CONCAT(t1.Name, " ", t1.Nickname) as 'HomeName', t1.Abbr as 'Home', s.HomeScore, CONCAT(t2.Name, " ", t2.Nickname) as 'AwayName', t2.Abbr as 'Away', s.AwayScore, s.Overtime, s.Shootout, s.Played
     FROM slugviewer as s
     INNER JOIN team_data AS t1 
       ON t1.TeamID = s.Home 
@@ -43,8 +43,10 @@ export default async (
     slug: game.Slug,
     date: game.Date,
     homeTeam: game.Home,
+    homeTeamName: game.HomeName,
     homeScore: game.HomeScore,
     awayTeam: game.Away,
+    awayTeamName: game.AwayName,
     awayScore: game.AwayScore,
     overtime: game.Overtime,
     shootout: game.Shootout,
