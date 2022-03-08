@@ -439,17 +439,13 @@ const TeamWrapper = styled.div`
   .name {
     margin: 0 10px;
     min-width: max-content;
-    color: #274F70;
+    color: #274f70;
     text-decoration: underline;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-
-  @media screen and (max-width: 768px) {
-    padding-right: 50px;
-    min-width: 0;
-    .name {
-      display: none;
-    }
-
 `;
 
 const HomeAwayRecords = styled.div`

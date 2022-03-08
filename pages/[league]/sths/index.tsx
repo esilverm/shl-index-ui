@@ -43,10 +43,10 @@ function LeagueHome({ league }: Props): JSX.Element {
     'all',
     5
   );
-  const { leaders: savePctLeaders, isLoading: isLoadingSL } = useLeaders(
+  const { leaders: winsLeaders, isLoading: isLoadingWL } = useLeaders(
     league,
     'goalie',
-    'savepct',
+    'wins',
     null,
     'all',
     5
@@ -156,9 +156,9 @@ function LeagueHome({ league }: Props): JSX.Element {
             <SideHeader>Top 5 Goalies</SideHeader>
             <LeadersBox>
               <div className="name header">Name</div>
-              <div className="stat header">PCT</div>
-              {!isLoadingSL &&
-                savePctLeaders.map(({ id, name, team, stat }) => (
+              <div className="stat header">W</div>
+              {!isLoadingWL &&
+                winsLeaders.map(({ id, name, team, stat }) => (
                   <React.Fragment key={id}>
                     <div className="name">
                       {name} ({team.abbr})
@@ -181,20 +181,7 @@ const Container = styled.div`
   grid-template-columns: repeat(8, 1fr);
   gap: 1.5rem;
   margin: 0 auto;
-
-  @media screen and (min-width: 2200px) {
-    height: auto;
-  }
-
-  @media screen and (max-width: 1224px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-
-  @media screen and (max-width: 1024px) {
-    display: block;
-    height: auto;
-  }
+  padding: 3px;
 `;
 
 const ScoresContainer = styled.div`
