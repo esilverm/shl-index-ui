@@ -55,6 +55,15 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
           >
             League
           </li>
+          <li
+            onClick={() => setActiveMenu('Records')}
+            onKeyDown={() => setActiveMenu('Records')}
+            tabIndex={0}
+            role="tab"
+            aria-selected={activeMenu === 'Records'}
+          >
+            Records
+          </li>
         </ul>
         <div>
           {activeMenu === 'Main' && (
@@ -69,7 +78,13 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
           {activeMenu === 'Pro League' && (
             <TabMenu>
               <ul>
-                <li>Standing</li>
+                <Link
+                  href={'/[league]/sths/standing'}
+                  as={`/${league}/sths/standing`}
+                  passHref
+                >
+                  <li>Standing</li>
+                </Link>
                 <li>Leader</li>
                 <li>Individual Leaders</li>
                 <li>Power Ranking</li>
@@ -110,7 +125,7 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
 
 const BodyContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: auto;
   background-image: url(/bg.jpeg);
   background-repeat: repeat-x;
   background-color: white;
@@ -130,6 +145,7 @@ const TabMenu = styled.div`
     & > li {
       text-decoration: underline;
       padding: 3px 10px;
+      margin: 0 0.25em;
       display: inline-block;
       border-radius: 3px 3px 0px 0px;
       font-size: 16px;
@@ -168,7 +184,7 @@ const TabMenu = styled.div`
 `;
 
 const MainContainer = styled.main`
-  padding: 10px;
+  padding: 10px 0;
   padding-top: 25px;
   width: 100%;
 `;
