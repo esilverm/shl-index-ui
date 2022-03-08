@@ -382,6 +382,15 @@ const TableHeader = styled.thead`
     font-size: 8pt;
     padding: 4px 12px 4px 0px;
     border: 1px solid #ccc;
+
+    &.sorted--asc {
+      background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+    }
+
+    &.sorted--desc {
+      background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+      background-color: #8dbdd8;
+    }
   }
 `;
 
@@ -402,10 +411,6 @@ const TableBody = styled.tbody`
     min-width: 20px;
 
     font-size: 8pt;
-
-    &.sorted {
-      background-color: rgba(1, 131, 218, 0.1);
-    }
   }
 
   tr {
