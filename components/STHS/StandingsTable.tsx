@@ -265,7 +265,7 @@ function StandingsTable({
       isLoading
         ? columnData.map((column) => ({
             ...column,
-            Cell: <Skeleton height={18} width="80%" />,
+            Cell: <Skeleton height={0} width="80%" />,
           }))
         : columnData,
     [isLoading, title]

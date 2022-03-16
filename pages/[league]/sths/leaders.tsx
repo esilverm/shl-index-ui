@@ -1,33 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 // import useSWR from 'swr';
-import { PlayerRatings, GoalieRatings, Player, Goalie } from '../../..';
-import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
+import { Player, Goalie } from '../../..';
 import GoalieScoreTable from '../../../components/STHS/GoalieScoreTable';
 import Layout from '../../../components/STHS/Layout';
 import SkaterScoreTable from '../../../components/STHS/SkaterScoreTable';
 import useGoalieStats from '../../../hooks/useGoalieStats';
 import useSkaterStats from '../../../hooks/useSkaterStats';
-import { SeasonType } from '../../api/v1/players/stats';
-
 interface Props {
   league: string;
   leaguename: string;
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
   const { ratings: skater, isLoading: isLoadingPlayers } = useSkaterStats(
     league,
-    filterSeasonType
+    'Regular Season'
   );
   const { ratings: goalie, isLoading: isLoadingGoalies } = useGoalieStats(
     league,
-    filterSeasonType
+    'Regular Season'
   );
 
   // get top 75 skaters in points
@@ -46,12 +42,6 @@ function PlayerPage({ league }: Props): JSX.Element {
           .sort((a, b) => b.wins - a.wins)
           .slice(0, 15) as Array<Goalie>)
       : [];
-
-  const [display, setDisplay] = useState('stats');
-
-  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
-    setFilterSeasonType(seasonType);
-  };
 
   return (
     <React.Fragment>
