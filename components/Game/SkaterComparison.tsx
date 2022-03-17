@@ -54,9 +54,11 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
         return skater[stat] > prev[stat] ? skater : prev;
       }, gameData.skaterStats[team][0]);
 
-      teamLeaders[stat][team].player = leader.name;
-      teamLeaders[stat][team].value =
-        stat === 'points' ? leader.goals + leader.assists : leader[stat];
+      if (leader && leader.name) {
+        teamLeaders[stat][team].player = leader.name;
+        teamLeaders[stat][team].value =
+          stat === 'points' ? leader.goals + leader.assists : leader[stat];
+      }
     });
   });
 
@@ -83,7 +85,9 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
                   teamLeaders[stat].away.value < teamLeaders[stat].home.value
                 }
               >
-                {teamLeaders[stat].away.value}
+                {teamLeaders[stat].away.value < 0
+                  ? '0'
+                  : teamLeaders[stat].away.value}
               </LeaderValue>
             </TeamLeader>
             <LeaderLabel>{teamLeaders[stat].label}</LeaderLabel>
@@ -93,7 +97,9 @@ const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
                   teamLeaders[stat].home.value < teamLeaders[stat].away.value
                 }
               >
-                {teamLeaders[stat].home.value}
+                {teamLeaders[stat].home.value < 0
+                  ? '0'
+                  : teamLeaders[stat].home.value}
               </LeaderValue>
               <LeaderSkater>{teamLeaders[stat].home.player}</LeaderSkater>
             </TeamLeader>
