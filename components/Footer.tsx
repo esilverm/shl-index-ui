@@ -16,7 +16,7 @@ function FooterBar(): JSX.Element {
         </a>{' '}
         |{' '}
         <a
-          href="https://gitreports.com/issue/esilverm/shl-index-ui/"
+          href="https://simulationhockey.com/newreply.php?tid=122906"
           rel="noreferrer"
           target="_blank"
         >
