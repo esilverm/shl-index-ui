@@ -29,10 +29,12 @@ const GoalieTPECost = {
   12: 112,
   13: 152,
   14: 192,
-  15: 232
-}
+  15: 232,
+};
 
-export function calculateGoalieTPE(players: GoalieRatings): number {
+export function calculateGoalieTPE(
+  players: GoalieRatings | { [s: string]: unknown } | ArrayLike<unknown>
+): number {
   const SKIP = [
     'id',
     'appliedTPE',
@@ -45,12 +47,12 @@ export function calculateGoalieTPE(players: GoalieRatings): number {
     'determination',
     'teamPlayer',
     'leadership',
-    'professionalism'
+    'professionalism',
   ];
   let totalTPE = 0;
-  for (const[key, value] of Object.entries(players)) {
-    if (SKIP.indexOf(key) !== -1) continue
-    totalTPE += GoalieTPECost[value - 5]
+  for (const [key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue;
+    totalTPE += GoalieTPECost[value - 5];
   }
   return totalTPE;
 }
@@ -190,14 +192,14 @@ function GoalieRatingsTable({
           accessor: 'appliedTPE',
           title: 'Applied TPE',
           sortDescFirst: true,
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
 
   // format data for TPE
   for (let x = 0; x < players.length; x++) {
-    players[x]['appliedTPE'] = calculateGoalieTPE(players[x])
+    players[x]['appliedTPE'] = calculateGoalieTPE(players[x]);
   }
 
   return (

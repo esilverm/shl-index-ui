@@ -126,6 +126,7 @@ export interface PlayerRatings {
     aggression: number;
     bravery: number;
   };
+  appliedTPE?: number;
 }
 
 export interface GoalieRatings {
@@ -152,6 +153,7 @@ export interface GoalieRatings {
     mentalToughness: number;
     goalieStamina: number;
   };
+  appliedTPE?: number;
 }
 
 export interface SearchType {
