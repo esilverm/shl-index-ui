@@ -14,7 +14,7 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
 
   return (
     <BodyContainer>
-      <TabMenu>
+      <TabMenu id="top">
         <ul>
           <Link href={'/[league]/sths'} as={`/${league}/sths`} passHref>
             <li className={'home'}>{league.toUpperCase()} Home</li>
@@ -145,6 +145,7 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
         </a>{' '}
         - <a href="/api">API Docs</a>
       </Footer>
+      <ScrollUp href="#top" />
     </BodyContainer>
   );
 }
@@ -228,6 +229,17 @@ const Footer = styled.div`
   & a {
     color: #274f70;
   }
+`;
+
+const ScrollUp = styled.a`
+  display: block;
+  width: 40px;
+  height: 40px;
+  opacity: 0.3;
+  position: fixed;
+  bottom: 50px;
+  right: 25px;
+  background: url(/icon_top.png) no-repeat;
 `;
 
 export default STHSLayout;

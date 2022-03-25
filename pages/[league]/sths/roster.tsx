@@ -16,6 +16,47 @@ interface Props {
   teamlist: Array<Team>;
 }
 
+const STHSTeamLinks = [
+  {
+    href: (name: string) => `/[league]/sths/roster#${name.replace(/[ ]/g, '')}`,
+    as: (league: string, name: string) =>
+      `/${league}/sths/roster#${name.replace(/[ ]/g, '')}`,
+    text: 'Pro Team Roster',
+  },
+  {
+    href: (name: string) =>
+      `/[league]/sths/scoring#${name.replace(/[ ]/g, '')}`,
+    as: (league: string, name: string) =>
+      `/${league}/sths/scoring#${name.replace(/[ ]/g, '')}`,
+    text: 'Pro Team Scoring',
+  },
+  {
+    href: () => '#',
+    as: () => `#`,
+    text: 'Pro Team Lines',
+  },
+  {
+    href: () => '#',
+    as: () => `#`,
+    text: 'Pro Team Schedule',
+  },
+  {
+    href: () => '#',
+    as: () => `#`,
+    text: 'Pro Team Stats',
+  },
+  {
+    href: () => '#',
+    as: () => `#`,
+    text: 'Pro Team Stats VS',
+  },
+  {
+    href: () => '#top',
+    as: () => `#top`,
+    text: 'Page Top',
+  },
+];
+
 function RosterPage({ league, teamlist }: Props): JSX.Element {
   const { ratings: ratings } = useRatings(league);
   const { ratings: goalieRatings } = useGoalieRatings(league);
@@ -61,6 +102,27 @@ function RosterPage({ league, teamlist }: Props): JSX.Element {
                   {name}
                 </Link>
               </TeamNameLink>
+              <TeamLinkList isTeam>
+                {STHSTeamLinks.map(({ href, as, text }, i) => (
+                  <React.Fragment key={text}>
+                    <span>[ </span>
+                    {i !== STHSTeamLinks.length - 1 ? (
+                      <Link href={href(name)} as={as(league, name)} passHref>
+                        {text}
+                      </Link>
+                    ) : (
+                      <strong>
+                        <Link href={href(name)} as={as(league, name)} passHref>
+                          {text}
+                        </Link>
+                      </strong>
+                    )}
+
+                    <span> ] </span>
+                  </React.Fragment>
+                ))}
+              </TeamLinkList>
+
               {ratings && goalieRatings && (
                 <React.Fragment>
                   <RatingsTableContainer>
@@ -116,8 +178,8 @@ const PageSizeWarning = styled.div`
   }
 `;
 
-const TeamLinkList = styled.div`
-  font-size: 12px;
+const TeamLinkList = styled.div<{ isTeam?: boolean }>`
+  font-size: 14px;
   a {
     color: #274f70;
 
@@ -130,7 +192,6 @@ const TeamLinkList = styled.div`
 
 const TeamContainer = styled.div`
   width: 100%;
-  margin: 30px 0;
   padding: 5px 0;
 `;
 
