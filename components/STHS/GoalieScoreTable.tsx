@@ -13,10 +13,9 @@ interface Props {
 function GoalieScoreTable({
   data: players,
   teamPage = false,
-  leadersPage = false,
 }: Props): JSX.Element {
   const columnData = [
-    leadersPage && {
+    {
       Header: '#',
       id: 'row',
       accessor: (_row, i) => i + 1,
@@ -24,7 +23,7 @@ function GoalieScoreTable({
     {
       Header: 'Goalie Name',
       id: 'player-table-player',
-      accessor: ({ name, team }) => `${name} (${team})`,
+      accessor: teamPage ? 'name' : ({ name, team }) => `${name} (${team})`,
     },
     {
       Header: 'GP',

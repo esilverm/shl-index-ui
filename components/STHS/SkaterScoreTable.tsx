@@ -21,7 +21,7 @@ function SkaterScoreTable({
     }${(toi / gamesPlayed) % 60 >> 0}`;
 
   const columnData = [
-    leadersPage && {
+    {
       Header: '#',
       id: 'row',
       accessor: (_row, i) => i + 1,
@@ -29,7 +29,8 @@ function SkaterScoreTable({
     {
       Header: 'Player Name',
       id: 'player-table-player',
-      accessor: ({ name, team }) => `${name} (${team})`,
+
+      accessor: teamPage ? 'name' : ({ name, team }) => `${name} (${team})`,
     },
     {
       Header: 'F',
@@ -187,52 +188,54 @@ function SkaterScoreTable({
       sortDescFirst: true,
     },
   ].concat(
-    leadersPage && [
-      {
-        Header: 'GA',
-        accessor: 'giveaways',
-        title: 'Giveaways',
-        sortDescFirst: true,
-      },
-      {
-        Header: 'TA',
-        accessor: 'takeaways',
-        title: 'Takeaways',
-        sortDescFirst: true,
-      },
+    leadersPage || teamPage
+      ? [
+          {
+            Header: 'GA',
+            accessor: 'giveaways',
+            title: 'Giveaways',
+            sortDescFirst: true,
+          },
+          {
+            Header: 'TA',
+            accessor: 'takeaways',
+            title: 'Takeaways',
+            sortDescFirst: true,
+          },
 
-      {
-        Header: 'W',
-        accessor: 'fightWins',
-        title: 'Fight Wins',
-        sortDescFirst: true,
-      },
-      {
-        Header: 'L',
-        accessor: 'fightLosses',
-        title: 'Fight Losses',
-        sortDescFirst: true,
-      },
+          {
+            Header: 'W',
+            accessor: 'fightWins',
+            title: 'Fight Wins',
+            sortDescFirst: true,
+          },
+          {
+            Header: 'L',
+            accessor: 'fightLosses',
+            title: 'Fight Losses',
+            sortDescFirst: true,
+          },
 
-      {
-        Header: 'GR',
-        accessor: 'gameRating',
-        title: 'Overall Game Rating',
-        sortDescFirst: true,
-      },
-      {
-        Header: 'OGR',
-        accessor: 'offensiveGameRating',
-        title: 'Offensive Game Rating',
-        sortDescFirst: true,
-      },
-      {
-        Header: 'DGR',
-        accessor: 'defensiveGameRating',
-        title: 'Defensive Game Rating',
-        sortDescFirst: true,
-      },
-    ]
+          {
+            Header: 'GR',
+            accessor: 'gameRating',
+            title: 'Overall Game Rating',
+            sortDescFirst: true,
+          },
+          {
+            Header: 'OGR',
+            accessor: 'offensiveGameRating',
+            title: 'Offensive Game Rating',
+            sortDescFirst: true,
+          },
+          {
+            Header: 'DGR',
+            accessor: 'defensiveGameRating',
+            title: 'Defensive Game Rating',
+            sortDescFirst: true,
+          },
+        ]
+      : []
   );
 
   return (

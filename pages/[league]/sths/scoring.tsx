@@ -4,12 +4,13 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-import { Team, PlayerRatings, GoalieRatings } from '../../..';
-import GoalieRatingsTable from '../../../components/STHS/GoalieRatingsTable';
+import { Team } from '../../..';
+import GoalieScoreTable from '../../../components/STHS/GoalieScoreTable';
 import Layout from '../../../components/STHS/Layout';
-import SkaterRatingsTable from '../../../components/STHS/SkaterRatingsTable';
-import useGoalieRatings from '../../../hooks/useGoalieRatings';
-import useRatings from '../../../hooks/useRatings';
+import SkaterAdvStatsTable from '../../../components/STHS/SkaterAdvStatsTable';
+import SkaterScoreTable from '../../../components/STHS/SkaterScoreTable';
+import useGoalieStats from '../../../hooks/useGoalieStats';
+import useSkaterStats from '../../../hooks/useSkaterStats';
 
 interface Props {
   league: string;
@@ -57,21 +58,35 @@ const STHSTeamLinks = [
   },
 ];
 
-function RosterPage({ league, teamlist }: Props): JSX.Element {
-  const { ratings: ratings } = useRatings(league);
-  const { ratings: goalieRatings } = useGoalieRatings(league);
+function ScoringPage({ league, teamlist }: Props): JSX.Element {
+  const { ratings: skaters } = useSkaterStats(league, 'Regular Season');
+  const { ratings: goalies } = useGoalieStats(league, 'Regular Season');
+
+  const getSkater = (team) =>
+    skaters
+      ? skaters
+          .filter((player) => player.position !== 'G' && player.team === team)
+          .sort((a, b) => b.points - a.points)
+      : [];
+
+  const getGoalie = (team) =>
+    goalies
+      ? goalies
+          .filter((player) => player.position === 'G' && player.team === team)
+          .sort((a, b) => b.wins - a.wins)
+      : [];
 
   return (
     <React.Fragment>
       <NextSeo
-        title="Roster"
+        title="Scoring"
         openGraph={{
-          title: 'Roster',
+          title: 'Scoring',
         }}
       />
       <Layout league={league} activePage="Pro Team">
         <Container>
-          <PageHeader>Pro Team Roster</PageHeader>
+          <PageHeader>Pro Team Scoring</PageHeader>
           <PageSizeWarning>
             Your browser screen resolution is too small for this page. Some
             information are hidden to keep the page readable.
@@ -123,25 +138,19 @@ function RosterPage({ league, teamlist }: Props): JSX.Element {
                 ))}
               </TeamLinkList>
 
-              {ratings && goalieRatings && (
+              {skaters && goalies && (
                 <React.Fragment>
                   <RatingsTableContainer>
-                    <SkaterRatingsTable
-                      data={
-                        ratings.filter(
-                          (p) => p.position !== 'G' && p.team === abbreviation
-                        ) as Array<PlayerRatings>
-                      }
+                    <SkaterScoreTable data={getSkater(abbreviation)} teamPage />
+                  </RatingsTableContainer>
+                  <RatingsTableContainer>
+                    <SkaterAdvStatsTable
+                      data={getSkater(abbreviation)}
+                      teamPage
                     />
                   </RatingsTableContainer>
                   <RatingsTableContainer>
-                    <GoalieRatingsTable
-                      data={
-                        goalieRatings.filter(
-                          (p) => p.position === 'G' && p.team === abbreviation
-                        ) as Array<GoalieRatings>
-                      }
-                    />
+                    <GoalieScoreTable data={getGoalie(abbreviation)} teamPage />
                   </RatingsTableContainer>
                 </React.Fragment>
               )}
@@ -230,4 +239,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: { league: leaguename, teamlist } };
 };
 
-export default RosterPage;
+export default ScoringPage;
