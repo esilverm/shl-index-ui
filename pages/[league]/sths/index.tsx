@@ -52,7 +52,6 @@ function LeagueHome({ league }: Props): JSX.Element {
     5
   );
 
-  console.log(pointLeaders);
   return (
     <React.Fragment>
       <NextSeo
@@ -92,10 +91,45 @@ function LeagueHome({ league }: Props): JSX.Element {
           </ScoresContainer>
           <NewsContainer>
             <NewsHeader>{leagueNames[league]} News</NewsHeader>
-
+            <h2>Sim Schedule!</h2>
+            <strong>
+              By League Management on Sunday, May 22, 2021 at 14:14
+            </strong>
+            <br />
+            <br />
+            Season begins on Monday, May 23 at 10 p.m. EST to allow for updates
+            and corrections. Otherwise, sim is as follows: Monday evenings at 9
+            or 10 p.m. EST, Tuesday through Friday at 8 a.m. EST, Saturday and
+            Sunday at 2 p.m. EST. ** This is full season sim schedule, which is
+            adjustable by myself. It is determined by my work schedule*, and if
+            I&#39;m unable to run the sim before going to work, I will not be
+            able to until after 6 p.m. EST. I will aim for morning sims, but
+            they may end up much later than expected. * Working at a credit
+            union, shifts are 8:15 - 5:00 and 9:30 - 6:15. I tend to work the
+            latter. My shift could change to the other for any random week. I
+            will give notice.
+            <br />
+            <h2>I wonder</h2>
+            <strong>
+              By League Management on Tuesday, March 22, 2021 at 02:23
+            </strong>
+            <br />
+            <br />
+            So, does anybody read this? Hello? I guess I&#39;m probably just
+            talking to myself here, but I figure it&#39;s a nice useful place to
+            store things.
+            <br />
+            <h2>Untitled</h2>
+            <strong>
+              By League Management on Thursday, March 17, 2021 at 22:10
+            </strong>
+            <br />
+            <br />
+            Raven is pretty cool, I guess.
+            <br />
             <h2>Latest Trade, Waiver, Injury & Suspension Transactions</h2>
             <p>
-              [5/1/2022 7:30:12 AM] - Joe Mama was added to Hamilton Steelhawks.
+              [4/1/2022 7:30:12 AM] - Joe Mama was added to Hamilton Steelhawks.
             </p>
           </NewsContainer>
           <TopScorersContainer>
@@ -220,6 +254,7 @@ const NewsContainer = styled.div`
     font-weight: 400;
     margin-top: 20px;
     margin-left: 10px;
+    margin-bottom: 12px;
   }
 `;
 

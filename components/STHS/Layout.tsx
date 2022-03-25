@@ -126,24 +126,22 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
       <MainContainer>{children}</MainContainer>
 
       <Footer>
-        &copy; {new Date().getFullYear()} -{' '}
-        <span>Made with ♥︎ by the SHL Dev Team - </span>
+        <span>Output by the </span>
         <a
-          href="https://simulationhockey.com/index.php"
+          href="https://simulationhockey.com/showthread.php?tid=64541"
           rel="noreferrer"
           target="_blank"
         >
-          Visit Forum
+          SimonT Franchise Hockey Manager (STFM)
         </a>{' '}
-        -{' '}
+        for Slappydoodle - Original Page{' '}
         <a
-          href="https://simulationhockey.com/newreply.php?tid=122906"
+          href="https://simulationhockey.com/showthread.php?tid=75312"
           rel="noreferrer"
           target="_blank"
         >
-          Report a Bug
-        </a>{' '}
-        - <a href="/api">API Docs</a>
+          The Augment #IzzyApproved
+        </a>
       </Footer>
       <ScrollUp href="#top" />
     </BodyContainer>

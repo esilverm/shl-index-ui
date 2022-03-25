@@ -32,23 +32,23 @@ const STHSTeamLinks = [
     text: 'Pro Team Scoring',
   },
   {
-    href: () => '#',
-    as: () => `#`,
+    href: () => '',
+    as: () => ``,
     text: 'Pro Team Lines',
   },
   {
-    href: () => '#',
-    as: () => `#`,
+    href: () => '',
+    as: () => ``,
     text: 'Pro Team Schedule',
   },
   {
-    href: () => '#',
-    as: () => `#`,
+    href: () => '',
+    as: () => ``,
     text: 'Pro Team Stats',
   },
   {
-    href: () => '#',
-    as: () => `#`,
+    href: () => '',
+    as: () => ``,
     text: 'Pro Team Stats VS',
   },
   {
