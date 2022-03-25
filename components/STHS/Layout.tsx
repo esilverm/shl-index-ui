@@ -120,8 +120,8 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
       <MainContainer>{children}</MainContainer>
 
       <Footer>
-        &copy; {new Date().getFullYear()} |{' '}
-        <span>Made with ♥︎ by the SHL Dev Team | </span>
+        &copy; {new Date().getFullYear()} -{' '}
+        <span>Made with ♥︎ by the SHL Dev Team - </span>
         <a
           href="https://simulationhockey.com/index.php"
           rel="noreferrer"
@@ -129,7 +129,15 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
         >
           Visit Forum
         </a>{' '}
-        | <a href="/api">API Docs</a>
+        -{' '}
+        <a
+          href="https://simulationhockey.com/newreply.php?tid=122906"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Report a Bug
+        </a>{' '}
+        - <a href="/api">API Docs</a>
       </Footer>
     </BodyContainer>
   );
@@ -210,6 +218,10 @@ const Footer = styled.div`
   color: black;
   font-weight: bold;
   margin-top: 3rem;
+
+  & a {
+    color: #274f70;
+  }
 `;
 
 export default STHSLayout;

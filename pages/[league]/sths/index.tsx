@@ -102,14 +102,16 @@ function LeagueHome({ league }: Props): JSX.Element {
             <SideHeader>Top 5 Point</SideHeader>
             <LeadersBox>
               <div className="name header">Name</div>
-              <div className="stat header">P</div>
+              <div className="stat header">GP - P</div>
               {!isLoadingPL &&
-                pointLeaders.map(({ id, name, team, stat }) => (
+                pointLeaders.map(({ id, name, team, stat, gamesPlayed }) => (
                   <React.Fragment key={id}>
                     <div className="name">
                       {name} ({team.abbr})
                     </div>
-                    <div className="stat">{stat}</div>
+                    <div className="stat">
+                      {gamesPlayed} - {stat}
+                    </div>
                   </React.Fragment>
                 ))}
             </LeadersBox>
