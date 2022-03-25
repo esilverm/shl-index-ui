@@ -104,8 +104,8 @@ function StandingsTable({
       Cell: ({ value }) => {
         return (
           <Link
-            href="/[league]/sths/rosters#[team]"
-            as={`/${league}/sths/rosters#${value[3].replace(' ', '')}`}
+            href="/[league]/sths/roster#[team]"
+            as={`/${league}/sths/roster#${value[3].replace(/[ ]/g, '')}`}
             passHref
           >
             <TeamWrapper>

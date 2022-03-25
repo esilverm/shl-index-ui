@@ -106,7 +106,13 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
           {activeMenu === 'Pro Team' && (
             <TabMenu>
               <ul>
-                <li>Roster</li>
+                <Link
+                  href={'/[league]/sths/roster'}
+                  as={`/${league}/sths/roster`}
+                  passHref
+                >
+                  <li>Roster</li>
+                </Link>
                 <li>Scoring</li>
                 <li>Lines</li>
                 <li>Schedule</li>
