@@ -16,7 +16,7 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
     <BodyContainer>
       <TabMenu id="top">
         <ul>
-          <Link href={'/[league]/sths'} as={`/${league}/sths`} passHref>
+          <Link href={'/[league]'} as={`/${league}`} passHref>
             <li className={'home'}>{league.toUpperCase()} Home</li>
           </Link>
           <li
@@ -79,22 +79,22 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
             <TabMenu>
               <ul>
                 <Link
-                  href={'/[league]/sths/standing'}
-                  as={`/${league}/sths/standing`}
+                  href={'/[league]/standing'}
+                  as={`/${league}/standing`}
                   passHref
                 >
                   <li>Standing</li>
                 </Link>
                 <Link
-                  href={'/[league]/sths/leaders'}
-                  as={`/${league}/sths/leaders`}
+                  href={'/[league]/leaders'}
+                  as={`/${league}/leaders`}
                   passHref
                 >
                   <li>Leader</li>
                 </Link>
                 <Link
-                  href={'/[league]/sths/individualLeaders'}
-                  as={`/${league}/sths/individualLeaders`}
+                  href={'/[league]/individualLeaders'}
+                  as={`/${league}/individualLeaders`}
                   passHref
                 >
                   <li>Individual Leaders</li>
@@ -107,8 +107,8 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
             <TabMenu>
               <ul>
                 <Link
-                  href={'/[league]/sths/roster'}
-                  as={`/${league}/sths/roster`}
+                  href={'/[league]/roster'}
+                  as={`/${league}/roster`}
                   passHref
                 >
                   <li>Roster</li>

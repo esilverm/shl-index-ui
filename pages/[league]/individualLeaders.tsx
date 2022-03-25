@@ -3,8 +3,8 @@ import { NextSeo } from 'next-seo';
 import React from 'react';
 import styled from 'styled-components';
 
-import Layout from '../../../components/STHS/Layout';
-import Leaderboard from '../../../components/STHS/Leaderboard';
+import Layout from '../../components/STHS/Layout';
+import Leaderboard from '../../components/STHS/Leaderboard';
 
 const skaterLeaderboards = [
   'goals',

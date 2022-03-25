@@ -3,10 +3,10 @@ import { NextSeo } from 'next-seo';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import Layout from '../../../components/STHS/Layout';
-import StandingsTable from '../../../components/STHS/StandingsTable';
-import useStandings from '../../../hooks/useStandings';
-import { Standings as StandingsData } from '../../api/v1/standings';
+import Layout from '../../components/STHS/Layout';
+import StandingsTable from '../../components/STHS/StandingsTable';
+import useStandings from '../../hooks/useStandings';
+import { Standings as StandingsData } from '../api/v1/standings';
 
 interface Props {
   league: string;
