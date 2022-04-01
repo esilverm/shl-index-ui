@@ -3,7 +3,7 @@ export interface Player {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   gamesPlayed: number;
   timeOnIce: number;
@@ -53,7 +53,7 @@ export interface Goalie {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   gamesPlayed: number;
   minutes: number;

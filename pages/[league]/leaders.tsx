@@ -1,242 +1,85 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import Leaderboard from '../../components/Leaderboard';
-import LeadersFilterSelector, {
-  LeadersFilter,
-} from '../../components/Selector/LeadersFilterSelector';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
-import { SeasonType } from '../api/v1/schedule';
-
-const skaterLeaderboards = [
-  'goals',
-  'assists',
-  'points',
-  'plusminus',
-  'shots',
-  'shotpct',
-  'hits',
-  'fightswon',
-  'penaltyminutes',
-  'shotsblocked',
-  'ppg',
-  'shg',
-];
-
-const goalieLeaderboards = [
-  'wins',
-  'losses',
-  'otl',
-  'ga',
-  'gaa',
-  'gsaa',
-  'saves',
-  'savepct',
-  'shutouts',
-  'gamesplayed',
-];
-
+// import useSWR from 'swr';
+import { Player, Goalie } from '../..';
+import GoalieScoreTable from '../../components/STHS/GoalieScoreTable';
+import Layout from '../../components/STHS/Layout';
+import SkaterScoreTable from '../../components/STHS/SkaterScoreTable';
+import useGoalieStats from '../../hooks/useGoalieStats';
+import useSkaterStats from '../../hooks/useSkaterStats';
 interface Props {
   league: string;
+  leaguename: string;
 }
 
-function Stats({ league }: Props): JSX.Element {
-  const [filter, setFilter] = useState<LeadersFilter>('Skaters');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
-  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
-  const [sprites, setSprites] = useState<{
-    [index: string]: React.ComponentClass<any>;
-  }>({});
-
-  useEffect(() => {
-    // Dynamically import svg icons based on the league chosen
-    (async () => {
-      const { default: s } = await import(
-        `../../public/team_logos/${league.toUpperCase()}/`
-      );
-
-      setSprites(() => s);
-      setLoadingAssets(() => false);
-    })();
-  }, []);
-
-  const onSeasonTypeSelect = useCallback(
-    (type) => setSeasonType(type),
-    [setSeasonType]
+function PlayerPage({ league }: Props): JSX.Element {
+  const { ratings: skater, isLoading: isLoadingPlayers } = useSkaterStats(
+    league,
+    'Regular Season'
   );
-  const onLeadersFilterSelect = useCallback(
-    (filter) => setFilter(filter),
-    [setFilter]
+  const { ratings: goalie, isLoading: isLoadingGoalies } = useGoalieStats(
+    league,
+    'Regular Season'
   );
 
-  if (isLoadingAssets || !sprites) return null;
+  // get top 75 skaters in points
+  const getSkater = () =>
+    skater
+      ? (skater
+          .filter((player) => player.position !== 'G')
+          .sort((a, b) => b.points - a.points)
+          .slice(0, 75) as Array<Player>)
+      : [];
 
-  const renderLeaderboards = () => {
-    const leaderboards =
-      filter === 'Goalies' ? goalieLeaderboards : skaterLeaderboards;
-    const playerType = filter === 'Goalies' ? 'goalie' : 'skater';
-    const skaterPosition =
-      filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
-
-    return leaderboards.map((statId) => (
-      <Leaderboard
-        key={statId}
-        league={league}
-        playerType={playerType}
-        stat={statId}
-        seasonType={seasonType}
-        Sprites={sprites}
-        position={skaterPosition}
-      />
-    ));
-  };
+  const getGoalie = () =>
+    goalie
+      ? (goalie
+          .filter((player) => player.position === 'G')
+          .sort((a, b) => b.wins - a.wins)
+          .slice(0, 15) as Array<Goalie>)
+      : [];
 
   return (
     <React.Fragment>
       <NextSeo
-        title="Leaders"
+        title="Players"
         openGraph={{
-          title: 'Leaders',
+          title: 'Players',
         }}
       />
-      <Header league={league} activePage="leaders" />
-      <Container>
-        <Filters>
-          <SelectorWrapper>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-            <SmallScreenFilters>
-              <LeadersFilterSelector
-                activeFilter={filter}
-                onChange={onLeadersFilterSelect}
-              />
-            </SmallScreenFilters>
-          </SelectorWrapper>
-          <DisplaySelectContainer role="tablist">
-            <DisplaySelectItem
-              onClick={() => setFilter('Skaters')}
-              active={filter === 'Skaters'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Skaters'}
-            >
-              Skaters
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Forwards')}
-              active={filter === 'Forwards'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Forwards'}
-            >
-              Forwards
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Defensemen')}
-              active={filter === 'Defensemen'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Defensemen'}
-            >
-              Defensemen
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Goalies')}
-              active={filter === 'Goalies'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Goalies'}
-            >
-              Goalies
-            </DisplaySelectItem>
-          </DisplaySelectContainer>
-        </Filters>
-        <LeaderBoards>{renderLeaderboards()}</LeaderBoards>
-      </Container>
-      <Footer />
+      <Layout league={league} activePage="Pro League">
+        <Container>
+          <Main>
+            <TableHeading>Pro Leaders</TableHeading>
+            <PageSizeWarning>
+              Your browser screen resolution is too small for this page. Some
+              information are hidden to keep the page readable.
+            </PageSizeWarning>
+            <TableWrapper>
+              <TableContainer>
+                {!isLoadingPlayers && (
+                  <SkaterScoreTable data={getSkater()} leadersPage />
+                )}
+              </TableContainer>
+            </TableWrapper>
+
+            <TableWrapper>
+              <TableContainer>
+                {!isLoadingGoalies && (
+                  <GoalieScoreTable data={getGoalie()} leadersPage />
+                )}
+              </TableContainer>
+            </TableWrapper>
+          </Main>
+        </Container>
+      </Layout>
     </React.Fragment>
   );
 }
-
-const Container = styled.div`
-  height: 100%;
-  width: 75%;
-  padding: 1px 0 40px 0;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (max-width: 1050px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-`;
-
-const Filters = styled.div`
-  @media screen and (max-width: 1050px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-`;
-
-const SelectorWrapper = styled.div`
-  width: 250px;
-  float: right;
-  margin-right: 3%;
-`;
-
-const DisplaySelectContainer = styled.div`
-  margin: 28px auto;
-  width: 95%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
-
-  @media screen and (max-width: 1050px) {
-    display: none;
-  }
-`;
-
-const DisplaySelectItem = styled.div<{ active: boolean }>`
-  display: inline-block;
-  padding: 8px 24px;
-  border: 1px solid
-    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors.grey100 : 'transparent'};
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  position: relative;
-  border-bottom: none;
-  bottom: -1px;
-`;
-
-const SmallScreenFilters = styled.div`
-  display: none;
-
-  @media screen and (max-width: 1050px) {
-    display: block;
-  }
-`;
-
-const LeaderBoards = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: auto;
-  width: 95%;
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
-`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
@@ -252,4 +95,45 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   return { props: { league: ctx.params.league } };
 };
 
-export default Stats;
+export default PlayerPage;
+
+// TODO Add better styling
+const Container = styled.div`
+  padding: 1px 0 40px 0;
+  margin: 0 auto;
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  margin: auto;
+`;
+
+const TableContainer = styled.div`
+  width: 100%;
+  margin: 30px 0;
+`;
+
+const TableHeading = styled.h2`
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.6em;
+  padding-bottom 9px;
+  padding-left: 9px;
+`;
+
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
+`;
+
+const PageSizeWarning = styled.div`
+  display: none;
+  color: #ff0000;
+  font-weight: bold;
+  padding: 1px 1px 1px 5px;
+  text-align: center;
+
+  @media screen and (max-width: 1060px) {
+    display: block;
+  }
+`;
