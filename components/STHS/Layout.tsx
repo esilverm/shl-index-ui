@@ -113,7 +113,13 @@ function STHSLayout({ league, activePage, children }: Props): JSX.Element {
                 >
                   <li>Roster</li>
                 </Link>
-                <li>Scoring</li>
+                <Link
+                  href={'/[league]/sths/scoring'}
+                  as={`/${league}/sths/scoring`}
+                  passHref
+                >
+                  <li>Scoring</li>
+                </Link>
                 <li>Lines</li>
                 <li>Schedule</li>
                 <li>Stats</li>
