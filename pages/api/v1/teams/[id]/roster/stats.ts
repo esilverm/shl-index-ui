@@ -59,7 +59,7 @@ export default async (
     ON s.SeasonID = p.SeasonID 
     AND s.LeagueID = p.LeagueID
     AND s.PlayerID = p.PlayerID
-    INNER JOIN player_ratings as r
+    INNER JOIN corrected_player_ratings as r
     ON s.SeasonID = r.SeasonID 
     AND s.LeagueID = r.LeagueID
     AND s.PlayerID = r.PlayerID
