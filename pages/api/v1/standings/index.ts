@@ -160,12 +160,13 @@ export default async (
     gp: team.Wins + team.Losses + team.OTL + team.SOL,
     wins:
       team.LeagueID === 2 || team.LeagueID === 3
-        ? team.Wins - ((team.Wins * 3 + team.SOL + team.OTL) % team.Points)
+        ? team.Wins -
+          ((team.Wins * 3 + team.SOL + team.OTL) % (team.Points || 1))
         : team.Wins,
     losses: team.Losses,
     OTW:
       team.LeagueID === 2 || team.LeagueID === 3
-        ? (team.Wins * 3 + team.SOL + team.OTL) % team.Points
+        ? (team.Wins * 3 + team.SOL + team.OTL) % (team.Points || 1)
         : undefined,
     OTL: team.OTL + team.SOL,
     points: team.Points,
