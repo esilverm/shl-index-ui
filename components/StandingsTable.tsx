@@ -150,7 +150,9 @@ function StandingsTable({
       accessor: 'wins',
       title: 'Wins',
     },
-    ...(league === 'iihf' || league === 'wjc'
+    ...((league === 'iihf' || league === 'wjc') &&
+    standings &&
+    'OTW' in standings[0]
       ? [
           {
             Header: 'W O/S',
