@@ -20,13 +20,14 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-
+  const [, setSeasonType] = useState('regular');
   const [isPlayoffs, setIsPlayoffs] = useState(false);
   const { data, isLoading } = useStandings(league, display);
   const windowSize = useWindowSize();
 
   const onSeasonTypeSelect = (type) => {
     setIsPlayoffs(type === 'Playoffs');
+    setSeasonType(type);
   };
 
   const renderDoublePlayoffsBracket = useCallback(

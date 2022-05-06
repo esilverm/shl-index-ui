@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import Error from 'next/error';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
@@ -31,6 +31,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSkater, setIsSkater] = useState<boolean>(true);
   const [playerError, setPlayerError] = useState<boolean>(false);
+  const [, setSeasonType] = useState('regular');
 
   // player info
   const [playerName, setPlayerName] = useState('');
@@ -80,6 +81,13 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
     isLoading: isLoadingSkaterInfo,
     isError: isErrorSkaterInfo,
   } = useSkaterInfo(id, league);
+
+  const handleSeasonTypeChange = useCallback(
+    (seasonType: string) => {
+      setSeasonType(seasonType);
+    },
+    [setSeasonType]
+  );
 
   // wait for all loads to complete
   useEffect(() => {
@@ -185,7 +193,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
           )}
           <ControlWrapper>
             <SelectorWrapper>
-              <SeasonTypeSelector />
+              <SeasonTypeSelector onChange={handleSeasonTypeChange} />
             </SelectorWrapper>
           </ControlWrapper>
           {!isLoading && (

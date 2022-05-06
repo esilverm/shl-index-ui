@@ -14,7 +14,7 @@ import {
 } from './styles';
 
 interface Props {
-  onChange?: (type: SeasonType) => void;
+  onChange: (type: SeasonType) => void;
 }
 
 export const SEASON_TYPE: {
@@ -77,7 +77,9 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
         : `?type=${parsedSeasonType.toLowerCase()}`;
       window.history.pushState(null, null, updatedSearch);
       setSelectedSeasonType(seasontype);
-      onChange(seasontype as SeasonType);
+      if (onChange) {
+        onChange(seasontype);
+      }
       setIsExpanded(false);
     }
   };

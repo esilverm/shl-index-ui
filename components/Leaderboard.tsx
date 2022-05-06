@@ -56,8 +56,8 @@ const Leaderboard = ({
     return (isDesc ? current / leader : leader / current) * 100;
   };
 
-  if (!leaders || isError || isLoading) {
-    return <SkeletonLeaderboard isError={isError} />;
+  if (!leaders || isError || isLoading || !leaders.length) {
+    return <SkeletonLeaderboard isError={isError} leaders={leaders} />;
   }
 
   const renderLeaders = () => {
@@ -111,8 +111,10 @@ const Leaderboard = ({
 
 const SkeletonLeaderboard = ({
   isError,
+  leaders,
 }: {
   isError: boolean;
+  leaders: any;
 }): JSX.Element => (
   <SkeletonTheme color="#ADB5BD" highlightColor="#CED4DA">
     {isError && (
@@ -122,7 +124,13 @@ const SkeletonLeaderboard = ({
         </strong>
       </Container>
     )}
-    {!isError && (
+    {!isError && leaders && (
+      <Container>
+        <strong>No data available</strong>
+      </Container>
+    )}
+
+    {!isError && !leaders && (
       <Container>
         <Skeleton width={150} height={30} />
         <TopTen>

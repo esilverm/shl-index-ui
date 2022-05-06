@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 // import useSWR from 'swr';
@@ -25,6 +25,7 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
+  const [, setSeasonType] = useState('regular');
   const { ratings: skaterratings, isLoading: isLoadingPlayers } =
     useRatings(league);
   const { ratings: skater, isLoading: isLoadingPlayerStat } =
@@ -60,6 +61,11 @@ function PlayerPage({ league }: Props): JSX.Element {
 
   const [display, setDisplay] = useState('stats');
 
+  const onSeasonTypeSelect = useCallback(
+    (seasonType) => setSeasonType(seasonType),
+    [setSeasonType]
+  );
+
   return (
     <React.Fragment>
       <NextSeo
@@ -72,7 +78,7 @@ function PlayerPage({ league }: Props): JSX.Element {
       <Container>
         <Filters>
           <SelectorWrapper>
-            <SeasonTypeSelector />
+            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
           </SelectorWrapper>
           <DisplaySelectContainer role="tablist">
             <DisplaySelectItem
