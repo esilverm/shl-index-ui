@@ -11,7 +11,6 @@ import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
 import StandingsTable from '../../components/StandingsTable';
 import useStandings from '../../hooks/useStandings';
 import useWindowSize from '../../hooks/useWindowSize';
-import { SeasonType } from '../api/v1/schedule';
 import { Standings as StandingsData } from '../api/v1/standings';
 import { PlayoffsRound } from '../api/v1/standings/playoffs';
 
@@ -21,14 +20,13 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('league');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
+
   const [isPlayoffs, setIsPlayoffs] = useState(false);
-  const { data, isLoading } = useStandings(league, display, seasonType);
+  const { data, isLoading } = useStandings(league, display);
   const windowSize = useWindowSize();
 
   const onSeasonTypeSelect = (type) => {
     setIsPlayoffs(type === 'Playoffs');
-    setSeasonType(type);
   };
 
   const renderDoublePlayoffsBracket = useCallback(

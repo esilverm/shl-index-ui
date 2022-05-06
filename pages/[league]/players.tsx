@@ -18,7 +18,6 @@ import useGoalieRatings from '../../hooks/useGoalieRatings';
 import useGoalieStats from '../../hooks/useGoalieStats';
 import useRatings from '../../hooks/useRatings';
 import useSkaterStats from '../../hooks/useSkaterStats';
-import { SeasonType } from '../api/v1/players/stats';
 
 interface Props {
   league: string;
@@ -28,12 +27,9 @@ interface Props {
 function PlayerPage({ league }: Props): JSX.Element {
   const { ratings: skaterratings, isLoading: isLoadingPlayers } =
     useRatings(league);
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-  const { ratings: skater, isLoading: isLoadingPlayerStat } = useSkaterStats(
-    league,
-    filterSeasonType
-  );
-  const { ratings: goalie } = useGoalieStats(league, filterSeasonType);
+  const { ratings: skater, isLoading: isLoadingPlayerStat } =
+    useSkaterStats(league);
+  const { ratings: goalie } = useGoalieStats(league);
 
   const { ratings: goalieratingdata, isLoading: isLoadingGoalies } =
     useGoalieRatings(league);
@@ -64,10 +60,6 @@ function PlayerPage({ league }: Props): JSX.Element {
 
   const [display, setDisplay] = useState('stats');
 
-  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
-    setFilterSeasonType(seasonType);
-  };
-
   return (
     <React.Fragment>
       <NextSeo
@@ -80,7 +72,7 @@ function PlayerPage({ league }: Props): JSX.Element {
       <Container>
         <Filters>
           <SelectorWrapper>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+            <SeasonTypeSelector />
           </SelectorWrapper>
           <DisplaySelectContainer role="tablist">
             <DisplaySelectItem

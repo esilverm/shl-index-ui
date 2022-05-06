@@ -1,11 +1,12 @@
 import useSWR from 'swr';
 
+import { SEASON_TYPE } from '../components/Selector/SeasonTypeSelector';
 import { Game } from '../pages/api/v1/schedule';
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
 const useSchedule = (
-  league: string,
-  seasonType = 'Regular Season'
+  league: string
 ): {
   games: Array<Game>;
   isLoading: boolean;
@@ -14,6 +15,7 @@ const useSchedule = (
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
   const seasonParam = season ? `&season=${season}` : '';
+  const seasonType = SEASON_TYPE[getQuerySeasonType().toUpperCase()];
 
   const { data, error } = useSWR(
     () =>

@@ -42,7 +42,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
-  const { games, isLoading } = useSchedule(league, filterSeasonType);
+  const { games, isLoading } = useSchedule(league);
   const scheduleContainerRef = useRef();
 
   useEffect(() => {

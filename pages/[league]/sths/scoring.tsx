@@ -59,8 +59,8 @@ const STHSTeamLinks = [
 ];
 
 function ScoringPage({ league, teamlist }: Props): JSX.Element {
-  const { ratings: skaters } = useSkaterStats(league, 'Regular Season');
-  const { ratings: goalies } = useGoalieStats(league, 'Regular Season');
+  const { ratings: skaters } = useSkaterStats(league);
+  const { ratings: goalies } = useGoalieStats(league);
 
   const getSkater = (team) =>
     skaters

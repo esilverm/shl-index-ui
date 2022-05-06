@@ -3,5 +3,5 @@ export const getQuerySeasonType = (): string => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const seasonType = urlParams.get('type') || '';
-  return seasonType.match(/\w+/) ? seasonType : '';
+  return seasonType.match(/\w+/) ? seasonType : 'regular';
 };

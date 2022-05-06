@@ -14,7 +14,7 @@ interface Props {
 
 function Standings({ league }: Props): JSX.Element {
   const [display, setDisplay] = useState('conference');
-  const { data, isLoading } = useStandings(league, display, 'Regular Season');
+  const { data, isLoading } = useStandings(league, display);
 
   return (
     <React.Fragment>

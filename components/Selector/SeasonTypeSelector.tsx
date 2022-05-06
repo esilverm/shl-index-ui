@@ -14,10 +14,10 @@ import {
 } from './styles';
 
 interface Props {
-  onChange: (type: SeasonType) => void;
+  onChange?: (type: SeasonType) => void;
 }
 
-const SEASON_TYPE: {
+export const SEASON_TYPE: {
   [key: string]: SeasonType;
 } = {
   PRE: 'Pre-Season',

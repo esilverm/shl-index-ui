@@ -8,7 +8,6 @@ interface Props {
   league: string;
   playerType: string;
   stat: string;
-  seasonType: string;
   Sprites: {
     [index: string]: React.ComponentClass<any>;
   };
@@ -19,7 +18,6 @@ const Leaderboard = ({
   league,
   playerType,
   stat,
-  seasonType,
   Sprites,
   position,
 }: Props): JSX.Element => {
@@ -27,7 +25,6 @@ const Leaderboard = ({
     league,
     playerType,
     stat,
-    seasonType,
     position
   );
 

@@ -58,7 +58,6 @@ function Stats({ league }: Props): JSX.Element {
                 league={league}
                 playerType="skater"
                 stat={statId}
-                seasonType={'Regular Season'}
               />
             ))}
           </LeaderBoards>
@@ -70,7 +69,6 @@ function Stats({ league }: Props): JSX.Element {
                 league={league}
                 playerType="goalie"
                 stat={statId}
-                seasonType={'Regular Season'}
               />
             ))}
           </LeaderBoards>
