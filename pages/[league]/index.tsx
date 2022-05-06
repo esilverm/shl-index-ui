@@ -18,7 +18,6 @@ function LeagueHome({ league }: Props): JSX.Element {
     league,
     'skater',
     'goals',
-    null,
     'all',
     1
   );
@@ -26,7 +25,6 @@ function LeagueHome({ league }: Props): JSX.Element {
     league,
     'skater',
     'points',
-    null,
     'all',
     1
   );
@@ -34,7 +32,6 @@ function LeagueHome({ league }: Props): JSX.Element {
     league,
     'goalie',
     'wins',
-    null,
     'all',
     1
   );
@@ -42,7 +39,6 @@ function LeagueHome({ league }: Props): JSX.Element {
     league,
     'goalie',
     'shutouts',
-    null,
     'all',
     1
   );

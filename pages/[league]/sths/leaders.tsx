@@ -17,14 +17,10 @@ interface Props {
 }
 
 function PlayerPage({ league }: Props): JSX.Element {
-  const { ratings: skater, isLoading: isLoadingPlayers } = useSkaterStats(
-    league,
-    'Regular Season'
-  );
-  const { ratings: goalie, isLoading: isLoadingGoalies } = useGoalieStats(
-    league,
-    'Regular Season'
-  );
+  const { ratings: skater, isLoading: isLoadingPlayers } =
+    useSkaterStats(league);
+  const { ratings: goalie, isLoading: isLoadingGoalies } =
+    useGoalieStats(league);
 
   // get top 75 skaters in points
   const getSkater = () =>

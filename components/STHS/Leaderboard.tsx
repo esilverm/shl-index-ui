@@ -9,22 +9,10 @@ interface Props {
   league: string;
   playerType: string;
   stat: string;
-  seasonType: string;
 }
 
-const Leaderboard = ({
-  league,
-  playerType,
-  stat,
-  seasonType,
-}: Props): JSX.Element => {
-  const { leaders, isLoading } = useLeaders(
-    league,
-    playerType,
-    stat,
-    seasonType,
-    null
-  );
+const Leaderboard = ({ league, playerType, stat }: Props): JSX.Element => {
+  const { leaders, isLoading } = useLeaders(league, playerType, stat, null);
 
   const columnData = [
     {

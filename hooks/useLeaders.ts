@@ -1,12 +1,13 @@
 import useSWR from 'swr';
 
+import { SEASON_TYPE } from '../components/Selector/SeasonTypeSelector';
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
 const useLeaders = (
   league: string,
   playerType = 'skater',
   stat = 'goals',
-  seasonType = 'Regular Season',
   position = 'all',
   limit = 10
 ): {
@@ -31,6 +32,7 @@ const useLeaders = (
 } => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
+  const seasonType = SEASON_TYPE[getQuerySeasonType().toUpperCase()];
   const seasonTypeParam =
     seasonType === 'Playoffs'
       ? '&type=playoffs'

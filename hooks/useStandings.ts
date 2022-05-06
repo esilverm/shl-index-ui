@@ -1,8 +1,10 @@
 import useSWR from 'swr';
 
+import { SEASON_TYPE } from '../components/Selector/SeasonTypeSelector';
 import { Standings } from '../pages/api/v1/standings';
 import { PlayoffsRound } from '../pages/api/v1/standings/playoffs';
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
 interface Hook {
   data: Standings | Array<PlayoffsRound>;
@@ -10,12 +12,9 @@ interface Hook {
   isError: boolean;
 }
 
-const useStandings = (
-  league: string,
-  display = 'league',
-  seasonType = 'Regular Season'
-): Hook => {
+const useStandings = (league: string, display = 'league'): Hook => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
+  const seasonType = SEASON_TYPE[getQuerySeasonType().toUpperCase()];
   const endpoint =
     seasonType === 'Playoffs'
       ? 'standings/playoffs'

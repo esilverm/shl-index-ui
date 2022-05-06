@@ -1,12 +1,13 @@
 import useSWR from 'swr';
 
 import { Player, Goalie } from '../';
+import { SEASON_TYPE } from '../components/Selector/SeasonTypeSelector';
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
-const useStandings = (
+const useTeamRosterStats = (
   league: string,
-  team: number,
-  seasonType: string
+  team: number
 ): {
   roster: Array<Player | Goalie>;
   isLoading: boolean;
@@ -14,6 +15,7 @@ const useStandings = (
 } => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
+  const seasonType = SEASON_TYPE[getQuerySeasonType().toUpperCase()];
   const seasonParam = season ? `&season=${season}` : '';
   const seasonTypeParam = seasonType
     ? `&type=${seasonType.toLowerCase().replace('-', '')}`
@@ -31,4 +33,4 @@ const useStandings = (
   };
 };
 
-export default useStandings;
+export default useTeamRosterStats;

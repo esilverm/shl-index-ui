@@ -53,6 +53,7 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
   const onSeasonSelect = (event) => {
     const season = event.target.dataset.season;
     const seasonInSearch = window.location.search.match(/([?|&])season=\d+/);
+    const queryParamsExist = window.location.search.match(/[?|&]/);
 
     if (season && season.match(/\d+/)) {
       const updatedSearch = seasonInSearch
@@ -60,6 +61,8 @@ function SeasonSelector({ seasons, loading }: Props): JSX.Element {
             seasonInSearch[0],
             `${seasonInSearch[1]}season=${season}`
           )
+        : queryParamsExist
+        ? `${window.location.search}&season=${season}`
         : `?season=${season}`;
       const newPath = `${window.location.pathname}${updatedSearch}`;
       router.push(newPath);
