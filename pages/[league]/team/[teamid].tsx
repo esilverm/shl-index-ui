@@ -59,7 +59,7 @@ function TeamPage({
     return <Error statusCode={404} />;
   }
 
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
+  const [, setFilterSeasonType] = useState('Regular Season');
   const { roster, isLoading } = useTeamRosterStats(leaguename, id);
   const [display, setDisplay] = useState('stats');
 
