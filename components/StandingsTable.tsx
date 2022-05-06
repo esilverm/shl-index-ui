@@ -313,7 +313,7 @@ function StandingsTable({
               ),
           }))
         : columnData,
-    [isLoading, isLoadingAssets, title]
+    [isLoading, isLoadingAssets, title, standings]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
