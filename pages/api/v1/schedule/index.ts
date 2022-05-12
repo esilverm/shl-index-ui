@@ -14,8 +14,8 @@ export type SeasonType = typeof seasonTypes[number];
 
 export interface GameRow {
   Slug: string;
-  SeasonID: string;
-  LeagueID: string;
+  SeasonID: number;
+  LeagueID: number;
   Date: string;
   Home: number;
   HomeScore: number;
@@ -25,12 +25,13 @@ export interface GameRow {
   Shootout: number;
   Played: number;
   Type: SeasonType;
+  GameID: number | null;
 }
 
 export interface Game {
   slug: string;
-  season: string;
-  league: string;
+  season: number;
+  league: number;
   date: string;
   homeTeam: number;
   homeScore: number;
@@ -40,6 +41,7 @@ export interface Game {
   shootout: number;
   played: number;
   type: SeasonType;
+  gameid: number | null;
 }
 
 export const convertGameRowToGame = (game: GameRow): Game => ({
@@ -55,6 +57,7 @@ export const convertGameRowToGame = (game: GameRow): Game => ({
   overtime: game.Overtime,
   shootout: game.Shootout,
   slug: game.Slug,
+  gameid: game.GameID,
 });
 
 export default async (

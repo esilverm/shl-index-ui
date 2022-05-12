@@ -120,8 +120,8 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
         )}
-
-        {!isLoading && (
+        {/* TODO: SWITCH THIS TO 66 */}
+        {!isLoading && gameData.game.gameid === null && (
           <>
             <LeftColumn>
               <TeamStats gameData={gameData} Sprites={Sprites} />
@@ -143,6 +143,22 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
                 league={league}
                 season={season}
               />
+            </RightColumn>
+          </>
+        )}
+
+        {/* base this page on https://www.nhl.com/gamecenter/dal-vs-cgy/2022/05/11/2021030175#game=2021030175,game_state=final,game_tab=stats */}
+        {!isLoading && gameData.game.gameid !== null && (
+          <>
+            <MiddleColumn>
+              <TeamsBlock
+                league={league}
+                gameData={gameData}
+                Sprites={Sprites}
+              />
+            </MiddleColumn>
+            <RightColumn>
+              <div />
             </RightColumn>
           </>
         )}
