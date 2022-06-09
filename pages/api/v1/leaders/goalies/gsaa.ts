@@ -100,7 +100,7 @@ export default async (
     season: player.SeasonID,
     gamesPlayed: player.GP,
     stat: player.GSAA,
-    statName: 'Goals Saved Against Average',
+    statName: 'Goals Saved Above Average',
     statNameAbbr: 'GSAA',
   }));
 
