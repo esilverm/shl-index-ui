@@ -278,6 +278,7 @@ export default async (
     };
 
     res.status(200).json(response);
+    return;
   }
 
   // ? IF WE ARE HERE, WE ARE USING FHM8 BOXSCORES
