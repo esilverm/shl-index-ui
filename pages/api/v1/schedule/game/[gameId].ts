@@ -294,10 +294,19 @@ export default async (
     CALL get_boxscore_goalie_stats(${gameId});
   `;
 
+  const gameSummarySearch = SQL`
+    SELECT score_home_p1, score_home_p2, score_home_p3, score_home_OT, score_home_SO, score_away_p1, score_away_p2, score_away_p3, score_away_OT, score_away_SO, star1, star2, star3, shots_home, shots_away, PIM_home, PIM_away, hits_home, hits_away, GA_home, GA_away, TA_home, TA_away, FOW_home, FOW_away, SOG_home_p1, SOG_home_p2, SOG_home_p3, SOG_home_OT, SOG_away_p1, SOG_away_p2, SOG_away_p3, SOG_away_OT, PPG_home, PPO_home, PPG_away, PPO_away
+    FROM boxscore_summary
+    WHERE gameID = ${(gameId as string).substring(
+      SeasonID.toString().length + 1
+    )};
+  `;
+
   const [periodScoringSummary] = await query(periodScoringSummarySearch);
   const [penaltySummary] = await query(penaltySummarySearch);
   const [skaterStatsSummary] = await query(skaterStatsSummarySearch);
   const [goalieStatsSummary] = await query(goalieStatsSummarySearch);
+  const [gameSummary] = await query(gameSummarySearch);
 
   // clean and parse responses
   const parsedPeriodScoringSummary = periodScoringSummary.map((period) => ({
@@ -414,6 +423,22 @@ export default async (
     }`,
   }));
 
+  const star1Stats =
+    parsedPlayerStatsSummary.find(
+      (player) => player.id === gameSummary.star1
+    ) ||
+    parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star1);
+  const star2Stats =
+    parsedPlayerStatsSummary.find(
+      (player) => player.id === gameSummary.star2
+    ) ||
+    parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star2);
+  const star3Stats =
+    parsedPlayerStatsSummary.find(
+      (player) => player.id === gameSummary.star3
+    ) ||
+    parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star3);
+
   const response = {
     game: {
       season: game.SeasonID,
@@ -429,15 +454,92 @@ export default async (
       shootout: game.Shootout,
       slug: game.Slug,
       gameid: game.GameID,
+      star1: star1Stats,
+      star2: star2Stats,
+      star3: star3Stats,
+      homeShots: gameSummary.shots_home,
+      awayShots: gameSummary.shots_away,
+      homePIM: gameSummary.PIM_home,
+      awayPIM: gameSummary.PIM_away,
+      homeHits: gameSummary.hits_home,
+      awayHits: gameSummary.hits_away,
+      homeGA: gameSummary.GA_home,
+      awayGA: gameSummary.GA_away,
+      homeTA: gameSummary.TA_home,
+      awayTA: gameSummary.TA_away,
+      homeFOW: gameSummary.FOW_home,
+      awayFOW: gameSummary.FOW_away,
+      homePPG: gameSummary.PPG_home,
+      homePPO: gameSummary.PPO_home,
+      awayPPG: gameSummary.PPG_away,
+      awayPPO: gameSummary.PPO_away,
     },
+    periodByPeriodStats: [
+      {
+        home: {
+          goals: gameSummary.score_home_p1,
+          shots: gameSummary.SOG_home_p1,
+        },
+        away: {
+          goals: gameSummary.score_away_p1,
+          shots: gameSummary.SOG_away_p1,
+        },
+      },
+      {
+        home: {
+          goals: gameSummary.score_home_p2,
+          shots: gameSummary.SOG_home_p2,
+        },
+        away: {
+          goals: gameSummary.score_away_p2,
+          shots: gameSummary.SOG_away_p2,
+        },
+      },
+      {
+        home: {
+          goals: gameSummary.score_home_p3,
+          shots: gameSummary.SOG_home_p3,
+        },
+        away: {
+          goals: gameSummary.score_away_p3,
+          shots: gameSummary.SOG_away_p3,
+        },
+      },
+      ...((game.Overtime && [
+        {
+          home: {
+            goals: gameSummary.score_home_OT,
+            shots: gameSummary.SOG_home_OT,
+          },
+          away: {
+            goals: gameSummary.score_away_OT,
+            shots: gameSummary.SOG_away_OT,
+          },
+        },
+      ]) ||
+        []),
+      ...((game.Shootout && [
+        {
+          home: {
+            goals: gameSummary.score_home_SO,
+          },
+          away: {
+            goals: gameSummary.score_away_SO,
+          },
+        },
+      ]) ||
+        []),
+    ],
     teams: {
       away: {
+        id: game.Away,
         name: game.AwayName,
         nickname: game.AwayNickname,
         abbr: game.AwayAbbr,
         primaryColor: game.AwayPrimaryColor,
       },
       home: {
+        id: game.Home,
         name: game.HomeName,
         nickname: game.HomeNickname,
         abbr: game.HomeAbbr,
