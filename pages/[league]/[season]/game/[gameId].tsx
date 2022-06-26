@@ -14,6 +14,9 @@ import {
   TeamStandings,
   TeamStats,
 } from '../../../../components/Game';
+import BoxscoreFinalScores from '../../../../components/Game/BoxscoreFinalScores';
+import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
+import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
 import Header from '../../../../components/Header';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
@@ -120,7 +123,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
         )}
-        {/* TODO: SWITCH THIS TO 66 */}
+
         {!isLoading && gameData.game.gameid === null && (
           <>
             <LeftColumn>
@@ -151,14 +154,19 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
         {!isLoading && gameData.game.gameid !== null && (
           <>
             <MiddleColumn>
-              <TeamsBlock
-                league={league}
+              <BoxscoreTeamStats
                 gameData={gameData}
                 Sprites={Sprites}
+                league={league}
               />
+              <BoxscoreTeamRosters gameData={gameData} />
             </MiddleColumn>
             <RightColumn>
-              <div />
+              <BoxscoreFinalScores
+                gameData={gameData}
+                Sprites={Sprites}
+                league={league}
+              />
             </RightColumn>
           </>
         )}
@@ -169,7 +177,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
 }
 
 const Container = styled.div`
-  width: 65%;
+  width: 75%;
   padding: 41px 0 40px 0;
   margin: 0 auto;
   display: flex;
