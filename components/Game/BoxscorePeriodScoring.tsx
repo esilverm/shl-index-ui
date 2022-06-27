@@ -13,7 +13,7 @@ const BoxscorePeriodScoring = ({ gameData, Sprites }): JSX.Element => {
   const firstPeriodGoals = scoring.filter((goal) => goal.period === 1);
   const secondPeriodGoals = scoring.filter((goal) => goal.period === 2);
   const thirdPeriodGoals = scoring.filter((goal) => goal.period === 3);
-  const overtimeGoals = scoring.filter((goal) => goal.period === 4);
+  const overtimeGoals = scoring.filter((goal) => goal.period === 0);
 
   return (
     <TeamsPreview>
@@ -134,7 +134,7 @@ const BoxscorePeriodScoring = ({ gameData, Sprites }): JSX.Element => {
                     isDark={tinycolor(goal.team.primaryColor).isDark()}
                     isHome={isHomeTeam}
                   >
-                    <div title={goal.time}>{goal.readableTime} / 1st</div>
+                    <div title={goal.time}>{goal.readableTime} / 2nd</div>
                     <div>
                       <span className="away">
                         {teams.away.abbr} {awayTeamScore}
@@ -208,7 +208,7 @@ const BoxscorePeriodScoring = ({ gameData, Sprites }): JSX.Element => {
                     isDark={tinycolor(goal.team.primaryColor).isDark()}
                     isHome={isHomeTeam}
                   >
-                    <div title={goal.time}>{goal.readableTime} / 1st</div>
+                    <div title={goal.time}>{goal.readableTime} / 3rd</div>
                     <div>
                       <span className="away">
                         {teams.away.abbr} {awayTeamScore}
@@ -289,7 +289,7 @@ const BoxscorePeriodScoring = ({ gameData, Sprites }): JSX.Element => {
                       isDark={tinycolor(goal.team.primaryColor).isDark()}
                       isHome={isHomeTeam}
                     >
-                      <div title={goal.time}>{goal.readableTime} / 1st</div>
+                      <div title={goal.time}>{goal.readableTime} / OT</div>
                       <div>
                         <span className="away">
                           {teams.away.abbr} {awayTeamScore}

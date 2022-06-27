@@ -15,7 +15,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
   const thirdPeriodPenalties = penalties.filter(
     (penalty) => penalty.period === 3
   );
-  const overtimePenalties = penalties.filter((penalty) => penalty.period === 4);
+  const overtimePenalties = penalties.filter((penalty) => penalty.period === 0);
 
   return (
     <TeamsPreview>
@@ -91,7 +91,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
             <div>Penalty</div>
           </PeriodName>
           {overtimePenalties.length > 0 ? (
-            thirdPeriodPenalties.map((penalty, index) => (
+            overtimePenalties.map((penalty, index) => (
               <PenaltyContainer key={index} color={penalty.team.primaryColor}>
                 <div>{penalty.readableTime}</div>
                 <div>{penalty.team.abbr}</div>
