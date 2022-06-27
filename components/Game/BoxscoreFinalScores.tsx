@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const BoxscoreFinalScores = ({ league, gameData, Sprites }): JSX.Element => {
+const BoxscoreFinalScores = ({ gameData, Sprites }): JSX.Element => {
   const { awayScore, homeScore, overtime, shootout } = gameData.game;
   const { periodByPeriodStats, teamStats, teams } = gameData;
   const final = `Final${shootout ? ' (SO)' : overtime ? ' (OT)' : ''}`;
@@ -25,11 +25,7 @@ const BoxscoreFinalScores = ({ league, gameData, Sprites }): JSX.Element => {
             <Sprites.Away />
           </TeamLogo>
           <TeamNameContainer>
-            <TeamName>
-              {league === 'iihf' || league === 'wjc'
-                ? teams.away.name
-                : teams.away.nickname}
-            </TeamName>
+            <TeamName>{teams.away.abbr}</TeamName>
             <TeamRecord>{teamStats.away.record}</TeamRecord>
           </TeamNameContainer>
         </TeamInfoContainer>
@@ -45,11 +41,7 @@ const BoxscoreFinalScores = ({ league, gameData, Sprites }): JSX.Element => {
             <Sprites.Home />
           </TeamLogo>
           <TeamNameContainer>
-            <TeamName>
-              {league === 'iihf' || league === 'wjc'
-                ? teams.home.name
-                : teams.home.nickname}
-            </TeamName>
+            <TeamName>{teams.home.abbr}</TeamName>
             <TeamRecord>{teamStats.home.record}</TeamRecord>
           </TeamNameContainer>
         </TeamInfoContainer>
