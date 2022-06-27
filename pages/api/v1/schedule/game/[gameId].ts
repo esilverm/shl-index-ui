@@ -300,7 +300,7 @@ export default async (
     FROM boxscore_summary
     WHERE gameID = ${(gameId as string).substring(
       SeasonID.toString().length + 1
-    )};
+    )} AND seasonID = ${SeasonID} AND leagueID = ${LeagueID};
   `;
 
   const [periodScoringSummary] = await query(periodScoringSummarySearch);

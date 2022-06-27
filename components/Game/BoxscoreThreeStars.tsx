@@ -50,7 +50,7 @@ const BoxscoreThreeStars = ({ gameData, Sprites }): JSX.Element => {
           <PlayerName>{star3.name}</PlayerName>
           <PlayerStats>
             {starThreeIsGoalie
-              ? `SavePct: ${star3.savePct}`
+              ? `SA: ${star3.shotsAgainst} SavePct: ${star3.savePct}`
               : `G: ${star3.goals} A: ${star3.assists}`}
           </PlayerStats>
         </PlayerStatsContainer>
