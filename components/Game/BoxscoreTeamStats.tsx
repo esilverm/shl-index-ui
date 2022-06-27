@@ -126,6 +126,11 @@ const TeamLogo = styled.div`
   width: 50px;
   height: 50px;
   margin-right: 0.5rem;
+
+  & * {
+    width: inherit;
+    height: inherit;
+  }
 `;
 
 const TeamName = styled.div`

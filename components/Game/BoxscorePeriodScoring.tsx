@@ -360,6 +360,11 @@ const TeamLogo = styled.div`
   width: 60px;
   height: 60px;
   margin: 0 0.5rem;
+
+  & * {
+    width: inherit;
+    height: inherit;
+  }
 `;
 
 const GoalInfoContainer = styled.div`
@@ -397,11 +402,11 @@ const GoalInfo = styled.div<{
   display: flex;
   flex-direction: row;
 
-  & > div:first-child,
   & > div:nth-child(2) {
     flex: 1;
   }
 
+  & > div:first-child,
   & > div:nth-child(3) {
     margin: 0 0.5rem;
   }

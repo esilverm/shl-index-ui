@@ -80,6 +80,11 @@ const TeamLogo = styled.div`
   width: 60px;
   height: 60px;
   margin-right: 0.5rem;
+
+  & * {
+    width: inherit;
+    height: inherit;
+  }
 `;
 
 const PlayerName = styled.div`
@@ -98,6 +103,10 @@ const PlayerStats = styled.div`
 const PlayerStatsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `;
 
 export default BoxscoreThreeStars;

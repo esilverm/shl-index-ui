@@ -49,7 +49,7 @@ const BoxscoreTeamRosters = ({ gameData }): JSX.Element => {
   return (
     <TeamsPreview>
       {/* Away Team */}
-      <>
+      <TeamTableContainer>
         <TeamName>
           {teams.away.name} {teams.away.nickname}
         </TeamName>
@@ -145,9 +145,9 @@ const BoxscoreTeamRosters = ({ gameData }): JSX.Element => {
               </TeamRosterTableRow>
             )
         )}
-      </>
+      </TeamTableContainer>
       {/* Home Team */}
-      <>
+      <TeamTableContainer>
         <TeamName>
           {teams.home.name} {teams.home.nickname}
         </TeamName>
@@ -239,7 +239,7 @@ const BoxscoreTeamRosters = ({ gameData }): JSX.Element => {
               </TeamRosterTableRow>
             )
         )}
-      </>
+      </TeamTableContainer>
     </TeamsPreview>
   );
 };
@@ -257,6 +257,11 @@ const TeamName = styled.h5`
   margin: 15px;
 `;
 
+const TeamTableContainer = styled.div`
+  overflow-x: auto;
+  width: 100%;
+`;
+
 const TeamRosterTableHeader = styled.div`
   display: flex;
   flex-direction: row;
@@ -266,6 +271,7 @@ const TeamRosterTableHeader = styled.div`
   align-items: center;
   border-top: 1px solid ${({ theme }) => theme.colors.grey400};
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey400};
+  min-width: 800px;
 `;
 
 const PlayerInfoContainer = styled.div`
@@ -313,6 +319,7 @@ const TeamRosterTableRow = styled.div`
   padding: 0 10px;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey400};
+  min-width: 800px;
 `;
 
 const PlayerStat = styled.div<{ long?: boolean }>`
