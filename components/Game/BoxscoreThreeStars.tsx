@@ -24,7 +24,7 @@ const BoxscoreThreeStars = ({ gameData, Sprites }): JSX.Element => {
           <PlayerName>{star1.name}</PlayerName>
           <PlayerStats>
             {starOneIsGoalie
-              ? `SavePct: ${star1.savePct}`
+              ? `SA: ${star1.shotsAgainst} SV%: ${star1.savePct.toFixed(3)}`
               : `G: ${star1.goals} A: ${star1.assists}`}
           </PlayerStats>
         </PlayerStatsContainer>
@@ -37,7 +37,7 @@ const BoxscoreThreeStars = ({ gameData, Sprites }): JSX.Element => {
           <PlayerName>{star2.name}</PlayerName>
           <PlayerStats>
             {starTwoIsGoalie
-              ? `SavePct: ${star2.savePct}`
+              ? `SA: ${star2.shotsAgainst} SV%: ${star2.savePct.toFixed(3)}`
               : `G: ${star2.goals} A: ${star2.assists}`}
           </PlayerStats>
         </PlayerStatsContainer>
@@ -50,7 +50,7 @@ const BoxscoreThreeStars = ({ gameData, Sprites }): JSX.Element => {
           <PlayerName>{star3.name}</PlayerName>
           <PlayerStats>
             {starThreeIsGoalie
-              ? `SA: ${star3.shotsAgainst} SavePct: ${star3.savePct}`
+              ? `SA: ${star3.shotsAgainst} SV%: ${star3.savePct.toFixed(3)}`
               : `G: ${star3.goals} A: ${star3.assists}`}
           </PlayerStats>
         </PlayerStatsContainer>
