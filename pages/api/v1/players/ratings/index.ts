@@ -2,6 +2,7 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
+import { calculateSkaterTPE } from '../../../../../components/RatingsTable/SkaterRatingsTable';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
 
@@ -65,7 +66,7 @@ export default async (
   });
 
   const parsed = combinedPlayerData.map((player) => {
-    return {
+    const tempPlayerRatings = {
       id: player.PlayerID,
       league: player.LeagueID,
       season: player.SeasonID,
@@ -100,6 +101,13 @@ export default async (
       leadership: player.Leadership,
       temperament: player.Temperament,
       professionalism: player.Professionalism,
+    };
+
+    const appliedTPE = calculateSkaterTPE(tempPlayerRatings);
+
+    return {
+      ...tempPlayerRatings,
+      appliedTPE: appliedTPE,
     };
   });
 

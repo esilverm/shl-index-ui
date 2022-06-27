@@ -29,10 +29,12 @@ const SkaterTPECost = {
   12: 97,
   13: 137,
   14: 187,
-  15: 242
-}
+  15: 242,
+};
 
-export function calculateSkaterTPE(players: PlayerRatings): number {
+export function calculateSkaterTPE(
+  players: PlayerRatings | { [s: string]: unknown } | ArrayLike<unknown>
+): number {
   const SKIP = [
     'id',
     'appliedTPE',
@@ -48,12 +50,12 @@ export function calculateSkaterTPE(players: PlayerRatings): number {
     'professionalism',
   ];
   let totalTPE = 0;
-  for (const[key, value] of Object.entries(players)) {
-    if (SKIP.indexOf(key) !== -1) continue
+  for (const [key, value] of Object.entries(players)) {
+    if (SKIP.indexOf(key) !== -1) continue;
     if (key === 'stamina') {
-      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[7]
+      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[7];
     } else {
-     totalTPE += SkaterTPECost[value - 5]
+      totalTPE += SkaterTPECost[value - 5];
     }
   }
   return totalTPE;
@@ -267,14 +269,14 @@ function PlayerRatingsTable({
           accessor: 'appliedTPE',
           title: 'Applied TPE',
           sortDescFirst: true,
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
 
   // format data for TPE
   for (let x = 0; x < players.length; x++) {
-    players[x]['appliedTPE'] = calculateSkaterTPE(players[x])
+    players[x]['appliedTPE'] = calculateSkaterTPE(players[x]);
   }
 
   return (

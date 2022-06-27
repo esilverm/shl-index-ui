@@ -55,7 +55,7 @@ export default async (
         SQL`
       WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
-    ))) - s.GoalsAgainst) as GSAA
+    ))) - s.GoalsAgainst) as GSAA, s.GP
     FROM `
       )
       .append(`player_goalie_stats_${type} AS s`)
@@ -98,8 +98,10 @@ export default async (
       abbr: player.TeamAbbr,
     },
     season: player.SeasonID,
+    gamesPlayed: player.GP,
     stat: player.GSAA,
-    statName: 'GSAA',
+    statName: 'Goals Saved Above Average',
+    statNameAbbr: 'GSAA',
   }));
 
   res.status(200).json(parsed);

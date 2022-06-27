@@ -48,7 +48,7 @@ export default async (
 
     const ratings = await query(SQL`
       SELECT * 
-      FROM player_ratings
+      FROM corrected_player_ratings
       WHERE LeagueID=${league}
         AND SeasonID=${season.SeasonID}
         AND PlayerID IN (${playerIDs})

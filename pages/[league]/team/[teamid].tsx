@@ -59,12 +59,8 @@ function TeamPage({
     return <Error statusCode={404} />;
   }
 
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-  const { roster, isLoading } = useTeamRosterStats(
-    leaguename,
-    id,
-    filterSeasonType
-  );
+  const [, setFilterSeasonType] = useState('Regular Season');
+  const { roster, isLoading } = useTeamRosterStats(leaguename, id);
   const [display, setDisplay] = useState('stats');
 
   const getSkaters = () =>

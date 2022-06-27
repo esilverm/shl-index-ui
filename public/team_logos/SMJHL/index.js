@@ -13,6 +13,7 @@ import REG from './Regina.svg?sprite';
 import STL from './St_Louis.svg?sprite';
 import STLOld from './St_LouisOld.svg?sprite';
 import VAN from './Vancouver.svg?sprite';
+import YUM from './Yukon.svg?sprite';
 
 export default {
   ANA,
@@ -30,4 +31,5 @@ export default {
   STL,
   STLOld,
   VAN,
+  YUM,
 };

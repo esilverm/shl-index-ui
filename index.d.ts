@@ -3,7 +3,7 @@ export interface Player {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   gamesPlayed: number;
   timeOnIce: number;
@@ -53,7 +53,7 @@ export interface Goalie {
   name: string;
   position: string;
   league: number;
-  team: number;
+  team: string;
   season: number;
   gamesPlayed: number;
   minutes: number;
@@ -126,6 +126,7 @@ export interface PlayerRatings {
     aggression: number;
     bravery: number;
   };
+  appliedTPE?: number;
 }
 
 export interface GoalieRatings {
@@ -152,6 +153,7 @@ export interface GoalieRatings {
     mentalToughness: number;
     goalieStamina: number;
   };
+  appliedTPE?: number;
 }
 
 export interface SearchType {

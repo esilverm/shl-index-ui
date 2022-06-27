@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import Error from 'next/error';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { PulseLoader } from 'react-spinners';
 import styled from 'styled-components';
@@ -21,7 +21,6 @@ import useGoalieStatsId from '../../../hooks/useGoalieStatsId';
 import useRatingsId from '../../../hooks/useRatingsId';
 import useSkaterInfo from '../../../hooks/useSkaterInfo';
 import useSkaterStatsId from '../../../hooks/useSkaterStatsId';
-import { SeasonType } from '../../api/v1/players/stats';
 
 interface Props {
   league: string;
@@ -32,7 +31,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSkater, setIsSkater] = useState<boolean>(true);
   const [playerError, setPlayerError] = useState<boolean>(false);
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
+  const [, setSeasonType] = useState('regular');
 
   // player info
   const [playerName, setPlayerName] = useState('');
@@ -62,13 +61,13 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
     ratings: goalieStats,
     isLoading: isLoadingGoalieStats,
     isError: isErrorGoalieStats,
-  } = useGoalieStatsId(id, league, filterSeasonType);
+  } = useGoalieStatsId(id, league);
 
   const {
     ratings: skaterStats,
     isLoading: isLoadingSkaterStats,
     isError: isErrorSkaterStats,
-  } = useSkaterStatsId(id, league, filterSeasonType);
+  } = useSkaterStatsId(id, league);
 
   // player info
   const {
@@ -82,6 +81,13 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
     isLoading: isLoadingSkaterInfo,
     isError: isErrorSkaterInfo,
   } = useSkaterInfo(id, league);
+
+  const handleSeasonTypeChange = useCallback(
+    (seasonType: string) => {
+      setSeasonType(seasonType);
+    },
+    [setSeasonType]
+  );
 
   // wait for all loads to complete
   useEffect(() => {
@@ -153,10 +159,6 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
     playerTeam,
   ]);
 
-  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
-    setFilterSeasonType(seasonType);
-  };
-
   const [display, setDisplay] = useState('stats');
 
   if (
@@ -191,7 +193,7 @@ function PlayerPage({ league, teamList, id }: Props): JSX.Element {
           )}
           <ControlWrapper>
             <SelectorWrapper>
-              <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+              <SeasonTypeSelector onChange={handleSeasonTypeChange} />
             </SelectorWrapper>
           </ControlWrapper>
           {!isLoading && (
