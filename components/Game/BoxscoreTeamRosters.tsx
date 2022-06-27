@@ -1,20 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const getPlayerShortname = (name: string): string => {
+export const getPlayerShortname = (name: string): string => {
   const splitName = name.split(' ');
   if (splitName.length === 1) {
     return name;
   } else if (
     splitName.length === 2 ||
-    splitName[splitName.length - 1].toLowerCase().includes('jr')
+    splitName[splitName.length - 1].toLowerCase().includes('jr') ||
+    splitName[splitName.length - 1].toLowerCase().includes('sr') ||
+    splitName[splitName.length - 1].toLowerCase().includes('ii') ||
+    splitName[splitName.length - 1].toLowerCase().includes('iii') ||
+    splitName[splitName.length - 1].toLowerCase().includes('iv')
   ) {
     // get first alphanumeric character of first name
     const firstChar = splitName[0].match(/[a-zA-Z0-9]/)[0];
 
     // if ends with jr
-    if (splitName[splitName.length - 1].toLowerCase().includes('jr')) {
-      return `${firstChar}. ${splitName[1]} Jr.`;
+    if (
+      splitName[splitName.length - 1].toLowerCase().includes('jr') ||
+      splitName[splitName.length - 1].toLowerCase().includes('sr') ||
+      splitName[splitName.length - 1].toLowerCase().includes('ii') ||
+      splitName[splitName.length - 1].toLowerCase().includes('iii') ||
+      splitName[splitName.length - 1].toLowerCase().includes('iv')
+    ) {
+      return `${firstChar}. ${splitName[splitName.length - 2]} ${
+        splitName[splitName.length - 1]
+      }`;
     }
 
     return `${firstChar}. ${splitName[1]}`;

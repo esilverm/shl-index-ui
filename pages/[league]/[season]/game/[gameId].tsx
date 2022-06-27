@@ -15,6 +15,7 @@ import {
   TeamStats,
 } from '../../../../components/Game';
 import BoxscoreFinalScores from '../../../../components/Game/BoxscoreFinalScores';
+import BoxscorePeriodScoring from '../../../../components/Game/BoxscorePeriodScoring';
 import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
 import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
 import Header from '../../../../components/Header';
@@ -167,6 +168,8 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
                 Sprites={Sprites}
                 league={league}
               />
+              <SmallSectionTitle>Scoring</SmallSectionTitle>
+              <BoxscorePeriodScoring gameData={gameData} Sprites={Sprites} />
             </RightColumn>
           </>
         )}
@@ -294,6 +297,13 @@ const ErrorBlock = styled.div`
   padding: 10px;
   margin: 10px 0;
   font-weight: 500;
+`;
+
+const SmallSectionTitle = styled.div`
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.grey700};
+  margin: 10px;
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

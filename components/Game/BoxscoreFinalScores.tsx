@@ -50,7 +50,7 @@ const BoxscoreFinalScores = ({ league, gameData, Sprites }): JSX.Element => {
                 ? teams.home.name
                 : teams.home.nickname}
             </TeamName>
-            <TeamRecord>{teamStats.away.record}</TeamRecord>
+            <TeamRecord>{teamStats.home.record}</TeamRecord>
           </TeamNameContainer>
         </TeamInfoContainer>
         {periodByPeriodStats.map((period, index) => (
