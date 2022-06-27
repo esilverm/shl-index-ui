@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { FlexRow } from './common';
+import { FlexRow, SectionTitle } from './common';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const BoxscoreTeamStats = ({ league, gameData, Sprites }): JSX.Element => {
@@ -27,6 +27,9 @@ const BoxscoreTeamStats = ({ league, gameData, Sprites }): JSX.Element => {
 
   return (
     <TeamsPreview>
+      <GameDate>
+        <SectionTitle>{gameData.game.date}</SectionTitle>
+      </GameDate>
       <FlexRow>
         <FirstColumn />
         <ColumnHeader>SOG</ColumnHeader>
@@ -88,7 +91,7 @@ const TeamsPreview = styled.div`
   flex-direction: column;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px;
+  padding: 0 15px 15px 15px;
   margin: 5px 0;
 `;
 
@@ -143,6 +146,17 @@ const TeamName = styled.div`
   @media screen and (max-width: 670px) {
     display: none;
   }
+`;
+
+const GameDate = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 4px solid ${({ theme }) => theme.colors.grey300};
+  margin-bottom: 10px;
+  padding 10px 0;
 `;
 
 export default BoxscoreTeamStats;
