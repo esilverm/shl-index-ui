@@ -20,6 +20,7 @@ import BoxscorePeriodScoring from '../../../../components/Game/BoxscorePeriodSco
 import BoxscorePeriodShots from '../../../../components/Game/BoxscorePeriodShots';
 import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
 import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
+import BoxscoreThreeStars from '../../../../components/Game/BoxscoreThreeStars';
 import Header from '../../../../components/Header';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
@@ -172,6 +173,8 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
               <BoxscorePeriodPenalties gameData={gameData} />
               <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
               <BoxscorePeriodShots gameData={gameData} />
+              <SmallSectionTitle>Three Stars of the Game</SmallSectionTitle>
+              <BoxscoreThreeStars gameData={gameData} Sprites={Sprites} />
             </RightColumn>
           </>
         )}
@@ -305,7 +308,7 @@ const SmallSectionTitle = styled.div`
   font-size: 0.9rem;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.grey700};
-  margin: 10px;
+  margin: 15px 10px 10px 10px;
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

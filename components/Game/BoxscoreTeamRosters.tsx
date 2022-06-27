@@ -9,9 +9,9 @@ export const getPlayerShortname = (name: string): string => {
     splitName.length === 2 ||
     splitName[splitName.length - 1].toLowerCase().includes('jr') ||
     splitName[splitName.length - 1].toLowerCase().includes('sr') ||
-    splitName[splitName.length - 1].toLowerCase().includes('ii') ||
-    splitName[splitName.length - 1].toLowerCase().includes('iii') ||
-    splitName[splitName.length - 1].toLowerCase().includes('iv')
+    splitName[splitName.length - 1].match(
+      /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/
+    )
   ) {
     // get first alphanumeric character of first name
     const firstChar = splitName[0].match(/[a-zA-Z0-9]/)[0];
@@ -20,9 +20,9 @@ export const getPlayerShortname = (name: string): string => {
     if (
       splitName[splitName.length - 1].toLowerCase().includes('jr') ||
       splitName[splitName.length - 1].toLowerCase().includes('sr') ||
-      splitName[splitName.length - 1].toLowerCase().includes('ii') ||
-      splitName[splitName.length - 1].toLowerCase().includes('iii') ||
-      splitName[splitName.length - 1].toLowerCase().includes('iv')
+      splitName[splitName.length - 1].match(
+        /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/
+      )
     ) {
       return `${firstChar}. ${splitName[splitName.length - 2]} ${
         splitName[splitName.length - 1]
