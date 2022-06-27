@@ -2,6 +2,7 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
+import { calculateGoalieTPE } from '../../../../../components/RatingsTable/GoalieRatingsTable';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
 
@@ -45,7 +46,7 @@ export default async (
 `);
 
   const parsed = basePlayerData.map((player) => {
-    return {
+    const tempGoalieRatings = {
       id: player.PlayerID,
       league: player.LeagueID,
       season: player.SeasonID,
@@ -70,6 +71,12 @@ export default async (
       leadership: player.Leadership,
       goalieStamina: player.GoalieStamina,
       professionalism: player.Professionalism,
+    };
+
+    const appliedTPE = calculateGoalieTPE(tempGoalieRatings);
+    return {
+      ...tempGoalieRatings,
+      appliedTPE,
     };
   });
 

@@ -10,7 +10,6 @@ import LeadersFilterSelector, {
   LeadersFilter,
 } from '../../components/Selector/LeadersFilterSelector';
 import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
-import { SeasonType } from '../api/v1/schedule';
 
 const skaterLeaderboards = [
   'goals',
@@ -45,12 +44,17 @@ interface Props {
 }
 
 function Stats({ league }: Props): JSX.Element {
+  const [, setSeasonType] = useState('regular');
   const [filter, setFilter] = useState<LeadersFilter>('Skaters');
-  const [seasonType, setSeasonType] = useState<SeasonType>('Regular Season');
   const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
+
+  const onSeasonTypeSelect = useCallback(
+    (seasonType) => setSeasonType(seasonType),
+    [setSeasonType]
+  );
 
   useEffect(() => {
     // Dynamically import svg icons based on the league chosen
@@ -64,10 +68,6 @@ function Stats({ league }: Props): JSX.Element {
     })();
   }, []);
 
-  const onSeasonTypeSelect = useCallback(
-    (type) => setSeasonType(type),
-    [setSeasonType]
-  );
   const onLeadersFilterSelect = useCallback(
     (filter) => setFilter(filter),
     [setFilter]
@@ -88,7 +88,6 @@ function Stats({ league }: Props): JSX.Element {
         league={league}
         playerType={playerType}
         stat={statId}
-        seasonType={seasonType}
         Sprites={sprites}
         position={skaterPosition}
       />

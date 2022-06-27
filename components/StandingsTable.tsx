@@ -20,6 +20,7 @@ interface Props {
         wins: number;
         losses: number;
         OTL: number;
+        OTW?: number;
         points: number;
         winPercent: string;
         ROW: number;
@@ -53,6 +54,7 @@ interface Props {
           wins: number;
           losses: number;
           OTL: number;
+          OTW?: number;
           points: number;
           winPercent: string;
           ROW: number;
@@ -148,6 +150,17 @@ function StandingsTable({
       accessor: 'wins',
       title: 'Wins',
     },
+    ...((league === 'iihf' || league === 'wjc') &&
+    standings &&
+    'OTW' in standings[0]
+      ? [
+          {
+            Header: 'W O/S',
+            accessor: 'OTW',
+            title: 'Wins in OT/SO',
+          },
+        ]
+      : []),
     {
       Header: 'L',
       accessor: 'losses',
@@ -158,6 +171,7 @@ function StandingsTable({
       accessor: 'OTL',
       title: 'Overtime Losses',
     },
+
     {
       Header: 'PTS',
       accessor: 'points',
@@ -168,11 +182,15 @@ function StandingsTable({
       accessor: 'winPercent',
       title: 'Points Percentage',
     },
-    {
-      Header: 'ROW',
-      accessor: 'ROW',
-      title: 'Regulation plus Overtime Wins',
-    },
+    ...(league === 'shl' || league === 'smjhl'
+      ? [
+          {
+            Header: 'ROW',
+            accessor: 'ROW',
+            title: 'Regulation plus Overtime Wins',
+          },
+        ]
+      : []),
     {
       Header: 'GF',
       accessor: 'goalsFor',
@@ -295,7 +313,7 @@ function StandingsTable({
               ),
           }))
         : columnData,
-    [isLoading, isLoadingAssets, title]
+    [isLoading, isLoadingAssets, title, standings]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

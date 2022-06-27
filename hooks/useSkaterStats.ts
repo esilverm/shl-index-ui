@@ -1,11 +1,12 @@
 import useSWR from 'swr';
 
 import { Player } from '..';
+import { SEASON_TYPE } from '../components/Selector/SeasonTypeSelector';
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
 const useSkaterStats = (
-  league: string,
-  seasonType: string
+  league: string
 ): {
   ratings: Array<Player>;
   isLoading: boolean;
@@ -13,6 +14,7 @@ const useSkaterStats = (
 } => {
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league);
   const season = getQuerySeason();
+  const seasonType = SEASON_TYPE[getQuerySeasonType().toUpperCase()];
   const seasonParam = season ? `&season=${season}` : '';
   const seasonTypeParam = seasonType
     ? `&type=${seasonType.toLowerCase().replace('-', '')}`

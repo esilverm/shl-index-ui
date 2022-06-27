@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import React, { useEffect, useRef, useState } from 'react';
 import { PulseLoader } from 'react-spinners';
@@ -14,7 +14,6 @@ import TeamSelector, {
   MinimalTeam,
 } from '../../components/Selector/TeamSelector';
 import useSchedule from '../../hooks/useSchedule';
-import { getQuerySeason } from '../../utils/season';
 import { SeasonType } from '../api/v1/schedule';
 
 enum SCHEDULE_STATES {
@@ -43,7 +42,7 @@ function Schedule({ league, teamlist }: Props): JSX.Element {
   const [sprites, setSprites] = useState<{
     [index: string]: React.ComponentClass<any>;
   }>({});
-  const { games, isLoading } = useSchedule(league, filterSeasonType);
+  const { games, isLoading } = useSchedule(league);
   const scheduleContainerRef = useRef();
 
   useEffect(() => {
@@ -259,29 +258,22 @@ const LoadAllButton = styled.button`
   }
 `;
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const {
+    query: { season, league: leaguename },
+  } = ctx;
 
-  const paths = leagues.map((league) => ({
-    params: { league },
-  }));
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const { league: leaguename } = ctx.params;
   const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
     typeof leaguename === 'string' ? leaguename : 'shl'
   );
-  const season = getQuerySeason();
+
   const seasonParam = season ? `&season=${season}` : '';
 
   const teamlist = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}${seasonParam}`
   ).then((res) => res.json());
 
-  return { props: { league: ctx.params.league, teamlist } };
+  return { props: { league: leaguename, teamlist } };
 };
 
 export default Schedule;

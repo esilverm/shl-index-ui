@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { SeasonType } from '../../pages/api/v1/schedule';
+import { getQuerySeasonType } from '../../utils/seasonType';
 
 import {
   Container,
@@ -16,7 +17,7 @@ interface Props {
   onChange: (type: SeasonType) => void;
 }
 
-const SEASON_TYPE: {
+export const SEASON_TYPE: {
   [key: string]: SeasonType;
 } = {
   PRE: 'Pre-Season',
@@ -44,12 +45,43 @@ function SeasonTypeSelector({ onChange }: Props): JSX.Element {
     }
   }, [selectorRef, isExpanded]);
 
+  useEffect(() => {
+    let nextSeasonType = getQuerySeasonType();
+
+    if (!nextSeasonType) {
+      nextSeasonType = SEASON_TYPE.REGULAR;
+    }
+
+    setSelectedSeasonType(SEASON_TYPE[nextSeasonType.toUpperCase()]);
+  }, []);
+
   const onButtonClick = () => setIsExpanded(!isExpanded);
   const onSeasonTypeSelect = (event) => {
     const { seasontype } = event.target.dataset;
-    onChange(seasontype);
-    setSelectedSeasonType(seasontype);
-    setIsExpanded(false);
+    const seasonTypeInSearch = window.location.search.match(/([?|&])type=\w+/);
+    const queryParamsExist = window.location.search.match(/[?|&]/);
+
+    if (seasontype && seasontype.match(/\w+/)) {
+      // set seasontype to key of seasonType in SEASON_TYPE
+      const parsedSeasonType = Object.keys(SEASON_TYPE).find(
+        (key) => SEASON_TYPE[key] === seasontype
+      );
+
+      const updatedSearch = seasonTypeInSearch
+        ? window.location.search.replace(
+            seasonTypeInSearch[0],
+            `${seasonTypeInSearch[1]}type=${parsedSeasonType.toLowerCase()}`
+          )
+        : queryParamsExist
+        ? `${window.location.search}&type=${parsedSeasonType.toLowerCase()}`
+        : `?type=${parsedSeasonType.toLowerCase()}`;
+      window.history.pushState(null, null, updatedSearch);
+      setSelectedSeasonType(seasontype);
+      if (onChange) {
+        onChange(seasontype);
+      }
+      setIsExpanded(false);
+    }
   };
 
   return (

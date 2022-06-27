@@ -2,6 +2,7 @@ import Link, { LinkProps } from 'next/link';
 import React from 'react';
 
 import { getQuerySeason } from '../utils/season';
+import { getQuerySeasonType } from '../utils/seasonType';
 
 interface SeasonLinkProps extends LinkProps {
   disabled?: boolean;
@@ -18,10 +19,17 @@ function LinkWithSeason({
   }
 
   const querySeason = getQuerySeason();
+  const querySeasonType = getQuerySeasonType();
   const seasonParam = querySeason ? `?season=${querySeason}` : '';
+  const seasonTypeParam =
+    seasonParam && querySeasonType
+      ? `&type=${querySeasonType}`
+      : querySeasonType
+      ? `?type=${querySeasonType}`
+      : '';
   const updatedProps = {
     ...props,
-    as: `${as}${seasonParam}`,
+    as: `${as}${seasonParam}${seasonTypeParam}`,
   };
 
   return <Link {...updatedProps}>{children}</Link>;

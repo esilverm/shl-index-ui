@@ -84,7 +84,9 @@ export default async (
           : ''
       )
       .append(
-        SQL` ORDER BY tr.Points DESC, tr.Wins DESC, tr.SOW ASC) as Position, td.LeagueID,`
+        +league !== 2 && +league !== 3
+          ? SQL` ORDER BY tr.Points DESC, tr.Wins - tr.SOW DESC, tr.Wins DESC, tr.GF - tr.GA DESC, tr.GF DESC) as Position, td.LeagueID,`
+          : SQL` ORDER BY tr.Points DESC, tr.Wins - ((tr.Wins * 3 + tr.SOL + tr.OTL) % tr.Points) - tr.SOW DESC, tr.GF - tr.GA DESC, tr.GF DESC) as Position, td.LeagueID,`
       )
       .append(
         display === 'conference'
@@ -156,8 +158,16 @@ export default async (
     conference: team.Conference,
     division: team.Division,
     gp: team.Wins + team.Losses + team.OTL + team.SOL,
-    wins: team.Wins,
+    wins:
+      team.LeagueID === 2 || team.LeagueID === 3
+        ? team.Wins -
+          ((team.Wins * 3 + team.SOL + team.OTL) % (team.Points || 1))
+        : team.Wins,
     losses: team.Losses,
+    OTW:
+      team.LeagueID === 2 || team.LeagueID === 3
+        ? (team.Wins * 3 + team.SOL + team.OTL) % (team.Points || 1)
+        : undefined,
     OTL: team.OTL + team.SOL,
     points: team.Points,
     winPercent: team.PCT === 0.999 ? (1).toFixed(3) : team.PCT.toFixed(3),
