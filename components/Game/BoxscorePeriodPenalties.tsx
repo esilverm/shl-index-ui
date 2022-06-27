@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const BoxscorePeriodPenalties = ({ gameData }) => {
   const { penalties } = gameData.boxscore;
   const { overtime } = gameData.game;

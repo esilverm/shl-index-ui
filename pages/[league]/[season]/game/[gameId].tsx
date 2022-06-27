@@ -17,6 +17,7 @@ import {
 import BoxscoreFinalScores from '../../../../components/Game/BoxscoreFinalScores';
 import BoxscorePeriodPenalties from '../../../../components/Game/BoxscorePeriodPenalties';
 import BoxscorePeriodScoring from '../../../../components/Game/BoxscorePeriodScoring';
+import BoxscorePeriodShots from '../../../../components/Game/BoxscorePeriodShots';
 import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
 import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
 import Header from '../../../../components/Header';
@@ -170,6 +171,7 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
               <SmallSectionTitle>Penalties</SmallSectionTitle>
               <BoxscorePeriodPenalties gameData={gameData} />
               <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
+              <BoxscorePeriodShots gameData={gameData} />
             </RightColumn>
           </>
         )}
