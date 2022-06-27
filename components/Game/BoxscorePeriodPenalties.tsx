@@ -32,7 +32,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
               <div>{penalty.readableTime}</div>
               <div>{penalty.team.abbr}</div>
               <div>
-                {penalty.reason} on {penalty.player}
+                {penalty.player} {penalty.reason}
               </div>
             </PenaltyContainer>
           ))
@@ -53,7 +53,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
               <div>{penalty.readableTime}</div>
               <div>{penalty.team.abbr}</div>
               <div>
-                {penalty.reason} on {penalty.player}
+                {penalty.player} {penalty.reason}
               </div>
             </PenaltyContainer>
           ))
@@ -74,7 +74,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
               <div>{penalty.readableTime}</div>
               <div>{penalty.team.abbr}</div>
               <div>
-                {penalty.reason} on {penalty.player}
+                {penalty.player} {penalty.reason}
               </div>
             </PenaltyContainer>
           ))
@@ -96,7 +96,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
                 <div>{penalty.readableTime}</div>
                 <div>{penalty.team.abbr}</div>
                 <div>
-                  {penalty.reason} on {penalty.player}
+                  {penalty.player} {penalty.reason}
                 </div>
               </PenaltyContainer>
             ))

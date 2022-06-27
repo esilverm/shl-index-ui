@@ -3,7 +3,10 @@ import styled from 'styled-components';
 
 export const getPlayerShortname = (name: string): string => {
   const splitName = name.split(' ');
-  if (splitName.length === 1) {
+  if (
+    splitName.length === 1 ||
+    (splitName.length === 2 && splitName[1].length === 1)
+  ) {
     return name;
   } else if (
     splitName.length === 2 ||
