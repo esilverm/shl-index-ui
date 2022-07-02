@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import Error from 'next/error';
-import React, { useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
 
@@ -10,6 +12,7 @@ import tinycolor from 'tinycolor2';
 import { PlayerRatings, GoalieRatings, Goalie, Player } from '../../..';
 import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
+import Line from '../../../components/Lines/Line';
 import GoalieRatingsTable from '../../../components/RatingsTable/GoalieRatingsTable';
 import SkaterRatingsTable from '../../../components/RatingsTable/SkaterRatingsTable';
 import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
@@ -18,6 +21,7 @@ import SkaterScoreTable from '../../../components/ScoreTable/SkaterScoreTable';
 import SeasonTypeSelector from '../../../components/Selector/SeasonTypeSelector';
 import useGoalieRatings from '../../../hooks/useGoalieRatings';
 import useRatings from '../../../hooks/useRatings';
+import useTeamLines from '../../../hooks/useTeamLines';
 import useTeamRosterStats from '../../../hooks/useTeamRosterStats';
 import { SeasonType } from '../../api/v1/teams/[id]/roster/stats';
 
@@ -45,6 +49,22 @@ interface Props {
   };
 }
 
+// TODO: add team data and make it the first visible option in the selector
+const TeamPageDisplays = ['roster', 'lines'] as const;
+type TeamPageDisplay = typeof TeamPageDisplays[number];
+
+const SkaterStatsDisplays = ['stats', 'advanced stats', 'ratings'] as const;
+type SkaterStatsDisplay = typeof SkaterStatsDisplays[number];
+
+const LinesDisplays = [
+  'even strength',
+  'power play',
+  'penalty kill',
+  'goalies',
+  'other',
+] as const;
+type LinesDisplay = typeof LinesDisplays[number];
+
 function TeamPage({
   leaguename,
   id,
@@ -59,46 +79,84 @@ function TeamPage({
     return <Error statusCode={404} />;
   }
 
+  const [elRefs, setElRefs] = useState({});
   const [, setFilterSeasonType] = useState('Regular Season');
   const { roster, isLoading } = useTeamRosterStats(leaguename, id);
-  const [display, setDisplay] = useState('stats');
+  const { lines, isLoading: isLoadingLines } = useTeamLines(leaguename, id);
+  const [display, setDisplay] = useState<SkaterStatsDisplay>('stats');
+  const [pageDisplay, setPageDisplay] = useState<TeamPageDisplay>('lines');
+  const [linesDisplay, setLinesDisplay] =
+    useState<LinesDisplay>('even strength');
 
-  const getSkaters = () =>
-    roster
-      ? (roster.filter((player) => player.position !== 'G') as Array<Player>)
-      : [];
-  const getGoalies = () =>
-    roster
-      ? (roster.filter((player) => player.position === 'G') as Array<Goalie>)
-      : [];
+  useEffect(() => {
+    setElRefs((elRefs) => ({
+      ...elRefs,
+      'even strength': Array(3)
+        .fill(null)
+        .map((_, i) => elRefs[i] || createRef()),
+      'power play': Array(3)
+        .fill(null)
+        .map((_, i) => elRefs[i] || createRef()),
+      'penalty kill': Array(3)
+        .fill(null)
+        .map((_, i) => elRefs[i] || createRef()),
+    }));
+  }, []);
+
+  // Lines are only available for FHM8 exports, so if there is an error on the backend we know that it's not a FHM8 export
+  const showLinesTab = React.useMemo(
+    () => !isLoadingLines && !('error' in lines),
+    [isLoadingLines, lines]
+  );
+
+  const rosterSkaters = React.useMemo(
+    () =>
+      roster
+        ? (roster.filter((player) => player.position !== 'G') as Array<Player>)
+        : [],
+    [roster]
+  );
+  const rosterGoalies = React.useMemo(
+    () =>
+      roster
+        ? (roster.filter((player) => player.position === 'G') as Array<Goalie>)
+        : [],
+    [roster]
+  );
 
   // ratings
   const { ratings: skaterratings, isLoading: isLoadingPlayerRatings } =
     useRatings(leaguename);
 
-  const getSkaterRatings = () =>
-    skaterratings
-      ? (skaterratings.filter(
-          (player) => player.position !== 'G' && player.team == abbreviation
-        ) as Array<PlayerRatings>)
-      : [];
+  const rosterSkaterRatings = React.useMemo(
+    () =>
+      skaterratings
+        ? (skaterratings.filter(
+            (player) => player.position !== 'G' && player.team == abbreviation
+          ) as Array<PlayerRatings>)
+        : [],
+    [skaterratings]
+  );
 
   const { ratings: goalieratingdata, isLoading: isLoadingGoalieRatings } =
     useGoalieRatings(leaguename);
 
-  const getGoalieRating = () =>
-    goalieratingdata
-      ? (goalieratingdata.filter(
-          (player) => player.position === 'G' && player.team == abbreviation
-        ) as Array<GoalieRatings>)
-      : [];
+  const rosterGoalieRatings = React.useMemo(
+    () =>
+      goalieratingdata
+        ? (goalieratingdata.filter(
+            (player) => player.position === 'G' && player.team == abbreviation
+          ) as Array<GoalieRatings>)
+        : [],
+    [goalieratingdata]
+  );
 
   const onSeasonTypeSelect = async (seasonType: SeasonType) => {
     setFilterSeasonType(seasonType);
   };
 
   return (
-    <React.Fragment>
+    <>
       <NextSeo
         title={name}
         additionalMetaTags={[
@@ -135,68 +193,236 @@ function TeamPage({
         </TeamInfoContainer>
       </TeamHero>
       <Container>
-        {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
-        <TableHeading>Skaters</TableHeading>
-        <Filters>
-          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-        </Filters>
-        <DisplaySelectContainer role="tablist">
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'stats')}
-            active={display === 'stats'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'stats'}
-          >
-            Stats
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => '')}
-            active={display === ''}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === ''}
-          >
-            Advanced Stats
-          </DisplaySelectItem>
-          <DisplaySelectItem
-            onClick={() => setDisplay(() => 'ratings')}
-            active={display === 'ratings'}
-            tabIndex={0}
-            role="tab"
-            aria-selected={display === 'ratings'}
-          >
-            Ratings
-          </DisplaySelectItem>
-        </DisplaySelectContainer>
-        <TableWrapper>
-          {!isLoading && (
-            <TableContainer>
-              {display === 'ratings' && !isLoadingPlayerRatings ? (
-                <SkaterRatingsTable data={getSkaterRatings()} teamPage />
-              ) : display === 'stats' ? (
-                <SkaterScoreTable data={getSkaters()} teamPage />
-              ) : (
-                <SkaterAdvStatsTable data={getSkaters()} teamPage />
+        {showLinesTab && (
+          <DisplaySelectContainer role="tablist">
+            {TeamPageDisplays.map((display) => (
+              <DisplaySelectItem
+                key={display}
+                onClick={() => setPageDisplay(display)}
+                active={pageDisplay === display}
+                tabIndex={0}
+                role="tab"
+                aria-selected={pageDisplay === display}
+                aria-controls={display}
+              >
+                {display}
+              </DisplaySelectItem>
+            ))}
+          </DisplaySelectContainer>
+        )}
+        {pageDisplay === 'roster' && (
+          <>
+            {/* Data for this page that we can also do: Roster, Historical Stats, etc. */}
+            <TableHeading>Skaters</TableHeading>
+            <Filters>
+              <SeasonTypeSelector onChange={onSeasonTypeSelect} />
+            </Filters>
+            <DisplaySelectContainer role="tablist">
+              {SkaterStatsDisplays.map((statsDisplay) => (
+                <DisplaySelectItem
+                  key={statsDisplay}
+                  onClick={() => setDisplay(statsDisplay)}
+                  active={display === statsDisplay}
+                  tabIndex={0}
+                  role="tab"
+                  aria-selected={display === statsDisplay}
+                  aria-controls={statsDisplay}
+                >
+                  {statsDisplay}
+                </DisplaySelectItem>
+              ))}
+            </DisplaySelectContainer>
+            <TableWrapper>
+              {!isLoading && (
+                <TableContainer>
+                  {display === 'ratings' && !isLoadingPlayerRatings ? (
+                    <SkaterRatingsTable data={rosterSkaterRatings} teamPage />
+                  ) : display === 'stats' ? (
+                    <SkaterScoreTable data={rosterSkaters} teamPage />
+                  ) : (
+                    <SkaterAdvStatsTable data={rosterSkaters} teamPage />
+                  )}
+                </TableContainer>
               )}
-            </TableContainer>
-          )}
-        </TableWrapper>
-        <TableHeading>Goalies</TableHeading>
-        <TableWrapper>
-          {!isLoading && (
-            <TableContainer>
-              {display === 'ratings' && !isLoadingGoalieRatings ? (
-                <GoalieRatingsTable data={getGoalieRating()} teamPage />
-              ) : (
-                <GoalieScoreTable data={getGoalies()} teamPage />
+            </TableWrapper>
+            <TableHeading>Goalies</TableHeading>
+            <TableWrapper>
+              {!isLoading && (
+                <TableContainer>
+                  {display === 'ratings' && !isLoadingGoalieRatings ? (
+                    <GoalieRatingsTable data={rosterGoalieRatings} teamPage />
+                  ) : (
+                    <GoalieScoreTable data={rosterGoalies} teamPage />
+                  )}
+                </TableContainer>
               )}
-            </TableContainer>
-          )}
-        </TableWrapper>
+            </TableWrapper>
+          </>
+        )}
+        {showLinesTab && pageDisplay === 'lines' && (
+          <>
+            {/* <TableHeading>Team Lines</TableHeading> */}
+            <DisplaySelectContainer role="tablist">
+              {LinesDisplays.map((linesDisplayItem) => (
+                <DisplaySelectItem
+                  key={linesDisplayItem}
+                  onClick={() => setLinesDisplay(linesDisplayItem)}
+                  active={linesDisplay === linesDisplayItem}
+                  tabIndex={0}
+                  role="tab"
+                  aria-selected={linesDisplay === linesDisplayItem}
+                  aria-controls={linesDisplayItem}
+                >
+                  {linesDisplayItem}
+                </DisplaySelectItem>
+              ))}
+            </DisplaySelectContainer>
+            {linesDisplay === 'even strength' && (
+              <>
+                {Object.keys(lines['ES']).map((lineType, i) => (
+                  <React.Fragment key={lineType}>
+                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineContainer>
+                      <div
+                        className="left"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft -=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &lt;
+                      </div>
+                      <LineGroupContainer
+                        key={lineType}
+                        ref={elRefs[linesDisplay][i]}
+                      >
+                        {Object.keys(lines['ES'][lineType]).map(
+                          (key) =>
+                            Object.keys(lines['ES'][lineType][key]).length >
+                              0 && (
+                              <LineContainer>
+                                <Line
+                                  key={key}
+                                  league={leaguename}
+                                  lineup={lines['ES'][lineType][key]}
+                                />
+                              </LineContainer>
+                            )
+                        )}
+                      </LineGroupContainer>
+                      <div
+                        className="right"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft +=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &gt;
+                      </div>
+                    </LineContainer>
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+            {linesDisplay === 'power play' && (
+              <>
+                {Object.keys(lines['PP']).map((lineType, i) => (
+                  <React.Fragment key={lineType}>
+                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineContainer>
+                      <div
+                        className="left"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft -=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &lt;
+                      </div>
+                      <LineGroupContainer
+                        key={lineType}
+                        ref={elRefs[linesDisplay][i]}
+                      >
+                        {Object.keys(lines['PP'][lineType]).map(
+                          (key) =>
+                            Object.keys(lines['PP'][lineType][key]).length >
+                              0 && (
+                              <LineContainer>
+                                <Line
+                                  key={key}
+                                  league={leaguename}
+                                  lineup={lines['PP'][lineType][key]}
+                                />
+                              </LineContainer>
+                            )
+                        )}
+                      </LineGroupContainer>
+                      <div
+                        className="right"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft +=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &gt;
+                      </div>
+                    </LineContainer>
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+            {linesDisplay === 'penalty kill' && (
+              <>
+                {Object.keys(lines['PK']).map((lineType, i) => (
+                  <React.Fragment key={lineType}>
+                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineContainer>
+                      <div
+                        className="left"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft -=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &lt;
+                      </div>
+                      <LineGroupContainer
+                        key={lineType}
+                        ref={elRefs[linesDisplay][i]}
+                      >
+                        {Object.keys(lines['PK'][lineType]).map(
+                          (key) =>
+                            Object.keys(lines['PK'][lineType][key]).length >
+                              0 && (
+                              <LineContainer>
+                                <Line
+                                  key={key}
+                                  league={leaguename}
+                                  lineup={lines['PK'][lineType][key]}
+                                />
+                              </LineContainer>
+                            )
+                        )}
+                      </LineGroupContainer>
+                      <div
+                        className="right"
+                        onClick={() => {
+                          elRefs[linesDisplay][i].current.scrollLeft +=
+                            elRefs[linesDisplay][i].current.clientWidth;
+                        }}
+                      >
+                        &gt;
+                      </div>
+                    </LineContainer>
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+          </>
+        )}
       </Container>
       <Footer />
-    </React.Fragment>
+    </>
   );
 }
 
@@ -337,6 +563,7 @@ const DisplaySelectItem = styled.div<{ active: boolean }>`
   position: relative;
   border-bottom: none;
   bottom: -1px;
+  text-transform: capitalize;
 `;
 
 const TableWrapper = styled.div`
@@ -355,6 +582,58 @@ const TableHeading = styled.h2`
   font-size: 2.2rem;
   padding: 5px 0;
   border-bottom: 1px solid black;
+`;
+
+// horizontal scrolling container for divs
+const LineGroupContainer = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(3, 100%);
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scroll-snap-type: x mandatory;
+  scroll-snap-stop: always;
+  scroll-behavior: smooth;
+
+  overscroll-behavior-x: contain;
+`;
+
+const LineTypeText = styled.div`
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  width: 40%;
+  margin: 0 auto;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid black;
+`;
+
+const LineContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+  margin: 0 auto;
+
+  & > div.left,
+  & > div.right {
+    font-family: Montserrat, sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    cursor: pointer;
+    margin: 20px;
+  }
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
