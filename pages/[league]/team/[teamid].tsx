@@ -85,7 +85,7 @@ function TeamPage({
   const { roster, isLoading } = useTeamRosterStats(leaguename, id);
   const { lines, isLoading: isLoadingLines } = useTeamLines(leaguename, id);
   const [display, setDisplay] = useState<SkaterStatsDisplay>('stats');
-  const [pageDisplay, setPageDisplay] = useState<TeamPageDisplay>('lines');
+  const [pageDisplay, setPageDisplay] = useState<TeamPageDisplay>('roster');
   const [linesDisplay, setLinesDisplay] =
     useState<LinesDisplay>('even strength');
 
@@ -282,7 +282,9 @@ function TeamPage({
               <>
                 {Object.keys(lines['ES']).map((lineType, i) => (
                   <React.Fragment key={lineType}>
-                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineTypeText>
+                      {lineType.split('on').join(' on ')}
+                    </LineTypeText>
                     <LineContainer>
                       <div
                         className="left"
@@ -329,7 +331,9 @@ function TeamPage({
               <>
                 {Object.keys(lines['PP']).map((lineType, i) => (
                   <React.Fragment key={lineType}>
-                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineTypeText>
+                      {lineType.split('on').join(' on ')}
+                    </LineTypeText>
                     <LineContainer>
                       <div
                         className="left"
@@ -376,7 +380,9 @@ function TeamPage({
               <>
                 {Object.keys(lines['PK']).map((lineType, i) => (
                   <React.Fragment key={lineType}>
-                    <LineTypeText>{lineType}</LineTypeText>
+                    <LineTypeText>
+                      {lineType.split('on').join(' on ')}
+                    </LineTypeText>
                     <LineContainer>
                       <div
                         className="left"
@@ -432,6 +438,32 @@ function TeamPage({
                   position="Backup"
                 />
               </GoaliesContainer>
+            )}
+            {linesDisplay === 'other' && (
+              <OtherContainer>
+                <div>
+                  <h3>Shootout Order</h3>
+                  {lines['shootout'].map((player, i) => (
+                    <LinePlayer
+                      key={player.id}
+                      player={player}
+                      league={leaguename}
+                      position={`Shootout ${i + 1}`}
+                    />
+                  ))}
+                </div>
+                <div>
+                  <h3>Extra Attackers</h3>
+                  {lines['extraAttackers'].map((player) => (
+                    <LinePlayer
+                      key={player.id}
+                      player={player}
+                      league={leaguename}
+                      position="Extra Attacker"
+                    />
+                  ))}
+                </div>
+              </OtherContainer>
             )}
           </>
         )}
@@ -660,6 +692,30 @@ const GoaliesContainer = styled.div`
 
   & div {
     flex: 1;
+  }
+`;
+
+const OtherContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+
+  & div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    & h3 {
+      font-size: 1.7rem;
+    }
+    & div {
+      flex: 1;
+    }
   }
 `;
 
