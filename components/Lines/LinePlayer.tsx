@@ -40,6 +40,7 @@ const PlayerContainer = styled.div`
   overflow: hidden;
   white-space: nowrap;
   min-width: 200px;
+  max-width: 350px;
 `;
 
 const NameText = styled.div`

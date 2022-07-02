@@ -13,6 +13,7 @@ import { PlayerRatings, GoalieRatings, Goalie, Player } from '../../..';
 import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
 import Line from '../../../components/Lines/Line';
+import LinePlayer from '../../../components/Lines/LinePlayer';
 import GoalieRatingsTable from '../../../components/RatingsTable/GoalieRatingsTable';
 import SkaterRatingsTable from '../../../components/RatingsTable/SkaterRatingsTable';
 import GoalieScoreTable from '../../../components/ScoreTable/GoalieScoreTable';
@@ -418,6 +419,20 @@ function TeamPage({
                 ))}
               </>
             )}
+            {linesDisplay === 'goalies' && (
+              <GoaliesContainer>
+                <LinePlayer
+                  player={lines['goalies']['starter']}
+                  league={leaguename}
+                  position="Starter"
+                />
+                <LinePlayer
+                  player={lines['goalies']['backup']}
+                  league={leaguename}
+                  position="Backup"
+                />
+              </GoaliesContainer>
+            )}
           </>
         )}
       </Container>
@@ -633,6 +648,18 @@ const LineContainer = styled.div`
     font-size: 3rem;
     cursor: pointer;
     margin: 20px;
+  }
+`;
+
+const GoaliesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  & div {
+    flex: 1;
   }
 `;
 
