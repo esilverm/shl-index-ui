@@ -300,16 +300,20 @@ function TeamPage({
                         ref={elRefs[linesDisplay][i]}
                       >
                         {Object.keys(lines['ES'][lineType]).map(
-                          (key) =>
+                          (key, index) =>
                             Object.keys(lines['ES'][lineType][key]).length >
                               0 && (
-                              <LineContainer>
+                              <LineWrapper>
+                                <h4>
+                                  {index + 1}
+                                  {['st', 'nd', 'rd'][index]} Line
+                                </h4>
                                 <Line
                                   key={key}
                                   league={leaguename}
                                   lineup={lines['ES'][lineType][key]}
                                 />
-                              </LineContainer>
+                              </LineWrapper>
                             )
                         )}
                       </LineGroupContainer>
@@ -349,16 +353,20 @@ function TeamPage({
                         ref={elRefs[linesDisplay][i]}
                       >
                         {Object.keys(lines['PP'][lineType]).map(
-                          (key) =>
+                          (key, index) =>
                             Object.keys(lines['PP'][lineType][key]).length >
                               0 && (
-                              <LineContainer>
+                              <LineWrapper>
+                                <h4>
+                                  {index + 1}
+                                  {['st', 'nd', 'rd'][index]} Line
+                                </h4>
                                 <Line
                                   key={key}
                                   league={leaguename}
                                   lineup={lines['PP'][lineType][key]}
                                 />
-                              </LineContainer>
+                              </LineWrapper>
                             )
                         )}
                       </LineGroupContainer>
@@ -398,16 +406,20 @@ function TeamPage({
                         ref={elRefs[linesDisplay][i]}
                       >
                         {Object.keys(lines['PK'][lineType]).map(
-                          (key) =>
+                          (key, index) =>
                             Object.keys(lines['PK'][lineType][key]).length >
                               0 && (
-                              <LineContainer>
+                              <LineWrapper>
+                                <h4>
+                                  {index + 1}
+                                  {['st', 'nd', 'rd'][index]} Line
+                                </h4>
                                 <Line
                                   key={key}
                                   league={leaguename}
                                   lineup={lines['PK'][lineType][key]}
                                 />
-                              </LineContainer>
+                              </LineWrapper>
                             )
                         )}
                       </LineGroupContainer>
@@ -680,6 +692,21 @@ const LineContainer = styled.div`
     font-size: 3rem;
     cursor: pointer;
     margin: 20px;
+  }
+`;
+
+const LineWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  & h4 {
+    font-family: Montserrat, sans-serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
   }
 `;
 
