@@ -77,6 +77,7 @@ const TeamStandings = ({ standings, Sprites }: Props): JSX.Element => {
 const TeamStandingsContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.grey100};
   padding: 15px 15px 0 15px;
+
   width: 100%;
 `;
 
