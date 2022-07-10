@@ -109,7 +109,7 @@ export default async (
 
   const [game] = await query(gameSearch);
 
-  const { SeasonID, LeagueID, Away, Home, Type, GameID } = game;
+  const { SeasonID, LeagueID, Away, Home, Type, Played, GameID } = game;
 
   const awayStats: TeamStats = {
     gamesPlayed: parseGamesPlayed({
@@ -145,8 +145,7 @@ export default async (
     }),
   };
 
-  // TODO: Switch this to 66
-  if (GameID === null) {
+  if (GameID === null || Played === 0) {
     const previousMatchupsSearch = SQL`
     SELECT *
     FROM slugviewer
