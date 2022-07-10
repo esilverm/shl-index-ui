@@ -121,65 +121,73 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           <PulseLoader size={15} />
         </CenteredContent>
       )}
-      <Container isFHM8Played={!isLoading && gameData.game.gameid !== null}>
+      <Container
+        isFHM8Played={
+          !isLoading &&
+          (gameData.game.gameid === null || gameData.game.played === 0)
+        }
+      >
         {gameError && (
           <ErrorBlock>
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
         )}
 
-        {!isLoading && gameData.game.gameid === null && (
-          <>
-            <LeftColumn>
-              <TeamStats gameData={gameData} Sprites={Sprites} />
-              {isRegularSeason && renderTeamStandings()}
-            </LeftColumn>
-            <MiddleColumn>
-              <TeamsBlock
-                league={league}
-                gameData={gameData}
-                Sprites={Sprites}
-              />
-              <SkaterComparison gameData={gameData} Sprites={Sprites} />
-              <GoalieComparison gameData={gameData} Sprites={Sprites} />
-            </MiddleColumn>
-            <RightColumn isFHM8Played={false}>
-              <PreviousMatchups
-                gameData={gameData}
-                Sprites={Sprites}
-                league={league}
-                season={season}
-              />
-            </RightColumn>
-          </>
-        )}
+        {!isLoading &&
+          (gameData.game.gameid === null || gameData.game.played === 0) && (
+            <>
+              <LeftColumn>
+                <TeamStats gameData={gameData} Sprites={Sprites} />
+                {isRegularSeason && renderTeamStandings()}
+              </LeftColumn>
+              <MiddleColumn>
+                <TeamsBlock
+                  league={league}
+                  gameData={gameData}
+                  Sprites={Sprites}
+                />
+                <SkaterComparison gameData={gameData} Sprites={Sprites} />
+                <GoalieComparison gameData={gameData} Sprites={Sprites} />
+              </MiddleColumn>
+              <RightColumn isFHM8Played={false}>
+                <PreviousMatchups
+                  gameData={gameData}
+                  Sprites={Sprites}
+                  league={league}
+                  season={season}
+                />
+              </RightColumn>
+            </>
+          )}
 
         {/* base this page on https://www.nhl.com/gamecenter/dal-vs-cgy/2022/05/11/2021030175#game=2021030175,game_state=final,game_tab=stats */}
-        {!isLoading && gameData.game.gameid !== null && (
-          <>
-            <MiddleColumn>
-              <BoxscoreTeamStats
-                gameData={gameData}
-                Sprites={Sprites}
-                league={league}
-              />
-              <BoxscoreTeamRosters gameData={gameData} />
-            </MiddleColumn>
-            <RightColumn
-              isFHM8Played={!isLoading && gameData.game.gameid !== null}
-            >
-              <BoxscoreFinalScores gameData={gameData} Sprites={Sprites} />
-              <SmallSectionTitle>Scoring</SmallSectionTitle>
-              <BoxscorePeriodScoring gameData={gameData} Sprites={Sprites} />
-              <SmallSectionTitle>Penalties</SmallSectionTitle>
-              <BoxscorePeriodPenalties gameData={gameData} />
-              <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
-              <BoxscorePeriodShots gameData={gameData} />
-              <SmallSectionTitle>Three Stars of the Game</SmallSectionTitle>
-              <BoxscoreThreeStars gameData={gameData} Sprites={Sprites} />
-            </RightColumn>
-          </>
-        )}
+        {!isLoading &&
+          gameData.game.gameid !== null &&
+          gameData.game.played === 1 && (
+            <>
+              <MiddleColumn>
+                <BoxscoreTeamStats
+                  gameData={gameData}
+                  Sprites={Sprites}
+                  league={league}
+                />
+                <BoxscoreTeamRosters gameData={gameData} />
+              </MiddleColumn>
+              <RightColumn
+                isFHM8Played={!isLoading && gameData.game.gameid !== null}
+              >
+                <BoxscoreFinalScores gameData={gameData} Sprites={Sprites} />
+                <SmallSectionTitle>Scoring</SmallSectionTitle>
+                <BoxscorePeriodScoring gameData={gameData} Sprites={Sprites} />
+                <SmallSectionTitle>Penalties</SmallSectionTitle>
+                <BoxscorePeriodPenalties gameData={gameData} />
+                <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
+                <BoxscorePeriodShots gameData={gameData} />
+                <SmallSectionTitle>Three Stars of the Game</SmallSectionTitle>
+                <BoxscoreThreeStars gameData={gameData} Sprites={Sprites} />
+              </RightColumn>
+            </>
+          )}
       </Container>
       <Footer />
     </React.Fragment>
