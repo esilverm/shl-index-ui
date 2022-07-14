@@ -43,7 +43,7 @@ const BoxscorePeriodPenalties = ({ gameData }) => {
       {/* 2nd */}
       <>
         <PeriodName>
-          <div>2st</div>
+          <div>2nd</div>
           <div>Team</div>
           <div>Penalty</div>
         </PeriodName>
