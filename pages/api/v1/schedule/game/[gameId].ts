@@ -297,9 +297,7 @@ export default async (
   const gameSummarySearch = SQL`
     SELECT score_home_p1, score_home_p2, score_home_p3, score_home_OT, score_home_SO, score_away_p1, score_away_p2, score_away_p3, score_away_OT, score_away_SO, star1, star2, star3, shots_home, shots_away, PIM_home, PIM_away, hits_home, hits_away, GA_home, GA_away, TA_home, TA_away, FOW_home, FOW_away, SOG_home_p1, SOG_home_p2, SOG_home_p3, SOG_home_OT, SOG_away_p1, SOG_away_p2, SOG_away_p3, SOG_away_OT, PPG_home, PPO_home, PPG_away, PPO_away
     FROM boxscore_summary
-    WHERE gameID = ${(gameId as string).substring(
-      SeasonID.toString().length + 1
-    )} AND seasonID = ${SeasonID} AND leagueID = ${LeagueID};
+    WHERE gameID = ${GameID} AND SeasonID = ${SeasonID} AND LeagueID = ${LeagueID};
   `;
 
   const [periodScoringSummary] = await query(periodScoringSummarySearch);
@@ -307,6 +305,11 @@ export default async (
   const [skaterStatsSummary] = await query(skaterStatsSummarySearch);
   const [goalieStatsSummary] = await query(goalieStatsSummarySearch);
   const [gameSummary] = await query(gameSummarySearch);
+
+  console.log(
+    gameSummary,
+    parseInt(GameID.toString().replace(SeasonID.toString(), ''))
+  );
 
   // clean and parse responses
   const parsedPeriodScoringSummary = periodScoringSummary.map((period) => ({
