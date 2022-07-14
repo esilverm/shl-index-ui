@@ -455,25 +455,29 @@ function TeamPage({
               <OtherContainer>
                 <div>
                   <h3>Shootout Order</h3>
-                  {lines['shootout'].map((player, i) => (
-                    <LinePlayer
-                      key={player.id}
-                      player={player}
-                      league={leaguename}
-                      position={`Shootout ${i + 1}`}
-                    />
-                  ))}
+                  {lines['shootout']
+                    .filter((player) => player !== null)
+                    .map((player, i) => (
+                      <LinePlayer
+                        key={player.id}
+                        player={player}
+                        league={leaguename}
+                        position={`Shootout ${i + 1}`}
+                      />
+                    ))}
                 </div>
                 <div>
                   <h3>Extra Attackers</h3>
-                  {lines['extraAttackers'].map((player) => (
-                    <LinePlayer
-                      key={player.id}
-                      player={player}
-                      league={leaguename}
-                      position="Extra Attacker"
-                    />
-                  ))}
+                  {lines['extraAttackers']
+                    .filter((player) => player !== null)
+                    .map((player) => (
+                      <LinePlayer
+                        key={player.id}
+                        player={player}
+                        league={leaguename}
+                        position="Extra Attacker"
+                      />
+                    ))}
                 </div>
               </OtherContainer>
             )}
