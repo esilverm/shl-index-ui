@@ -306,11 +306,6 @@ export default async (
   const [goalieStatsSummary] = await query(goalieStatsSummarySearch);
   const [gameSummary] = await query(gameSummarySearch);
 
-  console.log(
-    gameSummary,
-    parseInt(GameID.toString().replace(SeasonID.toString(), ''))
-  );
-
   // clean and parse responses
   const parsedPeriodScoringSummary = periodScoringSummary.map((period) => ({
     period: period.period,
