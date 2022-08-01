@@ -241,6 +241,43 @@ function SingleSkaterScoreTable({
       ],
     },
     {
+      Header: 'Faceoffs',
+      columns: [
+        {
+          Header: 'W',
+          accessor: ({ faceoffs, faceoffWins }) =>
+            faceoffs ? faceoffWins : '—',
+          title: 'Fight Wins',
+          sortDescFirst: true,
+        },
+        {
+          Header: 'L',
+          accessor: ({ faceoffs, faceoffWins }) =>
+            faceoffs ? faceoffs - faceoffWins : '—',
+          title: 'Fight Losses',
+          sortDescFirst: true,
+        },
+        {
+          Header: 'FO%',
+          id: 'player-table-foPct',
+          accessor: ({ faceoffs, faceoffWins }) =>
+            faceoffs ? ((faceoffWins / faceoffs) * 100).toFixed(1) : '—',
+        },
+      ],
+    },
+    {
+      Header: '',
+      id: 'player-table-gwg',
+      columns: [
+        {
+          Header: 'GWG',
+          accessor: ({ gwg }) => gwg ?? '—',
+          title: 'Game Winning Goals',
+          sortDescFirst: true,
+        },
+      ],
+    },
+    {
       Header: '',
       id: 'player-table-blocks',
       columns: [

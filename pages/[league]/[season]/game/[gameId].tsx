@@ -14,6 +14,13 @@ import {
   TeamStandings,
   TeamStats,
 } from '../../../../components/Game';
+import BoxscoreFinalScores from '../../../../components/Game/BoxscoreFinalScores';
+import BoxscorePeriodPenalties from '../../../../components/Game/BoxscorePeriodPenalties';
+import BoxscorePeriodScoring from '../../../../components/Game/BoxscorePeriodScoring';
+import BoxscorePeriodShots from '../../../../components/Game/BoxscorePeriodShots';
+import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
+import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
+import BoxscoreThreeStars from '../../../../components/Game/BoxscoreThreeStars';
 import Header from '../../../../components/Header';
 import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
 import { Standings } from '../../../api/v1/standings';
@@ -114,46 +121,81 @@ function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
           <PulseLoader size={15} />
         </CenteredContent>
       )}
-      <Container>
+      <Container
+        isFHM8Played={
+          !isLoading &&
+          (gameData.game.gameid === null || gameData.game.played === 0)
+        }
+      >
         {gameError && (
           <ErrorBlock>
             Failed to load game preview. Please reload the page to try again.
           </ErrorBlock>
         )}
 
-        {!isLoading && (
-          <>
-            <LeftColumn>
-              <TeamStats gameData={gameData} Sprites={Sprites} />
-              {isRegularSeason && renderTeamStandings()}
-            </LeftColumn>
-            <MiddleColumn>
-              <TeamsBlock
-                league={league}
-                gameData={gameData}
-                Sprites={Sprites}
-              />
-              <SkaterComparison gameData={gameData} Sprites={Sprites} />
-              <GoalieComparison gameData={gameData} Sprites={Sprites} />
-            </MiddleColumn>
-            <RightColumn>
-              <PreviousMatchups
-                gameData={gameData}
-                Sprites={Sprites}
-                league={league}
-                season={season}
-              />
-            </RightColumn>
-          </>
-        )}
+        {!isLoading &&
+          (gameData.game.gameid === null || gameData.game.played === 0) && (
+            <>
+              <LeftColumn>
+                <TeamStats gameData={gameData} Sprites={Sprites} />
+                {isRegularSeason && renderTeamStandings()}
+              </LeftColumn>
+              <MiddleColumn>
+                <TeamsBlock
+                  league={league}
+                  gameData={gameData}
+                  Sprites={Sprites}
+                />
+                <SkaterComparison gameData={gameData} Sprites={Sprites} />
+                <GoalieComparison gameData={gameData} Sprites={Sprites} />
+              </MiddleColumn>
+              <RightColumn isFHM8Played={false}>
+                <PreviousMatchups
+                  gameData={gameData}
+                  Sprites={Sprites}
+                  league={league}
+                  season={season}
+                />
+              </RightColumn>
+            </>
+          )}
+
+        {/* base this page on https://www.nhl.com/gamecenter/dal-vs-cgy/2022/05/11/2021030175#game=2021030175,game_state=final,game_tab=stats */}
+        {!isLoading &&
+          gameData.game.gameid !== null &&
+          gameData.game.played === 1 && (
+            <>
+              <MiddleColumn>
+                <BoxscoreTeamStats
+                  gameData={gameData}
+                  Sprites={Sprites}
+                  league={league}
+                />
+                <BoxscoreTeamRosters gameData={gameData} />
+              </MiddleColumn>
+              <RightColumn
+                isFHM8Played={!isLoading && gameData.game.gameid !== null}
+              >
+                <BoxscoreFinalScores gameData={gameData} Sprites={Sprites} />
+                <SmallSectionTitle>Scoring</SmallSectionTitle>
+                <BoxscorePeriodScoring gameData={gameData} Sprites={Sprites} />
+                <SmallSectionTitle>Penalties</SmallSectionTitle>
+                <BoxscorePeriodPenalties gameData={gameData} />
+                <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
+                <BoxscorePeriodShots gameData={gameData} />
+                <SmallSectionTitle>Three Stars of the Game</SmallSectionTitle>
+                <BoxscoreThreeStars gameData={gameData} Sprites={Sprites} />
+              </RightColumn>
+            </>
+          )}
       </Container>
       <Footer />
     </React.Fragment>
   );
 }
 
-const Container = styled.div`
-  width: 65%;
+const Container = styled.div<{ isFHM8Played: boolean }>`
+  width: 75%;
   padding: 41px 0 40px 0;
   margin: 0 auto;
   display: flex;
@@ -177,20 +219,27 @@ const Container = styled.div`
   @media screen and (max-width: 1200px) {
     display: grid;
     grid-template-columns: 300px auto;
+
     grid-template-areas:
       'stats teams'
       'matchups teams';
+
     justify-content: normal;
   }
 
+  ${({ isFHM8Played }) =>
+    !isFHM8Played
+      ? `
   @media screen and (max-width: 900px) {
     grid-template-columns: 300px auto 300px;
     grid-template-areas:
       'teams teams teams'
       'stats . matchups';
   }
-
-  @media screen and (max-width: 670px) {
+  `
+      : ''}
+  @media screen and (max-width: ${({ isFHM8Played }) =>
+    isFHM8Played ? '900px' : '670px'}) {
     grid-template-columns: 100%;
     grid-template-areas:
       'teams'
@@ -239,7 +288,7 @@ const MiddleColumn = styled.div`
   }
 `;
 
-const RightColumn = styled.div`
+const RightColumn = styled.div<{ isFHM8Played: boolean }>`
   width: 300px;
 
   @media screen and (max-width: 1200px) {
@@ -247,7 +296,8 @@ const RightColumn = styled.div`
     margin-top: 10px;
   }
 
-  @media screen and (max-width: 670px) {
+  @media screen and (max-width: ${({ isFHM8Played }) =>
+      isFHM8Played ? '900px' : '670px'}) {
     width: 100%;
   }
 `;
@@ -270,6 +320,13 @@ const ErrorBlock = styled.div`
   padding: 10px;
   margin: 10px 0;
   font-weight: 500;
+`;
+
+const SmallSectionTitle = styled.div`
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.grey700};
+  margin: 15px 10px 10px 10px;
 `;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
