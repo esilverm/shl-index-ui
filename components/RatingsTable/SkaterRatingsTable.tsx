@@ -53,7 +53,7 @@ export function calculateSkaterTPE(
   for (const [key, value] of Object.entries(players)) {
     if (SKIP.indexOf(key) !== -1) continue;
     if (key === 'stamina') {
-      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[7];
+      totalTPE += SkaterTPECost[value - 5] - SkaterTPECost[9];
     } else {
       totalTPE += SkaterTPECost[value - 5];
     }
