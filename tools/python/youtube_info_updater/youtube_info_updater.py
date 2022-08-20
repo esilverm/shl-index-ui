@@ -109,8 +109,8 @@ class YoutubeInfoUpdater():
         self.__youtube_api_key = config['NEXT_PUBLIC_YOUTUBE_API_KEY']
         self.__shl_channel_id = config['NEXT_PUBLIC_SHL_CHANNEL_ID']
         self.__smjhl_channel_id = config['NEXT_PUBLIC_SMJHL_CHANNEL_ID']
-        self.__wjc_channel_id = config['NEXT_PUBLIC_SMJHL_CHANNEL_ID']
-        self.__iihf_channel_id = config['NEXT_PUBLIC_SMJHL_CHANNEL_ID']
+        self.__wjc_channel_id = config['NEXT_PUBLIC_WJC_CHANNEL_ID']
+        self.__iihf_channel_id = config['NEXT_PUBLIC_IIHF_CHANNEL_ID']
 
         self.__logger.info(f'imported config file {self.__env_file_path}')
 
