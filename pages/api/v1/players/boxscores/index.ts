@@ -15,13 +15,13 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { playerId, leagueId = 0, season: seasonId, yoMama } = req.query;
+  const { playerId, leagueId = 0, season: seasonId, isGoalie } = req.query;
 
   const playerIdParam = playerId ?? 0;
   const leagueIdParam = leagueId ?? 0;
   const seasonIdParam = seasonId ?? 0;
 
-  if (yoMama) {
+  if (isGoalie) {
     const goalieBoxScoreData: any[] = await query(
       SQL`CALL \`admin_simdata\`.\`asron_get_boxscore_goalies\`(${seasonIdParam},${playerIdParam},${leagueIdParam});`
     );
