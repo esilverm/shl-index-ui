@@ -9,22 +9,26 @@ const Line = ({
   lineup: { [key: string]: { id: number; name: string } };
   league: string;
 }): JSX.Element => {
-  const numPlayers = Object.keys(lineup).length;
-
   return (
     <LineContainer>
       <InnerPlayersContainer>
-        {numPlayers >= 4 && (
+        {lineup['LW'] && (
           <LinePlayer player={lineup['LW']} position="LW" league={league} />
         )}
-        <LinePlayer player={lineup['C']} position="C" league={league} />
-        {numPlayers === 5 && (
+        {lineup['C'] && (
+          <LinePlayer player={lineup['C']} position="C" league={league} />
+        )}
+        {lineup['RW'] && (
           <LinePlayer player={lineup['RW']} position="RW" league={league} />
         )}
       </InnerPlayersContainer>
       <InnerPlayersContainer>
-        <LinePlayer player={lineup['LD']} position="LD" league={league} />
-        <LinePlayer player={lineup['RD']} position="RD" league={league} />
+        {lineup['LD'] && (
+          <LinePlayer player={lineup['LD']} position="LD" league={league} />
+        )}
+        {lineup['RD'] && (
+          <LinePlayer player={lineup['RD']} position="RD" league={league} />
+        )}
       </InnerPlayersContainer>
     </LineContainer>
   );
