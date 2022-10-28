@@ -92,7 +92,9 @@ function TeamPage({
   useEffect(() => {
     setElRefs((elRefs) => ({
       ...elRefs,
-      'even strength': Array(3)
+      'even strength': Array(
+        leaguename === 'wjc' || leaguename === 'iihf' ? 4 : 3
+      )
         .fill(null)
         .map((_, i) => elRefs[i] || createRef()),
       'power play': Array(3)
@@ -296,6 +298,9 @@ function TeamPage({
                         &lt;
                       </div>
                       <LineGroupContainer
+                        columns={
+                          leaguename === 'wjc' || leaguename === 'iihf' ? 4 : 3
+                        }
                         key={lineType}
                         ref={elRefs[linesDisplay][i]}
                       >
@@ -306,7 +311,7 @@ function TeamPage({
                               <LineWrapper>
                                 <h4>
                                   {index + 1}
-                                  {['st', 'nd', 'rd'][index]} Line
+                                  {['st', 'nd', 'rd', 'th'][index]} Line
                                 </h4>
                                 <Line
                                   key={key}
@@ -349,6 +354,7 @@ function TeamPage({
                         &lt;
                       </div>
                       <LineGroupContainer
+                        columns={3}
                         key={lineType}
                         ref={elRefs[linesDisplay][i]}
                       >
@@ -402,6 +408,7 @@ function TeamPage({
                         &lt;
                       </div>
                       <LineGroupContainer
+                        columns={3}
                         key={lineType}
                         ref={elRefs[linesDisplay][i]}
                       >
@@ -648,10 +655,10 @@ const TableHeading = styled.h2`
 `;
 
 // horizontal scrolling container for divs
-const LineGroupContainer = styled.div`
+const LineGroupContainer = styled.div<{ columns: number }>`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: repeat(3, 100%);
+  grid-template-columns: repeat(${({ columns }) => columns}, 100%);
   width: 100%;
   margin: 0 auto;
   padding: 20px 0;
@@ -758,9 +765,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
 
     const teamdata = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_API_ENDPOINT
-      }/api/v1/teams/${teamid}?league=${leagueid}${
+      `https://index.simulationhockey.com/api/v1/teams/${teamid}?league=${leagueid}${
         season ? `&season=${season}` : ``
       }`
     ).then((res) => res.json());
