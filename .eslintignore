@@ -1,8 +1,8 @@
-  # Dependency directories
-  /node_modules
+# Dependency directories
+/node_modules
 
-  # NextJS Files
-  /build
-  /public/*
-  /.next
-+ next-env.d.ts
+# NextJS Files
+/build
+/public/*
+/.next
+next-env.d.ts
