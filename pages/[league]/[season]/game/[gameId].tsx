@@ -73,14 +73,14 @@ export default ({ gameId, league }: { gameId: string; league: League }) => {
         ) : (
           <>
             <div className="flex flex-1 flex-col gap-2.5 lg:col-start-2 lg:col-end-3">
-              <div className="md:hidden">
+              <div className="lg:hidden">
                 <BoxscoreFinalScores league={league} gameData={gameData} />
               </div>
               <BoxscoreTeamStats league={league} gameData={gameData} />
               <BoxscoreTeamRosters gameData={gameData} />
             </div>
             <div className="flex w-full flex-col gap-2.5 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:w-[300px]">
-              <div className="hidden md:inline-block">
+              <div className="hidden lg:inline-block">
                 <BoxscoreFinalScores league={league} gameData={gameData} />
               </div>
               <BoxscorePeriodScoring league={league} gameData={gameData} />
