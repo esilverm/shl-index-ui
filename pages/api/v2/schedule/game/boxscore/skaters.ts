@@ -105,6 +105,7 @@ export default async (
         AND p.SeasonID = b.SeasonID
     LEFT JOIN slugviewer as s
       ON s.GameID = b.gameID
+      AND s.LeagueID = b.LeagueID
     WHERE b.gameID = ${gameid} AND b.LeagueID = ${league}
     `,
   );

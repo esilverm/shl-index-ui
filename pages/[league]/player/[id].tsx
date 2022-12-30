@@ -19,7 +19,6 @@ import { SkaterAdvStatsTable } from '../../../components/tables/SkaterAdvStatsTa
 import { SkaterRatingsTable } from '../../../components/tables/SkaterRatingsTable';
 import { SkaterScoreTable } from '../../../components/tables/SkaterScoreTable';
 import { TeamLogo } from '../../../components/TeamLogo';
-import { useSeason } from '../../../hooks/useSeason';
 import { useSeasonType } from '../../../hooks/useSeasonType';
 import {
   Goalie,
@@ -47,7 +46,6 @@ const fetchPlayerName = (league: League, playerId: string) =>
   );
 
 export default ({ playerId, league }: { playerId: string; league: League }) => {
-  const { season } = useSeason();
   const { type } = useSeasonType();
 
   const { data: playerTypeInfo } = useQuery<{
@@ -63,21 +61,12 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
   });
 
   const { data: playerInfo } = useQuery<PlayerInfo[] | GoalieInfo[]>({
-    queryKey: [
-      'playerInfo',
-      league,
-      playerId,
-      season,
-      playerTypeInfo?.playerType,
-    ],
+    queryKey: ['playerInfo', league, playerId, playerTypeInfo?.playerType],
     queryFn: () => {
-      const seasonParam = season ? `&season=${season}` : '';
       const endpoint =
         playerTypeInfo?.playerType === 'goalie' ? 'goalies' : 'players';
       return query(
-        `/api/v1/${endpoint}/${playerId}?league=${leagueNameToId(
-          league,
-        )}${seasonParam}`,
+        `/api/v1/${endpoint}/${playerId}?league=${leagueNameToId(league)}`,
       );
     },
     enabled: !!playerTypeInfo,

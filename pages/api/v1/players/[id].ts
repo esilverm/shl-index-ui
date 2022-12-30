@@ -16,7 +16,27 @@ export default async (
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const { id, league = 0, season } = req.query;
+  const { id, league = 0, season: seasonid } = req.query;
+
+  const seasonResponse =
+    //@ts-ignore
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
+    (await query<{ SeasonID: number }>(SQL`
+    SELECT DISTINCT SeasonID
+    FROM player_master
+    WHERE LeagueID=${+league}
+    AND PlayerID=${+id}
+    AND player_master.TeamID>=0
+    ORDER BY SeasonID DESC
+    LIMIT 1
+  `));
+
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
 
   const basePlayerData = await query(
     SQL`
@@ -36,14 +56,14 @@ export default async (
   AND corrected_player_ratings.PlayerID=${+id}
 `
       .append(
-        season != null
-          ? SQL`AND corrected_player_ratings.SeasonID=${season}`
+        season.SeasonID != null
+          ? SQL`AND corrected_player_ratings.SeasonID=${season.SeasonID} `
           : '',
       )
       .append(SQL`ORDER BY corrected_player_ratings.SeasonID DESC`),
   );
 
-  const combinedPlayerData = [...basePlayerData].map((player) => {
+  const combinedPlayerData = basePlayerData.map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
       [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
         20,
