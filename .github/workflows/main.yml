@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['12.*']
+        node-version: ['18.*']
 
     steps:
       - name: checkout
