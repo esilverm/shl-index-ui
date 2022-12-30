@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -10,28 +11,28 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-interface TeamRecordRow {
+export interface TeamRecordRow {
   Wins: number;
   Losses: number;
   OTL: number;
   SOL: number;
 }
 
-interface TeamStats {
+export interface TeamStats {
   gamesPlayed: number;
   goalsAgainst: number;
   goalsFor: number;
   record: string;
 }
 
-interface TeamIdentity {
+export interface TeamIdentity {
   name: string;
   nickname: string;
   abbr: string;
   primaryColor: string;
 }
 
-interface SkaterStats {
+export interface SkaterStats {
   name: string;
   goals: number;
   assists: number;
@@ -78,7 +79,7 @@ const parseTeamRecord = (record: TeamRecordRow) =>
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -188,13 +189,13 @@ export default async (
     `);
 
     const previousMatchups: Array<GameRow> = await query(
-      previousMatchupsSearch
+      previousMatchupsSearch,
     );
     const skaterStats = await query(skaterStatsSearch);
     const goalieStats = await query(goalieStatsSearch);
 
     const parsedPrevMatchups = previousMatchups.map((game) =>
-      convertGameRowToGame(game)
+      convertGameRowToGame(game),
     );
 
     const response: Matchup = {
@@ -423,17 +424,17 @@ export default async (
 
   const star1Stats =
     parsedPlayerStatsSummary.find(
-      (player) => player.id === gameSummary.star1
+      (player) => player.id === gameSummary.star1,
     ) ||
     parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star1);
   const star2Stats =
     parsedPlayerStatsSummary.find(
-      (player) => player.id === gameSummary.star2
+      (player) => player.id === gameSummary.star2,
     ) ||
     parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star2);
   const star3Stats =
     parsedPlayerStatsSummary.find(
-      (player) => player.id === gameSummary.star3
+      (player) => player.id === gameSummary.star3,
     ) ||
     parsedGoalieStatsSummary.find((player) => player.id === gameSummary.star3);
 
@@ -553,18 +554,18 @@ export default async (
       penalties: parsedPeriodPenaltySummary,
       away: {
         skaters: parsedPlayerStatsSummary.filter(
-          (skater) => skater.team === Away
+          (skater) => skater.team === Away,
         ),
         goalies: parsedGoalieStatsSummary.filter(
-          (goalie) => goalie.team === Away
+          (goalie) => goalie.team === Away,
         ),
       },
       home: {
         skaters: parsedPlayerStatsSummary.filter(
-          (skater) => skater.team === Home
+          (skater) => skater.team === Home,
         ),
         goalies: parsedGoalieStatsSummary.filter(
-          (goalie) => goalie.team === Home
+          (goalie) => goalie.team === Home,
         ),
       },
     },

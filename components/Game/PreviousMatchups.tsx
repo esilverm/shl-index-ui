@@ -1,170 +1,130 @@
-import React from 'react';
-import styled from 'styled-components';
+import { Spinner } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+import { useRouter } from 'next/router';
 
-import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
-import LinkWithSeason from '../LinkWithSeason';
+import { Game } from '../../pages/api/v1/schedule';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { League } from '../../utils/leagueHelpers';
+import { query } from '../../utils/query';
+import { onlyIncludeSeasonAndTypeInQuery } from '../../utils/routingHelpers';
+import { Link } from '../common/Link';
+import { TeamLogo } from '../TeamLogo';
 
-import { SectionTitle, TeamLogoSmall } from './common';
-
-interface Props {
-  gameData: Matchup;
-  Sprites: {
-    [index: string]: React.ComponentClass<any>;
-  };
-  league: string;
-  season: string;
-}
-
-const PreviousMatchups = ({
-  gameData,
-  Sprites,
+export const PreviousMatchups = ({
   league,
-  season,
-}: Props): JSX.Element => {
-  const renderPreviousMatchups = (previouslyPlayedMatchups) =>
-    previouslyPlayedMatchups.map((matchup) => (
-      <LinkWithSeason
-        href="/[league]/[season]/game/[gameid]"
-        as={`/${league}/${season}/game/${matchup.slug}`}
-        passHref
-        key={matchup.slug}
-      >
-        <MatchupRow isGame>
-          <GameDate>
-            {matchup.date} {matchup.played ? ' • Final' : ' • Not Played'}
-          </GameDate>
-          <MatchupTeamRow>
-            <TeamLogoSmall>
-              {matchup.awayTeam === gameData.game.awayTeam ? (
-                <Sprites.Away />
-              ) : (
-                <Sprites.Home />
-              )}
-            </TeamLogoSmall>
-            <span>
-              {matchup.awayTeam === gameData.game.awayTeam
-                ? gameData.teams.away.nickname
-                : gameData.teams.home.nickname}
-            </span>
-            <MatchupRowScore lost={matchup.awayScore < matchup.homeScore}>
-              {matchup.played ? matchup.awayScore : ''}
-            </MatchupRowScore>
-          </MatchupTeamRow>
-          <MatchupTeamRow>
-            <TeamLogoSmall>
-              {matchup.homeTeam === gameData.game.homeTeam ? (
-                <Sprites.Home />
-              ) : (
-                <Sprites.Away />
-              )}
-            </TeamLogoSmall>
-            <span>
-              {matchup.homeTeam === gameData.game.homeTeam
-                ? gameData.teams.home.nickname
-                : gameData.teams.away.nickname}
-            </span>
-            <MatchupRowScore lost={matchup.homeScore < matchup.awayScore}>
-              {matchup.played ? matchup.homeScore : ''}
-            </MatchupRowScore>
-          </MatchupTeamRow>
-        </MatchupRow>
-      </LinkWithSeason>
-    ));
+  previewData,
+}: {
+  league: League;
+  previewData: GamePreviewData | undefined;
+}) => {
+  const router = useRouter();
+  const { data } = useQuery<Game[]>({
+    queryKey: [
+      `previousMatchups`,
+      previewData?.game.league,
+      previewData?.game.season,
+      previewData?.game.type,
+      previewData?.game.awayTeam,
+      previewData?.game.homeTeam,
+    ],
+    queryFn: () =>
+      query(
+        `/api/v2/schedule/game/previousMatchups?league=${previewData?.game.league}&season=${previewData?.game.season}&type=${previewData?.game.type}&away=${previewData?.game.awayTeam}&home=${previewData?.game.homeTeam}`,
+      ),
+    enabled: !!previewData,
+  });
 
-  const previouslyPlayedMatchups = gameData.previousMatchups;
-  // const previouslyPlayedMatchups = gameData.previousMatchups.filter(
-  //   (game) => game.played === 1
-  // );
+  if (!previewData || !data) {
+    return (
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-grey100 p-4">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
-    <PreviousMatchupsContainer>
-      <MatchupsHeader>
-        <SectionTitle>{`${gameData.game.type} Series`}</SectionTitle>
-      </MatchupsHeader>
-      {previouslyPlayedMatchups.length > 0 &&
-        renderPreviousMatchups(previouslyPlayedMatchups)}
-      {previouslyPlayedMatchups.length === 0 && (
-        <MatchupRow>
-          <div>No previous games played</div>
-        </MatchupRow>
+    <div className="flex flex-col bg-grey100">
+      <div className="border-b-2 border-b-grey300 py-2.5 px-4 font-semibold">
+        {previewData.game.type} Series
+      </div>
+      {data.length === 0 ? (
+        <div className="flex flex-col bg-grey100 py-2.5 px-4">
+          No previous games played
+        </div>
+      ) : (
+        <div className="divide-y-2 divide-grey300">
+          {data.map((matchup) => {
+            const awayTeamInfo =
+              matchup.awayTeam === previewData.game.awayTeam
+                ? previewData.teams.away
+                : previewData.teams.home;
+
+            const homeTeamInfo =
+              matchup.homeTeam === previewData.game.homeTeam
+                ? previewData.teams.home
+                : previewData.teams.away;
+
+            return (
+              <Link
+                key={matchup.slug}
+                href={{
+                  pathname: `/[league]/${previewData.game.season}/game/[gameid]`,
+                  query: {
+                    ...onlyIncludeSeasonAndTypeInQuery(router.query),
+                    gameid: matchup.slug,
+                  },
+                }}
+                className={classnames(
+                  'flex flex-col bg-grey100 py-2.5 px-4 hover:brightness-75',
+                )}
+              >
+                <span className="mb-1.5 font-mont text-sm font-medium">
+                  {matchup.date} {matchup.played ? ' • Final' : ' • Not Played'}
+                </span>
+                <div className="mb-1.5 flex items-center justify-between font-mont text-sm font-medium">
+                  <div className="flex items-center">
+                    <TeamLogo
+                      league={league}
+                      teamAbbreviation={awayTeamInfo.abbr}
+                      className="mr-2 h-[25px] w-[25px]"
+                    />
+                    {awayTeamInfo.nickname}
+                  </div>
+                  <span
+                    className={classnames(
+                      'text-base',
+                      matchup.awayScore < matchup.homeScore && 'text-grey500',
+                      !matchup.played && 'hidden',
+                    )}
+                  >
+                    {matchup.awayScore}
+                  </span>
+                </div>
+                <div className="mb-1.5 flex items-center justify-between font-mont text-sm font-medium">
+                  <div className="flex items-center">
+                    <TeamLogo
+                      league={league}
+                      teamAbbreviation={homeTeamInfo.abbr}
+                      className="mr-2 h-[25px] w-[25px]"
+                    />
+                    {homeTeamInfo.nickname}
+                  </div>
+                  <span
+                    className={classnames(
+                      'text-base',
+                      matchup.homeScore < matchup.awayScore && 'text-grey500',
+                      !matchup.played && 'hidden',
+                    )}
+                  >
+                    {matchup.homeScore}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       )}
-    </PreviousMatchupsContainer>
+    </div>
   );
 };
-
-const PreviousMatchupsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  div:last-child {
-    margin-bottom: 0;
-    border-bottom: none;
-  }
-`;
-
-const MatchupTeamRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-
-  div:first-child {
-    margin-right: 10px;
-    font-weight: 500;
-  }
-`;
-
-const MatchupRowScore = styled.span<{
-  lost?: boolean;
-}>`
-  ${({ lost, theme }) => lost && `color: ${theme.colors.grey500};`};
-  font-family: Montserrat, sans-serif;
-  margin-left: auto;
-  font-size: 16px;
-`;
-
-const MatchupsHeader = styled.div`
-  font-weight: 600;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
-  padding: 10px 15px;
-`;
-
-const MatchupRow = styled.div<{
-  isGame?: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px 15px 15px 15px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
-
-  * {
-    padding-bottom: 5px;
-  }
-
-  span:first-child {
-    font-family: Montserrat, sans-serif;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  ${({ isGame = false }) =>
-    isGame
-      ? `
-    cursor: pointer;
-    &:hover {
-      filter: brightness(0.8);
-    }
-  `
-      : ``}
-`;
-
-const GameDate = styled.span`
-  font-weight: 500;
-`;
-
-export default PreviousMatchups;

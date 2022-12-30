@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -11,7 +12,7 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 

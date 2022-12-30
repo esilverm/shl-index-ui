@@ -1,3 +1,8 @@
-**/node_modules/*
-**/out/*
-**/.next/*
+  # Dependency directories
+  /node_modules
+
+  # NextJS Files
+  /build
+  /public/*
+  /.next
++ next-env.d.ts

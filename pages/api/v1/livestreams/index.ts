@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -18,7 +19,7 @@ export interface LivestreamData {
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Array<LivestreamData> | string>
+  res: NextApiResponse<Array<LivestreamData> | string>,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -29,7 +30,7 @@ export default async (
       ? SQL`
         WHERE league=${league}
         `
-      : ''
+      : '',
   );
 
   const youtube_data: Array<{

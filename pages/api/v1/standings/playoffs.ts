@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -16,7 +17,7 @@ export interface PlayoffsSeries {
   team2: PlayoffTeam;
 }
 
-interface PlayoffTeam {
+export interface PlayoffTeam {
   id?: number;
   wins?: number;
   name?: string;
@@ -30,7 +31,7 @@ export type PlayoffsRound = Array<PlayoffsSeries>;
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -61,7 +62,7 @@ export default async (
       WHERE po.LeagueID=${+league}
         AND po.SeasonID=${season.SeasonID}
     ORDER BY po.startdate
-  `
+  `,
   );
 
   const parsed = playoffs.reduce((res, { startdate, ...matchup }) => {

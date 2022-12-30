@@ -1,66 +1,41 @@
+import classnames from 'classnames';
+import { useRouter } from 'next/router';
 import React from 'react';
-import styled from 'styled-components';
 
-import { getPlayerShortname } from '../Game/BoxscoreTeamRosters';
-import Link from '../LinkWithSeason';
+import { getPlayerShortname } from '../../utils/playerHelpers';
+import { onlyIncludeSeasonAndTypeInQuery } from '../../utils/routingHelpers';
+import { Link } from '../common/Link';
 
-const LinePlayer = ({
+export const LinePlayer = ({
   player,
   position,
-  league,
+  className,
 }: {
-  player: { id: number; name: string };
+  player: { id: number; name: string } | undefined;
   position: string;
-  league: string;
-}): JSX.Element => {
+  className?: string;
+}) => {
+  const router = useRouter();
   return (
-    <PlayerContainer>
+    <div
+      className={classnames(
+        'mx-5 flex min-w-[200px] max-w-[350px] flex-col items-center justify-center overflow-hidden whitespace-nowrap rounded py-8 px-12 shadow-[0px_0px_15px_rgba(0,_0,_0,_0.1)]',
+        className,
+      )}
+    >
       <Link
-        href="/[league]/player/[id]"
-        as={`/${league}/player/${player.id}`}
-        passHref
+        href={{
+          pathname: '/[league]/player/[id]',
+          query: {
+            ...onlyIncludeSeasonAndTypeInQuery(router.query),
+            id: player?.id,
+          },
+        }}
+        className="mb-2.5 inline-block text-ellipsis whitespace-nowrap text-lg font-bold transition-colors hover:text-blue600"
       >
-        <NameText>{getPlayerShortname(player.name)}</NameText>
+        {getPlayerShortname(player?.name ?? '')}
       </Link>
-      <PositionText>{position}</PositionText>
-    </PlayerContainer>
+      <div className="text-base font-semibold">{position}</div>
+    </div>
   );
 };
-
-const PlayerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 3rem;
-
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  margin: 0 20px;
-  overflow: hidden;
-  white-space: nowrap;
-  min-width: 200px;
-  max-width: 350px;
-`;
-
-const NameText = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  cursor: pointer;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.blue600};
-    transition: all 200ms ease-out;
-  }
-`;
-
-const PositionText = styled.div`
-  font-size: 1rem;
-  font-weight: 600;
-`;
-
-export default LinePlayer;

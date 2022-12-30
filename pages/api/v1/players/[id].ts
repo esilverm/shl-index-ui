@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -11,7 +12,7 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -37,15 +38,15 @@ export default async (
       .append(
         season != null
           ? SQL`AND corrected_player_ratings.SeasonID=${season}`
-          : ''
+          : '',
       )
-      .append(SQL`ORDER BY corrected_player_ratings.SeasonID DESC`)
+      .append(SQL`ORDER BY corrected_player_ratings.SeasonID DESC`),
   );
 
   const combinedPlayerData = [...basePlayerData].map((player) => {
     const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
       [player.G, player.LD, player.RD, player.LW, player.C, player.RW].indexOf(
-        20
+        20,
       )
     ];
 

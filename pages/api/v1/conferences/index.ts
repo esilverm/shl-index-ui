@@ -9,19 +9,18 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-type Data = Array<{ id: number; league: number; name: string; season: number }>;
-
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Data | string>
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
 
-  const [season] =
+  const seasonResponse =
+    //@ts-ignore
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
-    (await query(SQL`
+    (await query<{ SeasonID: number }>(SQL`
       SELECT DISTINCT SeasonID
       FROM conferences
       WHERE LeagueID=${+league}
@@ -29,26 +28,33 @@ export default async (
       LIMIT 1
     `));
 
-  const conferences: Array<{
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
+
+  const conferences = await query<{
     ConferenceID: number;
     LeagueID: number;
     Name: string;
     SeasonID: number;
-  }> = await query(SQL`
+  }>(SQL`
     SELECT * 
     FROM conferences 
     WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
   `);
 
-  if (conferences.length === 0) {
+  if ('error' in conferences || !conferences) {
     res
       .status(404)
-      .send('Error 404: Could not find conferences for given parameters.');
+      .send('Error 404: Could not find conference for given parameters.');
     return;
   }
 
-  const parsed: Data = conferences.map((conference) => ({
+  const parsed = conferences.map((conference) => ({
     id: conference.ConferenceID,
     league: conference.LeagueID,
     name: conference.Name,

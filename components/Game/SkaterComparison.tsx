@@ -1,174 +1,175 @@
-import React from 'react';
-import styled from 'styled-components';
+import { Skeleton } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+import { maxBy } from 'lodash';
+import { useMemo } from 'react';
 
-import { Matchup } from '../../pages/api/v1/schedule/game/[gameId]';
+import { SkaterStats } from '../../pages/api/v1/schedule/game/[gameId]';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { assertUnreachable } from '../../utils/assertUnreachable';
+import { clone } from '../../utils/clone';
+import { League } from '../../utils/leagueHelpers';
+import { getPlayerShortname } from '../../utils/playerHelpers';
+import { query } from '../../utils/query';
 
-import { ComparisonHeader, SectionTitle, TeamLogoSmall } from './common';
+import { GamePreviewCard } from './GamePreviewCard';
 
-interface Props {
-  gameData: Matchup;
-  Sprites: {
-    [index: string]: React.ComponentClass<any>;
-  };
-}
-
-const SkaterComparison = ({ gameData, Sprites }: Props): JSX.Element => {
-  const defaultStatLeaders = {
-    away: {
-      player: '',
-      value: -99,
-    },
-    home: {
-      player: '',
-      value: -99,
-    },
-  };
-  // Using JSON because the spread and Object.assign operators copied the object with its reference
-  const teamLeaders = {
-    points: {
-      label: 'Points',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
-    },
-    goals: {
-      label: 'Goals',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
-    },
-    assists: {
-      label: 'Assists',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
-    },
-    plusMinus: {
-      label: '+/-',
-      ...JSON.parse(JSON.stringify(defaultStatLeaders)),
-    },
-  };
-
-  Object.keys(gameData.skaterStats).forEach((team) => {
-    Object.keys(teamLeaders).forEach((stat) => {
-      const leader = gameData.skaterStats[team].reduce((prev, skater) => {
-        if (stat === 'points') {
-          return skater.goals + skater.assists > prev.goals + prev.assists
-            ? skater
-            : prev;
-        }
-        return skater[stat] > prev[stat] ? skater : prev;
-      }, gameData.skaterStats[team][0]);
-
-      if (leader && leader.name) {
-        teamLeaders[stat][team].player = leader.name;
-        teamLeaders[stat][team].value =
-          stat === 'points' ? leader.goals + leader.assists : leader[stat];
-      }
-    });
-  });
-
-  const title = gameData.game.played ? 'Team Leaders' : 'Players To Watch';
-
-  return (
-    <SkaterComparisonContainer>
-      <ComparisonHeader>
-        <TeamLogoSmall>
-          <Sprites.Away />
-        </TeamLogoSmall>
-        <SectionTitle>{title}</SectionTitle>
-        <TeamLogoSmall>
-          <Sprites.Home />
-        </TeamLogoSmall>
-      </ComparisonHeader>
-      <SkaterStats>
-        {Object.keys(teamLeaders).map((stat) => (
-          <StatComparison key={stat}>
-            <TeamLeader>
-              <LeaderSkater>{teamLeaders[stat].away.player}</LeaderSkater>
-              <LeaderValue
-                gray={
-                  teamLeaders[stat].away.value < teamLeaders[stat].home.value
-                }
-              >
-                {teamLeaders[stat].away.value < 0
-                  ? '0'
-                  : teamLeaders[stat].away.value}
-              </LeaderValue>
-            </TeamLeader>
-            <LeaderLabel>{teamLeaders[stat].label}</LeaderLabel>
-            <TeamLeader home>
-              <LeaderValue
-                gray={
-                  teamLeaders[stat].home.value < teamLeaders[stat].away.value
-                }
-              >
-                {teamLeaders[stat].home.value < 0
-                  ? '0'
-                  : teamLeaders[stat].home.value}
-              </LeaderValue>
-              <LeaderSkater>{teamLeaders[stat].home.player}</LeaderSkater>
-            </TeamLeader>
-          </StatComparison>
-        ))}
-      </SkaterStats>
-    </SkaterComparisonContainer>
-  );
+const defaultStatLeaders = {
+  away: {
+    player: '',
+    value: -Infinity,
+  },
+  home: {
+    player: '',
+    value: -Infinity,
+  },
 };
 
-const SkaterComparisonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px;
-  margin-top: 10px;
-`;
+export const SkaterComparison = ({
+  league,
+  previewData,
+}: {
+  league: League;
+  previewData: GamePreviewData | undefined;
+}) => {
+  const { data, isLoading } = useQuery<{
+    away: SkaterStats[];
+    home: SkaterStats[];
+  }>({
+    queryKey: [
+      `gamePreviewSkaterStats`,
+      previewData?.game.league,
+      previewData?.game.season,
+      previewData?.game.type,
+      previewData?.game.awayTeam,
+      previewData?.game.homeTeam,
+    ],
+    queryFn: () =>
+      query(
+        `/api/v2/schedule/game/skaterStats?league=${previewData?.game.league}&season=${previewData?.game.season}&type=${previewData?.game.type}&away=${previewData?.game.awayTeam}&home=${previewData?.game.homeTeam}`,
+      ),
+    enabled: !!previewData,
+  });
 
-const SkaterStats = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
+  const teamLeaders = useMemo(() => {
+    const initial = {
+      points: {
+        label: 'Points',
+        ...clone(defaultStatLeaders),
+      },
+      goals: {
+        label: 'Goals',
+        ...clone(defaultStatLeaders),
+      },
+      assists: {
+        label: 'Assists',
+        ...clone(defaultStatLeaders),
+      },
+      plusMinus: {
+        label: '+/-',
+        ...clone(defaultStatLeaders),
+      },
+    };
 
-const StatComparison = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin: 10px 0;
-  align-items: center;
-`;
+    if (!data) return initial;
 
-const TeamLeader = styled.div<{
-  home?: boolean;
-}>`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 50%;
-  text-align: ${({ home }) => (home ? 'right' : 'left')};
-  margin-${({ home }) => (home ? 'left' : 'right')}: 10px;
-`;
+    Object.entries(data).forEach(([team, roster]) => {
+      Object.keys(initial).forEach((stat) => {
+        const currentStat = stat as keyof typeof initial;
+        const leader = maxBy(roster, (skater) => {
+          switch (currentStat) {
+            case 'points':
+              return skater.goals + skater.assists;
+            case 'goals':
+            case 'assists':
+            case 'plusMinus':
+              return skater[currentStat];
+            default:
+              return assertUnreachable(currentStat);
+          }
+        });
 
-const LeaderSkater = styled.span`
-  font-weight: 600;
-  word-break: break-word;
+        if (leader && leader.name) {
+          initial[currentStat][team as 'away' | 'home'] = {
+            player: leader.name,
+            value:
+              currentStat === 'points'
+                ? leader.goals + leader.assists
+                : leader[currentStat],
+          };
+        }
+      });
+    });
+    return initial;
+  }, [data]);
 
-  @media screen and (max-width: 900px) {
-    font-size: 14px;
-  }
-`;
+  const title = previewData?.game.played ? 'Team Leaders' : 'Players To Watch';
 
-const LeaderValue = styled.span<{
-  gray?: boolean;
-}>`
-  font-size: 32px;
-  font-weight: 600;
-  font-family: Montserrat, sans-serif;
-  ${({ gray, theme }) => gray && `color: ${theme.colors.grey500};`}
-
-  @media screen and (max-width: 900px) {
-    font-size: 22px;
-  }
-`;
-
-const LeaderLabel = styled.span`
-  width: 75px;
-  font-size: 14px;
-  text-align: center;
-`;
-
-export default SkaterComparison;
+  return (
+    <GamePreviewCard
+      league={league}
+      title={title}
+      awayAbbr={previewData?.teams.away.abbr}
+      homeAbbr={previewData?.teams.home.abbr}
+    >
+      <div className="flex flex-col justify-between">
+        {Object.values(teamLeaders).map((leaders) => (
+          <div
+            className="m-4 flex items-center overflow-hidden"
+            key={leaders.label}
+          >
+            <div className="flex min-w-[100px] flex-1 items-center justify-between font-semibold">
+              <Skeleton
+                isLoaded={!isLoading}
+                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
+              >
+                <span className="inline-block  text-sm lg:hidden">
+                  {getPlayerShortname(leaders.away.player)}
+                </span>
+                <span className="hidden text-sm lg:inline-block">
+                  {leaders.away.player}
+                </span>
+              </Skeleton>
+              <Skeleton isLoaded={!isLoading}>
+                <span
+                  className={classnames(
+                    'ml-2 font-mont text-2xl md:text-3xl',
+                    leaders.away.value < leaders.home.value && 'text-grey500',
+                  )}
+                >
+                  {leaders.away.value}
+                </span>
+              </Skeleton>
+            </div>
+            <span className="w-[75px] text-center text-sm">
+              {leaders.label}
+            </span>
+            <div className="flex min-w-[100px] flex-1 items-center justify-between font-semibold">
+              <Skeleton isLoaded={!isLoading}>
+                <span
+                  className={classnames(
+                    'mr-2 font-mont text-2xl md:text-3xl',
+                    leaders.home.value < leaders.away.value && 'text-grey500',
+                  )}
+                >
+                  {leaders.home.value}
+                </span>
+              </Skeleton>
+              <Skeleton
+                isLoaded={!isLoading}
+                className="overflow-hidden text-ellipsis whitespace-nowrap text-right"
+              >
+                <span className="inline-block text-sm lg:hidden">
+                  {getPlayerShortname(leaders.home.player)}
+                </span>
+                <span className="hidden text-sm lg:inline-block">
+                  {leaders.home.player}
+                </span>
+              </Skeleton>
+            </div>
+          </div>
+        ))}
+      </div>
+    </GamePreviewCard>
+  );
+};
