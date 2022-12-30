@@ -260,8 +260,9 @@ export default ({
                 statValue={
                   teamStats
                     ? `${(
-                        (teamStats.shOpportunities -
-                          teamStats.ppGoalsAgainst * 100) /
+                        ((teamStats.shOpportunities -
+                          teamStats.ppGoalsAgainst) *
+                          100) /
                         teamStats.shOpportunities
                       ).toFixed(1)}
                     %`
