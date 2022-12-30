@@ -5,6 +5,8 @@ import SQL from 'sql-template-strings';
 import { query } from '../../../../lib/db';
 import use from '../../../../lib/middleware';
 
+import { DivisionsInternal } from './[id]';
+
 const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
@@ -19,22 +21,29 @@ type Data = Array<{
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Data | string>
+  res: NextApiResponse<Data | string>,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, conference, season: seasonid } = req.query;
 
-  const [season] =
+  const seasonResponse =
+    //@ts-ignore
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
-    (await query(SQL`
-      SELECT DISTINCT SeasonID
-      FROM divisions
-      WHERE LeagueID=${+league}
-      ORDER BY SeasonID DESC
-      LIMIT 1
-    `));
+    (await query<{ SeasonID: number }>(SQL`
+    SELECT DISTINCT SeasonID
+    FROM conferences
+    WHERE LeagueID=${+league}
+    ORDER BY SeasonID DESC
+    LIMIT 1
+  `));
 
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
   const search = SQL`
     SELECT * 
     FROM divisions 
@@ -42,19 +51,13 @@ export default async (
       AND SeasonID=${season.SeasonID}
   `;
 
-  if (!Number.isNaN(+conference)) {
+  if (conference && !Number.isNaN(+conference)) {
     search.append(SQL` AND ConferenceID=${+conference}`);
   }
 
-  const divisions: Array<{
-    DivisionID: number;
-    ConferenceID: number;
-    LeagueID: number;
-    Name: string;
-    SeasonID: number;
-  }> = await query(search);
+  const divisions = await query<DivisionsInternal>(search);
 
-  if (divisions.length === 0) {
+  if ('error' in divisions || !divisions) {
     res
       .status(404)
       .send('Error 404: Could not find divisions for given parameters.');

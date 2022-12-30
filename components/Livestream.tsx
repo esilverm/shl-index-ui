@@ -1,86 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { PulseLoader } from 'react-spinners';
-import styled from 'styled-components';
-import useSWR from 'swr';
+import { Spinner } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useMemo, useState } from 'react';
 
-import { LivestreamData } from '../pages/api/v1/livestreams/index';
+import { LivestreamData } from '../pages/api/v1/livestreams';
+import { query } from '../utils/query';
 
-function Livestream({
-  currentLeague = 'shl',
-}: {
-  currentLeague: string;
-}): JSX.Element {
+export const Livestream = ({ league }: { league: string }) => {
   const [isLive, setIsLive] = useState(false);
 
-  const league = currentLeague;
+  const { data, isLoading, isError } = useQuery<LivestreamData[], Error>({
+    queryKey: ['livestream', league],
+    queryFn: () => query(`api/v1/livestreams?league=${league}`),
+  });
 
-  const { data: livestreamData, error: livestreamError } = useSWR<
-    Array<LivestreamData>
-  >(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/livestreams?league=${league}`
-  );
-
-  const videoID = livestreamData ? livestreamData[0].videoId : '';
+  const videoID = useMemo(() => (data ? data[0]?.videoId : ''), [data]);
 
   useEffect(() => {
-    if (livestreamData && livestreamData[0].isLive === 'live') {
+    if (data && data[0]?.isLive === 'live') {
       setIsLive(true);
     }
-  }, [livestreamData]);
+  }, [data]);
 
   return (
     <>
-      <Title>{isLive ? 'Current' : 'Most Recent'} Livestream</Title>
-      <Container>
-        {!livestreamData && !livestreamError && (
-          <CenteredContent>
-            <PulseLoader size={15} />
-          </CenteredContent>
-        )}
-        {livestreamData && !livestreamError && (
-          <LivestreamIFrame
+      <h2 className="pb-4 text-3xl font-bold">
+        {isLive ? 'Current' : 'Most Recent'} Livestream
+      </h2>
+      <div className="relative before:block before:aspect-video before:content-['']">
+        {isLoading || isError ? (
+          <div className="mt-4 grid w-full place-items-center">
+            <Spinner size="xl" />
+          </div>
+        ) : (
+          <iframe
             src={`https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=1&color=white&rel=0`}
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            className="absolute top-0 left-0 h-full w-full rounded-xl"
           />
         )}
-      </Container>
+      </div>
     </>
   );
-}
-
-const Container = styled.div`
-  position: relative;
-
-  &:before {
-    content: '';
-    display: block;
-    padding-bottom: calc(100% / (16 / 9));
-  }
-`;
-
-const Title = styled.h2`
-  font-size: 2rem;
-  padding-bottom: 1rem;
-`;
-
-const LivestreamIFrame = styled.iframe`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-`;
-
-const CenteredContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-export default Livestream;
+};

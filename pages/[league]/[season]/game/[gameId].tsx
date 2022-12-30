@@ -1,339 +1,115 @@
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useEffect, useState } from 'react';
-import { PulseLoader } from 'react-spinners';
-import styled from 'styled-components';
-import useSWR from 'swr';
 
-import Footer from '../../../../components/Footer';
-import {
-  GoalieComparison,
-  PreviousMatchups,
-  SkaterComparison,
-  TeamsBlock,
-  TeamStandings,
-  TeamStats,
-} from '../../../../components/Game';
-import BoxscoreFinalScores from '../../../../components/Game/BoxscoreFinalScores';
-import BoxscorePeriodPenalties from '../../../../components/Game/BoxscorePeriodPenalties';
-import BoxscorePeriodScoring from '../../../../components/Game/BoxscorePeriodScoring';
-import BoxscorePeriodShots from '../../../../components/Game/BoxscorePeriodShots';
-import BoxscoreTeamRosters from '../../../../components/Game/BoxscoreTeamRosters';
-import BoxscoreTeamStats from '../../../../components/Game/BoxscoreTeamStats';
-import BoxscoreThreeStars from '../../../../components/Game/BoxscoreThreeStars';
-import Header from '../../../../components/Header';
-import { Matchup as MatchupData } from '../../../api/v1/schedule/game/[gameId]';
-import { Standings } from '../../../api/v1/standings';
+import { Footer } from '../../../../components/Footer';
+import { BoxscoreFinalScores } from '../../../../components/game/boxscore/BoxscoreFinalScores';
+import { BoxscorePeriodPenalties } from '../../../../components/game/boxscore/BoxscorePeriodPenalties';
+import { BoxscorePeriodScoring } from '../../../../components/game/boxscore/BoxscorePeriodScoring';
+import { BoxscorePeriodShots } from '../../../../components/game/boxscore/BoxscorePeriodShots';
+import { BoxscoreTeamRosters } from '../../../../components/game/boxscore/BoxscoreTeamRosters';
+import { BoxscoreTeamStats } from '../../../../components/game/boxscore/BoxscoreTeamStats';
+import { BoxscoreThreeStars } from '../../../../components/game/boxscore/BoxscoreThreeStars';
+import { GamePreview } from '../../../../components/game/GamePreview';
+import { GamePreviewStandings } from '../../../../components/game/GamePreviewStandings';
+import { GoalieComparison } from '../../../../components/game/GoalieComparison';
+import { PreviewTeamStats } from '../../../../components/game/PreviewTeamStats';
+import { PreviousMatchups } from '../../../../components/game/PreviousMatchups';
+import { SkaterComparison } from '../../../../components/game/SkaterComparison';
+import { Header } from '../../../../components/Header';
+import { League } from '../../../../utils/leagueHelpers';
+import { query } from '../../../../utils/query';
+import { type GamePreviewData } from '../../../api/v2/schedule/game/preview';
 
-interface Props {
-  league: string;
-  leagueId: number;
-  gameId: string;
-  season: string;
-}
+const fetchShouldShowBoxscore = (gameId: string) =>
+  query(`/api/v1/schedule/game/shouldShowBoxscore?gameId=${gameId}`);
 
-function GameResults({ league, leagueId, gameId, season }: Props): JSX.Element {
-  const [standings, setStandings] = useState<Array<Standings[number]>>();
-  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
-  const [Sprites, setSprites] = useState<{
-    [index: string]: React.ComponentClass<any>;
-  }>({});
+export default ({ gameId, league }: { gameId: string; league: League }) => {
+  const { data: isBoxscore } = useQuery<{ shouldShowBoxscore: boolean }>({
+    queryKey: ['shouldShowBoxscore', gameId],
+    queryFn: () => fetchShouldShowBoxscore(gameId),
+  });
 
-  const { data: gameData, error: gameError } = useSWR<MatchupData>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/game/${gameId}`
-  );
-
-  const standingsType = league === 'shl' ? 'division' : 'conference';
-  const { data: standingsData, error: standingsError } = useSWR<Standings>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/standings?display=${standingsType}&season=${season}&league=${leagueId}`
-  );
-
-  useEffect(() => {
-    if (!gameData) return;
-    // Dynamically import svg icons based on the league chosen
-    (async () => {
-      const { default: s } = await import(
-        `../../../../public/team_logos/${league.toUpperCase()}/`
-      );
-
-      const teamSprites = {
-        Away: s[gameData.teams.away.abbr],
-        Home: s[gameData.teams.home.abbr],
-      };
-
-      setSprites(() => ({
-        ...teamSprites,
-        ...s,
-      }));
-      setLoadingAssets(() => false);
-    })();
-  }, [gameData]);
-
-  useEffect(() => {
-    if (!standingsData || !gameData) return;
-
-    const awayDivision = standingsData.find((division) =>
-      division.teams.some(
-        (team) => team.abbreviation === gameData.teams.away.abbr
-      )
-    );
-    const homeDivision = standingsData.find((division) =>
-      division.teams.some(
-        (team) => team.abbreviation === gameData.teams.home.abbr
-      )
-    );
-
-    setStandings([awayDivision, homeDivision]);
-  }, [gameData, standingsData]);
-
-  const renderTeamStandings = () => {
-    if (!standings && !standingsError) {
-      return (
-        <CenteredContent>
-          <PulseLoader size={15} />
-        </CenteredContent>
-      );
-    }
-
-    if (standingsError) {
-      return <ErrorBlock>Failed to load standings</ErrorBlock>;
-    }
-
-    if (standings) {
-      return <TeamStandings standings={standings} Sprites={Sprites} />;
-    }
-  };
-
-  const isLoading = isLoadingAssets || !gameData;
-  const isRegularSeason = gameData && gameData.game.type === 'Regular Season';
+  const { data: gameData } = useQuery<GamePreviewData>({
+    queryKey: ['gamePreview', gameId],
+    queryFn: () => query(`/api/v2/schedule/game/preview?gameId=${gameId}`),
+  });
 
   return (
-    <React.Fragment>
+    <>
       <NextSeo
-        title="Game"
+        title={`${league.toUpperCase()} Game`}
         openGraph={{
-          title: 'Game',
+          title: `${league.toUpperCase()} Game`,
         }}
       />
-      <Header league={league} activePage="game" isSticky={false} />
-      {isLoading && !gameError && (
-        <CenteredContent>
-          <PulseLoader size={15} />
-        </CenteredContent>
-      )}
-      <Container
-        isFHM8Played={
-          !isLoading &&
-          (gameData.game.gameid === null || gameData.game.played === 0)
-        }
-      >
-        {gameError && (
-          <ErrorBlock>
-            Failed to load game preview. Please reload the page to try again.
-          </ErrorBlock>
+      <Header league={league} activePage="game" />
+      <div
+        className={classnames(
+          'mx-auto grid w-11/12 auto-rows-max grid-cols-[100%] items-start gap-2.5 py-5 lg:grid-cols-[300px_auto] xl:flex xl:justify-evenly 2xl:w-3/4',
+          isBoxscore?.shouldShowBoxscore
+            ? 'lg:grid-cols-[300px_auto]'
+            : 'sm:grid-cols-[300px_auto] ',
         )}
-
-        {!isLoading &&
-          (gameData.game.gameid === null || gameData.game.played === 0) && (
-            <>
-              <LeftColumn>
-                <TeamStats gameData={gameData} Sprites={Sprites} />
-                {isRegularSeason && renderTeamStandings()}
-              </LeftColumn>
-              <MiddleColumn>
-                <TeamsBlock
-                  league={league}
-                  gameData={gameData}
-                  Sprites={Sprites}
-                />
-                <SkaterComparison gameData={gameData} Sprites={Sprites} />
-                <GoalieComparison gameData={gameData} Sprites={Sprites} />
-              </MiddleColumn>
-              <RightColumn isFHM8Played={false}>
-                <PreviousMatchups
-                  gameData={gameData}
-                  Sprites={Sprites}
-                  league={league}
-                  season={season}
-                />
-              </RightColumn>
-            </>
-          )}
-
-        {/* base this page on https://www.nhl.com/gamecenter/dal-vs-cgy/2022/05/11/2021030175#game=2021030175,game_state=final,game_tab=stats */}
-        {!isLoading &&
-          gameData.game.gameid !== null &&
-          gameData.game.played === 1 && (
-            <>
-              <MiddleColumn>
-                <BoxscoreTeamStats
-                  gameData={gameData}
-                  Sprites={Sprites}
-                  league={league}
-                />
-                <BoxscoreTeamRosters gameData={gameData} />
-              </MiddleColumn>
-              <RightColumn
-                isFHM8Played={!isLoading && gameData.game.gameid !== null}
-              >
-                <BoxscoreFinalScores gameData={gameData} Sprites={Sprites} />
-                <SmallSectionTitle>Scoring</SmallSectionTitle>
-                <BoxscorePeriodScoring gameData={gameData} Sprites={Sprites} />
-                <SmallSectionTitle>Penalties</SmallSectionTitle>
-                <BoxscorePeriodPenalties gameData={gameData} />
-                <SmallSectionTitle>Shots on Goal</SmallSectionTitle>
-                <BoxscorePeriodShots gameData={gameData} />
-                <SmallSectionTitle>Three Stars of the Game</SmallSectionTitle>
-                <BoxscoreThreeStars gameData={gameData} Sprites={Sprites} />
-              </RightColumn>
-            </>
-          )}
-      </Container>
+      >
+        {!isBoxscore?.shouldShowBoxscore ? (
+          <>
+            <div className="flex h-fit w-full flex-col justify-between gap-2.5 sm:w-[300px]">
+              <PreviewTeamStats league={league} previewData={gameData} />
+              {gameData?.game.type === 'Regular Season' && (
+                <GamePreviewStandings league={league} previewData={gameData} />
+              )}
+            </div>
+            <div className="flex flex-1 flex-col gap-2.5">
+              <GamePreview league={league} previewData={gameData} />
+              <SkaterComparison league={league} previewData={gameData} />
+              <GoalieComparison league={league} previewData={gameData} />
+            </div>
+            <div className="w-full sm:w-[300px]">
+              <PreviousMatchups league={league} previewData={gameData} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-1 flex-col gap-2.5 lg:col-start-2 lg:col-end-3">
+              <div className="lg:hidden">
+                <BoxscoreFinalScores league={league} gameData={gameData} />
+              </div>
+              <BoxscoreTeamStats league={league} gameData={gameData} />
+              <BoxscoreTeamRosters gameData={gameData} />
+            </div>
+            <div className="flex w-full flex-col gap-2.5 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:w-[300px]">
+              <div className="hidden lg:inline-block">
+                <BoxscoreFinalScores league={league} gameData={gameData} />
+              </div>
+              <BoxscorePeriodScoring league={league} gameData={gameData} />
+              <BoxscorePeriodPenalties gameData={gameData} />
+              <BoxscorePeriodShots gameData={gameData} />
+              <BoxscoreThreeStars league={league} gameData={gameData} />
+            </div>
+          </>
+        )}
+      </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
-}
-
-const Container = styled.div<{ isFHM8Played: boolean }>`
-  width: 75%;
-  padding: 41px 0 40px 0;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-evenly;
-
-  @media screen and (max-width: 1650px) {
-    width: 75%;
-    padding: 21px 0 40px 0;
-  }
-
-  @media screen and (max-width: 1550px) {
-    width: 85%;
-  }
-
-  @media screen and (max-width: 1400px) {
-    width: 95%;
-  }
-
-  @media screen and (max-width: 1200px) {
-    display: grid;
-    grid-template-columns: 300px auto;
-
-    grid-template-areas:
-      'stats teams'
-      'matchups teams';
-
-    justify-content: normal;
-  }
-
-  ${({ isFHM8Played }) =>
-    !isFHM8Played
-      ? `
-  @media screen and (max-width: 900px) {
-    grid-template-columns: 300px auto 300px;
-    grid-template-areas:
-      'teams teams teams'
-      'stats . matchups';
-  }
-  `
-      : ''}
-  @media screen and (max-width: ${({ isFHM8Played }) =>
-    isFHM8Played ? '900px' : '670px'}) {
-    grid-template-columns: 100%;
-    grid-template-areas:
-      'teams'
-      'stats'
-      'matchups';
-  }
-`;
-
-const LeftColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 300px;
-  height: fit-content;
-
-  > div {
-    margin-bottom: 10px;
-  }
-
-  @media screen and (max-width: 1200px) {
-    grid-area: stats;
-  }
-
-  @media screen and (max-width: 900px) {
-    margin-top: 10px;
-  }
-
-  @media screen and (max-width: 670px) {
-    width: 100%;
-  }
-`;
-
-const MiddleColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  margin: 0 20px;
-
-  @media screen and (max-width: 1200px) {
-    grid-area: teams;
-    margin: 0 0 0 20px;
-  }
-
-  @media screen and (max-width: 900px) {
-    margin: 0;
-  }
-`;
-
-const RightColumn = styled.div<{ isFHM8Played: boolean }>`
-  width: 300px;
-
-  @media screen and (max-width: 1200px) {
-    grid-area: matchups;
-    margin-top: 10px;
-  }
-
-  @media screen and (max-width: ${({ isFHM8Played }) =>
-      isFHM8Played ? '900px' : '670px'}) {
-    width: 100%;
-  }
-`;
-
-const CenteredContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const ErrorBlock = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.red200};
-  height: 50px;
-  padding: 10px;
-  margin: 10px 0;
-  font-weight: 500;
-`;
-
-const SmallSectionTitle = styled.div`
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.grey700};
-  margin: 15px 10px 10px 10px;
-`;
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { league, gameId, season } = params;
-  const leagueId = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(league as string);
-
-  return { props: { league, leagueId, gameId, season } };
 };
 
-export default GameResults;
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const queryClient = new QueryClient();
+  const { league, gameId } = query;
+
+  await queryClient.prefetchQuery({
+    queryKey: ['shouldShowBoxscore', gameId],
+    queryFn: () => fetchShouldShowBoxscore(gameId as string),
+  });
+
+  return {
+    props: {
+      league,
+      gameId,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};

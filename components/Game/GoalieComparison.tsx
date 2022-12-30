@@ -1,279 +1,204 @@
-import React from 'react';
-import styled from 'styled-components';
+import { Skeleton } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import React, { useMemo } from 'react';
 
-import {
-  GoalieStats,
-  Matchup,
-} from '../../pages/api/v1/schedule/game/[gameId]';
+import { GoalieStats } from '../../pages/api/v1/schedule/game/[gameId]';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { assertUnreachable } from '../../utils/assertUnreachable';
+import { League } from '../../utils/leagueHelpers';
+import { getPlayerShortname } from '../../utils/playerHelpers';
+import { query } from '../../utils/query';
 
-import {
-  ComparisonHeader,
-  FlexColumn,
-  FlexRow,
-  SectionTitle,
-  TeamLogoSmall,
-} from './common';
+import { GamePreviewCard } from './GamePreviewCard';
 
-interface Props {
-  gameData: Matchup;
-  Sprites: {
-    [index: string]: React.ComponentClass<any>;
-  };
-}
+const sortByGamesPlayed = (goalies: GoalieStats[]): GoalieStats[] =>
+  goalies.sort((a, b) =>
+    a.wins + a.losses + a.OT > b.wins + b.losses + b.OT ? -1 : 1,
+  );
 
-const GoalieComparison = ({ gameData, Sprites }: Props): JSX.Element => {
-  const statLabels = {
-    record: 'Record',
-    GAA: 'GAA',
-    savePct: 'SV%',
-    shutouts: 'SO',
-  };
+const statLabels = {
+  record: 'Record',
+  GAA: 'GAA',
+  savePct: 'SV%',
+  shutouts: 'SO',
+} as const;
 
-  const sortByGamesPlayed = (goalies: Array<GoalieStats>) =>
-    goalies.sort((a, b) =>
-      a.wins + a.losses + a.OT > b.wins + b.losses + b.OT ? -1 : 1
-    );
-
-  const renderGoalieStats = (team: 'away' | 'home') =>
-    Object.values(sortByGamesPlayed(gameData.goalieStats[team])).map(
-      (goalie, i) => (
-        <React.Fragment key={`goalie_${goalie.name}_${i}`}>
-          <GoalieName>{goalie.name}</GoalieName>
-          <FlexRow>
-            <GoalieStat>
-              <span>{statLabels.record}</span>
-              <span>{`${goalie.wins}-${goalie.losses}-${goalie.OT}`}</span>
-            </GoalieStat>
-            {Object.keys(goalie).map((stat, i) => {
-              if (!Object.keys(statLabels).includes(stat)) return null;
-
-              return (
-                <GoalieStat key={`${stat}_${i}_${goalie.name}`}>
-                  <span>{statLabels[stat]}</span>
-                  <span>
-                    {stat === 'savePct'
-                      ? goalie[stat].toFixed(3)
-                      : goalie[stat]}
-                  </span>
-                </GoalieStat>
-              );
-            })}
-          </FlexRow>
-        </React.Fragment>
-      )
-    );
-
-  const renderGoalieStatsWithSharedLabels = () => {
-    const awayGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.away);
-    const homeGoaliesSorted = sortByGamesPlayed(gameData.goalieStats.home);
-    const maxNumGoalies = Math.max(
-      awayGoaliesSorted.length,
-      homeGoaliesSorted.length
-    );
-
-    return new Array(maxNumGoalies).fill(0).map((_, index) => {
-      const awayGoalie = awayGoaliesSorted[index];
-      const homeGoalie = homeGoaliesSorted[index];
-      if (!awayGoalie && !homeGoalie) return null;
-
-      return (
-        <GoalieFlexColumn key={index}>
-          <GoalieFlexRow>
-            <div className={'away'}>
-              <GoalieName>{awayGoalie && awayGoalie.name}</GoalieName>
-            </div>
-            <span />
-            <div className={'home'}>
-              <GoalieName>{homeGoalie && homeGoalie.name}</GoalieName>
-            </div>
-          </GoalieFlexRow>
-          <GoalieFlexRow>
-            <GoalieStat>
-              <span>
-                {awayGoalie
-                  ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}`
-                  : ''}
-              </span>
-              <span>{statLabels.record}</span>
-              <span>
-                {homeGoalie
-                  ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}`
-                  : ''}
-              </span>
-            </GoalieStat>
-          </GoalieFlexRow>
-          {Object.keys(statLabels).map((stat, i) => {
-            if (stat === 'record') return null;
-
-            return (
-              <GoalieFlexRow key={`${stat}_${i}`}>
-                <GoalieStat>
-                  <span>
-                    {awayGoalie &&
-                      (stat === 'savePct'
-                        ? awayGoalie[stat].toFixed(3)
-                        : stat === 'GAA'
-                        ? awayGoalie[stat].toFixed(2)
-                        : awayGoalie[stat])}
-                  </span>
-                  <span>{statLabels[stat]}</span>
-                  <span>
-                    {homeGoalie &&
-                      (stat === 'savePct'
-                        ? homeGoalie[stat].toFixed(3)
-                        : stat === 'GAA'
-                        ? homeGoalie[stat].toFixed(2)
-                        : homeGoalie[stat])}
-                  </span>
-                </GoalieStat>
-              </GoalieFlexRow>
-            );
-          })}
-        </GoalieFlexColumn>
-      );
-    });
-  };
-
+const VerticalGoalieList = ({
+  goalieData,
+  isLoading,
+}: {
+  goalieData: GoalieStats[];
+  isLoading: boolean;
+}) => {
   return (
-    <GoalieComparisonContainer>
-      <ComparisonHeader>
-        <TeamLogoSmall>
-          <Sprites.Away />
-        </TeamLogoSmall>
-        <SectionTitle>Goaltender Comparison</SectionTitle>
-        <TeamLogoSmall>
-          <Sprites.Home />
-        </TeamLogoSmall>
-      </ComparisonHeader>
-      <GoalieStatsBlock>
-        <TeamGoaliesWide>{renderGoalieStats('away')}</TeamGoaliesWide>
-        <TeamGoaliesWide home>{renderGoalieStats('home')}</TeamGoaliesWide>
-        <TeamGoaliesNarrow>
-          {renderGoalieStatsWithSharedLabels()}
-        </TeamGoaliesNarrow>
-      </GoalieStatsBlock>
-    </GoalieComparisonContainer>
+    <>
+      {Object.values(goalieData).map((goalie, i) => (
+        <React.Fragment key={`goalie_${goalie.name}_${i}`}>
+          <Skeleton isLoaded={!isLoading}>
+            <span className="break-words font-semibold">
+              {getPlayerShortname(goalie.name)}
+            </span>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
+            <div className="mb-3 flex w-full items-center justify-between">
+              <div className="flex flex-col font-mont text-sm text-grey800">
+                <span>{statLabels.record}</span>
+                <span className="font-semibold text-grey600">
+                  {goalie.wins}-{goalie.losses}-{goalie.OT}
+                </span>
+              </div>
+              {Object.keys(goalie).map((stat, i) => {
+                if (!(stat in statLabels)) {
+                  return null;
+                }
+                const currentStat = stat as keyof typeof statLabels;
+                return (
+                  <div
+                    className="flex flex-col font-mont text-sm text-grey800"
+                    key={`${stat}_${i}_${goalie.name}`}
+                  >
+                    <span>{statLabels[currentStat]}</span>
+                    <span className="font-semibold text-grey600">
+                      {currentStat === 'savePct'
+                        ? goalie[currentStat].toFixed(3).padEnd(4, '0')
+                        : currentStat === 'record'
+                        ? assertUnreachable(currentStat as never)
+                        : goalie[currentStat]}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </Skeleton>
+        </React.Fragment>
+      ))}
+    </>
   );
 };
 
-const GoalieComparisonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.grey100};
-  padding: 15px;
-  margin-top: 10px;
-`;
+export const GoalieComparison = ({
+  league,
+  previewData,
+}: {
+  league: League;
+  previewData: GamePreviewData | undefined;
+}) => {
+  const { data, isLoading } = useQuery<{
+    away: GoalieStats[];
+    home: GoalieStats[];
+  }>({
+    queryKey: [
+      `gamePreviewGoalieStats`,
+      previewData?.game.league,
+      previewData?.game.season,
+      previewData?.game.type,
+      previewData?.game.awayTeam,
+      previewData?.game.homeTeam,
+    ],
+    queryFn: () =>
+      query(
+        `/api/v2/schedule/game/goalieStats?league=${previewData?.game.league}&season=${previewData?.game.season}&type=${previewData?.game.type}&away=${previewData?.game.awayTeam}&home=${previewData?.game.homeTeam}`,
+      ),
+    enabled: !!previewData,
+  });
 
-const GoalieStatsBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  const sortedAwayGoalies = useMemo(
+    () => (data?.away ? sortByGamesPlayed(data?.away) : []),
+    [data?.away],
+  );
 
-  @media screen and (max-width: 900px) {
-    flex-direction: column;
-  }
-`;
+  const sortedHomeGoalies = useMemo(
+    () => (data?.home ? sortByGamesPlayed(data?.home) : []),
+    [data?.home],
+  );
 
-const TeamGoaliesWide = styled.div<{
-  home?: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  ${({ home }) => home && `text-align: right;`}
+  return (
+    <GamePreviewCard
+      title="Goaltender Comparison"
+      league={league}
+      awayAbbr={previewData?.teams.away.abbr}
+      homeAbbr={previewData?.teams.home.abbr}
+    >
+      <div className="flex flex-col justify-between md:flex-row">
+        <div className="hidden w-[200px] flex-col p-4 md:flex">
+          <VerticalGoalieList
+            goalieData={sortedAwayGoalies}
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="hidden w-[200px] flex-col p-4 text-right md:flex">
+          <VerticalGoalieList
+            goalieData={sortedHomeGoalies}
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="flex flex-col justify-center md:hidden">
+          {new Array(
+            Math.max(sortedAwayGoalies.length, sortedHomeGoalies.length),
+          )
+            .fill(0)
+            .map((_, i) => {
+              const awayGoalie = sortedAwayGoalies[i];
+              const homeGoalie = sortedHomeGoalies[i];
+              if (!awayGoalie && !homeGoalie) return null;
 
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
-`;
+              return (
+                <div className="flex flex-col p-2.5" key={i}>
+                  <div className="flex w-full items-center justify-between break-all">
+                    <div className="mt-4 flex-1 break-words font-semibold">
+                      {awayGoalie && getPlayerShortname(awayGoalie?.name)}
+                    </div>
+                    <div className="mt-4 flex-1 break-words text-right font-semibold">
+                      {homeGoalie && getPlayerShortname(homeGoalie?.name)}
+                    </div>
+                  </div>
+                  {Object.keys(statLabels).map((stat, i) => {
+                    const currentStat = stat as keyof typeof statLabels;
 
-const TeamGoaliesNarrow = styled.div`
-  display: none;
-
-  @media screen and (max-width: 900px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    > div:not(:last-child) {
-      border-bottom: 2px solid ${({ theme }) => theme.colors.grey300};
-    }
-
-    * > span {
-      height: 20px;
-    }
-  }
-`;
-
-const GoalieFlexColumn = styled(FlexColumn)`
-  padding: 10px 0;
-`;
-
-const GoalieFlexRow = styled.div<{
-  home?: boolean;
-  width?: number;
-}>`
-  display: flex;
-  flex-direction: row;
-  word-break: break-all;
-  align-items: center;
-  justify-content: space-between;
-
-  div.away,
-  div.home {
-    width: 50%;
-  }
-
-  div.home {
-    text-align: right;
-  }
-`;
-
-const GoalieName = styled.span`
-  font-weight: 600;
-  margin-top: 15px;
-  word-break: break-word;
-
-  @media screen and (max-width: 900px) {
-    margin-top: 0;
-  }
-`;
-
-const GoalieStat = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.grey800};
-
-  span:last-child {
-    color: ${({ theme }) => theme.colors.grey600};
-    font-weight: 600;
-  }
-
-  @media screen and (max-width: 900px) {
-    width: 100%;
-    font-weight: 600;
-    margin-top: 5px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    > span:first-child {
-      width: 20%;
-      text-align: left;
-    }
-
-    > span:nth-child(2) {
-      text-align: center;
-    }
-
-    > span:last-child {
-      width: 20%;
-      text-align: right;
-    }
-  }
-`;
-
-export default GoalieComparison;
+                    return (
+                      <div
+                        className="mt-2 flex w-full items-center justify-between break-all font-mont text-sm"
+                        key={`${stat}_${i}`}
+                      >
+                        <div className="flex-1 break-words font-semibold text-grey600">
+                          {awayGoalie &&
+                            (currentStat === 'record'
+                              ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}`
+                              : currentStat === 'savePct'
+                              ? awayGoalie[currentStat]
+                                  .toFixed(3)
+                                  .padEnd(5, '0')
+                              : currentStat === 'GAA'
+                              ? awayGoalie[currentStat]
+                                  .toFixed(2)
+                                  .padEnd(4, '0')
+                              : awayGoalie[currentStat])}
+                        </div>
+                        <span className="font-semibold text-grey800">
+                          {statLabels[currentStat]}
+                        </span>
+                        <div className="flex-1 break-words text-right font-semibold text-grey600">
+                          {homeGoalie &&
+                            (currentStat === 'record'
+                              ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}`
+                              : currentStat === 'savePct'
+                              ? homeGoalie[currentStat]
+                                  .toFixed(3)
+                                  .padEnd(5, '0')
+                              : currentStat === 'GAA'
+                              ? homeGoalie[currentStat]
+                                  .toFixed(2)
+                                  .padEnd(4, '0')
+                              : homeGoalie[currentStat])}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </div>
+      </div>
+    </GamePreviewCard>
+  );
+};

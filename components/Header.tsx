@@ -1,378 +1,175 @@
+import { useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
+import { Squash as Hamburger } from 'hamburger-react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { HamburgerCollapse } from 'react-animated-burgers';
-import VisibilitySensor from 'react-visibility-sensor';
-import styled from 'styled-components';
-import useSWR from 'swr';
+import { useState } from 'react';
+import VisibilitySensor from 'react-visibility-sensor-v2';
 
-import Link from './LinkWithSeason';
-import ScoreBar from './ScoreBar';
-import SeasonSelector from './Selector/SeasonSelector';
+import { useSeason } from '../hooks/useSeason';
+import Back from '../public/back.svg';
+import { League, leagueNameToId } from '../utils/leagueHelpers';
+import { query } from '../utils/query';
+import { onlyIncludeSeasonAndTypeInQuery } from '../utils/routingHelpers';
 
-interface Props {
-  league: string;
-  showScoreBar?: boolean;
-  activePage?: string;
-  team?: number;
-  days?: number;
-  isSticky?: boolean;
-}
+import { Link } from './common/Link';
+import { Select } from './common/Select';
+import { LeagueLogo } from './LeagueLogo';
+import { ScoreBar } from './scoreBar/ScoreBar';
 
-const defaultProps = {
-  showScoreBar: true,
-  activePage: '',
-};
+const menuLinks = [
+  'team',
+  'standings',
+  'leaders',
+  'schedule',
+  'players',
+] as const;
+type MenuLinks = typeof menuLinks[number] | 'game';
 
-function HeaderBar({
+export const Header = ({
   league,
-  showScoreBar = true,
-  activePage = '',
-  team = null,
-  days = null,
-  isSticky = true,
-}: Props & typeof defaultProps): JSX.Element {
-  const [scheduleVisible, setScheduleVisible] = useState<boolean>(true);
-  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  activePage,
+  daysToShow,
+  shouldStickToTop,
+  shouldShowScoreBar = true,
+}: {
+  league: League;
+  activePage?: MenuLinks;
+  daysToShow?: number;
+  shouldShowScoreBar?: boolean;
+  shouldStickToTop?: boolean;
+}) => {
+  const [scheduleVisible, setScheduleVisible] = useState(true);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const router = useRouter();
 
-  const { data: scheduleData, error: scheduleError } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/schedule/header?league=${[
-      'shl',
-      'smjhl',
-      'iihf',
-      'wjc',
-    ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
-      days ? `&days=${days}` : ``
-    }`
-  );
+  const { season, seasonsList, setSeason, seasonLoading } = useSeason();
+  const { teamid } = router.query;
 
-  const { data: seasonsData, error: seasonsError } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/leagues/seasons?league=${[
-      'shl',
-      'smjhl',
-      'iihf',
-      'wjc',
-    ].indexOf(league)}${typeof team === 'number' ? `&team=${team}` : ``}${
-      days ? `&days=${days}` : ``
-    }`
-  );
-
-  const getSeasonsList = () =>
-    seasonsData ? seasonsData.map((leagueEntry) => leagueEntry.season) : [];
+  const { data: scheduleData, isLoading: scheduleIsLoading } = useQuery({
+    queryKey: ['header', league, teamid, daysToShow],
+    queryFn: () =>
+      query(
+        `api/v1/schedule/header?league=${leagueNameToId(league)}${
+          teamid ? `&team=${parseInt(teamid as string)}` : ``
+        }${daysToShow ? `&days=${daysToShow}` : ``}`,
+      ),
+  });
 
   return (
-    <HeaderWrapper sticky={(!scheduleVisible || !showScoreBar) && isSticky}>
-      {showScoreBar && (
+    <div
+      className={classnames(
+        (!scheduleVisible || !shouldShowScoreBar) &&
+          shouldStickToTop &&
+          '[&+div]:pt-16',
+      )}
+    >
+      {shouldShowScoreBar && (
         <VisibilitySensor
           partialVisibility
-          onChange={(e) => setScheduleVisible(e)}
+          onChange={(e: boolean) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <ScoreBar
-            data={scheduleData}
-            loading={!scheduleData && !scheduleError}
-            league={league}
-          />
+          <div className={'h-24 w-full bg-grey100'}>
+            <ScoreBar
+              data={scheduleData}
+              loading={scheduleIsLoading}
+              league={league}
+            />
+          </div>
         </VisibilitySensor>
       )}
-      <HeaderNav
-        sticky={(!scheduleVisible || !showScoreBar) && isSticky}
+      <div
+        className={classnames(
+          (!scheduleVisible || !shouldShowScoreBar) &&
+            shouldStickToTop &&
+            'fixed top-0',
+          'z-50 h-16 w-full bg-grey900',
+        )}
         role="navigation"
         aria-label="Main"
       >
-        <Container>
-          <Link href="/" as={`/`} passHref>
-            <GoBack
-              role="link"
-              tabIndex={0}
-              dangerouslySetInnerHTML={{
-                __html: require(`../public/back.svg?include`),
-              }}
+        <div className="relative mx-auto flex h-full w-full items-center justify-between px-[5%] sm:w-11/12 sm:justify-start sm:p-0 lg:w-3/4">
+          <Link href="/" className="hidden h-2/5 w-max sm:inline-block">
+            <Back className="top-[5%] mx-2 h-[90%] text-grey100" />
+          </Link>
+          <Link
+            href={{
+              pathname: '/[league]',
+              query: onlyIncludeSeasonAndTypeInQuery(router.query),
+            }}
+            className={classnames(
+              !scheduleVisible || !shouldShowScoreBar
+                ? 'sm:h-full'
+                : 'sm:h-[150%]',
+              'order-2 m-0 h-full w-max transition-all sm:mx-2 sm:inline-block',
+            )}
+          >
+            <LeagueLogo
+              league={league}
+              className={classnames(
+                !scheduleVisible || !shouldShowScoreBar
+                  ? 'sm:top-[2.5%]'
+                  : 'sm:top-[5%]',
+                'relative top-[5%] h-[90%]',
+              )}
             />
           </Link>
-          <Link href="/[league]" as={`/${league}`} passHref>
-            <Logo
-              scheduleNotVisible={!scheduleVisible || !showScoreBar}
-              role="link"
-              tabIndex={0}
-              dangerouslySetInnerHTML={{
-                __html: require(`../public/league_logos/${league.toUpperCase()}.svg?include`),
-              }}
-            />
-          </Link>
-          <MenuDrawer active={drawerVisible}>
-            <Link href="/" as={`/`} passHref>
-              <MenuItem
-                className="HomeButton"
-                active={activePage === 'home'}
-                role="link"
-                tabIndex={0}
-              >
-                Home
-              </MenuItem>
-            </Link>
-            <Link href="/[league]/team" as={`/${league}/team`} passHref>
-              <MenuItem
-                active={activePage === 'teams'}
-                role="link"
-                tabIndex={0}
-              >
-                Teams
-              </MenuItem>
-            </Link>
+          <div
+            className={classnames(
+              !drawerVisible && 'hidden',
+              'absolute top-16 left-0 z-50 order-1 h-auto w-full flex-col bg-grey800 sm:relative sm:top-0 sm:order-3 sm:flex sm:h-full sm:w-auto sm:flex-row sm:bg-[transparent]',
+            )}
+          >
             <Link
-              href="/[league]/standings"
-              as={`/${league}/standings`}
-              passHref
+              href="/"
+              _hover={{ textDecoration: 'none' }}
+              className="!hover:no-underline flex h-12 w-full items-center justify-center text-sm font-bold capitalize !text-grey100 hover:bg-blue600 sm:hidden"
             >
-              <MenuItem
-                active={activePage === 'standings'}
-                role="link"
-                tabIndex={0}
-              >
-                Standings
-              </MenuItem>
+              Home
             </Link>
-            <Link href="/[league]/leaders" as={`/${league}/leaders`} passHref>
-              <MenuItem
-                active={activePage === 'leaders'}
-                role="link"
-                tabIndex={0}
+            {menuLinks.map((linkName) => (
+              <Link
+                href={{
+                  pathname: `/[league]/${linkName}`,
+                  query: onlyIncludeSeasonAndTypeInQuery(router.query),
+                }}
+                className={classnames(
+                  activePage === linkName &&
+                    'border-l-4 border-l-grey100 pr-4 sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1',
+                  '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-blue600 sm:h-full sm:w-max',
+                )}
+                _hover={{ textDecoration: 'none' }}
+                key={linkName}
               >
-                Leaders
-              </MenuItem>
-            </Link>
-            <Link href="/[league]/schedule" as={`/${league}/schedule`} passHref>
-              <MenuItem
-                active={activePage === 'schedule'}
-                role="link"
-                tabIndex={0}
-              >
-                Schedule
-              </MenuItem>
-            </Link>
-            <Link href="/[league]/players" as={`/${league}/players`} passHref>
-              <MenuItem
-                active={activePage === 'players'}
-                role="link"
-                tabIndex={0}
-              >
-                Players
-              </MenuItem>
-            </Link>
-          </MenuDrawer>
-          <HamburgerIcon
-            isActive={drawerVisible}
-            toggleButton={() => setDrawerVisible(() => !drawerVisible)}
-            barColor="#F8F9FA"
-            buttonWidth={24}
-          />
-          <SelectorWrapper>
+                {linkName}
+              </Link>
+            ))}
+          </div>
+          <div className="inline-block sm:hidden">
+            <Hamburger
+              toggled={drawerVisible}
+              toggle={() =>
+                setDrawerVisible((currentVisibility) => !currentVisibility)
+              }
+              color="#F8F9FA"
+              size={24}
+            />
+          </div>
+          <div className="relative order-3 mr-4 sm:mr-[2%] sm:ml-auto sm:w-auto">
             {activePage !== 'game' &&
-              router.pathname.indexOf('/player/') === -1 && (
-                <SeasonSelector
-                  seasons={getSeasonsList()}
-                  loading={!seasonsData && !seasonsError}
+              router.pathname.indexOf('/player/') === -1 &&
+              !seasonLoading && (
+                <Select<typeof seasonsList[0]>
+                  options={seasonsList.sort((a: number, b: number) => b - a)}
+                  selectedOption={season ?? 0}
+                  onSelection={setSeason}
+                  optionClassName="before:content-['S'] sm:before:content-['Season'] sm:before:mr-1"
+                  dark
                 />
               )}
-          </SelectorWrapper>
-        </Container>
-      </HeaderNav>
-    </HeaderWrapper>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
-
-HeaderBar.defaultProps = defaultProps;
-
-const HeaderWrapper = styled.header<{ sticky: boolean }>`
-  ${({ sticky }) =>
-    sticky
-      ? `
-  & + div {
-    padding-top: 64px;
-  }`
-      : ''}
-`;
-
-const HeaderNav = styled.div<{ sticky: boolean }>`
-  ${({ sticky }) =>
-    sticky
-      ? ` 
-  position: fixed;
-  top: 0;
-  `
-      : ''}
-
-  width: 100%;
-  height: 64px;
-  background-color: ${({ theme }) => theme.colors.grey900};
-  z-index: 999;
-`;
-
-const Container = styled.div`
-  width: 75%;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  @media screen and (max-width: 768px) {
-    width: 90%;
-  }
-
-  @media screen and (max-width: 670px) {
-    width: 100%;
-    padding: 0 5%;
-    position: relative;
-    justify-content: space-between;
-  }
-`;
-
-const Logo = styled.div<{ scheduleNotVisible: boolean }>`
-  transition: all 200ms;
-  height: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `100%` : `150%`)};
-  width: max-content;
-  margin: 0 1% 0 2%;
-
-  & svg {
-    position: relative;
-    height: 90%;
-    top: ${({ scheduleNotVisible }) => (scheduleNotVisible ? `2.5%` : `5%`)};
-    object-fit: contain;
-    border-radius: 5px;
-    transition: all 200ms ease-out;
-    cursor: pointer;
-  }
-
-  @media screen and (max-width: 670px) {
-    order: 2;
-    height: 100%;
-    margin: 0;
-
-    & svg {
-      top: 5%;
-      margin: 0;
-    }
-  }
-`;
-
-const GoBack = styled.div`
-  transition: all 200ms;
-  height: 40%;
-  width: max-content;
-  margin: 0 0.2% 0 0.2%;
-
-  & svg {
-    position: relative;
-    height: 90%;
-    top: 5%;
-    object-fit: contain;
-    border-radius: 5px;
-    transition: all 200ms ease-out;
-    cursor: pointer;
-  }
-
-  @media screen and (max-width: 670px) {
-    display: none;
-    }
-  }
-`;
-
-const MenuDrawer = styled.div<{ active: boolean }>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-  width: auto;
-
-  @media screen and (max-width: 670px) {
-    order: 0;
-    flex-direction: column;
-    position: absolute;
-    background-color: ${({ theme }) => theme.colors.grey800};
-    width: 100%;
-    height: auto;
-    top: 64px;
-    left: 0;
-    ${({ active }) => (active ? '' : 'display: none;')}
-    z-index: 999;
-  }
-`;
-
-const MenuItem = styled.div<{ active: boolean }>`
-  color: ${({ theme }) => theme.colors.grey100};
-  font-size: 14px;
-  font-weight: 700;
-  height: 100%;
-  width: max-content;
-  padding: 0 10px;
-  ${({ active, theme }) =>
-    active
-      ? `
-  border-bottom: 5px solid ${theme.colors.grey100};
-  padding-top: 5px;`
-      : ``}
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blue600};
-  }
-  &.HomeButton {
-    @media screen and (min-width: 670px) {
-      display: none !important;
-    }
-    @media screen and (max-width: 670px) {
-      display: flex;
-    }
-  }
-  @media screen and (max-width: 670px) {
-    width: 100%;
-    height: 50px;
-
-    // Change look of active tab within menu on mobile device
-    ${({ active, theme }) =>
-      active
-        ? `
-    border-bottom: none; 
-    border-left: 5px solid ${theme.colors.grey100};
-    padding-top: 0;
-    padding-right: 15px;
-    `
-        : ``}
-  }
-`;
-
-const HamburgerIcon = styled(HamburgerCollapse)`
-  @media screen and (min-width: 671px) {
-    display: none !important;
-  }
-`;
-
-const SelectorWrapper = styled.div`
-  @media screen and (min-width: 671px) {
-    margin: 0 2% 0 auto;
-  }
-
-  @media screen and (max-width: 670px) {
-    order: 3;
-    width: 55px;
-  }
-`;
-
-HeaderBar.propTypes = {
-  league: PropTypes.string.isRequired,
-  showScoreBar: PropTypes.bool,
-  activePage: PropTypes.string,
 };
-
-HeaderBar.defaultProps = {
-  showScoreBar: true,
-  activePage: '',
-};
-
-export default HeaderBar;

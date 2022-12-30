@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -13,7 +14,7 @@ export type SeasonType = string;
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -48,7 +49,7 @@ export default async (
       WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
-  `)
+  `),
     ));
 
   const playerStats = await query(
@@ -66,7 +67,7 @@ export default async (
     WHERE s.LeagueID=${+league}
       AND s.SeasonID=${season.SeasonID}
       AND s.TeamID=${+id}
-  `)
+  `),
   );
 
   const goalieStats = await query(
@@ -80,7 +81,7 @@ export default async (
     WHERE s.LeagueID=${+league}
       AND s.SeasonID=${season.SeasonID}
       AND s.TeamID=${+id}
-  `)
+  `),
   );
 
   const parsed = [...playerStats, ...goalieStats].map((player) => {

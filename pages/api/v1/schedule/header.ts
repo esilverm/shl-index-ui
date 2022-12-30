@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
@@ -5,7 +6,7 @@ import { query } from '../../../../lib/db';
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   const { league = 0, days = 5, team } = req.query;
 
@@ -76,7 +77,7 @@ export default async (
 
   // Solution from here: https://stackoverflow.com/a/60688789/10382232
   dateList.sort(
-    (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
+    (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf(),
   );
 
   // get x amount of played game days and 1 game from the future.
@@ -90,8 +91,8 @@ export default async (
       playedGames.length - +days < 0
         ? playedGames.length
         : playedGames.length - +days - nextGameDay.length,
-      1
-    )
+      1,
+    ),
   );
 
   res.status(200).json([...lastGames, ...nextGameDay]);

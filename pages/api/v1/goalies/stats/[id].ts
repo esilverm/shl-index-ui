@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -11,7 +12,7 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -54,16 +55,16 @@ export default async (
     AND r.G=20
 	  AND p.TeamID>=0
     AND s.PlayerID=${+id}
-  `
+  `,
       )
       .append(
         seasonid != null
           ? SQL`
             AND s.SeasonID=${+seasonid}
           `
-          : ''
+          : '',
       )
-      .append(SQL`ORDER BY s.SeasonID DESC`)
+      .append(SQL`ORDER BY s.SeasonID DESC`),
   );
 
   // remove 0 season

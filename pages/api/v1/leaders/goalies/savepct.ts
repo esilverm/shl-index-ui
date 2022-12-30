@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -11,7 +12,7 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -42,7 +43,7 @@ export default async (
       WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
-  `)
+  `),
     ));
 
   const savepctLeaders = await query(
@@ -64,7 +65,7 @@ export default async (
     AND s.SeasonID=${season.SeasonID}
     AND s.Minutes > 60
     AND s.GP >= (
-      SELECT MAX(GP) FROM `
+      SELECT MAX(GP) FROM `,
       )
       .append(`player_goalie_stats_${type}`)
       .append(
@@ -72,11 +73,11 @@ export default async (
       WHERE LeagueID=${+league}
       AND SeasonID=${season.SeasonID}
     ) / 5
-    ORDER BY s.SavePct `
+    ORDER BY s.SavePct `,
       )
       .append(desc ? `DESC` : `ASC`).append(`
     LIMIT ${limit}
-    `)
+    `),
   );
 
   const parsed = [...savepctLeaders].map((player) => ({

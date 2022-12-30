@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -9,44 +10,49 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-export type Standings = Array<{
+export type StandingsItem = {
+  position: number;
+  id: number;
   name: string;
-  teams: Array<{
-    position: number;
-    id: number;
-    name: string;
-    location: string;
-    abbreviation: string;
-    gp: number;
+  location: string;
+  abbreviation: string;
+  gp: number;
+  wins: number;
+  losses: number;
+  OTL: number;
+  OTW?: number;
+  points: number;
+  winPercent: string;
+  ROW: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDiff: number;
+  home: {
     wins: number;
     losses: number;
     OTL: number;
-    points: number;
-    winPercent: string;
-    ROW: number;
-    goalsFor: number;
-    goalsAgainst: number;
-    goalDiff: number;
-    home: {
-      wins: number;
-      losses: number;
-      OTL: number;
-    };
-    away: {
-      wins: number;
-      losses: number;
-      OTL: number;
-    };
-    shootout: {
-      wins: number;
-      losses: number;
-    };
-  }>;
-}>;
+  };
+  away: {
+    wins: number;
+    losses: number;
+    OTL: number;
+  };
+  shootout: {
+    wins: number;
+    losses: number;
+  };
+};
+
+export type Standings =
+  | Array<StandingsItem>
+  | Array<{
+      name: string;
+      teams: Array<StandingsItem>;
+    }>;
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -81,19 +87,19 @@ export default async (
           ? SQL` PARTITION BY tr.ConferenceID`
           : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` PARTITION BY tr.ConferenceID, tr.DivisionID`
-          : ''
+          : '',
       )
       .append(
         +league !== 2 && +league !== 3
           ? SQL` ORDER BY tr.Points DESC, tr.Wins - tr.SOW DESC, tr.Wins DESC, tr.GF - tr.GA DESC, tr.GF DESC) as Position, td.LeagueID,`
-          : SQL` ORDER BY tr.Points DESC, tr.Wins - ((tr.Wins * 3 + tr.SOL + tr.OTL) % tr.Points) - tr.SOW DESC, tr.GF - tr.GA DESC, tr.GF DESC) as Position, td.LeagueID,`
+          : SQL` ORDER BY tr.Points DESC, tr.Wins - ((tr.Wins * 3 + tr.SOL + tr.OTL) % tr.Points) - tr.SOW DESC, tr.GF - tr.GA DESC, tr.GF DESC) as Position, td.LeagueID,`,
       )
       .append(
         display === 'conference'
           ? SQL` c.Name AS Conference, `
           : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` d.Name AS Division, `
-          : ''
+          : '',
       )
       .append(
         SQL`td.Name, td.Nickname, td.Abbr, tr.TeamID, tr.Wins, tr.Losses, tr.OTL, tr.SOW, tr.SOL, tr.Points, tr.GF, tr.GA, tr.PCT, h.HomeWins, h.HomeLosses, h.HomeOTL, a.AwayWins, a.AwayLosses, a.AwayOTL
@@ -101,7 +107,7 @@ export default async (
       INNER JOIN team_data AS td
         ON tr.TeamID = td.TeamID
         AND tr.LeagueID = td.LeagueID
-        AND tr.SeasonID = td.SeasonID`
+        AND tr.SeasonID = td.SeasonID`,
       )
       .append(
         display === 'conference'
@@ -119,7 +125,7 @@ export default async (
           AND tr.LeagueID = d.LeagueID
           AND tr.SeasonID = d.SeasonID
           `
-          : ''
+          : '',
       ).append(SQL`
       LEFT JOIN (
         SELECT Home AS TeamID, SeasonID, LeagueID, 
@@ -145,7 +151,7 @@ export default async (
           AND tr.SeasonID = a.SeasonID
       WHERE tr.LeagueID=${+league}
         AND tr.SeasonID=${season.SeasonID}
-  `)
+  `),
   );
 
   const parsed = standings.map((team) => ({

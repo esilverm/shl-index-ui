@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -11,7 +12,7 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
@@ -47,17 +48,17 @@ export default async (
           ? SQL` PARTITION BY td.ConferenceID`
           : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` PARTITION BY td.ConferenceID, td.DivisionID`
-          : ''
+          : '',
       )
       .append(
-        SQL` ORDER BY ps.PTS DESC, ps.Wins DESC, ps.SOW ASC) as Position, ps.LeagueID,`
+        SQL` ORDER BY ps.PTS DESC, ps.Wins DESC, ps.SOW ASC) as Position, ps.LeagueID,`,
       )
       .append(
         display === 'conference'
           ? SQL` c.Name AS Conference, `
           : +league !== 2 && +league !== 3 && display === 'division'
           ? SQL` d.Name AS Division, `
-          : ''
+          : '',
       )
       .append(
         SQL`
@@ -87,7 +88,7 @@ export default async (
             team_data AS td ON ps.TeamID = td.TeamID
             AND ps.SeasonID = td.SeasonID
             AND ps.LeagueID = td.LeagueID
-        `
+        `,
       )
       .append(
         display === 'conference'
@@ -105,11 +106,11 @@ export default async (
             AND ps.LeagueID = d.LeagueID
             AND ps.SeasonID = d.SeasonID
             `
-          : ''
+          : '',
       ).append(SQL`
     WHERE ps.LeagueID=${+league}
     AND ps.SeasonID=${season.SeasonID}
-  `)
+  `),
   );
 
   const parsed = preseason.map((team) => ({

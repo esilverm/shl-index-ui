@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -9,10 +10,10 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'];
+const seasonTypes = ['Pre-Season', 'Regular Season', 'Playoffs'] as const;
 export type SeasonType = typeof seasonTypes[number];
 
-export interface GameRow {
+export type GameRow = {
   Slug: string;
   SeasonID: number;
   LeagueID: number;
@@ -26,9 +27,9 @@ export interface GameRow {
   Played: number;
   Type: SeasonType;
   GameID: number | null;
-}
+};
 
-export interface Game {
+export type Game = {
   slug: string;
   season: number;
   league: number;
@@ -42,7 +43,7 @@ export interface Game {
   played: number;
   type: SeasonType;
   gameid: number | null;
-}
+};
 
 export const convertGameRowToGame = (game: GameRow): Game => ({
   season: game.SeasonID,
@@ -62,7 +63,7 @@ export const convertGameRowToGame = (game: GameRow): Game => ({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
