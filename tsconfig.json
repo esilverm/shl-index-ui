@@ -17,6 +17,6 @@
     "incremental": true,
     "typeRoots": ["./typings", "./node_modules/@types"],
   },
-  "include": ["custom-next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["custom-next-env.d.ts", "**/*.ts", "**/*.tsx", "./components"],
   "exclude": ["node_modules", "next-env.d.ts"]
 }
