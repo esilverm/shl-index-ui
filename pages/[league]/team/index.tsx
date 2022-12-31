@@ -1,17 +1,17 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
-import { Link } from 'components/common/Link';
-import { Footer } from 'components/Footer';
-import { Header } from 'components/Header';
-import { TeamStatsTable } from 'components/tables/TeamStatsTable';
-import { TeamLogo } from 'components/TeamLogo';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
+import { Link } from '../../../components/common/Link';
+import { Footer } from '../../../components/Footer';
+import { Header } from '../../../components/Header';
+import { TeamStatsTable } from '../../../components/tables/TeamStatsTable';
+import { TeamLogo } from '../../../components/TeamLogo';
 import { useSeason } from '../../../hooks/useSeason';
 import {
   isMainLeague,

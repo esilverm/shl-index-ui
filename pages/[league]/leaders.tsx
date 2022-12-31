@@ -1,18 +1,18 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { Footer } from 'components/Footer';
-import { Header } from 'components/Header';
-import { Leaderboard } from 'components/leaderboard/Leaderboard';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { NextSeo } from 'next-seo';
+import { useCallback, useMemo } from 'react';
+
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { Leaderboard } from '../../components/leaderboard/Leaderboard';
 import {
   goalieLeaderboardStats,
   LeaderboardTypes,
   leaderboardTypes,
   skaterLeaderboardStats,
-} from 'components/leaderboard/shared';
-import { SeasonTypeSelector } from 'components/SeasonTypeSelector';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { NextSeo } from 'next-seo';
-import { useCallback, useMemo } from 'react';
-
+} from '../../components/leaderboard/shared';
+import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
 import { useRouterPageState } from '../../hooks/useRouterPageState';
 import { League } from '../../utils/leagueHelpers';
 

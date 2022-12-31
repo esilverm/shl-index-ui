@@ -7,18 +7,18 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-import { Footer } from 'components/Footer';
-import { Header } from 'components/Header';
-import { SeasonTypeSelector } from 'components/SeasonTypeSelector';
-import { GoalieRatingsTable } from 'components/tables/GoalieRatingsTable';
-import { GoalieScoreTable } from 'components/tables/GoalieScoreTable';
-import { SkaterAdvStatsTable } from 'components/tables/SkaterAdvStatsTable';
-import { SkaterRatingsTable } from 'components/tables/SkaterRatingsTable';
-import { SkaterScoreTable } from 'components/tables/SkaterScoreTable';
-import { TeamLogo } from 'components/TeamLogo';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 
+import { Footer } from '../../../components/Footer';
+import { Header } from '../../../components/Header';
+import { SeasonTypeSelector } from '../../../components/SeasonTypeSelector';
+import { GoalieRatingsTable } from '../../../components/tables/GoalieRatingsTable';
+import { GoalieScoreTable } from '../../../components/tables/GoalieScoreTable';
+import { SkaterAdvStatsTable } from '../../../components/tables/SkaterAdvStatsTable';
+import { SkaterRatingsTable } from '../../../components/tables/SkaterRatingsTable';
+import { SkaterScoreTable } from '../../../components/tables/SkaterScoreTable';
+import { TeamLogo } from '../../../components/TeamLogo';
 import { useSeasonType } from '../../../hooks/useSeasonType';
 import {
   Goalie,

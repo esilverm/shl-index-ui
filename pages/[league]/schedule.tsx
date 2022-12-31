@@ -1,15 +1,15 @@
 import { Checkbox, Spinner } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-import { Select } from 'components/common/Select';
-import { Footer } from 'components/Footer';
-import { Header } from 'components/Header';
-import { ScheduleDay } from 'components/schedule/ScheduleDay';
-import { SeasonTypeSelector } from 'components/SeasonTypeSelector';
 import { groupBy, isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useCallback, useMemo } from 'react';
 
+import { Select } from '../../components/common/Select';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { ScheduleDay } from '../../components/schedule/ScheduleDay';
+import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
 import { useRouterPageState } from '../../hooks/useRouterPageState';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
