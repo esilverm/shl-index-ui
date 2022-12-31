@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8000",
     "lint": "next lint",
     "create-sprites": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/createSprites.ts",
     "postinstall": "yarn run create-sprites"
