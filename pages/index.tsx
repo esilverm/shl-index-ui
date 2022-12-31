@@ -1,7 +1,7 @@
+import { Link } from 'components/common/Link';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 
-import { Link } from '../components/common/Link';
 import IIHFLogo from '../public/league_logos/IIHF.svg';
 import SHLLogo from '../public/league_logos/SHL.svg';
 import SMJHLLogo from '../public/league_logos/SMJHL.svg';

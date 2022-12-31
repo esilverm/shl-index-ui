@@ -1,10 +1,10 @@
+import { Footer } from 'components/Footer';
+import { Header } from 'components/Header';
+import { HomepageLeaders } from 'components/homepage/HomepageLeaders';
+import { Livestream } from 'components/Livestream';
 import { NextSeo } from 'next-seo';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 
-import { Footer } from '../../components/Footer';
-import { Header } from '../../components/Header';
-import { HomepageLeaders } from '../../components/homepage/HomepageLeaders';
-import { Livestream } from '../../components/Livestream';
 import { League } from '../../utils/leagueHelpers';
 
 export default ({ league }: { league: League }) => {

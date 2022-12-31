@@ -1,16 +1,16 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
+import { Footer } from 'components/Footer';
+import { Header } from 'components/Header';
+import { DoubleBracket } from 'components/playoffBracket/DoubleBracket';
+import { SingleBracket } from 'components/playoffBracket/SingleBracket';
+import { SeasonTypeSelector } from 'components/SeasonTypeSelector';
+import { StandingsTable } from 'components/tables/StandingsTable';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useMemo, useState } from 'react';
 
-import { Footer } from '../../components/Footer';
-import { Header } from '../../components/Header';
-import { DoubleBracket } from '../../components/playoffBracket/DoubleBracket';
-import { SingleBracket } from '../../components/playoffBracket/SingleBracket';
-import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
-import { StandingsTable } from '../../components/tables/StandingsTable';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
 import {
