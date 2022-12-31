@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useMemo } from 'react';
 
-import { BoxscoreSummary } from '../../../pages/api/v2/schedule/game/boxscore/summary';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { query } from '../../../utils/query';
+import { BoxscoreSummary } from '../../pages/api/v2/schedule/game/boxscore/summary';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { query } from '../../utils/query';
 
 import { periods } from './shared';
 

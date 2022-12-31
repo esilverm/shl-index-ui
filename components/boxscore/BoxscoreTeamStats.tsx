@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useMemo } from 'react';
 
-import { BoxscoreSummary } from '../../../pages/api/v2/schedule/game/boxscore/summary';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { League } from '../../../utils/leagueHelpers';
-import { query } from '../../../utils/query';
-import { TeamLogo } from '../../TeamLogo';
+import { BoxscoreSummary } from '../../pages/api/v2/schedule/game/boxscore/summary';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { League } from '../../utils/leagueHelpers';
+import { query } from '../../utils/query';
+import { TeamLogo } from '../TeamLogo';
 
 const TableCell = ({
   children,

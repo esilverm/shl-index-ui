@@ -3,13 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
 
-import { BoxscoreGoalie } from '../../../pages/api/v2/schedule/game/boxscore/goalies';
-import { BoxscoreSkater } from '../../../pages/api/v2/schedule/game/boxscore/skaters';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { getPlayerShortname } from '../../../utils/playerHelpers';
-import { query } from '../../../utils/query';
-import { onlyIncludeSeasonAndTypeInQuery } from '../../../utils/routingHelpers';
-import { Link } from '../../common/Link';
+import { BoxscoreGoalie } from '../../pages/api/v2/schedule/game/boxscore/goalies';
+import { BoxscoreSkater } from '../../pages/api/v2/schedule/game/boxscore/skaters';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { getPlayerShortname } from '../../utils/playerHelpers';
+import { query } from '../../utils/query';
+import { onlyIncludeSeasonAndTypeInQuery } from '../../utils/routingHelpers';
+import { Link } from '../common/Link';
 
 const TableCell = ({
   children,

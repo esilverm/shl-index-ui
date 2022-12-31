@@ -4,9 +4,9 @@ import classnames from 'classnames';
 import { groupBy } from 'lodash';
 import { useMemo } from 'react';
 
-import { BoxscorePenalties } from '../../../pages/api/v2/schedule/game/boxscore/penalties';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { query } from '../../../utils/query';
+import { BoxscorePenalties } from '../../pages/api/v2/schedule/game/boxscore/penalties';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { query } from '../../utils/query';
 
 import { Period } from './shared';
 

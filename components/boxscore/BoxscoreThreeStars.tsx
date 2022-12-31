@@ -2,13 +2,13 @@ import { Spinner } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { BoxscoreGoalie } from '../../../pages/api/v2/schedule/game/boxscore/goalies';
-import { BoxscoreSkater } from '../../../pages/api/v2/schedule/game/boxscore/skaters';
-import { BoxscoreSummary } from '../../../pages/api/v2/schedule/game/boxscore/summary';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { League } from '../../../utils/leagueHelpers';
-import { query } from '../../../utils/query';
-import { TeamLogo } from '../../TeamLogo';
+import { BoxscoreGoalie } from '../../pages/api/v2/schedule/game/boxscore/goalies';
+import { BoxscoreSkater } from '../../pages/api/v2/schedule/game/boxscore/skaters';
+import { BoxscoreSummary } from '../../pages/api/v2/schedule/game/boxscore/summary';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { League } from '../../utils/leagueHelpers';
+import { query } from '../../utils/query';
+import { TeamLogo } from '../TeamLogo';
 
 const StarRow = ({
   league,

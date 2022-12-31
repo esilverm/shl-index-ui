@@ -6,14 +6,14 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 
-import { BoxscoreScoring } from '../../../pages/api/v2/schedule/game/boxscore/scoring';
-import { GamePreviewData } from '../../../pages/api/v2/schedule/game/preview';
-import { League } from '../../../utils/leagueHelpers';
-import { getPlayerShortname } from '../../../utils/playerHelpers';
-import { query } from '../../../utils/query';
-import { onlyIncludeSeasonAndTypeInQuery } from '../../../utils/routingHelpers';
-import { Link } from '../../common/Link';
-import { TeamLogo } from '../../TeamLogo';
+import { BoxscoreScoring } from '../../pages/api/v2/schedule/game/boxscore/scoring';
+import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { League } from '../../utils/leagueHelpers';
+import { getPlayerShortname } from '../../utils/playerHelpers';
+import { query } from '../../utils/query';
+import { onlyIncludeSeasonAndTypeInQuery } from '../../utils/routingHelpers';
+import { Link } from '../common/Link';
+import { TeamLogo } from '../TeamLogo';
 
 import { Period } from './shared';
 
