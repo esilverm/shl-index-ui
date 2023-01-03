@@ -10,6 +10,7 @@ const chakraTheme: Partial<ChakraTheme> = {
           overflowY: 'auto',
           minWidth: 'max-content',
           w: '100%',
+          zIndex: 100,
         },
         item: {
           fontFamily: 'var(--font-montserrat)',

@@ -11,7 +11,7 @@ export const Select = <T extends string | number>({
   optionClassName,
   dark = false,
 }: {
-  options: Array<T>;
+  options: Array<T> | Readonly<Array<T>>;
   selectedOption: T;
   onSelection: (option: T) => void;
   className?: string;
