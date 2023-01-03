@@ -15,7 +15,7 @@ export const PaginationControl = <T extends Record<string, unknown>>({
   table: Table<T>;
 }) => {
   return (
-    <div className="flex w-full items-center justify-between space-x-10 rounded-b-lg border border-t-0 border-grey500 py-2 px-4">
+    <div className="flex w-full items-center justify-between space-x-3 rounded-b-lg border border-t-0 border-grey500 py-2 px-4 lg:space-x-10">
       <Tooltip
         label="Jump to first page"
         isDisabled={!table.getCanPreviousPage()}
