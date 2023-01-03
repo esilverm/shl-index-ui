@@ -24,7 +24,7 @@ export const TeamStat = ({
     </Skeleton>
     {statHelpText && (
       <Skeleton isLoaded={!isLoading}>
-        <StatHelpText>{statHelpText}</StatHelpText>
+        <StatHelpText className="font-mont">{statHelpText}</StatHelpText>
       </Skeleton>
     )}
   </Stat>
