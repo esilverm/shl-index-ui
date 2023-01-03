@@ -520,7 +520,11 @@ export const SkaterScoreTable = ({
   return (
     <Table<Player>
       table={table}
-      tableBehavioralFlags={SKATER_TABLE_FLAGS({ type, data: 'scoring' })}
+      tableBehavioralFlags={SKATER_TABLE_FLAGS({
+        playerType: 'skater',
+        type,
+        data: 'scoring',
+      })}
       label={`${type}_skater_stats`}
     />
   );

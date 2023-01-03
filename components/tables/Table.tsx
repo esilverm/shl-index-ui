@@ -33,7 +33,10 @@ export const Table = <T extends Record<string, unknown>>({
         )}
       >
         {tableBehavioralFlags.enableFiltering && (
-          <FilterControl table={table} />
+          <FilterControl
+            table={table}
+            tableBehavioralFlags={tableBehavioralFlags}
+          />
         )}
         {tableBehavioralFlags.showCSVExportButton && (
           <Tooltip

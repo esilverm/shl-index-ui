@@ -273,7 +273,11 @@ export const SkaterRatingsTable = ({
   return (
     <Table<SkaterRatings>
       table={table}
-      tableBehavioralFlags={SKATER_TABLE_FLAGS({ type, data: 'ratings' })}
+      tableBehavioralFlags={SKATER_TABLE_FLAGS({
+        playerType: 'skater',
+        type,
+        data: 'ratings',
+      })}
       label={`${type}_skater_ratings`}
     />
   );

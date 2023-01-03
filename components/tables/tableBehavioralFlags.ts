@@ -4,6 +4,7 @@ export const STANDINGS_TABLE: TableBehavioralFlags = {
   showCSVExportButton: false,
   enablePagination: false,
   enableFiltering: false,
+  showTableFilterOptions: false,
 };
 
 export const TEAM_STATS_TABLE: TableBehavioralFlags = {
@@ -12,12 +13,15 @@ export const TEAM_STATS_TABLE: TableBehavioralFlags = {
   showCSVExportButton: true,
   enablePagination: false,
   enableFiltering: false,
+  showTableFilterOptions: false,
 };
 
 export const SKATER_TABLE_FLAGS = ({
+  playerType,
   type,
   data,
 }: {
+  playerType: 'skater' | 'goalie';
   type: 'league' | 'team' | 'player';
   data: 'scoring' | 'ratings' | 'adv';
 }): TableBehavioralFlags => ({
@@ -26,6 +30,7 @@ export const SKATER_TABLE_FLAGS = ({
   showCSVExportButton: true,
   enablePagination: type === 'league',
   enableFiltering: type === 'league',
+  showTableFilterOptions: playerType !== 'goalie',
 });
 
 export interface TableBehavioralFlags {
@@ -34,4 +39,5 @@ export interface TableBehavioralFlags {
   showCSVExportButton: boolean;
   enablePagination: boolean;
   enableFiltering: boolean;
+  showTableFilterOptions: boolean;
 }

@@ -9,13 +9,18 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { Table } from '@tanstack/react-table';
+import classnames from 'classnames';
 import { debounce } from 'lodash';
 import { ChangeEvent, useCallback, useState } from 'react';
 
+import { TableBehavioralFlags } from './tableBehavioralFlags';
+
 export const FilterControl = <T extends Record<string, unknown>>({
   table,
+  tableBehavioralFlags,
 }: {
   table: Table<T>;
+  tableBehavioralFlags: TableBehavioralFlags;
 }) => {
   const [filterLoading, setFilterLoading] = useState(false);
   const [filter, setFilter] = useState(table.getState().globalFilter);
@@ -70,7 +75,12 @@ export const FilterControl = <T extends Record<string, unknown>>({
           )}
         </InputRightElement>
       </InputGroup>
-      <div className="ml-3 mt-2 text-sm text-grey600">
+      <div
+        className={classnames(
+          'ml-3 mt-2 text-sm text-grey600',
+          !tableBehavioralFlags.showTableFilterOptions && 'hidden',
+        )}
+      >
         Options: <Code>position:[C,LW,RW,LD,RD]</Code>
       </div>
     </div>

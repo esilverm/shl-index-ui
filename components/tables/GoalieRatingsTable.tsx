@@ -209,7 +209,11 @@ export const GoalieRatingsTable = ({
   return (
     <Table<GoalieRatings>
       table={table}
-      tableBehavioralFlags={SKATER_TABLE_FLAGS({ type, data: 'ratings' })}
+      tableBehavioralFlags={SKATER_TABLE_FLAGS({
+        playerType: 'goalie',
+        type,
+        data: 'ratings',
+      })}
       label={`${type}_goalie_ratings`}
     />
   );

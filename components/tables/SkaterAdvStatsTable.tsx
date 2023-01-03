@@ -244,7 +244,11 @@ export const SkaterAdvStatsTable = ({
   return (
     <Table<PlayerWithAdvancedStats>
       table={table}
-      tableBehavioralFlags={SKATER_TABLE_FLAGS({ type, data: 'adv' })}
+      tableBehavioralFlags={SKATER_TABLE_FLAGS({
+        playerType: 'skater',
+        type,
+        data: 'adv',
+      })}
       label={`${type}_skater_advanced_stats`}
     />
   );
