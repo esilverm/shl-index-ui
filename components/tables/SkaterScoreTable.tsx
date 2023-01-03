@@ -217,8 +217,15 @@ export const SkaterScoreTable = ({
       }),
       columnHelper.group({
         header: '',
-        id: 'player-table-shot-pct',
+        id: 'shots',
         columns: [
+          columnHelper.accessor('shotsOnGoal', {
+            header: () => <TableHeader title="Shots On Goal">S</TableHeader>,
+            footer: ({ table }) =>
+              calculateColumnSumForColumnID(table, 'shotsOnGoal'),
+            enableGlobalFilter: false,
+            sortDescFirst: true,
+          }),
           columnHelper.accessor(
             ({ goals, shotsOnGoal }) =>
               `${((goals * 100) / Math.max(shotsOnGoal, 1)).toFixed(1)}%`,
