@@ -132,7 +132,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
               <TeamLogo
                 league={league}
                 teamAbbreviation={playerInfo[0]?.team}
-                className="mt-2.5 h-40 w-40"
+                className="mt-10 h-40 w-40 md:mt-2.5"
               />
               <div className="text-3xl font-bold uppercase">
                 {playerNameInfo?.name ?? 'Player'}
