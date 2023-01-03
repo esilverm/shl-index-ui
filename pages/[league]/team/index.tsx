@@ -93,7 +93,7 @@ export default ({ league }: { league: League }) => {
           )}
           <TabPanels>
             <TabPanel px={0}>
-              <div className="mt-5 grid auto-rows-[100px]  grid-cols-[repeat(auto-fill,_minmax(340px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]">
+              <div className="mt-5 grid auto-rows-[100px]  grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]">
                 {sortedTeams?.map((team) => (
                   <Link
                     key={team.id}
