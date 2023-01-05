@@ -4610,9 +4610,9 @@ fragment-cache@^0.2.1:
     map-cache "^0.2.2"
 
 framer-motion@^8:
-  version "8.1.4"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-8.1.4.tgz#9bedb3184eb226b8edfef389143fcf82e4b2058d"
-  integrity sha512-dyibKIom+lX0BsSG1fHwxbDkEIMAGMUlWL4fFdOfMzd0t/kNKqQB4QTFf2sG9vovjUeTNXSVbmBW07g2S8HV2Q==
+  version "8.1.8"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-8.1.8.tgz#900bfde642cae852b23a0a08513f93ef6638b92b"
+  integrity sha512-0Am0ObiOS+CuZhf4p8/Srt5yu+w4fUFGMw7LPzX1HPq5vn85bu4/13jvmZZAjrkf/6rCXZvsT5aZriFuDiLU+w==
   dependencies:
     "@motionone/dom" "^10.15.3"
     hey-listen "^1.0.8"
