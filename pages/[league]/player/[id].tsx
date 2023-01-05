@@ -34,13 +34,13 @@ import { SkaterRatings as PlayerRatings } from '../../api/v1/players/ratings/[id
 
 const fetchPlayerType = (league: League, playerId: string) =>
   query(
-    `/api/v2/player/playerType?league=${leagueNameToId(
+    `api/v2/player/playerType?league=${leagueNameToId(
       league,
     )}&playerId=${playerId}`,
   );
 const fetchPlayerName = (league: League, playerId: string) =>
   query(
-    `/api/v2/player/playerName?league=${leagueNameToId(
+    `api/v2/player/playerName?league=${leagueNameToId(
       league,
     )}&playerId=${playerId}`,
   );
@@ -66,7 +66,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       const endpoint =
         playerTypeInfo?.playerType === 'goalie' ? 'goalies' : 'players';
       return query(
-        `/api/v1/${endpoint}/${playerId}?league=${leagueNameToId(league)}`,
+        `api/v1/${endpoint}/${playerId}?league=${leagueNameToId(league)}`,
       );
     },
     enabled: !!playerTypeInfo,
@@ -78,7 +78,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       const endpoint =
         playerTypeInfo?.playerType === 'goalie' ? 'goalies' : 'players';
       return query(
-        `/api/v1/${endpoint}/ratings/${playerId}?league=${leagueNameToId(
+        `api/v1/${endpoint}/ratings/${playerId}?league=${leagueNameToId(
           league,
         )}`,
       );
@@ -101,7 +101,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       const endpoint =
         playerTypeInfo?.playerType === 'goalie' ? 'goalies' : 'players';
       return query(
-        `/api/v1/${endpoint}/stats/${playerId}?league=${leagueNameToId(
+        `api/v1/${endpoint}/stats/${playerId}?league=${leagueNameToId(
           league,
         )}${seasonTypeParam}`,
       );

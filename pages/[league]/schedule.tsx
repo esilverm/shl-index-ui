@@ -20,7 +20,7 @@ import { TeamInfo } from '../api/v1/teams';
 
 const getTeamsListData = async (league: League, season: number | undefined) => {
   const seasonParam = season ? `&season=${season}` : '';
-  return query(`/api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
+  return query(`api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
 };
 
 export default ({ league }: { league: League }) => {

@@ -50,7 +50,7 @@ export default ({
         ? `&type=${seasonTypeToApiFriendlyParam(type)}`
         : '';
       return query(
-        `/api/v1/teams/${teamdata.id}/roster/stats?league=${leagueNameToId(
+        `api/v1/teams/${teamdata.id}/roster/stats?league=${leagueNameToId(
           league,
         )}${seasonParam}${seasonTypeParam}`,
       );
@@ -62,9 +62,7 @@ export default ({
     queryFn: () => {
       const seasonParam = season ? `&season=${season}` : '';
       return query(
-        `/api/v1/players/ratings?league=${leagueNameToId(
-          league,
-        )}${seasonParam}`,
+        `api/v1/players/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
   });
@@ -74,9 +72,7 @@ export default ({
     queryFn: () => {
       const seasonParam = season ? `&season=${season}` : '';
       return query(
-        `/api/v1/goalies/ratings?league=${leagueNameToId(
-          league,
-        )}${seasonParam}`,
+        `api/v1/goalies/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
   });
@@ -86,7 +82,7 @@ export default ({
     queryFn: () => {
       const seasonParam = season ? `&season=${season}` : '';
       return query(
-        `/api/v1/teams/${teamdata.id}/lines?league=${leagueNameToId(
+        `api/v1/teams/${teamdata.id}/lines?league=${leagueNameToId(
           league,
         )}${seasonParam}`,
       );
@@ -100,7 +96,7 @@ export default ({
     queryFn: () => {
       const seasonParam = season ? `&season=${season}` : '';
       return query(
-        `/api/v1/teams/${teamdata.id}/stats?league=${leagueNameToId(
+        `api/v1/teams/${teamdata.id}/stats?league=${leagueNameToId(
           league,
         )}${seasonParam}`,
       );

@@ -72,7 +72,7 @@ export const Leaderboard = ({
         ? `&type=${seasonTypeToApiFriendlyParam(type)}`
         : '';
       return query(
-        `/api/v1/leaders${endpoint}/${
+        `api/v1/leaders${endpoint}/${
           leaderboardType.stat
         }?limit=10&league=${leagueNameToId(
           league,

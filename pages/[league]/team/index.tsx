@@ -25,7 +25,7 @@ import { TeamStats } from '../../api/v1/teams/stats';
 
 const getTeamsListData = async (league: League, season: number | undefined) => {
   const seasonParam = season ? `&season=${season}` : '';
-  return query(`/api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
+  return query(`api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
 };
 const getTeamsListStats = async (
   league: League,
@@ -33,7 +33,7 @@ const getTeamsListStats = async (
 ) => {
   const seasonParam = season ? `&season=${season}` : '';
   return query(
-    `/api/v1/teams/stats?league=${leagueNameToId(league)}${seasonParam}`,
+    `api/v1/teams/stats?league=${leagueNameToId(league)}${seasonParam}`,
   );
 };
 

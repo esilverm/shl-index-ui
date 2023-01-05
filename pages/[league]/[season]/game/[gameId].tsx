@@ -23,7 +23,7 @@ import { query } from '../../../../utils/query';
 import { type GamePreviewData } from '../../../api/v2/schedule/game/preview';
 
 const fetchShouldShowBoxscore = (gameId: string) =>
-  query(`/api/v1/schedule/game/shouldShowBoxscore?gameId=${gameId}`);
+  query(`api/v1/schedule/game/shouldShowBoxscore?gameId=${gameId}`);
 
 export default ({ gameId, league }: { gameId: string; league: League }) => {
   const { data: isBoxscore } = useQuery<{ shouldShowBoxscore: boolean }>({
@@ -33,7 +33,7 @@ export default ({ gameId, league }: { gameId: string; league: League }) => {
 
   const { data: gameData } = useQuery<GamePreviewData>({
     queryKey: ['gamePreview', gameId],
-    queryFn: () => query(`/api/v2/schedule/game/preview?gameId=${gameId}`),
+    queryFn: () => query(`api/v2/schedule/game/preview?gameId=${gameId}`),
   });
 
   return (

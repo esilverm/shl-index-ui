@@ -33,7 +33,7 @@ export const HomepageLeaders = ({
         ? `&type=${seasonTypeToApiFriendlyParam(type)}`
         : '';
       return query(
-        `/api/v1/leaders/${skaterType}s/${stat}?position=all&limit=1&league=${leagueNameToId(
+        `api/v1/leaders/${skaterType}s/${stat}?position=all&limit=1&league=${leagueNameToId(
           league,
         )}${seasonParam}${seasonTypeParam}`,
       );

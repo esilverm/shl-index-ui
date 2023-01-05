@@ -30,7 +30,7 @@ export const PreviousMatchups = ({
     ],
     queryFn: () =>
       query(
-        `/api/v2/schedule/game/previousMatchups?league=${previewData?.game.league}&season=${previewData?.game.season}&type=${previewData?.game.type}&away=${previewData?.game.awayTeam}&home=${previewData?.game.homeTeam}`,
+        `api/v2/schedule/game/previousMatchups?league=${previewData?.game.league}&season=${previewData?.game.season}&type=${previewData?.game.type}&away=${previewData?.game.awayTeam}&home=${previewData?.game.homeTeam}`,
       ),
     enabled: !!previewData,
   });

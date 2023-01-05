@@ -22,7 +22,7 @@ export const BoxscorePeriodShots = ({
     ],
     queryFn: () =>
       query(
-        `/api/v2/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v2/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });

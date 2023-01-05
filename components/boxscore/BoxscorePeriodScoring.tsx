@@ -186,7 +186,7 @@ export const BoxscorePeriodScoring = ({
     ],
     queryFn: () =>
       query(
-        `/api/v2/schedule/game/boxscore/scoring?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v2/schedule/game/boxscore/scoring?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });

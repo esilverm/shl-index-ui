@@ -273,7 +273,7 @@ export const BoxscoreTeamRosters = ({
     ],
     queryFn: () =>
       query(
-        `/api/v2/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v2/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
@@ -289,7 +289,7 @@ export const BoxscoreTeamRosters = ({
     ],
     queryFn: () =>
       query(
-        `/api/v2/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v2/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
