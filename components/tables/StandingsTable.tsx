@@ -5,6 +5,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import classnames from 'classnames';
+import { useSeasonType } from 'hooks/useSeasonType';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
@@ -30,6 +31,7 @@ export const StandingsTable = ({
   title?: string;
 }) => {
   const router = useRouter();
+  const { type } = useSeasonType();
 
   const columns = useMemo(
     () => [
@@ -82,7 +84,7 @@ export const StandingsTable = ({
       columnHelper.accessor('wins', {
         header: () => <TableHeader title="Wins">W</TableHeader>,
       }),
-      ...(!isMainLeague(league)
+      ...(!isMainLeague(league) && type === 'Regular Season'
         ? [
             columnHelper.accessor('OTW', {
               header: () => (
