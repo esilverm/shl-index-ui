@@ -205,7 +205,7 @@ export const StandingsTable = ({
         },
       ),
     ],
-    [league, router.query, title],
+    [league, router.query, title, type],
   );
 
   const table = useReactTable({
