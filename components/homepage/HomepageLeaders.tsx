@@ -49,19 +49,19 @@ export const HomepageLeaders = ({
               pathname: `/[league]/player/[id]`,
               query: {
                 ...onlyIncludeSeasonAndTypeInQuery(router.query),
-                id: data ? data[0].id : 0,
+                id: data && data[0] ? data[0].id : 0,
               },
             }}
           >
             <h4 className="text-xl font-semibold hover:underline">
-              {data ? data[0].name : 'Player Name'}
+              {data && data[0] ? data[0].name : 'Player Name'}
             </h4>
           </Link>
         </Skeleton>
         <div className="font-mont">
           <Skeleton isLoaded={!isLoading} className="inline">
             <span className="mr-1 text-5xl font-extrabold">
-              {data ? data[0].stat : 0}
+              {data && data[0] ? data[0].stat : 0}
             </span>
           </Skeleton>
           <span className="text-base uppercase">{stat}</span>
@@ -69,7 +69,7 @@ export const HomepageLeaders = ({
       </div>
       <TeamLogo
         league={league}
-        teamAbbreviation={data ? data[0].team.abbr : undefined}
+        teamAbbreviation={data && data[0] ? data[0].team.abbr : undefined}
         className="aspect-square w-1/3 max-w-[120px]"
       />
     </div>
