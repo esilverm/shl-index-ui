@@ -365,6 +365,7 @@ export const SkaterScoreTable = ({
                   table,
                   'player-table-faceoff-wins',
                 ) || '-',
+              sortingFn: 'alphanumeric',
               enableGlobalFilter: false,
               sortDescFirst: true,
             },
@@ -380,6 +381,7 @@ export const SkaterScoreTable = ({
                   table,
                   'player-table-faceoff-losses',
                 ) || '-',
+              sortingFn: 'alphanumeric',
               enableGlobalFilter: false,
               sortDescFirst: true,
             },
@@ -402,6 +404,7 @@ export const SkaterScoreTable = ({
                 if (isNaN(value)) return '-';
                 return `${value.toFixed(1)}%`;
               },
+              sortingFn: 'alphanumeric',
               enableGlobalFilter: false,
               sortDescFirst: true,
             },
@@ -419,6 +422,7 @@ export const SkaterScoreTable = ({
             ),
             footer: ({ table }) =>
               calculateColumnSumForColumnID(table, 'player-table-gwg'),
+            sortingFn: 'alphanumeric',
             enableGlobalFilter: false,
             sortDescFirst: true,
           }),
