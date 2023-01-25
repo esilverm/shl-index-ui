@@ -145,9 +145,12 @@ export default ({ league }: { league: League }) => {
                 <div className="mt-8 text-3xl font-bold">No games found</div>
               )}
               {Object.entries(gamesByDate)
-                .sort(
-                  (a, b) => new Date(a[0]).valueOf() - new Date(b[0]).valueOf(),
-                )
+                .sort((a, b) => {
+                  const aDate = new Date(a[0]);
+                  const bDate = new Date(b[0]);
+
+                  return aDate.getTime() - bDate.getTime();
+                })
                 .map(([date, games]) => (
                   <ScheduleDay
                     key={date}
