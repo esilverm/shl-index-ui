@@ -146,16 +146,18 @@ export default ({ league }: { league: League }) => {
               )}
               {Object.entries(gamesByDate)
                 .sort((a, b) => {
-                  const aDate = new Date(a[0]);
-                  const bDate = new Date(b[0]);
-                  console.log(
-                    'times.',
-                    aDate,
-                    bDate,
-                    aDate.getTime(),
-                    bDate.getTime(),
+                  // NOTE: this is necessary since date parser on mobile requires the dates to follow ISO 8601 (ex. "2017-04-16")
+                  const [aYear, aMonth, aDate] = a[0]
+                    .split('-')
+                    .map((datePart) => parseInt(datePart));
+                  const [bYear, bMonth, bDate] = b[0]
+                    .split('-')
+                    .map((datePart) => parseInt(datePart));
+
+                  return (
+                    new Date(aYear, aMonth, aDate).getTime() -
+                    new Date(bYear, bMonth, bDate).getTime()
                   );
-                  return aDate.getTime() - bDate.getTime();
                 })
                 .map(([date, games]) => (
                   <ScheduleDay
