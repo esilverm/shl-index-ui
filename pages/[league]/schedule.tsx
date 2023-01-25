@@ -148,7 +148,13 @@ export default ({ league }: { league: League }) => {
                 .sort((a, b) => {
                   const aDate = new Date(a[0]);
                   const bDate = new Date(b[0]);
-
+                  console.log(
+                    'times.',
+                    aDate,
+                    bDate,
+                    aDate.getTime(),
+                    bDate.getTime(),
+                  );
                   return aDate.getTime() - bDate.getTime();
                 })
                 .map(([date, games]) => (
