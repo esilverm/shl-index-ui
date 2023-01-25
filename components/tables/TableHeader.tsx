@@ -8,7 +8,7 @@ export const TableHeader = ({
   title?: string;
   children: React.ReactNode;
 }) => (
-  <Tooltip placement="top" label={title} isDisabled={!title}>
+  <Tooltip placement="top" label={title} isDisabled={!title} closeOnScroll>
     {children}
   </Tooltip>
 );
