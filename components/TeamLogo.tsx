@@ -24,6 +24,8 @@ const getLogoId = (
           return 'Czechia';
         case 'FIN':
           return 'Finland';
+        case 'FRA':
+          return 'France';
         case 'GER':
           return 'Germany';
         case 'GBR':
