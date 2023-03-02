@@ -1,55 +1,15 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
 import { NextSeo } from 'next-seo';
-import React from 'react';
-import styled from 'styled-components';
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
 
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import HomepageLeaders from '../../components/HomepageLeaders';
-import LiveStream from '../../components/Livestream';
-import useLeaders from '../../hooks/useLeaders';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { HomepageLeaders } from '../../components/homepage/HomepageLeaders';
+import { Livestream } from '../../components/Livestream';
+import { League } from '../../utils/leagueHelpers';
 
-interface Props {
-  league: string;
-}
-
-function LeagueHome({ league }: Props): JSX.Element {
-  const { leaders: goalLeader, isLoading: isLoadingGL } = useLeaders(
-    league,
-    'skater',
-    'goals',
-    'all',
-    1
-  );
-  const { leaders: pointLeader, isLoading: isLoadingPL } = useLeaders(
-    league,
-    'skater',
-    'points',
-    'all',
-    1
-  );
-  const { leaders: winLeader, isLoading: isLoadingWL } = useLeaders(
-    league,
-    'goalie',
-    'wins',
-    'all',
-    1
-  );
-  const { leaders: shutoutLeader, isLoading: isLoadingSL } = useLeaders(
-    league,
-    'goalie',
-    'shutouts',
-    'all',
-    1
-  );
-
-  let leaders = [];
-  if (!isLoadingGL && !isLoadingPL && !isLoadingSL && !isLoadingWL) {
-    leaders = [goalLeader[0], pointLeader[0], winLeader[0], shutoutLeader[0]];
-  }
-
+export default ({ league }: { league: League }) => {
   return (
-    <React.Fragment>
+    <>
       <NextSeo
         title={league.toUpperCase()}
         openGraph={{
@@ -57,61 +17,26 @@ function LeagueHome({ league }: Props): JSX.Element {
         }}
       />
       <Header league={league} />
-      <Container>
-        <YoutubeEmbedContainer>
-          <LiveStream currentLeague={league} />
-        </YoutubeEmbedContainer>
-        <HomepageLeadersContainer>
-          <HomepageLeaders league={league} leaders={leaders} />
-        </HomepageLeadersContainer>
-      </Container>
+      <div className="my-0 mx-auto block h-auto w-full flex-1 grid-cols-4 grid-rows-6 gap-6 bg-grey100 p-6 lg:grid xl:w-3/4">
+        <div className="col-[initial] row-[initial] m-auto w-4/5 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-7 md:m-0 md:w-full">
+          <Livestream league={league} />
+        </div>
+        <div className="col-start-4 col-end-5 row-start-1 row-end-7 divide-y-2 divide-grey300">
+          <h3 className="pb-4 text-3xl font-bold">League Leaders</h3>
+          <HomepageLeaders league={league} skaterType="skater" stat="goals" />
+          <HomepageLeaders league={league} skaterType="skater" stat="points" />
+          <HomepageLeaders league={league} skaterType="goalie" stat="wins" />
+          <HomepageLeaders
+            league={league}
+            skaterType="goalie"
+            stat="shutouts"
+          />
+        </div>
+      </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
-}
-
-const Container = styled.div`
-  display: grid;
-  width: 75%;
-  padding: 2.5%;
-  height: auto;
-  grid-template-rows: repeat(6, 1fr);
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (min-width: 2200px) {
-    height: auto;
-  }
-
-  @media screen and (max-width: 1224px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-
-  @media screen and (max-width: 1024px) {
-    display: block;
-    height: auto;
-  }
-`;
-
-const YoutubeEmbedContainer = styled.div`
-  grid-column: 1 / 4;
-  grid-row: 1 / 7;
-
-  @media screen and (max-width: 800px) {
-    width: 80%;
-    grid-column: initial;
-    grid-row: initial;
-    margin: auto;
-  }
-`;
-
-const HomepageLeadersContainer = styled.div`
-  grid-column: 4 / 5;
-  grid-row: 1 / 7;
-`;
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
@@ -124,7 +49,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  return { props: { league: ctx.params.league } };
+  return { props: { league: ctx.params?.league } };
 };
-
-export default LeagueHome;

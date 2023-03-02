@@ -2,9 +2,11 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
-import { calculateSkaterTPE } from '../../../../../components/RatingsTable/SkaterRatingsTable';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
+import { InternalPlayerRatings } from '../../../../../typings/api';
+
+import { parseSkaterRatings } from './[id]';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -14,102 +16,51 @@ export type SeasonType = string;
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
 
-  const [season] =
+  const seasonResponse =
+    //@ts-ignore
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
-    (await query(SQL`
-      SELECT DISTINCT SeasonID
-      FROM player_master
-      WHERE LeagueID=${+league}
-      ORDER BY SeasonID DESC
-      LIMIT 1
+    (await query<{ SeasonID: number }>(SQL`
+    SELECT DISTINCT SeasonID
+    FROM conferences
+    WHERE LeagueID=${+league}
+    ORDER BY SeasonID DESC
+    LIMIT 1
   `));
 
-  const basePlayerData = await query(SQL`
-  SELECT *
-  FROM corrected_player_ratings
-  INNER JOIN player_master
-  ON corrected_player_ratings.PlayerID = player_master.PlayerID
-  AND corrected_player_ratings.SeasonID = player_master.SeasonID
-  AND corrected_player_ratings.LeagueID = player_master.LeagueID
-  INNER JOIN team_data
-  ON player_master.TeamID = team_data.TeamID
-  AND corrected_player_ratings.SeasonID = team_data.SeasonID
-  AND corrected_player_ratings.LeagueID = team_data.LeagueID
-  WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.SeasonID=${season.SeasonID}
-  AND corrected_player_ratings.G<19
-  AND player_master.TeamID>=0;
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
+
+  const basePlayerData = await query<InternalPlayerRatings>(SQL`
+  SELECT r.*, p.\`Last Name\` as Name, t.\`Abbr\`
+  FROM corrected_player_ratings as r
+  INNER JOIN player_master as p
+    ON r.PlayerID = p.PlayerID
+      AND r.SeasonID = p.SeasonID
+      AND r.LeagueID = p.LeagueID
+  INNER JOIN team_data as t
+    ON p.TeamID = t.TeamID
+      AND r.SeasonID = t.SeasonID
+      AND r.LeagueID = t.LeagueID
+  WHERE r.LeagueID=${+league}
+    AND r.SeasonID=${season.SeasonID}
+    AND r.G<19
+    AND p.TeamID>=0
   `);
 
-  const combinedPlayerData = basePlayerData.map((player) => {
-    const position = ['G', 'LD', 'RD', 'LW', 'C', 'RW'][
-      [
-        +player.G,
-        +player.LD,
-        +player.RD,
-        +player.LW,
-        +player.C,
-        +player.RW,
-      ].indexOf(20)
-    ];
+  if ('error' in basePlayerData) {
+    res.status(400).send('Error: Backend Error');
+    return;
+  }
 
-    return {
-      ...player,
-      position,
-    };
-  });
-
-  const parsed = combinedPlayerData.map((player) => {
-    const tempPlayerRatings = {
-      id: player.PlayerID,
-      league: player.LeagueID,
-      season: player.SeasonID,
-      name: player['Last Name'],
-      team: player.Abbr,
-      position: player.position,
-      screening: player.Screening,
-      gettingOpen: player.GettingOpen,
-      passing: player.Passing,
-      puckHandling: player.PuckHandling,
-      shootingAccuracy: player.ShootingAccuracy,
-      shootingRange: player.ShootingRange,
-      offensiveRead: player.OffensiveRead,
-      checking: player.Checking,
-      hitting: player.Hitting,
-      positioning: player.Positioning,
-      stickChecking: player.Stickchecking,
-      shotBlocking: player.ShotBlocking,
-      faceoffs: player.Faceoffs,
-      defensiveRead: player.DefensiveRead,
-      acceleration: player.Acceleration,
-      agility: player.Agility,
-      balance: player.Balance,
-      speed: player.Speed,
-      stamina: player.Stamina,
-      strength: player.Strength,
-      fighting: player.Fighting,
-      aggression: player.Aggression,
-      bravery: player.Bravery,
-      determination: player.Determination,
-      teamPlayer: player.Teamplayer,
-      leadership: player.Leadership,
-      temperament: player.Temperament,
-      professionalism: player.Professionalism,
-    };
-
-    const appliedTPE = calculateSkaterTPE(tempPlayerRatings);
-
-    return {
-      ...tempPlayerRatings,
-      appliedTPE: appliedTPE,
-    };
-  });
-
-  res.status(200).json(parsed);
+  res.status(200).json(basePlayerData.map(parseSkaterRatings));
 };

@@ -30,9 +30,6 @@ yarn-error.log*
 .env.production.local
 .venv
 
-# ides
-.vscode
-
 # python
 __pycache__
 

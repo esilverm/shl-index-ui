@@ -9,30 +9,46 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export type DivisionsInternal = {
+  DivisionID: number;
+  ConferenceID: number;
+  LeagueID: number;
+  Name: string;
+  SeasonID: number;
+};
+
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { id, league = 0, conference = 0, season: seasonid } = req.query;
 
-  if (Number.isNaN(+id)) {
+  if (!id || Number.isNaN(+id)) {
     res.status(400).send('Error: Division id must be a number');
     return;
   }
 
-  const [season] =
-    (!Number.isNaN(seasonid) && [{ SeasonID: seasonid }]) ||
-    (await query(SQL`
+  const seasonResponse =
+    //@ts-ignore
+    (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
+    (await query<{ SeasonID: number }>(SQL`
       SELECT DISTINCT SeasonID
-      FROM divisions
+      FROM conferences
       WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
     `));
 
-  const [division] = await query(SQL`
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
+
+  const divisionResponse = await query<DivisionsInternal>(SQL`
   SELECT * 
   FROM divisions 
   WHERE LeagueID=${+league}
@@ -41,12 +57,14 @@ export default async (
     AND ConferenceID=${+conference}
 `);
 
-  if (!division) {
+  if ('error' in divisionResponse || !divisionResponse) {
     res
       .status(404)
       .send('Error 404: Could not find division for given parameters.');
     return;
   }
+
+  const [division] = divisionResponse;
 
   const parsed = {
     id,

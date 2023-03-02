@@ -1,241 +1,118 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Select } from 'components/common/Select';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useCallback, useMemo } from 'react';
 
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import Leaderboard from '../../components/Leaderboard';
-import LeadersFilterSelector, {
-  LeadersFilter,
-} from '../../components/Selector/LeadersFilterSelector';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { Leaderboard } from '../../components/leaderboard/Leaderboard';
+import {
+  goalieLeaderboardStats,
+  LeaderboardTypes,
+  leaderboardTypes,
+  skaterLeaderboardStats,
+} from '../../components/leaderboard/shared';
+import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
+import { useRouterPageState } from '../../hooks/useRouterPageState';
+import { League } from '../../utils/leagueHelpers';
 
-const skaterLeaderboards = [
-  'goals',
-  'assists',
-  'points',
-  'plusminus',
-  'shots',
-  'shotpct',
-  'hits',
-  'fightswon',
-  'penaltyminutes',
-  'shotsblocked',
-  'ppg',
-  'shg',
-];
+export default ({ league }: { league: League }) => {
+  const { tab, setRouterPageState } = useRouterPageState<{
+    tab: LeaderboardTypes;
+  }>({
+    keys: ['tab'],
+    initialState: {
+      tab: 'Skaters',
+    },
+  });
 
-const goalieLeaderboards = [
-  'wins',
-  'losses',
-  'otl',
-  'ga',
-  'gaa',
-  'gsaa',
-  'saves',
-  'savepct',
-  'shutouts',
-  'gamesplayed',
-];
+  const currentActiveTab = useMemo(() => {
+    return leaderboardTypes.indexOf(tab);
+  }, [tab]);
 
-interface Props {
-  league: string;
-}
-
-function Stats({ league }: Props): JSX.Element {
-  const [, setSeasonType] = useState('regular');
-  const [filter, setFilter] = useState<LeadersFilter>('Skaters');
-  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
-  const [sprites, setSprites] = useState<{
-    [index: string]: React.ComponentClass<any>;
-  }>({});
-
-  const onSeasonTypeSelect = useCallback(
-    (seasonType) => setSeasonType(seasonType),
-    [setSeasonType]
+  const setCurrentActiveTab = useCallback(
+    (index: number) => {
+      setRouterPageState('tab', leaderboardTypes[index]);
+    },
+    [setRouterPageState],
   );
-
-  useEffect(() => {
-    // Dynamically import svg icons based on the league chosen
-    (async () => {
-      const { default: s } = await import(
-        `../../public/team_logos/${league.toUpperCase()}/`
-      );
-
-      setSprites(() => s);
-      setLoadingAssets(() => false);
-    })();
-  }, []);
-
-  const onLeadersFilterSelect = useCallback(
-    (filter) => setFilter(filter),
-    [setFilter]
-  );
-
-  if (isLoadingAssets || !sprites) return null;
-
-  const renderLeaderboards = () => {
-    const leaderboards =
-      filter === 'Goalies' ? goalieLeaderboards : skaterLeaderboards;
-    const playerType = filter === 'Goalies' ? 'goalie' : 'skater';
-    const skaterPosition =
-      filter === 'Forwards' ? 'f' : filter === 'Defensemen' ? 'd' : '';
-
-    return leaderboards.map((statId) => (
-      <Leaderboard
-        key={statId}
-        league={league}
-        playerType={playerType}
-        stat={statId}
-        Sprites={sprites}
-        position={skaterPosition}
-      />
-    ));
-  };
 
   return (
-    <React.Fragment>
+    <>
       <NextSeo
-        title="Leaders"
+        title={`${league.toUpperCase()} ${tab} Leaders`}
         openGraph={{
-          title: 'Leaders',
+          title: `${league.toUpperCase()} ${tab} Leaders`,
         }}
       />
       <Header league={league} activePage="leaders" />
-      <Container>
-        <Filters>
-          <SelectorWrapper>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-            <SmallScreenFilters>
-              <LeadersFilterSelector
-                activeFilter={filter}
-                onChange={onLeadersFilterSelect}
-              />
-            </SmallScreenFilters>
-          </SelectorWrapper>
-          <DisplaySelectContainer role="tablist">
-            <DisplaySelectItem
-              onClick={() => setFilter('Skaters')}
-              active={filter === 'Skaters'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Skaters'}
-            >
-              Skaters
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Forwards')}
-              active={filter === 'Forwards'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Forwards'}
-            >
-              Forwards
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Defensemen')}
-              active={filter === 'Defensemen'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Defensemen'}
-            >
-              Defensemen
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setFilter('Goalies')}
-              active={filter === 'Goalies'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={filter === 'Goalies'}
-            >
-              Goalies
-            </DisplaySelectItem>
-          </DisplaySelectContainer>
-        </Filters>
-        <LeaderBoards>{renderLeaderboards()}</LeaderBoards>
-      </Container>
+      <div className="mx-auto w-full space-y-2 bg-grey100 py-6 sm:px-6 lg:w-3/4 lg:py-0 lg:pt-px lg:pb-10">
+        <div className="mt-3 flex !h-7 flex-col items-center justify-center space-y-2 sm:mt-0 sm:flex-row sm:space-y-0 lg:float-right lg:inline-block">
+          <SeasonTypeSelector className="!h-7 w-48 lg:top-7" />
+          <Select<LeaderboardTypes>
+            options={leaderboardTypes}
+            selectedOption={leaderboardTypes[currentActiveTab]}
+            onSelection={(value) => {
+              setCurrentActiveTab(leaderboardTypes.indexOf(value));
+            }}
+            className="w-48 sm:!hidden"
+          />
+        </div>
+        <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
+          <TabList className="mt-7 !hidden sm:!flex">
+            {leaderboardTypes.map((type) => (
+              <Tab key={type}>{type}</Tab>
+            ))}
+          </TabList>
+          <TabPanels>
+            {leaderboardTypes.map((type) => {
+              if (type === 'Goalies') {
+                return (
+                  <TabPanel
+                    key={type}
+                    className="flex flex-wrap justify-center"
+                  >
+                    <div className="flex flex-wrap justify-center">
+                      {goalieLeaderboardStats.map((stat) => (
+                        <Leaderboard
+                          key={stat}
+                          league={league}
+                          leaderboardType={{
+                            playerType: type,
+                            stat,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </TabPanel>
+                );
+              }
+
+              return (
+                <TabPanel key={type}>
+                  <div className="flex flex-wrap justify-center">
+                    {skaterLeaderboardStats.map((stat) => (
+                      <Leaderboard
+                        key={stat}
+                        league={league}
+                        leaderboardType={{
+                          playerType: type,
+                          stat,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </TabPanel>
+              );
+            })}
+          </TabPanels>
+        </Tabs>
+      </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
-}
-
-const Container = styled.div`
-  height: 100%;
-  width: 75%;
-  padding: 1px 0 40px 0;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (max-width: 1050px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-`;
-
-const Filters = styled.div`
-  @media screen and (max-width: 1050px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-`;
-
-const SelectorWrapper = styled.div`
-  width: 250px;
-  float: right;
-  margin-right: 3%;
-`;
-
-const DisplaySelectContainer = styled.div`
-  margin: 28px auto;
-  width: 95%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
-
-  @media screen and (max-width: 1050px) {
-    display: none;
-  }
-`;
-
-const DisplaySelectItem = styled.div<{ active: boolean }>`
-  display: inline-block;
-  padding: 8px 24px;
-  border: 1px solid
-    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors.grey100 : 'transparent'};
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  position: relative;
-  border-bottom: none;
-  bottom: -1px;
-`;
-
-const SmallScreenFilters = styled.div`
-  display: none;
-
-  @media screen and (max-width: 1050px) {
-    display: block;
-  }
-`;
-
-const LeaderBoards = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: auto;
-  width: 95%;
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
-`;
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
@@ -248,7 +125,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  return { props: { league: ctx.params.league } };
+  return { props: { league: ctx.params?.league } };
 };
-
-export default Stats;

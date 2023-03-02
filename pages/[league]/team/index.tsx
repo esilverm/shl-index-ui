@@ -1,151 +1,171 @@
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import React from 'react';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
-import { Team } from '../../..';
-import Footer from '../../../components/Footer';
-import Header from '../../../components/Header';
-import Link from '../../../components/LinkWithSeason';
+import { Link } from '../../../components/common/Link';
+import { Footer } from '../../../components/Footer';
+import { Header } from '../../../components/Header';
+import { TeamStatsTable } from '../../../components/tables/TeamStatsTable';
+import { TeamLogo } from '../../../components/TeamLogo';
+import { useSeason } from '../../../hooks/useSeason';
+import {
+  isMainLeague,
+  League,
+  leagueNameToId,
+} from '../../../utils/leagueHelpers';
+import { query } from '../../../utils/query';
+import { onlyIncludeSeasonAndTypeInQuery } from '../../../utils/routingHelpers';
+import { TeamInfo } from '../../api/v1/teams';
+import { TeamStats } from '../../api/v1/teams/stats';
 
-interface Props {
-  league: string;
-  teamlist: Array<Team>;
-}
-
-function index({ league, teamlist }: Props): JSX.Element {
-  return (
-    <React.Fragment>
-      <NextSeo
-        title="Teams"
-        openGraph={{
-          title: 'Teams',
-        }}
-      />
-      <Header league={league} activePage="teams" />
-      <Container>
-        <TeamListContainer>
-          {teamlist
-            .sort((a, b) => {
-              if (league === 'iihf' || league === 'wjc') {
-                return a.nameDetails.second.localeCompare(b.nameDetails.second);
-              }
-              return a.nameDetails.first.localeCompare(b.nameDetails.first);
-            })
-            .map((team) => (
-              <Link
-                href="/[league]/team/[id]"
-                as={`/${league}/team/${team.id}`}
-                passHref
-                key={team.id}
-              >
-                <TeamLink {...team.colors}>
-                  <TeamLogo
-                    src={require(`../../../public/team_logos/${league.toUpperCase()}/${team.location
-                      .replace('.', '')
-                      .replace(/white|blue/i, '')
-                      .trim()
-                      .split(' ')
-                      .join('_')}.svg`)}
-                    alt={`${team.name} logo`}
-                  />
-                  <TeamName bright={tinycolor(team.colors.primary).isDark()}>
-                    <span className="first">{team.nameDetails.first}</span>
-                    <span className="second">{team.nameDetails.second}</span>
-                  </TeamName>
-                </TeamLink>
-              </Link>
-            ))}
-        </TeamListContainer>
-      </Container>
-      <Footer />
-    </React.Fragment>
-  );
-}
-
-const Container = styled.div`
-  width: 75%;
-  padding: 1px 0 40px 0;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    padding: 0%;
-  }
-`;
-
-const TeamListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  grid-auto-rows: 100px;
-  margin-top: 20px;
-
-  @media (min-width: 500px) {
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-`;
-
-const TeamLink = styled.div<{
-  primary: string;
-  secondary: string;
-  text: string;
-}>`
-  width: 90%;
-  height: 90%;
-  background-color: ${({ primary }) => primary};
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: auto;
-`;
-
-const TeamLogo = styled.img`
-  height: 60%;
-  filter: drop-shadow(0 0 1.15rem rgba(0, 0, 0, 0.4));
-  margin: 0 5%;
-`;
-
-const TeamName = styled.h2<{ bright: boolean }>`
-  color: ${({ bright, theme }) =>
-    bright ? theme.colors.grey100 : theme.colors.grey900};
-
-  span {
-    display: block;
-  }
-
-  span.first {
-    font-family: Montserrat, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.1rem;
-  }
-
-  span.second {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15rem;
-  }
-`;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const {
-    query: { season, league: leaguename },
-  } = ctx;
-
-  const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
-    typeof leaguename === 'string' ? leaguename : 'shl'
-  );
-
+const getTeamsListData = async (league: League, season: number | undefined) => {
   const seasonParam = season ? `&season=${season}` : '';
-
-  const teamlist = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}${seasonParam}`
-  ).then((res) => res.json());
-
-  return { props: { league: leaguename, teamlist } };
+  return query(`api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
+};
+const getTeamsListStats = async (
+  league: League,
+  season: number | undefined,
+) => {
+  const seasonParam = season ? `&season=${season}` : '';
+  return query(
+    `api/v1/teams/stats?league=${leagueNameToId(league)}${seasonParam}`,
+  );
 };
 
-export default index;
+export default ({ league }: { league: League }) => {
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const router = useRouter();
+  const { season } = useSeason();
+
+  const { data } = useQuery<TeamInfo[]>({
+    queryKey: ['teams', league, season],
+    queryFn: () => getTeamsListData(league, season),
+  });
+
+  const shouldShowTeamStats = !season || season >= 66;
+
+  const { data: teamStats } = useQuery<TeamStats[]>({
+    queryKey: ['teamsStats', league, season],
+    queryFn: () => getTeamsListStats(league, season),
+    enabled: shouldShowTeamStats,
+  });
+
+  const sortedTeams = useMemo(
+    () =>
+      data?.sort((a, b) => {
+        if (isMainLeague(league)) {
+          return a.nameDetails.first.localeCompare(b.nameDetails.first);
+        }
+        return a.nameDetails.second.localeCompare(b.nameDetails.second);
+      }),
+    [data, league],
+  );
+
+  // If users switch to a season that doesnt have team stats they can get stuck with an empty page
+  useEffect(() => {
+    if (!shouldShowTeamStats && currentTab === 1) {
+      setCurrentTab(0);
+    }
+  }, [currentTab, shouldShowTeamStats]);
+
+  return (
+    <>
+      <NextSeo
+        title={`${league.toUpperCase()} Teams`}
+        openGraph={{
+          title: `${league.toUpperCase()} Teams`,
+        }}
+      />
+      <Header league={league} activePage="team" />
+      <div className="mx-auto w-full bg-grey100 pt-px pb-10 lg:w-3/4">
+        <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
+          {shouldShowTeamStats && (
+            <TabList className="mx-10 pt-8">
+              <Tab>Team List</Tab>
+              <Tab>Team Stats</Tab>
+            </TabList>
+          )}
+          <TabPanels>
+            <TabPanel px={0}>
+              <div className="mt-5 grid auto-rows-[100px]  grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]">
+                {sortedTeams?.map((team) => (
+                  <Link
+                    key={team.id}
+                    href={{
+                      pathname: '/[league]/team/[id]',
+                      query: {
+                        ...onlyIncludeSeasonAndTypeInQuery(router.query),
+                        id: team.id,
+                      },
+                    }}
+                    className="m-auto flex h-[90%] w-[90%] items-center rounded-lg"
+                    style={{ backgroundColor: team.colors.primary }}
+                  >
+                    <TeamLogo
+                      league={league}
+                      teamAbbreviation={team.abbreviation}
+                      className="mx-[5%] h-3/5 drop-shadow-[0_0_1.15rem_rgba(0,_0,_0,_0.4)]"
+                    />
+                    <h2
+                      className={classnames(
+                        'text-2xl',
+                        tinycolor(team.colors.primary).isDark()
+                          ? 'text-grey100'
+                          : 'text-grey900',
+                      )}
+                    >
+                      <span className="block font-mont font-normal tracking-widest">
+                        {team.nameDetails.first}
+                      </span>
+                      <span className="font-semibold uppercase tracking-[0.15rem]">
+                        {team.nameDetails.second}
+                      </span>
+                    </h2>
+                  </Link>
+                ))}
+              </div>
+            </TabPanel>
+            {shouldShowTeamStats && teamStats && (
+              <TabPanel>
+                <div className="mx-auto w-full md:w-11/12">
+                  <TeamStatsTable data={teamStats} league={league} />
+                </div>
+              </TabPanel>
+            )}
+          </TabPanels>
+        </Tabs>
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const queryClient = new QueryClient();
+  const { season, league } = query;
+
+  const parsedSeason = parseInt(season as string);
+
+  await queryClient.prefetchQuery({
+    queryKey: ['teams', league, parsedSeason],
+    queryFn: () => getTeamsListData(league as League, parsedSeason),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ['teamsStats', league, parsedSeason],
+    queryFn: () => getTeamsListStats(league as League, parsedSeason),
+  });
+
+  return {
+    props: {
+      league,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};

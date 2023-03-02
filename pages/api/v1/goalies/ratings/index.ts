@@ -2,9 +2,11 @@ import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
 
-import { calculateGoalieTPE } from '../../../../../components/RatingsTable/GoalieRatingsTable';
 import { query } from '../../../../../lib/db';
 import use from '../../../../../lib/middleware';
+import { InternalPlayerRatings } from '../../../../../typings/api';
+
+import { parseGoalieRatings } from './[id]';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
@@ -12,73 +14,51 @@ const cors = Cors({
 
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { league = 0, season: seasonid } = req.query;
 
-  const [season] =
+  const seasonResponse =
+    //@ts-ignore
     (!Number.isNaN(+seasonid) && [{ SeasonID: +seasonid }]) ||
-    (await query(SQL`
+    (await query<{ SeasonID: number }>(SQL`
       SELECT DISTINCT SeasonID
-      FROM player_master
+      FROM conferences
       WHERE LeagueID=${+league}
       ORDER BY SeasonID DESC
       LIMIT 1
-  `));
+    `));
 
-  const basePlayerData = await query(SQL`
-  SELECT *
-  FROM corrected_player_ratings
-  INNER JOIN player_master
-  ON corrected_player_ratings.PlayerID = player_master.PlayerID
-  AND corrected_player_ratings.SeasonID = player_master.SeasonID
-  AND corrected_player_ratings.LeagueID = player_master.LeagueID
-  INNER JOIN team_data
-  ON player_master.TeamID = team_data.TeamID
-  AND corrected_player_ratings.SeasonID = team_data.SeasonID
-  AND corrected_player_ratings.LeagueID = team_data.LeagueID
-  WHERE corrected_player_ratings.LeagueID=${+league}
-  AND corrected_player_ratings.SeasonID=${season.SeasonID}
-  AND corrected_player_ratings.G=20
-  AND player_master.TeamID>=0;
+  if ('error' in seasonResponse) {
+    res.status(400).send('Error: Server Error');
+    return;
+  }
+
+  const [season] = seasonResponse;
+
+  const basePlayerData = await query<InternalPlayerRatings>(SQL`
+  SELECT r.*, p.\`Last Name\` as Name, t.\`Abbr\`
+  FROM corrected_player_ratings as r
+  INNER JOIN player_master as p
+    ON r.PlayerID = p.PlayerID
+      AND r.SeasonID = p.SeasonID
+      AND r.LeagueID = p.LeagueID
+  INNER JOIN team_data as t
+    ON p.TeamID = t.TeamID
+      AND r.SeasonID = t.SeasonID
+      AND r.LeagueID = t.LeagueID
+  WHERE r.LeagueID=${+league}
+    AND r.SeasonID=${season.SeasonID}
+    AND r.G=20
+    AND p.TeamID>=0
 `);
 
-  const parsed = basePlayerData.map((player) => {
-    const tempGoalieRatings = {
-      id: player.PlayerID,
-      league: player.LeagueID,
-      season: player.SeasonID,
-      name: player['Last Name'],
-      team: player.Abbr,
-      position: 'G',
-      blocker: player.Blocker,
-      glove: player.Glove,
-      passing: player.GPassing,
-      pokeCheck: player.GPokecheck,
-      positioning: player.GPositioning,
-      rebound: player.Rebound,
-      recovery: player.Recovery,
-      puckhandling: player.GPuckhandling,
-      lowShots: player.LowShots,
-      reflexes: player.Reflexes,
-      skating: player.GSkating,
-      aggression: player.Aggression,
-      mentalToughness: player.MentalToughness,
-      determination: player.Determination,
-      teamPlayer: player.Teamplayer,
-      leadership: player.Leadership,
-      goalieStamina: player.GoalieStamina,
-      professionalism: player.Professionalism,
-    };
+  if ('error' in basePlayerData) {
+    res.status(400).send('Error: Backend Error');
+    return;
+  }
 
-    const appliedTPE = calculateGoalieTPE(tempGoalieRatings);
-    return {
-      ...tempGoalieRatings,
-      appliedTPE,
-    };
-  });
-
-  res.status(200).json(parsed);
+  res.status(200).json(basePlayerData.map(parseGoalieRatings));
 };

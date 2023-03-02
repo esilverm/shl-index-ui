@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['12.*']
+        node-version: ['18.*']
 
     steps:
       - name: checkout
@@ -24,7 +24,7 @@ jobs:
           cache: 'yarn'
       
       - name: install modules
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
       
       - name: run eslint
         run: yarn lint

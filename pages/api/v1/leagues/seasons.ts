@@ -9,27 +9,20 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-type Data = Array<{
-  id: number;
-  name: string;
-  abbreviation: string;
-  season: number;
-}>;
-
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
   const { league = null } = req.query;
 
-  const seasons: Array<{
+  const seasons = await query<{
     LeagueID: number;
     Name: string;
     Abbr: string;
     SeasonID: number;
-  }> = await query(
+  }>(
     SQL`
     SELECT DISTINCT schedules.SeasonID, league_data.LeagueID, league_data.Name, league_data.Abbr
     FROM schedules
@@ -41,10 +34,15 @@ export default async (
           ? SQL`
         WHERE league_data.LeagueID=${+league}
         `
-          : ''
+          : '',
       )
-      .append(SQL`ORDER BY league_data.LeagueID ASC, schedules.SeasonID ASC`)
+      .append(SQL`ORDER BY league_data.LeagueID ASC, schedules.SeasonID ASC`),
   );
+
+  if ('error' in seasons) {
+    res.status(400).json({ error: 'Server error' });
+    return;
+  }
 
   const parsed = seasons.map((season) => ({
     id: season.LeagueID,

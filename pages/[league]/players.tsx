@@ -1,150 +1,153 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { GetStaticProps, GetStaticPaths } from 'next';
+import {
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
-// import useSWR from 'swr';
-import { PlayerRatings, GoalieRatings, Player, Goalie } from '../..';
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import GoalieRatingsTable from '../../components/RatingsTable/GoalieRatingsTable';
-import SkaterRatingsTable from '../../components/RatingsTable/SkaterRatingsTable';
-import GoalieScoreTable from '../../components/ScoreTable/GoalieScoreTable';
-import SkaterAdvStatsTable from '../../components/ScoreTable/SkaterAdvStatsTable';
-import SkaterScoreTable from '../../components/ScoreTable/SkaterScoreTable';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
-import useGoalieRatings from '../../hooks/useGoalieRatings';
-import useGoalieStats from '../../hooks/useGoalieStats';
-import useRatings from '../../hooks/useRatings';
-import useSkaterStats from '../../hooks/useSkaterStats';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
+import { GoalieRatingsTable } from '../../components/tables/GoalieRatingsTable';
+import { GoalieScoreTable } from '../../components/tables/GoalieScoreTable';
+import { SkaterAdvStatsTable } from '../../components/tables/SkaterAdvStatsTable';
+import { SkaterRatingsTable } from '../../components/tables/SkaterRatingsTable';
+import { SkaterScoreTable } from '../../components/tables/SkaterScoreTable';
+import { useSeason } from '../../hooks/useSeason';
+import { useSeasonType } from '../../hooks/useSeasonType';
+import { Goalie, PlayerWithAdvancedStats } from '../../typings/api';
+import { League, leagueNameToId } from '../../utils/leagueHelpers';
+import { query } from '../../utils/query';
+import { seasonTypeToApiFriendlyParam } from '../../utils/seasonTypeHelpers';
+import { GoalieRatings } from '../api/v1/goalies/ratings/[id]';
+import { SkaterRatings } from '../api/v1/players/ratings/[id]';
 
-interface Props {
-  league: string;
-  leaguename: string;
-}
+export default ({ league }: { league: League }) => {
+  const { season } = useSeason();
+  const { type } = useSeasonType();
 
-function PlayerPage({ league }: Props): JSX.Element {
-  const [, setSeasonType] = useState('regular');
-  const { ratings: skaterratings, isLoading: isLoadingPlayers } =
-    useRatings(league);
-  const { ratings: skater, isLoading: isLoadingPlayerStat } =
-    useSkaterStats(league);
-  const { ratings: goalie } = useGoalieStats(league);
+  const { data: skaterScoring } = useQuery<PlayerWithAdvancedStats[]>({
+    queryKey: ['skaterScoring', league, type, season],
+    queryFn: () => {
+      const seasonParam = season ? `&season=${season}` : '';
+      const seasonTypeParam = type
+        ? `&type=${seasonTypeToApiFriendlyParam(type)}`
+        : '';
+      return query(
+        `api/v1/players/stats?league=${leagueNameToId(
+          league,
+        )}${seasonParam}${seasonTypeParam}`,
+      );
+    },
+  });
 
-  const { ratings: goalieratingdata, isLoading: isLoadingGoalies } =
-    useGoalieRatings(league);
+  const { data: goalieScoring } = useQuery<Goalie[]>({
+    queryKey: ['goalieScoring', league, type, season],
+    queryFn: () => {
+      const seasonParam = season ? `&season=${season}` : '';
+      const seasonTypeParam = type
+        ? `&type=${seasonTypeToApiFriendlyParam(type)}`
+        : '';
+      return query(
+        `api/v1/goalies/stats?league=${leagueNameToId(
+          league,
+        )}${seasonParam}${seasonTypeParam}`,
+      );
+    },
+  });
 
-  const getSkaters = () =>
-    skaterratings
-      ? (skaterratings.filter(
-          (player) => player.position !== 'G'
-        ) as Array<PlayerRatings>)
-      : [];
+  const { data: skaterRatings } = useQuery<SkaterRatings[]>({
+    queryKey: ['skaterRatings', league, season],
+    queryFn: () => {
+      const seasonParam = season ? `&season=${season}` : '';
+      return query(
+        `api/v1/players/ratings?league=${leagueNameToId(league)}${seasonParam}`,
+      );
+    },
+  });
 
-  const getGoalies = () =>
-    goalieratingdata
-      ? (goalieratingdata.filter(
-          (player) => player.position === 'G'
-        ) as Array<GoalieRatings>)
-      : [];
+  const { data: goalieRatings } = useQuery<GoalieRatings[]>({
+    queryKey: ['goalieRatings', league, season],
+    queryFn: () => {
+      const seasonParam = season ? `&season=${season}` : '';
+      return query(
+        `api/v1/goalies/ratings?league=${leagueNameToId(league)}${seasonParam}`,
+      );
+    },
+  });
 
-  const getSkater = () =>
-    skater
-      ? (skater.filter((player) => player.position !== 'G') as Array<Player>)
-      : [];
-
-  const getGoalie = () =>
-    goalie
-      ? (goalie.filter((player) => player.position === 'G') as Array<Goalie>)
-      : [];
-
-  const [display, setDisplay] = useState('stats');
-
-  const onSeasonTypeSelect = useCallback(
-    (seasonType) => setSeasonType(seasonType),
-    [setSeasonType]
-  );
+  const isLoading =
+    !skaterScoring || !skaterRatings || !goalieRatings || !goalieScoring;
 
   return (
-    <React.Fragment>
+    <>
       <NextSeo
-        title="Players"
+        title={`${league.toUpperCase()} Players`}
         openGraph={{
-          title: 'Players',
+          title: `${league.toUpperCase()} Players`,
         }}
       />
       <Header league={league} activePage="players" />
-      <Container>
-        <Filters>
-          <SelectorWrapper>
-            <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-          </SelectorWrapper>
-          <DisplaySelectContainer role="tablist">
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => 'stats')}
-              active={display === 'stats'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'stats'}
-            >
-              Stats
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => '')}
-              active={display === ''}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === ''}
-            >
-              Adv Stats
-            </DisplaySelectItem>
-            <DisplaySelectItem
-              onClick={() => setDisplay(() => 'ratings')}
-              active={display === 'ratings'}
-              tabIndex={0}
-              role="tab"
-              aria-selected={display === 'ratings'}
-            >
-              Ratings
-            </DisplaySelectItem>
-          </DisplaySelectContainer>
-        </Filters>
-        <Main>
-          <TableHeading>Skaters</TableHeading>
-          <TableWrapper>
-            <TableContainer>
-              {display === 'ratings' && !isLoadingPlayers ? (
-                <SkaterRatingsTable data={getSkaters()} pagination searching />
-              ) : display === 'stats' && !isLoadingPlayerStat ? (
-                <SkaterScoreTable data={getSkater()} pagination searching />
-              ) : (
-                <SkaterAdvStatsTable data={getSkater()} pagination searching />
-              )}
-            </TableContainer>
-          </TableWrapper>
-          <TableHeading>Goalies</TableHeading>
-          <TableWrapper>
-            {!isLoadingGoalies && (
-              <TableContainer>
-                {display === 'ratings' && !isLoadingGoalies ? (
-                  <GoalieRatingsTable
-                    data={getGoalies()}
-                    pagination
-                    searching
-                  />
-                ) : (
-                  <GoalieScoreTable data={getGoalie()} pagination searching />
-                )}
-              </TableContainer>
-            )}
-          </TableWrapper>
-        </Main>
-      </Container>
+      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:pt-px lg:pb-10">
+        {isLoading ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Spinner size="xl" />
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
+              <SeasonTypeSelector className="top-7 !h-7 w-48" />
+            </div>
+            <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
+              Skaters
+            </h2>
+            <Tabs>
+              <TabList>
+                <Tab>Stats</Tab>
+                <Tab>Advanced Stats</Tab>
+                <Tab>Ratings</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <SkaterScoreTable data={skaterScoring} type="league" />
+                </TabPanel>
+                <TabPanel>
+                  <SkaterAdvStatsTable data={skaterScoring} type="league" />
+                </TabPanel>
+                <TabPanel>
+                  <SkaterRatingsTable data={skaterRatings} type="league" />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+            <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
+              Goalies
+            </h2>
+            <Tabs>
+              <TabList>
+                <Tab>Stats</Tab>
+                <Tab>Ratings</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <GoalieScoreTable data={goalieScoring} type="league" />
+                </TabPanel>
+                <TabPanel>
+                  <GoalieRatingsTable data={goalieRatings} type="league" />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </>
+        )}
+      </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
-}
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = ['shl', 'smjhl', 'iihf', 'wjc'];
@@ -157,92 +160,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  return { props: { league: ctx.params.league } };
+  return { props: { league: ctx.params?.league } };
 };
-
-export default PlayerPage;
-
-// TODO Add better styling
-const Container = styled.div`
-  width: 75%;
-  padding: 1px 0 40px 0;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-`;
-
-const TableWrapper = styled.div`
-  width: 95%;
-  margin: auto;
-`;
-
-const TableContainer = styled.div`
-  width: 100%;
-  margin: 30px 0;
-`;
-
-const TableHeading = styled.h2`
-  width: 95%;
-  margin: 30px auto;
-  font-size: 2.2rem;
-  padding: 5px 0;
-  border-bottom: 1px solid black;
-`;
-
-const Main = styled.main`
-  height: 100%;
-  width: 100%;
-`;
-
-const DisplaySelectContainer = styled.div`
-  margin: 28px auto;
-  width: 95%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey500};
-`;
-
-const DisplaySelectItem = styled.div<{ active: boolean }>`
-  display: inline-block;
-  padding: 8px 24px;
-  border: 1px solid
-    ${({ theme, active }) => (active ? theme.colors.grey500 : 'transparent')};
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors.grey100 : 'transparent'};
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  position: relative;
-  border-bottom: none;
-  bottom: -1px;
-`;
-
-const Filters = styled.div`
-  @media screen and (max-width: 1024px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-
-  @media screen and (max-width: 750px) {
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-`;
-
-const SelectorWrapper = styled.div`
-  width: 250px;
-  float: right;
-  margin-right: 3%;
-`;

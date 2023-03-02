@@ -1,279 +1,197 @@
-/* eslint-disable no-unused-vars */
+import { Checkbox, Spinner } from '@chakra-ui/react';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { groupBy, isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import React, { useEffect, useRef, useState } from 'react';
-import { PulseLoader } from 'react-spinners';
-import styled from 'styled-components';
+import { useCallback, useMemo } from 'react';
 
-import { Team } from '../..';
-import Footer from '../../components/Footer';
-import GameDaySchedule from '../../components/GameDaySchedule';
-import Header from '../../components/Header';
-import SeasonTypeSelector from '../../components/Selector/SeasonTypeSelector';
-import TeamSelector, {
-  MinimalTeam,
-} from '../../components/Selector/TeamSelector';
-import useSchedule from '../../hooks/useSchedule';
-import { SeasonType } from '../api/v1/schedule';
+import { Select } from '../../components/common/Select';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import { ScheduleDay } from '../../components/schedule/ScheduleDay';
+import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
+import { useRouterPageState } from '../../hooks/useRouterPageState';
+import { useSeason } from '../../hooks/useSeason';
+import { useSeasonType } from '../../hooks/useSeasonType';
+import { League, leagueNameToId } from '../../utils/leagueHelpers';
+import { query } from '../../utils/query';
+import { Game } from '../api/v1/schedule';
+import { TeamInfo } from '../api/v1/teams';
 
-enum SCHEDULE_STATES {
-  INITIAL_LOADING = 'INITIAL_LOADING',
-  INITIAL_LOADED = 'INITIAL_LOADED',
-  FULL_LOADING = 'FULL_LOADING',
-  FULL_LOADED = 'FULL_LOADED',
-}
-type ScheduleState = keyof typeof SCHEDULE_STATES;
+const getTeamsListData = async (league: League, season: number | undefined) => {
+  const seasonParam = season ? `&season=${season}` : '';
+  return query(`api/v1/teams?league=${leagueNameToId(league)}${seasonParam}`);
+};
 
-const initialNumberOfGames = 32;
+export default ({ league }: { league: League }) => {
+  const { type } = useSeasonType();
+  const { season } = useSeason();
 
-interface Props {
-  league: string;
-  teamlist: Array<Team>;
-}
-
-function Schedule({ league, teamlist }: Props): JSX.Element {
-  const [scheduleHeight, setScheduleHeight] = useState(0);
-  const [scheduleState, setScheduleState] =
-    useState<ScheduleState>('INITIAL_LOADING');
-  const [showFullSchedule, setShowFullSchedule] = useState(false);
-  const [filterSeasonType, setFilterSeasonType] = useState('Regular Season');
-  const [filterTeam, setFilterTeam] = useState<number>(-1);
-  const [isLoadingAssets, setLoadingAssets] = useState<boolean>(true);
-  const [sprites, setSprites] = useState<{
-    [index: string]: React.ComponentClass<any>;
-  }>({});
-  const { games, isLoading } = useSchedule(league);
-  const scheduleContainerRef = useRef();
-
-  useEffect(() => {
-    // Dynamically import svg icons based on the league chosen
-    (async () => {
-      const { default: s } = await import(
-        `../../public/team_logos/${league.toUpperCase()}/`
-      );
-
-      setSprites(() => s);
-      setLoadingAssets(() => false);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (scheduleContainerRef.current) {
-      const containerElem = scheduleContainerRef.current as HTMLElement;
-      if (containerElem.clientHeight > scheduleHeight) {
-        const newState =
-          scheduleState === SCHEDULE_STATES.INITIAL_LOADING
-            ? SCHEDULE_STATES.INITIAL_LOADED
-            : SCHEDULE_STATES.FULL_LOADED;
-
-        setScheduleState(newState);
-        setScheduleHeight(containerElem.clientHeight);
-      }
-    }
+  const {
+    selectedTeam: currentSelectedTeam,
+    unplayedOnly,
+    setRouterPageState,
+  } = useRouterPageState<{
+    selectedTeam: string;
+    unplayedOnly: 'false' | 'true';
+  }>({
+    keys: ['selectedTeam', 'unplayedOnly'],
+    initialState: {
+      selectedTeam: '-1',
+      unplayedOnly: 'false',
+    },
   });
 
-  useEffect(() => {
-    const isInitialLoading = scheduleState === SCHEDULE_STATES.INITIAL_LOADING;
-    const isFullLoading = scheduleState === SCHEDULE_STATES.FULL_LOADING;
+  const selectedTeam = parseInt(currentSelectedTeam);
 
-    if (isInitialLoading || isFullLoading) {
-      setShowFullSchedule(isFullLoading);
-    }
-  }, [scheduleState]);
+  const { data: teamList } = useQuery<TeamInfo[]>({
+    queryKey: ['teams', league, season],
+    queryFn: () => getTeamsListData(league, season),
+  });
 
-  useEffect(() => {
-    setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
-    setScheduleHeight(0);
-  }, [filterSeasonType, filterTeam]);
+  const { data } = useQuery<Game[]>({
+    queryKey: ['schedule', league, season, type],
+    queryFn: () => {
+      const seasonParam = season ? `&season=${season}` : '';
 
-  const onSeasonTypeSelect = async (seasonType: SeasonType) => {
-    setScheduleState(SCHEDULE_STATES.INITIAL_LOADING);
-    setFilterSeasonType(seasonType);
-  };
+      return query(
+        `api/v1/schedule?league=${leagueNameToId(
+          league,
+        )}&type=${type}${seasonParam}`,
+      );
+    },
+  });
 
-  const onTeamSelect = (team: MinimalTeam) => setFilterTeam(parseInt(team.id));
-
-  const onLoadAllGames = () => setScheduleState(SCHEDULE_STATES.FULL_LOADING);
-
-  const hasFilteredTeam = (game) =>
-    filterTeam === -1 ||
-    game.awayTeam === filterTeam ||
-    game.homeTeam === filterTeam;
-
-  const getDatesForRendering = (sortedGames) => {
-    let gameDates = sortedGames.reduce((acc, game) => {
-      if (!acc.includes(game.date) && hasFilteredTeam(game)) {
-        return [...acc, game.date];
-      }
-      return acc;
-    }, []);
-
-    if (gameDates.length <= initialNumberOfGames && !showFullSchedule) {
-      setShowFullSchedule(true);
-    } else if (!showFullSchedule) {
-      gameDates = gameDates.slice(0, initialNumberOfGames);
+  const { teamSelectorList, teamSelectorMap } = useMemo(() => {
+    if (!teamList) {
+      return {
+        teamSelectorList: null,
+        teamSelectorMap: null,
+      };
     }
 
-    return gameDates;
-  };
+    const selectorList = (
+      teamList
+        ?.map((team) => [team.id, team.name])
+        .concat([[-1, 'All Teams']]) as [number, string][]
+    ).sort((a, b) => a[1].localeCompare(b[1]));
 
-  const renderGameDays = () => {
-    if (isLoading || isLoadingAssets) return null;
+    return {
+      teamSelectorList: selectorList.map((team) => team[0]),
+      teamSelectorMap: new Map<number, string>(selectorList),
+    };
+  }, [teamList]);
 
-    // Parse our dates first since mobile browsers can't do so
-    const sortedGames = [...games].sort((gameA, gameB) => {
-      const [aYear, aMonth, aDate] = gameA.date
-        .split('-')
-        .map((v) => parseInt(v));
-      const [bYear, bMonth, bDate] = gameB.date
-        .split('-')
-        .map((v) => parseInt(v));
-      return (
-        new Date(aYear, aMonth - 1, aDate).valueOf() -
-        new Date(bYear, bMonth - 1, bDate).valueOf()
-      );
-    });
-    const gameDates = getDatesForRendering(sortedGames);
+  const onTeamSelection = useCallback(
+    (team: number) => {
+      setRouterPageState('selectedTeam', team);
+    },
+    [setRouterPageState],
+  );
 
-    const gameDaySchedules = gameDates.reduce((acc, date) => {
-      const gamesOnDate = sortedGames.filter((game) => game.date === date);
-      const filteredGamesOnDate = gamesOnDate.filter((game) =>
-        hasFilteredTeam(game)
-      );
-
-      return [
-        ...acc,
-        <GameDaySchedule
-          key={date}
-          date={date}
-          games={filteredGamesOnDate}
-          teamlist={teamlist}
-          sprites={sprites}
-        />,
-      ];
-    }, []);
-
-    return gameDaySchedules.length > 0 ? gameDaySchedules : 'No games found';
-  };
-
-  const isScheduleLoading =
-    scheduleState === SCHEDULE_STATES.INITIAL_LOADING ||
-    scheduleState === SCHEDULE_STATES.FULL_LOADING;
+  const gamesByDate = useMemo(() => {
+    return groupBy(
+      data
+        ?.filter((game) => unplayedOnly === 'false' || !game.played)
+        .filter(
+          (game) =>
+            selectedTeam === -1 ||
+            game.awayTeam === selectedTeam ||
+            game.homeTeam === selectedTeam,
+        ),
+      (game) => game.date,
+    );
+  }, [data, selectedTeam, unplayedOnly]);
 
   return (
-    <React.Fragment>
+    <>
       <NextSeo
-        title="Schedule"
+        title={`${league.toUpperCase()} Schedule`}
         openGraph={{
-          title: 'Schedule',
+          title: `${league.toUpperCase()} Schedule`,
         }}
       />
       <Header league={league} activePage="schedule" />
-      <Container>
-        <Filters>
-          <SeasonTypeSelector onChange={onSeasonTypeSelect} />
-          <TeamSelector teams={teamlist} onChange={onTeamSelect} />
-        </Filters>
-        <ScheduleContainer ref={scheduleContainerRef}>
-          {renderGameDays()}
-        </ScheduleContainer>
-        <LoadingWrapper isLoading={isScheduleLoading}>
-          {isScheduleLoading && <PulseLoader size={15} />}
-          {!isScheduleLoading && !showFullSchedule && (
-            <LoadAllButton onClick={onLoadAllGames}>
-              Load all games
-            </LoadAllButton>
-          )}
-        </LoadingWrapper>
-      </Container>
+      <div className="m-auto w-full bg-grey100 py-10 lg:w-3/4 lg:p-[2.5%]">
+        {!teamList || !teamSelectorList || !teamSelectorMap || !data ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Spinner size="xl" />
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col items-center space-y-2 md:mr-8 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
+              <SeasonTypeSelector className="!h-7 w-48" />
+              <Select<number>
+                options={teamSelectorList}
+                selectedOption={selectedTeam}
+                onSelection={onTeamSelection}
+                optionsMap={teamSelectorMap}
+                className="!h-7 w-56"
+              />
+              <Checkbox
+                isChecked={unplayedOnly === 'true'}
+                onChange={() =>
+                  setRouterPageState(
+                    'unplayedOnly',
+                    unplayedOnly === 'true' ? 'false' : 'true',
+                  )
+                }
+              >
+                Hide Played Games
+              </Checkbox>
+            </div>
+            <div className="mx-auto mb-10 flex w-11/12 flex-wrap justify-evenly">
+              {isEmpty(gamesByDate) && (
+                <div className="mt-8 text-3xl font-bold">No games found</div>
+              )}
+              {Object.entries(gamesByDate)
+                .sort((a, b) => {
+                  // NOTE: this is necessary since date parser on mobile requires the dates to follow ISO 8601 (ex. "2017-04-16")
+                  const [aYear, aMonth, aDate] = a[0]
+                    .split('-')
+                    .map((datePart) => parseInt(datePart));
+                  const [bYear, bMonth, bDate] = b[0]
+                    .split('-')
+                    .map((datePart) => parseInt(datePart));
+
+                  return (
+                    new Date(aYear, aMonth, aDate).getTime() -
+                    new Date(bYear, bMonth, bDate).getTime()
+                  );
+                })
+                .map(([date, games]) => (
+                  <ScheduleDay
+                    key={date}
+                    league={league}
+                    date={date}
+                    games={games}
+                    teamData={teamList}
+                  />
+                ))}
+            </div>
+          </>
+        )}
+      </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
-}
-
-const Container = styled.div`
-  width: 75%;
-  padding: 41px 0 40px 0;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.grey100};
-
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-    padding: 2.5%;
-  }
-`;
-
-const Filters = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-right: 4%;
-  justify-content: flex-end;
-
-  button {
-    width: 225px;
-    margin-right: 10px;
-  }
-
-  @media screen and (max-width: 750px) {
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-right: 0;
-      margin-bottom: 5px;
-    }
-  }
-`;
-
-const ScheduleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 95%;
-  margin: 0 auto 40px;
-  flex-wrap: wrap;
-`;
-
-const LoadingWrapper = styled.div<{ isLoading: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  ${({ isLoading }) => (isLoading ? 'height: 65vh' : '')};
-`;
-
-const LoadAllButton = styled.button`
-  display: inline-block;
-  padding: 8px 20px;
-  border: 1px solid ${({ theme }) => theme.colors.grey500};
-  background-color: ${({ theme }) => theme.colors.grey100};
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.grey300};
-  }
-
-  &:active {
-    background-color: ${({ theme }) => theme.colors.grey200};
-  }
-`;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const {
-    query: { season, league: leaguename },
-  } = ctx;
-
-  const leagueid = ['shl', 'smjhl', 'iihf', 'wjc'].indexOf(
-    typeof leaguename === 'string' ? leaguename : 'shl'
-  );
-
-  const seasonParam = season ? `&season=${season}` : '';
-
-  const teamlist = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/teams?league=${leagueid}${seasonParam}`
-  ).then((res) => res.json());
-
-  return { props: { league: leaguename, teamlist } };
 };
 
-export default Schedule;
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const queryClient = new QueryClient();
+  const { season, league } = query;
+
+  const parsedSeason = parseInt(season as string);
+
+  await queryClient.prefetchQuery({
+    queryKey: ['teams', league, parsedSeason],
+    queryFn: () => getTeamsListData(league as League, parsedSeason),
+  });
+
+  return {
+    props: {
+      league,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};

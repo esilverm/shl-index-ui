@@ -9,26 +9,25 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
-type Data = Array<{
-  id: number;
-  name: string;
-  abbreviation: string;
-}>;
-
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
-  const leagues: Array<{
+  const leagues = await query<{
     LeagueID: number;
     Name: string;
     Abbr: string;
-  }> = await query(SQL`
+  }>(SQL`
     SELECT *
     FROM league_data
   `);
+
+  if ('error' in leagues) {
+    res.status(400).json({ error: 'Server error' });
+    return;
+  }
 
   const parsed = leagues.map((league) => ({
     id: league.LeagueID,

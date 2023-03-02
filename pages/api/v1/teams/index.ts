@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SQL from 'sql-template-strings';
@@ -9,9 +10,40 @@ const cors = Cors({
   methods: ['GET', 'HEAD'],
 });
 
+export type TeamInfo = {
+  id: number;
+  season: number;
+  league: number;
+  conference: number;
+  division?: number;
+  name: string;
+  abbreviation: string;
+  location: string;
+  nameDetails: {
+    first: string;
+    second: string;
+  };
+  colors: {
+    primary: string;
+    secondary: string;
+    text: string;
+  };
+  stats: {
+    wins: number;
+    losses: number;
+    overtimeLosses: number;
+    shootoutWins: number;
+    shootoutLosses: number;
+    points: number;
+    goalsFor: number;
+    goalsAgainst: number;
+    winPercent: number;
+  };
+};
+
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   await use(req, res, cors);
 
