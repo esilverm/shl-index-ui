@@ -47,7 +47,7 @@ const getLogoId = (
         case 'USA':
           return 'United_States';
         default:
-          return assertUnreachable(teamAbbreviation as never);
+          return 'IIHF';
       }
     }
     case 'shl': {
@@ -122,7 +122,7 @@ const getLogoId = (
           }
           return 'Winnipeg';
         default:
-          return assertUnreachable(teamAbbreviation as never);
+          return 'SHL';
       }
     }
     case 'smjhl': {
@@ -173,7 +173,7 @@ const getLogoId = (
         case 'YUM':
           return 'Yukon';
         default:
-          return assertUnreachable(teamAbbreviation as never);
+          return 'SMJHL';
       }
     }
     case 'wjc': {
@@ -209,7 +209,7 @@ const getLogoId = (
         case 'YG':
           return 'Young_Guns';
         default:
-          return assertUnreachable(teamAbbreviation as never);
+          return 'WJC';
       }
     }
     default:
@@ -232,6 +232,18 @@ export const TeamLogo = ({
     () => getLogoId(teamAbbreviation, league, season ?? Infinity),
     [league, season, teamAbbreviation],
   );
+
+  if (
+    spriteId === 'IIHF' ||
+    spriteId === 'WJC' ||
+    spriteId === 'SHL' ||
+    spriteId === 'SMJHL'
+  ) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img className={className} src={`/league_logos/${spriteId}.svg`} />
+    );
+  }
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
