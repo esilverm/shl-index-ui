@@ -195,6 +195,8 @@ const getLogoId = (
           return 'North_America';
         case 'RCL':
           return 'UCORCAL';
+        case 'RHI':
+          return 'Rhine';
         case 'SWE':
           return 'Sweden';
         case 'USA':
