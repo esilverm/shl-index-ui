@@ -107,6 +107,9 @@ const getLogoId = (
         case 'TEX':
           return 'Texas';
         case 'TOR':
+          if (season < 70) {
+            return 'TorontoOld';
+          }
           return 'Toronto';
         case 'WKP':
           return 'West_Kendall';
