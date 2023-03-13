@@ -82,7 +82,7 @@ const getLogoId = (
           }
           return 'Minnesota';
         case 'MTL':
-          if (season < 65) {
+          if (season < 66) {
             return 'MontrealOld';
           }
           return 'Montreal';
@@ -117,7 +117,7 @@ const getLogoId = (
           if (season < 58) {
             return 'WinnipegOld';
           }
-          if (season < 65) {
+          if (season < 66) {
             return 'WinnipegPreS65';
           }
           return 'Winnipeg';
