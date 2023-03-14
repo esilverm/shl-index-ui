@@ -8,7 +8,7 @@ import { assertUnreachable } from './assertUnreachable';
 
 // This converts names to First initial. (any middle initials) Last Name [titles]
 export const getPlayerShortname = (name: string): string => {
-  const splitName = name.split(' ');
+  const splitName = name.split(' ').filter(Boolean);
   if (
     splitName.length === 1 ||
     (splitName.length === 2 && splitName[1].length === 1)
