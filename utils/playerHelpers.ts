@@ -100,10 +100,6 @@ const VALID_GOALIE_ATTRIBUTES = [
 ];
 
 const getSkaterTPECost = (attributeValue: number) => {
-  if (attributeValue < -1 || attributeValue > 15) {
-    console.log(attributeValue);
-  }
-
   switch (attributeValue) {
     case -5:
     case -4:
