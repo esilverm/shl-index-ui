@@ -8,7 +8,8 @@ import { assertUnreachable } from './assertUnreachable';
 
 // This converts names to First initial. (any middle initials) Last Name [titles]
 export const getPlayerShortname = (name: string): string => {
-  const splitName = name.split(' ');
+  if (!name) return name;
+  const splitName = name.split(' ').filter(Boolean);
   if (
     splitName.length === 1 ||
     (splitName.length === 2 && splitName[1].length === 1)
@@ -99,10 +100,6 @@ const VALID_GOALIE_ATTRIBUTES = [
 ];
 
 const getSkaterTPECost = (attributeValue: number) => {
-  if (attributeValue < -1 || attributeValue > 15) {
-    console.log(attributeValue);
-  }
-
   switch (attributeValue) {
     case -5:
     case -4:
