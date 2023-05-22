@@ -169,6 +169,9 @@ const getLogoId = (
           }
           return 'St_Louis';
         case 'VAN':
+          if (season < 71) {
+            return 'VancouverOld';
+          }
           return 'Vancouver';
         case 'YUM':
           return 'Yukon';
