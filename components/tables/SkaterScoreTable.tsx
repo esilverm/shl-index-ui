@@ -233,11 +233,15 @@ export const SkaterScoreTable = ({
               header: () => (
                 <TableHeader title="Shooting Percentage">S%</TableHeader>
               ),
-              footer: ({ table }) =>
-                `${calculateColumnAverageForColumnID(
+              footer: ({ table }) => {
+                const goals = calculateColumnSumForColumnID(table, 'goals');
+                const shots = calculateColumnSumForColumnID(
                   table,
-                  'player-table-spct',
-                ).toFixed(1)}%`,
+                  'shotsOnGoal',
+                );
+
+                return `${((goals / shots) * 100).toFixed(1)}%`;
+              },
               id: 'player-table-spct',
               enableGlobalFilter: false,
               sortDescFirst: true,
@@ -397,12 +401,19 @@ export const SkaterScoreTable = ({
                 <TableHeader title="Faceoff Win Percent">FO%</TableHeader>
               ),
               footer: ({ table }) => {
-                const value = calculateColumnAverageForColumnID(
+                const wins = calculateColumnSumForColumnID(
                   table,
-                  'player-table-faceoffPct',
+                  'player-table-faceoff-wins',
                 );
-                if (isNaN(value)) return '-';
-                return `${value.toFixed(1)}%`;
+                const total =
+                  wins +
+                  calculateColumnSumForColumnID(
+                    table,
+                    'player-table-faceoff-losses',
+                  );
+
+                if (isNaN(wins) || isNaN(total)) return '-';
+                return `${((wins / total) * 100).toFixed(1)}%`;
               },
               sortingFn: 'alphanumeric',
               enableGlobalFilter: false,

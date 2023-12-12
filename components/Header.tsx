@@ -23,7 +23,7 @@ const menuLinks = [
   'schedule',
   'players',
 ] as const;
-type MenuLinks = typeof menuLinks[number] | 'game';
+type MenuLinks = (typeof menuLinks)[number] | 'game';
 
 export const Header = ({
   league,
@@ -159,7 +159,7 @@ export const Header = ({
             {activePage !== 'game' &&
               router.pathname.indexOf('/player/') === -1 &&
               !seasonLoading && (
-                <Select<typeof seasonsList[0]>
+                <Select<(typeof seasonsList)[0]>
                   options={seasonsList.sort((a: number, b: number) => b - a)}
                   selectedOption={season ?? 0}
                   onSelection={setSeason}
