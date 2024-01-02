@@ -187,10 +187,14 @@ const getLogoId = (
         case 'CNR':
           return 'Canada';
         case 'CNW':
+        case 'CAR':
           return 'Canada_Red';
+        case 'CAB':
+          return 'Canada_Black';
         case 'DCH':
           return 'DACH';
         case 'FIN':
+        case 'NDN':
           return 'Finland';
         case 'ICE':
           return 'Ice';
@@ -206,6 +210,7 @@ const getLogoId = (
         case 'USB':
           return 'United_States';
         case 'USR':
+        case 'USW':
           return 'United_States_Red';
         case 'WOR':
           return 'World';
