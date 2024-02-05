@@ -78,7 +78,10 @@ const getLogoId = (
           return 'Manhattan';
         case 'MIN':
           if (season < 56) {
-            return 'MinnesotaOld';
+            return 'MinnesotaPreS56';
+          }
+          if (season < 75) {
+            return 'MinnesotaPreS75';
           }
           return 'Minnesota';
         case 'MTL':
