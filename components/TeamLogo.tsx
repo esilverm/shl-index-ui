@@ -277,6 +277,8 @@ const getLogoId = (
           return 'Nevada';
         case 'NL':
           return 'Newfoundland';
+        case 'OTT':
+          return 'Ottawa';
         case 'QCC':
           return 'Quebec_City';
         case 'REG':
