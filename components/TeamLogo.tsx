@@ -63,7 +63,7 @@ const getLogoId = (
             return { spriteId: 'CalgaryPreS3', isHistorical: true };
           }
           if (season < 58) {
-            return { spriteId: 'CalgaryPreS56', isHistorical: true };
+            return { spriteId: 'CalgaryPreS58', isHistorical: true };
           }
           return 'Calgary';
         case 'CHI':
@@ -387,7 +387,7 @@ export const TeamLogo = ({
     <img
       className={className}
       src={`/stack/${
-        isHistorical ? 'historical' : ''
+        isHistorical ? 'historical-' : ''
       }${league.toLowerCase()}.stack.svg#${spriteId}`}
     />
   );
