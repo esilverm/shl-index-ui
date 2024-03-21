@@ -387,7 +387,7 @@ export const TeamLogo = ({
     <img
       className={className}
       src={`/stack/${
-        isHistorical ? 'historical-' : ''
+        isHistorical ? 'historical' : ''
       }${league.toLowerCase()}.stack.svg#${spriteId}`}
     />
   );

@@ -54,7 +54,7 @@ gulp
       mode: {
         stack: {
           dest: '../public/stack/',
-          sprite: 'historical-shl.stack.svg',
+          sprite: 'historicalshl.stack.svg',
         },
       },
     }),
