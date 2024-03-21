@@ -226,10 +226,10 @@ const getLogoId = (
             return { spriteId: 'West_KendallPreS3', isHistorical: true };
           }
           if (season < 6) {
-            return { spriteId: 'WestKendallPreS6', isHistorical: true };
+            return { spriteId: 'West_KendallPreS6', isHistorical: true };
           }
           if (season < 25) {
-            return { spriteId: 'WestKendallPreS25', isHistorical: true };
+            return { spriteId: 'West_KendallPreS25', isHistorical: true };
           }
           return { spriteId: 'West_Kendall', isHistorical: true };
         case 'VAN':
