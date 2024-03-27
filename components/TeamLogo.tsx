@@ -283,6 +283,8 @@ const getLogoId = (
           return 'Quebec_City';
         case 'REG':
           return 'Regina';
+        case 'SDT':
+          return 'San_Diego';
         case 'STL':
           if (season < 55) {
             return 'St_LouisOld';
