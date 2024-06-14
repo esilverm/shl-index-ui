@@ -160,7 +160,7 @@ export default ({
         <div className="flex h-[30%] flex-col items-center justify-between text-center md:items-start md:text-left">
           <h1
             className={classnames(
-              teamColorIsDark ? 'text-grey100' : 'text-grey900',
+              teamColorIsDark ? 'text-grey100 dark:text-grey100TextDark' : 'text-grey900 dark:text-grey900Dark',
               'text-4xl',
             )}
           >
@@ -173,7 +173,7 @@ export default ({
           </h1>
           <h3
             className={classnames(
-              teamColorIsDark ? 'text-grey100' : 'text-grey900',
+              teamColorIsDark ? 'text-grey100 dark:text-grey100TextDark' : 'text-grey900 dark:text-grey900Dark',
               'font-mont text-lg',
             )}
           >
@@ -186,7 +186,7 @@ export default ({
           </h3>
         </div>
       </div>
-      <div className="m-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:p-8">
+      <div className="m-auto w-full bg-grey100 p-[2.5%] dark:bg-grey100Dark lg:w-3/4 lg:p-8">
         {shouldShowTeamStats && (
           <div className="mb-6 hidden flex-col space-y-6 sm:flex">
             <h3 className="text-4xl font-bold">Current Season Stats</h3>

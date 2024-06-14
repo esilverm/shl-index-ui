@@ -83,7 +83,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="team" />
-      <div className="mx-auto w-full bg-grey100 pt-px pb-10 lg:w-3/4">
+      <div className="mx-auto w-full bg-grey100 pt-px pb-10 dark:bg-grey100Dark lg:w-3/4">
         <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
           {shouldShowTeamStats && (
             <TabList className="mx-10 pt-8">
@@ -116,8 +116,8 @@ export default ({ league }: { league: League }) => {
                       className={classnames(
                         'text-2xl',
                         tinycolor(team.colors.primary).isDark()
-                          ? 'text-grey100'
-                          : 'text-grey900',
+                          ? 'text-grey100 dark:text-grey100TextDark'
+                          : 'text-grey900 dark:text-grey900Dark',
                       )}
                     >
                       <span className="block font-mont font-normal tracking-widest">

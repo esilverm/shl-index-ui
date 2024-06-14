@@ -17,7 +17,7 @@ export const ScheduleDay = ({
 }) => {
   return (
     <div className="m-4 flex w-[300px] flex-col px-1 ">
-      <h2 className="border-b-2 border-b-grey500 pb-1 font-mont text-2xl font-bold">
+      <h2 className="border-b-2 border-b-grey500 pb-1 font-mont text-2xl font-bold dark:border-b-grey500Dark">
         {date}
       </h2>
       {games.map((game) => (

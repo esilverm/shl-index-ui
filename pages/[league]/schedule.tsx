@@ -112,7 +112,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="schedule" />
-      <div className="m-auto w-full bg-grey100 py-10 lg:w-3/4 lg:p-[2.5%]">
+      <div className="m-auto w-full bg-grey100  py-10 dark:bg-grey100Dark lg:w-3/4 lg:p-[2.5%]">
         {!teamList || !teamSelectorList || !teamSelectorMap || !data ? (
           <div className="flex h-full w-full items-center justify-center">
             <Spinner size="xl" />

@@ -118,8 +118,8 @@ export const BoxscoreTeamStats = ({
   });
 
   return (
-    <div className="flex w-full flex-col bg-grey100 p-4 pt-0">
-      <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
+    <div className="flex w-full flex-col bg-grey100 p-4 pt-0 dark:bg-grey100Dark">
+      <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold dark:bg-grey300Dark">
         <Skeleton isLoaded={!!gameData}>
           <span className="text-sm">{gameData?.game.date}</span>
         </Skeleton>

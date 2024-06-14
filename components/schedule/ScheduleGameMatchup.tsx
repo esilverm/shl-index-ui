@@ -45,8 +45,8 @@ const ScheduleMatchupTeam = ({
       className={classnames(
         'flex items-center justify-between font-medium',
         winner === 'none' || winner === teamType.toLowerCase()
-          ? 'text-grey900'
-          : 'text-grey500',
+          ? 'text-grey900 dark:text-grey900Dark'
+          : 'text-grey500 dark:text-grey500Dark',
       )}
     >
       <div className="flex items-center font-mont text-lg">
@@ -89,7 +89,7 @@ export const ScheduleGameMatchup = ({
           gameid: game.slug,
         },
       }}
-      className="flex flex-col border-b-2 border-b-grey500 py-1 px-2.5 hover:bg-grey300"
+      className="flex flex-col border-b-2 border-b-grey500 py-1 px-2.5 hover:bg-grey300 dark:border-b-grey500Dark dark:hover:bg-grey300Dark"
     >
       <ScheduleMatchupTeam
         game={game}

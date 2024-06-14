@@ -61,7 +61,7 @@ const StarRow = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
           {star.name}
         </div>
-        <div className="text-xs text-grey700">
+        <div className="text-xs text-grey700 dark:text-grey700Dark">
           {starIsGoalie
             ? `SA: ${starInfo.shotsAgainst} SV%: ${starInfo.savePct.toFixed(3)}`
             : `G: ${starInfo.goals} A: ${starInfo.assists} H: ${starInfo.hits}`}
@@ -133,10 +133,10 @@ export const BoxscoreThreeStars = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">
         Three Stars of the Game
       </div>
-      <div className="flex w-full flex-col bg-grey100 font-mont">
+      <div className="flex w-full flex-col bg-grey100 font-mont dark:bg-grey100Dark">
         <StarRow
           league={league}
           gameData={gameData}

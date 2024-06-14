@@ -26,8 +26,8 @@ const RightArrow = () => {
         className={classnames(
           'transition-colors',
           isLastItemVisible
-            ? '[&_path]:!fill-grey900/10'
-            : '[&_path]:!fill-grey900',
+            ? '[&_path]:!fill-grey900/10 dark:[&_path]:!fill-grey900Dark/10'
+            : '[&_path]:!fill-grey900 dark:[&_path]:!fill-grey900Dark',
         )}
       />
     </div>
@@ -51,8 +51,8 @@ const LeftArrow = () => {
         className={classnames(
           'transition-colors',
           isFirstItemVisible
-            ? '[&_path]:!fill-grey900/10'
-            : '[&_path]:!fill-grey900',
+            ? '[&_path]:!fill-grey900/10 dark:[&_path]:!fill-grey900Dark/10'
+            : '[&_path]:!fill-grey900 dark:[&_path]:!fill-grey900Dark',
         )}
       />
     </div>
@@ -79,11 +79,11 @@ const DateItem = ({ gameid }: { gameid: string }) => {
     <div
       role="presentation"
       aria-label="Score Bar Date"
-      className="relative flex h-full w-[46px] items-center justify-center border-r border-r-grey500 bg-grey200"
+      className="relative flex h-full w-[46px] items-center justify-center border-r border-r-grey500 bg-grey200 dark:border-r-grey500Dark dark:bg-grey200Dark"
     >
       <span
         aria-label="Date"
-        className="relative top-[3px] text-center text-base font-bold text-grey900"
+        className="relative top-[3px] text-center text-base font-bold text-grey900 dark:text-grey900Dark"
       >
         {months[parseInt(gameid.split('-')[1]) - 1]}
         <br />
@@ -123,7 +123,7 @@ const ScoreBarItem = ({
       }}
       className={classnames(
         'relative inline-block h-full w-full transition-all',
-        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100/80',
+        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100/80 dark:hover:after:bg-grey900Dark/80 dark:hover:after:text-grey100TextDark/80',
         data.played
           ? "hover:after:content-['See_Game_Results']"
           : "hover:after:content-['See_Game_Preview']",
@@ -134,7 +134,7 @@ const ScoreBarItem = ({
     >
       <div
         className={classnames(
-          'relative h-full w-[189px] border-r border-r-grey500 bg-grey100 pt-[23px]',
+          'relative h-full w-[189px] border-r border-r-grey500  bg-grey100 pt-[23px] dark:border-r-grey500Dark dark:bg-grey100Dark',
         )}
       >
         {/* Home Team */}
@@ -142,8 +142,8 @@ const ScoreBarItem = ({
           className={classnames(
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.homeScore > data.awayScore || !data.played
-              ? 'text-grey900'
-              : 'text-grey600',
+              ? 'text-grey900 dark:text-grey900Dark'
+              : 'text-grey600 dark:text-grey600Dark',
           )}
         >
           <TeamLogo
@@ -165,8 +165,8 @@ const ScoreBarItem = ({
           className={classnames(
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.awayScore > data.homeScore || !data.played
-              ? 'text-grey900'
-              : 'text-grey600',
+              ? 'text-grey900 dark:text-grey900Dark'
+              : 'text-grey600 dark:text-grey600Dark',
           )}
         >
           <TeamLogo
@@ -220,7 +220,7 @@ export const ScoreBar = ({
   loading: boolean;
   league: League;
 }) => (
-  <div className="h-24 w-full bg-grey100 [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
+  <div className="h-24 w-full bg-grey100 dark:bg-grey100Dark [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
     {loading ? (
       <div className="flex h-full w-full items-center justify-center">
         <Spinner size="xl" />
@@ -232,7 +232,7 @@ export const ScoreBar = ({
         scrollContainerClassName="!h-full overflow-x-hidden"
         wrapperClassName="h-full"
       >
-        {data.flatMap(({ date, games }) =>
+       {/*  {data.flatMap(({ date, games }) =>
           [<DateItem key={date} gameid={date} />].concat(
             games.map(({ slug, ...game }) => (
               <ScoreBarItem
@@ -246,7 +246,7 @@ export const ScoreBar = ({
               />
             )),
           ),
-        )}
+        )}*/}
       </ScrollMenu>
     )}
   </div>

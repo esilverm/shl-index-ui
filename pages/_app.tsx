@@ -11,7 +11,6 @@ import React from 'react';
 
 import SEO from '../next-seo.config';
 import { CustomChakraProvider } from '../styles/CustomChakraProvider';
-
 const montserrat = Montserrat({
   subsets: ['latin'],
   weight: 'variable',

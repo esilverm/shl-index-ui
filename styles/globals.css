@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+.light {
+  --hyperlink: 30, 136, 229; /* blue600 */
+  --blue700: 25, 118, 210;/* blue700 */
+  --grey900: 33, 37, 41;/* grey900 */
+  --LabelHeadings: 52, 58, 64;/* grey800 */
+  --grey700: 73, 80, 87;/* grey700 */
+  --grey650: 107, 115, 123;/* grey650 */
+  --grey600: 108, 117, 125;/* grey600 */
+  --grey500: 173, 181, 189;/* grey500 */
+  --grey400: 206, 212, 218;/* grey400 */
+  --grey300: 222, 226, 230;/* grey300 */
+  --grey200: 233, 236, 239;/* grey200 */
+  --grey100: 248, 249, 250;/* grey100 */
+  --red200: 239, 154, 154;/* red200 */
+  --offWhite: 235,234,227;
+}
+
+.dark {
+  --hyperlinkDark: 82, 156, 236;
+  --blue700Dark: 78, 134, 220;
+  --grey900Dark: 20,20,25; 
+  --LabelHeadingsDark: 20, 20, 25;
+  --grey700Dark: 104, 111, 118;
+  --grey650Dark: 94, 102, 109;
+  --grey600Dark: 91, 99, 107;
+  --grey500Dark: 78, 86, 94;
+  --grey400Dark: 56, 62, 68;
+  --grey300Dark: 35,39,43;
+  --grey200Dark:  45, 48, 51;
+  --grey100Dark: 33, 37, 41;
+  --grey100TextDark:  248, 249, 250;
+  --red200: 239, 154, 154;
+  --offWhite: 235,234,227;
+}
+
 @layer base {
   html,
   body {

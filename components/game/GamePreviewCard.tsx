@@ -16,8 +16,8 @@ export const GamePreviewCard = ({
   homeAbbr: string | undefined;
   children?: React.ReactNode;
 }) => (
-  <div className="flex flex-col bg-grey100">
-    <div className="mx-4 flex items-center justify-between border-b-2 border-b-grey300 py-4 font-semibold">
+  <div className="flex flex-col bg-grey100 dark:bg-grey100Dark">
+    <div className="mx-4 flex items-center justify-between border-b-2 border-b-grey300 py-4 font-semibold dark:border-b-grey300Dark">
       <SkeletonCircle isLoaded={!!awayAbbr}>
         <TeamLogo
           league={league}

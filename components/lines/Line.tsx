@@ -40,7 +40,7 @@ export const Line = ({
 
   return (
     <>
-      <div className="m-auto w-2/5 border-b border-b-grey900 py-5 text-center font-mont text-3xl font-semibold">
+      <div className="m-auto w-2/5 border-b border-b-grey900 py-5 text-center font-mont text-3xl font-semibold dark:border-b-grey900Dark">
         {type.split('on').join(' on ')}
       </div>
       <div className="m-auto flex w-full items-center justify-between px-2.5">
