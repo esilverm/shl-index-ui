@@ -24,6 +24,7 @@ const menuLinks = [
   'leaders',
   'schedule',
   'players',
+  'portal',
 ] as const;
 type MenuLinks = (typeof menuLinks)[number] | 'game';
 
@@ -160,10 +161,14 @@ export const Header = ({
             </Link>
             {menuLinks.map((linkName) => (
               <Link
-                href={{
-                  pathname: `/[league]/${linkName}`,
-                  query: onlyIncludeSeasonAndTypeInQuery(router.query),
-                }}
+                href={
+                  linkName === 'portal'
+                    ? 'https://portal.simulationhockey.com/'
+                    : {
+                        pathname: `/[league]/${linkName}`,
+                        query: onlyIncludeSeasonAndTypeInQuery(router.query),
+                      }
+                }
                 className={classnames(
                   activePage === linkName &&
                     'border-l-4 border-l-grey100 pr-4 dark:border-l-offWhite sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1 dark:sm:border-b-offWhite',
@@ -187,7 +192,7 @@ export const Header = ({
             />
           </div>
           <div className="relative order-3 mr-4 flex items-center sm:mr-[2%] sm:ml-auto sm:w-auto">
-          <IconButton
+            <IconButton
               aria-label="Toggle Dark Mode"
               icon={
                 isClient && localStorage.getItem('theme') === 'dark' ? (
