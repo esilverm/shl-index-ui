@@ -120,7 +120,7 @@ export default ({ league }: { league: League }) => {
         ) : (
           <>
             <div className="flex flex-col items-center space-y-2 md:mr-8 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
-              <SeasonTypeSelector className="dark !h-7 w-48 dark:border-offWhite dark:text-offWhite" />
+              <SeasonTypeSelector className="dark !h-7 w-48 " />
               <Select<number>
                 options={teamSelectorList}
                 selectedOption={selectedTeam}

@@ -101,7 +101,7 @@ export default ({ league }: { league: League }) => {
         ) : (
           <>
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-              <SeasonTypeSelector className="top-7 !h-7 w-48 dark:border-offWhite dark:text-offWhite" />
+              <SeasonTypeSelector className="top-7 !h-7 w-48" />
             </div>
             <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold dark:border-b-grey900Dark">
               Skaters

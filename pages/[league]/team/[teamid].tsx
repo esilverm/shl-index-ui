@@ -309,7 +309,7 @@ export default ({
           <TabPanels>
             <TabPanel px={0}>
               <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
-                <SeasonTypeSelector className="!h-7 w-48 dark:border-offWhite dark:text-offWhite lg:top-2" />
+                <SeasonTypeSelector className="!h-7 w-48 lg:top-2" />
               </div>
               <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
                 Skaters
