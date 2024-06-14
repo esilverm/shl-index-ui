@@ -178,7 +178,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
             className={classnames('mx-auto', isIndexView && 'lg:w-11/12')}
           >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-              <SeasonTypeSelector className="top-7 !h-7 w-48" />
+              <SeasonTypeSelector className="top-7 !h-7 w-48 dark:border-offWhite dark:text-offWhite" />
             </div>
             {isIndexView && (
               <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
@@ -199,11 +199,38 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
             )}
             <Tabs>
               <TabList>
-                <Tab>Stats</Tab>
+                <Tab
+                  _selected={{
+                    color:
+                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    borderBottomColor:
+                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  }}
+                >
+                  Stats
+                </Tab>
                 {playerTypeInfo?.playerType === 'skater' && (
-                  <Tab>Adv Stats</Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Adv Stats
+                  </Tab>
                 )}
-                <Tab>Ratings</Tab>
+                <Tab
+                  _selected={{
+                    color:
+                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    borderBottomColor:
+                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  }}
+                >
+                  Ratings
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>

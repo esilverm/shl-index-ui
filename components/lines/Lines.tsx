@@ -25,7 +25,16 @@ export const Lines = ({
     <Tabs>
       <TabList>
         {linesDisplays.map((name) => (
-          <Tab key={name}>{name}</Tab>
+          <Tab
+            _selected={{
+              color: 'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+              borderBottomColor:
+                'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+            }}
+            key={name}
+          >
+            {name}
+          </Tab>
         ))}
       </TabList>
       <TabPanels>

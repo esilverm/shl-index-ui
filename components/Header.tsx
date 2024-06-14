@@ -166,7 +166,7 @@ export const Header = ({
                 }}
                 className={classnames(
                   activePage === linkName &&
-                    'border-l-4 border-l-grey100 pr-4 dark:border-l-grey100Dark sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1 dark:sm:border-b-grey100Dark',
+                    'border-l-4 border-l-grey100 pr-4 dark:border-l-offWhite sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1 dark:sm:border-b-offWhite',
                   '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-hyperlink dark:!text-grey100TextDark dark:hover:bg-hyperlinkDark sm:h-full sm:w-max',
                 )}
                 _hover={{ textDecoration: 'none' }}

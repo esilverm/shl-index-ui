@@ -87,13 +87,29 @@ export default ({ league }: { league: League }) => {
         <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
           {shouldShowTeamStats && (
             <TabList className="mx-10 pt-8">
-              <Tab>Team List</Tab>
-              <Tab>Team Stats</Tab>
+              <Tab
+                _selected={{
+                  color: 'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  borderBottomColor:
+                    'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                }}
+              >
+                Team List
+              </Tab>
+              <Tab
+                _selected={{
+                  color: 'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  borderBottomColor:
+                    'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                }}
+              >
+                Team Stats
+              </Tab>
             </TabList>
           )}
           <TabPanels>
             <TabPanel px={0}>
-              <div className="mt-5 grid auto-rows-[100px]  grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]">
+              <div className="mt-5 grid auto-rows-[100px]  grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))] ">
                 {sortedTeams?.map((team) => (
                   <Link
                     key={team.id}

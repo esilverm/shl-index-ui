@@ -66,10 +66,10 @@ export const StandingsTable = ({
                   aria-label={`${cellValue[3]} logo`}
                   className="h-[30px] w-[30px]"
                 />
-                <span className="inline text-left text-hyperlink dark:text-hyperlink md:hidden">
+                <span className="inline text-left text-hyperlink dark:text-hyperlinkDark md:hidden">
                   {cellValue[1]}
                 </span>
-                <span className="my-0 mx-2.5 hidden min-w-max text-left text-hyperlink dark:text-hyperlink md:inline">
+                <span className="my-0 mx-2.5 hidden min-w-max text-left text-hyperlink dark:text-hyperlinkDark md:inline">
                   {cellValue[2]}
                 </span>
               </Link>

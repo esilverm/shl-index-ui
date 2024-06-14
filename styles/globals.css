@@ -56,3 +56,13 @@
     scrollbar-width: none; /* Firefox */
 }
 }
+
+
+@media (max-width: 640px) {
+    .line-card {
+      transform: scale(0.6); /* Shrinks the card to 80% of its original size */
+    }
+    .arrow-button {
+      font-size: 1rem; /* Adjust size of arrows */
+    }
+  }
