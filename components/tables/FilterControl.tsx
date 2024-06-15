@@ -49,7 +49,7 @@ export const FilterControl = <T extends Record<string, unknown>>({
     <div className="flex w-full flex-col">
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <SearchIcon className="!text-grey500" />
+          <SearchIcon className="!text-grey500 dark:!text-grey500Dark" />
         </InputLeftElement>
         <Input
           value={filter}
@@ -63,7 +63,7 @@ export const FilterControl = <T extends Record<string, unknown>>({
             table.getState().globalFilter && (
               <IconButton
                 aria-label="Clear filter"
-                icon={<CloseIcon className="!text-grey500" />}
+                icon={<CloseIcon className="!text-grey500 dark:!text-grey500Dark" />}
                 size="sm"
                 variant="ghost"
                 onClick={() => {
@@ -77,7 +77,7 @@ export const FilterControl = <T extends Record<string, unknown>>({
       </InputGroup>
       <div
         className={classnames(
-          'ml-3 mt-2 text-sm text-grey600',
+          'ml-3 mt-2 text-sm text-grey600 dark:text-grey600Dark',
           !tableBehavioralFlags.showTableFilterOptions && 'hidden',
         )}
       >

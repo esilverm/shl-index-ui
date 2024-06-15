@@ -160,7 +160,9 @@ export default ({
         <div className="flex h-[30%] flex-col items-center justify-between text-center md:items-start md:text-left">
           <h1
             className={classnames(
-              teamColorIsDark ? 'text-grey100' : 'text-grey900',
+              teamColorIsDark
+                ? 'text-grey100 dark:text-grey100TextDark'
+                : 'text-grey900 dark:text-grey900Dark',
               'text-4xl',
             )}
           >
@@ -173,7 +175,9 @@ export default ({
           </h1>
           <h3
             className={classnames(
-              teamColorIsDark ? 'text-grey100' : 'text-grey900',
+              teamColorIsDark
+                ? 'text-grey100 dark:text-grey100TextDark'
+                : 'text-grey900 dark:text-grey900Dark',
               'font-mont text-lg',
             )}
           >
@@ -186,7 +190,7 @@ export default ({
           </h3>
         </div>
       </div>
-      <div className="m-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:p-8">
+      <div className="m-auto w-full bg-grey100 p-[2.5%] dark:bg-grey100Dark lg:w-3/4 lg:p-8">
         {shouldShowTeamStats && (
           <div className="mb-6 hidden flex-col space-y-6 sm:flex">
             <h3 className="text-4xl font-bold">Current Season Stats</h3>
@@ -282,8 +286,24 @@ export default ({
         <Tabs index={currentTab} onChange={setCurrentTab}>
           {shouldShowLinesTab && (
             <TabList>
-              <Tab>Roster</Tab>
-              <Tab>Lines</Tab>
+              <Tab
+                _selected={{
+                  color: 'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  borderBottomColor:
+                    'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                }}
+              >
+                Roster
+              </Tab>
+              <Tab
+                _selected={{
+                  color: 'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                  borderBottomColor:
+                    'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                }}
+              >
+                Lines
+              </Tab>
             </TabList>
           )}
           <TabPanels>
@@ -296,9 +316,36 @@ export default ({
               </h2>
               <Tabs>
                 <TabList>
-                  <Tab>Stats</Tab>
-                  <Tab>Advanced Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Stats
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Advanced Stats
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Ratings
+                  </Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -317,8 +364,26 @@ export default ({
               </h2>
               <Tabs>
                 <TabList>
-                  <Tab>Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Stats
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                      borderBottomColor:
+                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
+                    }}
+                  >
+                    Ratings
+                  </Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel>

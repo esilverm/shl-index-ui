@@ -105,7 +105,7 @@ export const Leaderboard = ({
             >
               <div
                 className={classnames(
-                  'relative flex min-h-[30px] items-center  border-b-2 border-b-grey300',
+                  'relative flex min-h-[30px] items-center  border-b-2 border-b-grey300 dark:border-b-grey400Dark',
                   i === 0 ? 'py-0.5 text-xl font-semibold' : 'text-lg',
                 )}
               >
@@ -179,7 +179,7 @@ const StatVisualizer = ({
 
   return (
     <div
-      className="absolute h-full bg-grey700 opacity-10"
+      className="absolute h-full bg-grey700 opacity-10 dark:bg-grey650Dark"
       style={{
         width: `${widthPercentage}%`,
       }}

@@ -67,7 +67,7 @@ const GoalTimingBar = ({
       <div
         className={classnames(
           'flex-1 text-center',
-          teamColorIsDark && 'text-grey100',
+          teamColorIsDark && 'text-grey100 dark:text-grey100TextDark',
         )}
         style={{
           backgroundColor: teamColor,
@@ -111,7 +111,7 @@ const PeriodScoringColumn = ({
   const router = useRouter();
   return (
     <>
-      <div className="w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700">
+      <div className="w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700 dark:border-b-grey500Dark dark:bg-grey300Dark dark:text-grey700Dark">
         {title}
       </div>
       {!data ? (
@@ -126,7 +126,7 @@ const PeriodScoringColumn = ({
             <div
               key={i}
               className={classnames(
-                'flex w-full items-center border-b border-b-grey500 py-6 px-2.5',
+                'flex w-full items-center border-b border-b-grey500 py-6 px-2.5 dark:border-b-grey500Dark',
               )}
             >
               <TeamLogo
@@ -143,11 +143,11 @@ const PeriodScoringColumn = ({
                       id: goal.scorer.id,
                     },
                   }}
-                  className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-xl font-semibold hover:text-blue600"
+                  className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-xl font-semibold hover:text-hyperlink dark:hover:text-hyperlink"
                 >
                   {goal.scorer.name}
                 </Link>
-                <div className="text-xs text-grey700">
+                <div className="text-xs text-grey700 dark:text-grey100TextDark">
                   {!goal.primaryAssist
                     ? 'Unassisted'
                     : `${getPlayerShortname(goal.primaryAssist.name ?? '')}${
@@ -228,8 +228,8 @@ export const BoxscorePeriodScoring = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">Scoring</div>
-      <div className="flex w-full flex-col bg-grey100">
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">Scoring</div>
+      <div className="flex w-full flex-col bg-grey100 dark:bg-grey100Dark">
         <PeriodScoringColumn
           league={league}
           data={periodByPeriodScoring[1]}

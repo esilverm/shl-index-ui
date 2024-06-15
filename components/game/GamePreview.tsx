@@ -26,8 +26,8 @@ export const GamePreview = ({
   }`;
 
   return (
-    <div className="flex h-fit w-full flex-col bg-grey100 p-4 pt-0">
-      <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
+    <div className="flex h-fit w-full flex-col bg-grey100 p-4 pt-0 dark:bg-grey100Dark">
+      <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold dark:border-b-grey300Dark">
         <Skeleton isLoaded={!!previewData}>
           <span className="text-sm">{previewData?.game.date}</span>
         </Skeleton>
@@ -64,7 +64,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600">
+              <span className="font-mont text-sm text-grey600 dark:text-grey600Dark">
                 {previewData?.teamStats.away.record}
               </span>
             </Skeleton>
@@ -75,7 +75,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold',
                 previewData?.game.awayScore < previewData?.game.homeScore &&
-                  'text-grey500',
+                  'text-grey500 dark:text-grey500Dark',
               )}
             >
               {previewData?.game.awayScore}
@@ -112,7 +112,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600">
+              <span className="font-mont text-sm text-grey600 dark:text-grey600Dark">
                 {previewData?.teamStats.home.record}
               </span>
             </Skeleton>
@@ -122,7 +122,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold md:order-first',
                 previewData?.game.homeScore < previewData?.game.awayScore &&
-                  'text-grey500',
+                  'text-grey500 dark:text-grey500Dark',
               )}
             >
               {previewData?.game.homeScore}

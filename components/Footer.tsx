@@ -2,7 +2,7 @@ import { Link } from '@chakra-ui/react';
 import React from 'react';
 
 export const Footer = () => (
-  <footer className="flex h-16 w-full items-center justify-center bg-grey900 text-grey100">
+  <footer className="flex h-16 w-full items-center justify-center bg-grey900 text-grey100 dark:text-grey100TextDark">
     <div className="font-mont text-xs">
       &copy; {new Date().getFullYear()} |{' '}
       <span className="hidden sm:inline">

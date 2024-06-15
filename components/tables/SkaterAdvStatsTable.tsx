@@ -50,7 +50,7 @@ export const SkaterAdvStatsTable = ({
                         id: cellValue[1],
                       },
                     }}
-                    className="inline-block w-full max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap text-left leading-none text-blue600 "
+                    className="inline-block w-full max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap text-left leading-none text-hyperlink dark:text-hyperlinkDark "
                   >
                     {cellValue[0]}
                   </Link>

@@ -54,10 +54,10 @@ export const TeamStatsTable = ({
                   teamAbbreviation={cellValue[1] as string}
                   className="h-[30px] w-[30px]"
                 />
-                <span className="ml-1.5 text-left text-blue600 md:hidden">
+                <span className="ml-1.5 text-left text-hyperlink dark:text-hyperlinkDark md:hidden">
                   {cellValue[1]}
                 </span>
-                <span className="my-0 mx-2.5 hidden min-w-max text-left text-blue600 md:inline">
+                <span className="my-0 mx-2.5 hidden min-w-max text-left text-hyperlink dark:text-hyperlinkDark md:inline">
                   {cellValue[0]}
                 </span>
               </Link>
