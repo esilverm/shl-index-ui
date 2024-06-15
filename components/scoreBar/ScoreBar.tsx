@@ -232,7 +232,7 @@ export const ScoreBar = ({
         scrollContainerClassName="!h-full overflow-x-hidden"
         wrapperClassName="h-full"
       >
-       {/*  {data.flatMap(({ date, games }) =>
+       {data.flatMap(({ date, games }) =>
           [<DateItem key={date} gameid={date} />].concat(
             games.map(({ slug, ...game }) => (
               <ScoreBarItem
@@ -246,7 +246,7 @@ export const ScoreBar = ({
               />
             )),
           ),
-        )}*/}
+        )}
       </ScrollMenu>
     )}
   </div>
