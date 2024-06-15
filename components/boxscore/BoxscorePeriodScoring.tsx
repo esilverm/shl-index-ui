@@ -147,7 +147,7 @@ const PeriodScoringColumn = ({
                 >
                   {goal.scorer.name}
                 </Link>
-                <div className="text-xs text-grey700 dark:text-grey700Dark">
+                <div className="text-xs text-grey700 dark:text-grey100TextDark">
                   {!goal.primaryAssist
                     ? 'Unassisted'
                     : `${getPlayerShortname(goal.primaryAssist.name ?? '')}${

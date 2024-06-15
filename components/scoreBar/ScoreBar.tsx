@@ -83,7 +83,7 @@ const DateItem = ({ gameid }: { gameid: string }) => {
     >
       <span
         aria-label="Date"
-        className="relative top-[3px] text-center text-base font-bold text-grey900 dark:text-grey900Dark"
+        className="relative top-[3px] text-center text-base font-bold text-grey900 dark:text-grey100TextDark"
       >
         {months[parseInt(gameid.split('-')[1]) - 1]}
         <br />
@@ -123,7 +123,7 @@ const ScoreBarItem = ({
       }}
       className={classnames(
         'relative inline-block h-full w-full transition-all',
-        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100/80 dark:hover:after:bg-grey900Dark/80 dark:hover:after:text-grey100TextDark/80',
+        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900 hover:after:text-grey100 hover:after:opacity-70 dark:hover:after:bg-grey100Dark dark:hover:after:text-grey100TextDark ',
         data.played
           ? "hover:after:content-['See_Game_Results']"
           : "hover:after:content-['See_Game_Preview']",
@@ -142,8 +142,8 @@ const ScoreBarItem = ({
           className={classnames(
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.homeScore > data.awayScore || !data.played
-              ? 'text-grey900 dark:text-grey900Dark'
-              : 'text-grey600 dark:text-grey600Dark',
+              ? 'text-grey900 dark:text-grey100TextDark'
+              : 'text-grey600 dark:text-grey100TextDark',
           )}
         >
           <TeamLogo
@@ -165,8 +165,8 @@ const ScoreBarItem = ({
           className={classnames(
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.awayScore > data.homeScore || !data.played
-              ? 'text-grey900 dark:text-grey900Dark'
-              : 'text-grey600 dark:text-grey600Dark',
+              ? 'text-grey900 dark:text-grey100TextDark'
+              : 'text-grey600 dark:text-grey100TextDark',
           )}
         >
           <TeamLogo
@@ -232,7 +232,7 @@ export const ScoreBar = ({
         scrollContainerClassName="!h-full overflow-x-hidden"
         wrapperClassName="h-full"
       >
-       {data.flatMap(({ date, games }) =>
+       {data?.flatMap(({ date, games }) =>
           [<DateItem key={date} gameid={date} />].concat(
             games.map(({ slug, ...game }) => (
               <ScoreBarItem
