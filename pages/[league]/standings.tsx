@@ -115,7 +115,7 @@ export default ({ league }: { league: League }) => {
                 >
                   Conference
                 </Tab>
-                {isMainLeague(league) && (
+                {isMainLeague(league) && (league==='smjhl' && (season === undefined || season < 76)) && (
                   <Tab
                     _selected={{
                       color:
