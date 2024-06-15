@@ -5,6 +5,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useColorMode,
 } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
@@ -57,6 +58,24 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     () => Boolean(portalView === undefined),
     [portalView],
   );
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    if (
+      !isIndexView &&
+      portalView &&
+      (portalView === 'dark' || portalView === 'light')
+    ) {
+      if (portalView === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+      setColorMode(portalView);
+    }
+  }, [isIndexView, portalView, setColorMode]);
 
   const { type } = useSeasonType();
 
@@ -164,7 +183,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       {isIndexView && <Header league={league} activePage="players" />}
       <div
         className={classnames(
-          'mx-auto w-full bg-grey100  dark:bg-grey100Dark',
+          'mx-auto w-full bg-grey100 dark:bg-grey100Dark',
           isIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
         )}
       >
@@ -178,7 +197,8 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
             className={classnames('mx-auto', isIndexView && 'lg:w-11/12')}
           >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-              <SeasonTypeSelector className="top-7 !h-7 w-48" />
+            <SeasonTypeSelector className={`${isIndexView ? 'top-7 !h-7 w-48' : ''} mb-4 md:mb-0 md:ml-4`} />
+
             </div>
             {isIndexView && (
               <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
