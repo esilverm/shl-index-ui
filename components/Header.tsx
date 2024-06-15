@@ -1,5 +1,14 @@
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
-import { IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  useColorMode,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Squash as Hamburger } from 'hamburger-react';
@@ -24,7 +33,6 @@ const menuLinks = [
   'leaders',
   'schedule',
   'players',
-  'portal',
 ] as const;
 type MenuLinks = (typeof menuLinks)[number] | 'game';
 
@@ -45,7 +53,8 @@ export const Header = ({
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-
+  const LINK_CLASSES =
+    '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-secondaryText dark:!text-secondaryTextDark hover:bg-borderblue dark:hover:bg-borderblueDark sm:h-full sm:w-max';
   const { season, seasonsList, setSeason, seasonLoading } = useSeason();
   const { teamid } = router.query;
 
@@ -161,14 +170,10 @@ export const Header = ({
             </Link>
             {menuLinks.map((linkName) => (
               <Link
-                href={
-                  linkName === 'portal'
-                    ? 'https://portal.simulationhockey.com/'
-                    : {
-                        pathname: `/[league]/${linkName}`,
-                        query: onlyIncludeSeasonAndTypeInQuery(router.query),
-                      }
-                }
+                href={{
+                  pathname: `/[league]/${linkName}`,
+                  query: onlyIncludeSeasonAndTypeInQuery(router.query),
+                }}
                 className={classnames(
                   activePage === linkName &&
                     'border-l-4 border-l-grey100 pr-4 dark:border-l-offWhite sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1 dark:sm:border-b-offWhite',
@@ -180,6 +185,48 @@ export const Header = ({
                 {linkName}
               </Link>
             ))}
+            {drawerVisible ? (
+              <>
+                <Link
+                  href="https://www.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Forums
+                </Link>
+
+                <Link
+                  href="https://portal.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Portal
+                </Link>
+
+                <Link
+                  href="https://cards.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Cards
+                </Link>
+              </>
+            ) : (
+              <Menu>
+                <MenuButton className={LINK_CLASSES}>More</MenuButton>
+                <MenuList>
+                  <MenuItem as="a" href="https://www.simulationhockey.com">
+                    Forums
+                  </MenuItem>
+                  <MenuItem as="a" href="https://portal.simulationhockey.com">
+                    Index
+                  </MenuItem>
+                  <MenuItem as="a" href="https://cards.simulationhockey.com">
+                    Cards
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            )}
           </div>
           <div className="inline-block sm:hidden">
             <Hamburger
