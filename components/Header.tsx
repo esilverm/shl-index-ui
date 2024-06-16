@@ -53,7 +53,7 @@ export const Header = ({
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const LINK_CLASSES =
-    '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-secondaryText dark:!text-secondaryTextDark hover:bg-borderblue dark:hover:bg-borderblueDark sm:h-full sm:w-max';
+    '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 dark:!text-grey100TextDark hover:bg-hyperlink dark:hover:bg-hyperlinkDark sm:h-full sm:w-max';
   const { season, seasonsList, setSeason, seasonLoading } = useSeason();
   const { teamid } = router.query;
 

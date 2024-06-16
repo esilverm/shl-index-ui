@@ -77,7 +77,7 @@ export const FilterControl = <T extends Record<string, unknown>>({
       </InputGroup>
       <div
         className={classnames(
-          'ml-3 mt-2 text-sm text-grey600 dark:text-grey600Dark',
+          'ml-3 mt-2 text-sm text-grey600 dark:text-grey100TextDark',
           !tableBehavioralFlags.showTableFilterOptions && 'hidden',
         )}
       >

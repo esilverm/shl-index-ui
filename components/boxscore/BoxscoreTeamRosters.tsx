@@ -76,7 +76,7 @@ const TeamSkaterTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-grey400Dark dark:bg-grey200Dark dark:text-grey600Dark">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-grey400Dark dark:bg-grey200Dark dark:text-grey100TextDark">
         <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-grey400Dark">
           Skaters
         </TableHeader>
@@ -201,7 +201,7 @@ const TeamGoalieTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-grey400Dark dark:bg-grey200Dark dark:text-grey600Dark">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-grey400Dark dark:bg-grey200Dark dark:text-grey100TextDark">
         <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-grey400Dark">
           Goalies
         </TableHeader>

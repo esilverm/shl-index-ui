@@ -111,7 +111,7 @@ const PeriodScoringColumn = ({
   const router = useRouter();
   return (
     <>
-      <div className="w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700 dark:border-b-grey500Dark dark:bg-grey300Dark dark:text-grey700Dark">
+      <div className="w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700 dark:border-b-grey500Dark dark:bg-grey300Dark dark:text-grey100TextDark">
         {title}
       </div>
       {!data ? (
@@ -228,7 +228,7 @@ export const BoxscorePeriodScoring = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">Scoring</div>
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey100TextDark">Scoring</div>
       <div className="flex w-full flex-col bg-grey100 dark:bg-grey100Dark">
         <PeriodScoringColumn
           league={league}

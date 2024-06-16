@@ -64,7 +64,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600 dark:text-grey600Dark">
+              <span className="font-mont text-sm text-grey600 dark:text-grey100TextDark">
                 {previewData?.teamStats.away.record}
               </span>
             </Skeleton>
@@ -112,7 +112,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600 dark:text-grey600Dark">
+              <span className="font-mont text-sm text-grey600 dark:text-grey100TextDark">
                 {previewData?.teamStats.home.record}
               </span>
             </Skeleton>

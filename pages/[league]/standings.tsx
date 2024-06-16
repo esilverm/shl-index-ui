@@ -17,6 +17,7 @@ import {
   isMainLeague,
   League,
   leagueNameToId,
+  shouldShowDivision,
 } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Standings, StandingsItem } from '../api/v1/standings';
@@ -115,7 +116,7 @@ export default ({ league }: { league: League }) => {
                 >
                   Conference
                 </Tab>
-                {isMainLeague(league) && (league==='smjhl' && (season === undefined || season < 76)) && (
+                {isMainLeague(league)  && shouldShowDivision(league, season) && (
                   <Tab
                     _selected={{
                       color:

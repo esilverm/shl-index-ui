@@ -72,7 +72,7 @@ const TeamFinalScoreRow = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
           {gameData?.teams[team].abbr}
         </div>
-        <div className="text-xs text-grey700 dark:text-grey700Dark">
+        <div className="text-xs text-grey700 dark:text-grey100TextDark">
           {gameData?.teamStats[team].record}
         </div>
       </div>

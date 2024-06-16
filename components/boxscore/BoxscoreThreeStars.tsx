@@ -133,7 +133,7 @@ export const BoxscoreThreeStars = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey100TextDark">
         Three Stars of the Game
       </div>
       <div className="flex w-full flex-col bg-grey100 font-mont dark:bg-grey100Dark">
