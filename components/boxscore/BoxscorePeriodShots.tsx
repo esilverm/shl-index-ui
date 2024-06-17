@@ -54,16 +54,16 @@ export const BoxscorePeriodShots = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
         Shots on Goal
       </div>
-      <div className="flex w-full flex-col bg-grey100 dark:bg-grey100Dark">
-        <div className="flex w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700 dark:border-b-grey500Dark dark:bg-grey300Dark dark:text-grey700Dark">
+      <div className="flex w-full flex-col bg-grey100">
+        <div className="flex w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700">
           <div className="w-1/2">Period</div>
           <div className="flex-1">{gameData.teams.away.abbr}</div>
           <div className="flex-1">{gameData.teams.home.abbr}</div>
         </div>
-        <div className="divide-y divide-grey500 dark:divide-grey500Dark">
+        <div className="divide-y divide-grey500">
           {shotsByPeriod.map(({ awayShots, homeShots }, i) => (
             <div
               key={periods[i]}

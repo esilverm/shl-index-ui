@@ -20,7 +20,7 @@ const PeriodPenaltiesColumn = ({
   period: Period;
 }) => (
   <>
-    <div className="flex w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700 dark:border-b-grey500Dark dark:bg-grey300Dark dark:text-grey100TextDark">
+    <div className="flex w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700">
       <div className="w-1/5">{period}</div>
       <div className="w-1/5">Team</div>
       <div className="flex-1">Penalty</div>
@@ -28,7 +28,7 @@ const PeriodPenaltiesColumn = ({
     {!data ? (
       <div className="flex w-full items-center py-6 px-2.5">No Penalties</div>
     ) : (
-      <div className="divide-y divide-grey500 dark:divide-grey100TextDark">
+      <div className="divide-y divide-grey500">
         {data.map((penalty, i) => {
           const teamColor =
             penalty.teamAbbr === gameData.teams.home.abbr
@@ -90,10 +90,10 @@ export const BoxscorePeriodPenalties = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700 dark:text-grey700Dark">
+      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
         Penalties
       </div>
-      <div className="flex w-full flex-col bg-grey100 dark:bg-grey100Dark">
+      <div className="flex w-full flex-col bg-grey100">
         <PeriodPenaltiesColumn
           period="1st"
           data={penaltiesByPeriod[1]}
