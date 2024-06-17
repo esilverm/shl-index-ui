@@ -94,7 +94,7 @@ export default ({ league }: { league: League }) => {
               <TabList className="my-7">
                 <Tab>League</Tab>
                 <Tab>Conference</Tab>
-                {isMainLeague(league) && shouldShowDivision(league, season) &&  <Tab>Division</Tab>}
+                {shouldShowDivision(league, season) &&  <Tab>Division</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>

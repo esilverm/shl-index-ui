@@ -7,8 +7,5 @@ export const isMainLeague = (league: League): boolean =>
   league === 'shl' || league === 'smjhl';
 
 export const shouldShowDivision = (league: League, season: number): boolean => { 
-  if (league === 'smjhl' && season >= 76) {
-    return false;
-  }
-  return true;
+  return league === 'shl' || (league === 'smjhl' && season < 76);
 };
