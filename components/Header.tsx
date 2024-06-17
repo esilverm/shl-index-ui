@@ -1,3 +1,4 @@
+import { Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Squash as Hamburger } from 'hamburger-react';
@@ -41,7 +42,8 @@ export const Header = ({
   const [scheduleVisible, setScheduleVisible] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const router = useRouter();
-
+  const LINK_CLASSES =
+    '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100  hover:bg-hyperlink sm:h-full sm:w-max'; // saving for dark mode dark:!text-grey100TextDark dark:hover:bg-hyperlinkDark
   const { season, seasonsList, setSeason, seasonLoading } = useSeason();
   const { teamid } = router.query;
 
@@ -144,6 +146,49 @@ export const Header = ({
                 {linkName}
               </Link>
             ))}
+            {drawerVisible ? (
+              <>
+                <Link
+                  href="https://www.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Forums
+                </Link>
+
+                <Link
+                  href="https://portal.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Portal
+                </Link>
+
+                <Link
+                  href="https://cards.simulationhockey.com"
+                  _hover={{ textDecoration: 'none' }}
+                  className={LINK_CLASSES}
+                >
+                  Cards
+                </Link>
+              </>
+            ) : (
+              <Menu>
+                <MenuButton className={LINK_CLASSES}>More</MenuButton>
+                <MenuList>
+                  <MenuDivider />
+                  <MenuItem as="a" href="https://www.simulationhockey.com">
+                    Forums
+                  </MenuItem>
+                  <MenuItem as="a" href="https://portal.simulationhockey.com">
+                    Index
+                  </MenuItem>
+                  <MenuItem as="a" href="https://cards.simulationhockey.com">
+                    Cards
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            )}
           </div>
           <div className="inline-block sm:hidden">
             <Hamburger
