@@ -64,15 +64,11 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="standings" />
-      <div className="mx-auto w-full bg-grey100  p-[2.5%] dark:bg-grey100Dark lg:pt-px lg:pb-10 2xl:w-5/6 2xl:px-8">
+      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:pt-px lg:pb-10 2xl:w-5/6 2xl:px-8">
         <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
           <SeasonTypeSelector className="!h-7 w-48 lg:top-7" />
         </div>
-        <Tabs
-          isLazy
-          index={currentActiveTab}
-          onChange={setCurrentActiveTab}
-        >
+        <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           {type === 'Playoffs' ? (
             <>
               {shouldShowDoublePlayoffsBracket && (
@@ -95,38 +91,9 @@ export default ({ league }: { league: League }) => {
             <>
               {/* If we are in playoffs don't render this */}
               <TabList className="my-7">
-                <Tab
-                  _selected={{
-                    color:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                  }}
-                >
-                  League
-                </Tab>
-                <Tab
-                  _selected={{
-                    color:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                  }}
-                >
-                  Conference
-                </Tab>
-                {isMainLeague(league) && (league==='smjhl' && (season === undefined || season < 76)) && (
-                  <Tab
-                    _selected={{
-                      color:
-                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                      borderBottomColor:
-                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    }}
-                  >
-                    Division
-                  </Tab>
-                )}
+                <Tab>League</Tab>
+                <Tab>Conference</Tab>
+                {isMainLeague(league) && <Tab>Division</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>

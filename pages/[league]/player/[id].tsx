@@ -5,14 +5,10 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  useColorMode,
 } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
 
 import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
@@ -50,33 +46,6 @@ const fetchPlayerName = (league: League, playerId: string) =>
   );
 
 export default ({ playerId, league }: { playerId: string; league: League }) => {
-  const router = useRouter();
-
-  const { portalView } = router.query;
-
-  const isIndexView = useMemo(
-    () => Boolean(portalView === undefined),
-    [portalView],
-  );
-  const { setColorMode } = useColorMode();
-
-  useEffect(() => {
-    if (
-      !isIndexView &&
-      portalView &&
-      (portalView === 'dark' || portalView === 'light')
-    ) {
-      if (portalView === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-      } else {
-        document.documentElement.classList.add('light');
-        document.documentElement.classList.remove('dark');
-      }
-      setColorMode(portalView);
-    }
-  }, [isIndexView, portalView, setColorMode]);
-
   const { type } = useSeasonType();
 
   const { data: playerTypeInfo } = useQuery<{
@@ -91,9 +60,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     queryFn: () => fetchPlayerName(league, playerId),
   });
 
-  const { data: playerInfo, isLoading: playerInfoLoading } = useQuery<
-    PlayerInfo[] | GoalieInfo[]
-  >({
+  const { data: playerInfo } = useQuery<PlayerInfo[] | GoalieInfo[]>({
     queryKey: ['playerInfo', league, playerId, playerTypeInfo?.playerType],
     queryFn: () => {
       const endpoint =
@@ -105,9 +72,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo,
   });
 
-  const { data: playerRatings, isLoading: playerRatingsLoading } = useQuery<
-    PlayerRatings[] | GoalieRatings[]
-  >({
+  const { data: playerRatings } = useQuery<PlayerRatings[] | GoalieRatings[]>({
     queryKey: ['playerRatings', league, playerId, playerTypeInfo?.playerType],
     queryFn: () => {
       const endpoint =
@@ -121,9 +86,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
-  const { data: playerStats, isLoading: playerStatsLoading } = useQuery<
-    PlayerWithAdvancedStats[] | Goalie[]
-  >({
+  const { data: playerStats } = useQuery<PlayerWithAdvancedStats[] | Goalie[]>({
     queryKey: [
       'playerStats',
       league,
@@ -146,32 +109,6 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
-  useEffect(() => {
-    let spinnerHeight;
-    let statsHeight;
-
-    if (
-      !isIndexView &&
-      (playerInfoLoading || playerRatingsLoading || playerStatsLoading)
-    ) {
-      spinnerHeight = document.getElementById('player-loading')?.offsetHeight;
-    }
-
-    if (!isIndexView && (playerInfo || playerRatings || playerStats)) {
-      statsHeight = document.getElementById('player-details')?.offsetHeight;
-    }
-
-    parent.postMessage(spinnerHeight ? spinnerHeight : statsHeight ?? 0, '*');
-  }, [
-    isIndexView,
-    playerInfo,
-    playerInfoLoading,
-    playerRatings,
-    playerRatingsLoading,
-    playerStats,
-    playerStatsLoading,
-  ]);
-
   return (
     <>
       <NextSeo
@@ -180,77 +117,39 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           title: playerNameInfo?.name ?? 'Player',
         }}
       />
-      {isIndexView && <Header league={league} activePage="players" />}
-      <div
-        className={classnames(
-          'mx-auto w-full bg-grey100 dark:bg-grey100Dark',
-          isIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
-        )}
-      >
+      <Header league={league} activePage="players" />
+      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10">
         {!playerInfo || !playerRatings || !playerStats ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Spinner id="player-loading" size="xl" />
+            <Spinner size="xl" />
           </div>
         ) : (
-          <div
-            id="player-details"
-            className={classnames('mx-auto', isIndexView && 'lg:w-11/12')}
-          >
+          <div className="mx-auto lg:w-11/12">
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-            <SeasonTypeSelector className={`${isIndexView ? 'top-7 !h-7 w-48' : ''} mb-4 md:mb-0 md:ml-4`} />
-
+              <SeasonTypeSelector className="top-7 !h-7 w-48" />
             </div>
-            {isIndexView && (
-              <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
-                <TeamLogo
-                  league={league}
-                  teamAbbreviation={playerInfo[0]?.team}
-                  className="mt-10 h-40 w-40 md:mt-2.5"
-                />
-                <div className="text-3xl font-bold uppercase">
-                  {playerNameInfo?.name ?? 'Player'}
-                </div>
-                <div className="text-center font-mont text-lg uppercase">
-                  {'position' in playerInfo[0] ? playerInfo[0].position : 'G'} |{' '}
-                  {Math.floor(playerInfo[0].height / 12)} ft{' '}
-                  {playerInfo[0].height % 12} in | {playerInfo[0].weight} lbs
-                </div>
+            <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
+              <TeamLogo
+                league={league}
+                teamAbbreviation={playerInfo[0]?.team}
+                className="mt-10 h-40 w-40 md:mt-2.5"
+              />
+              <div className="text-3xl font-bold uppercase">
+                {playerNameInfo?.name ?? 'Player'}
               </div>
-            )}
+              <div className="text-center font-mont text-lg uppercase">
+                {'position' in playerInfo[0] ? playerInfo[0].position : 'G'} |{' '}
+                {Math.floor(playerInfo[0].height / 12)} ft{' '}
+                {playerInfo[0].height % 12} in | {playerInfo[0].weight} lbs
+              </div>
+            </div>
             <Tabs>
               <TabList>
-                <Tab
-                  _selected={{
-                    color:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                  }}
-                >
-                  Stats
-                </Tab>
+                <Tab>Stats</Tab>
                 {playerTypeInfo?.playerType === 'skater' && (
-                  <Tab
-                    _selected={{
-                      color:
-                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                      borderBottomColor:
-                        'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    }}
-                  >
-                    Adv Stats
-                  </Tab>
+                  <Tab>Adv Stats</Tab>
                 )}
-                <Tab
-                  _selected={{
-                    color:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink)) dark:rgb(var(--hyperlinkDark))',
-                  }}
-                >
-                  Ratings
-                </Tab>
+                <Tab>Ratings</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -314,7 +213,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           </div>
         )}
       </div>
-      {isIndexView && <Footer />}
+      <Footer />
     </>
   );
 };

@@ -53,7 +53,7 @@ const TeamFinalScoreRow = ({
   <div
     className={classnames(
       'flex w-full items-center py-2',
-      team === 'away' && 'border-b-2 border-b-grey200 dark:border-b-grey200Dark',
+      team === 'away' && 'border-b-2 border-b-grey200',
     )}
   >
     <TableCell firstColumn className="flex w-full items-center">
@@ -72,7 +72,7 @@ const TeamFinalScoreRow = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
           {gameData?.teams[team].abbr}
         </div>
-        <div className="text-xs text-grey700 dark:text-grey700Dark">
+        <div className="text-xs text-grey700">
           {gameData?.teamStats[team].record}
         </div>
       </div>
@@ -117,8 +117,8 @@ export const BoxscoreFinalScores = ({
   }`;
 
   return (
-    <div className="flex w-full flex-col bg-grey100 px-4 pb-2 dark:bg-grey100Dark">
-      <div className="flex w-full items-center border-b-2 border-b-grey300 py-2.5 font-mont text-xs dark:border-b-grey300Dark">
+    <div className="flex w-full flex-col bg-grey100 px-4 pb-2">
+      <div className="flex w-full items-center border-b-2 border-b-grey300 py-2.5 font-mont text-xs">
         <TableCell firstColumn className="w-2/5 text-sm font-semibold">
           {final}
         </TableCell>

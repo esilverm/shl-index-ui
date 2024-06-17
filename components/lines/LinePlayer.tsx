@@ -31,7 +31,7 @@ export const LinePlayer = ({
             id: player?.id,
           },
         }}
-        className="mb-2.5 inline-block text-ellipsis whitespace-nowrap text-lg font-bold transition-colors hover:text-hyperlink dark:hover:text-hyperlink"
+        className="mb-2.5 inline-block text-ellipsis whitespace-nowrap text-lg font-bold transition-colors hover:text-blue600"
       >
         {getPlayerShortname(player?.name ?? '')}
       </Link>
