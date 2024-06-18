@@ -12,7 +12,7 @@ import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
