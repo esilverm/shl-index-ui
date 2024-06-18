@@ -5,10 +5,14 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useColorMode,
 } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
@@ -46,6 +50,31 @@ const fetchPlayerName = (league: League, playerId: string) =>
   );
 
 export default ({ playerId, league }: { playerId: string; league: League }) => {
+  const router = useRouter();
+
+  const { portalView } = router.query;
+
+  const shouldShowIndexView = !portalView;
+
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    if (
+      !shouldShowIndexView &&
+      portalView &&
+      (portalView === 'dark' || portalView === 'light')
+    ) {
+      if (portalView === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+      setColorMode(portalView);
+    }
+  }, [shouldShowIndexView, portalView, setColorMode]);
+
   const { type } = useSeasonType();
 
   const { data: playerTypeInfo } = useQuery<{
@@ -109,6 +138,18 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
+  const isLoading = !playerInfo || !playerRatings || !playerStats;
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (shouldShowIndexView) return;
+
+    const contentHeight = isLoading
+      ? loaderRef.current?.offsetHeight
+      : detailsRef.current?.offsetHeight;
+    parent.postMessage(contentHeight ?? 0, '*');
+  }, [isLoading, shouldShowIndexView]);
+
   return (
     <>
       <NextSeo
@@ -117,39 +158,77 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           title: playerNameInfo?.name ?? 'Player',
         }}
       />
-      <Header league={league} activePage="players" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10">
-        {!playerInfo || !playerRatings || !playerStats ? (
+      {shouldShowIndexView && <Header league={league} activePage="players" />}
+      <div
+        className={classnames(
+          'mx-auto w-full bg-grey100',
+          shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
+        )}
+      >
+        {isLoading ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Spinner size="xl" />
+            <Spinner ref={loaderRef} size="xl" />
           </div>
         ) : (
-          <div className="mx-auto lg:w-11/12">
+          <div
+            ref={detailsRef}
+            className={classnames(
+              'mx-auto',
+              shouldShowIndexView && 'lg:w-11/12',
+            )}
+          >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-              <SeasonTypeSelector className="top-7 !h-7 w-48" />
-            </div>
-            <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
-              <TeamLogo
-                league={league}
-                teamAbbreviation={playerInfo[0]?.team}
-                className="mt-10 h-40 w-40 md:mt-2.5"
+              <SeasonTypeSelector
+                className={classnames('mb-4 md:mb-0 md:ml-4', {
+                  'top-7 !h-7 w-48': shouldShowIndexView,
+                })}
               />
-              <div className="text-3xl font-bold uppercase">
-                {playerNameInfo?.name ?? 'Player'}
-              </div>
-              <div className="text-center font-mont text-lg uppercase">
-                {'position' in playerInfo[0] ? playerInfo[0].position : 'G'} |{' '}
-                {Math.floor(playerInfo[0].height / 12)} ft{' '}
-                {playerInfo[0].height % 12} in | {playerInfo[0].weight} lbs
-              </div>
             </div>
+            {shouldShowIndexView && (
+              <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
+                <TeamLogo
+                  league={league}
+                  teamAbbreviation={playerInfo[0]?.team}
+                  className="mt-10 h-40 w-40 md:mt-2.5"
+                />
+                <div className="text-3xl font-bold uppercase">
+                  {playerNameInfo?.name ?? 'Player'}
+                </div>
+                <div className="text-center font-mont text-lg uppercase">
+                  {'position' in playerInfo[0] ? playerInfo[0].position : 'G'} |{' '}
+                  {Math.floor(playerInfo[0].height / 12)} ft{' '}
+                  {playerInfo[0].height % 12} in | {playerInfo[0].weight} lbs
+                </div>
+              </div>
+            )}
             <Tabs>
               <TabList>
-                <Tab>Stats</Tab>
+                <Tab
+                  _selected={{
+                    color: 'rgb(var(--hyperlink))',
+                    borderBottomColor: 'rgb(var(--hyperlink))',
+                  }}
+                >
+                  Stats
+                </Tab>
                 {playerTypeInfo?.playerType === 'skater' && (
-                  <Tab>Adv Stats</Tab>
+                  <Tab
+                    _selected={{
+                      color: 'rgb(var(--hyperlink))',
+                      borderBottomColor: 'rgb(var(--hyperlink))',
+                    }}
+                  >
+                    Adv Stats
+                  </Tab>
                 )}
-                <Tab>Ratings</Tab>
+                <Tab
+                  _selected={{
+                    color: 'rgb(var(--hyperlink))',
+                    borderBottomColor: 'rgb(var(--hyperlink))',
+                  }}
+                >
+                  Ratings
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -213,7 +292,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           </div>
         )}
       </div>
-      <Footer />
+      {shouldShowIndexView && <Footer />}
     </>
   );
 };
