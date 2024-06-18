@@ -1,3 +1,9 @@
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Squash as Hamburger } from 'hamburger-react';
@@ -23,6 +29,22 @@ const menuLinks = [
   'schedule',
   'players',
 ] as const;
+
+const externalLinks = [
+  {
+    name: 'Forums',
+    href: 'https://simulationhockey.com/index.php',
+  },
+  {
+    name: 'Portal',
+    href: 'https://portal.simulationhockey.com/',
+  },
+  {
+    name: 'Cards',
+    href: 'https://cards.simulationhockey.com/',
+  },
+];
+
 type MenuLinks = (typeof menuLinks)[number] | 'game';
 
 export const Header = ({
@@ -41,7 +63,6 @@ export const Header = ({
   const [scheduleVisible, setScheduleVisible] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const router = useRouter();
-
   const { season, seasonsList, setSeason, seasonLoading } = useSeason();
   const { teamid } = router.query;
 
@@ -144,6 +165,38 @@ export const Header = ({
                 {linkName}
               </Link>
             ))}
+            {drawerVisible ? (
+              <>
+                {externalLinks.map(({ name, href }) => (
+                  <Link
+                    key={name}
+                    href={href}
+                    _hover={{ textDecoration: 'none' }}
+                    target="_blank"
+                  >
+                    {name}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <Menu>
+                <MenuButton className="!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-blue600 sm:h-full sm:w-max">
+                  More
+                </MenuButton>
+                <MenuList>
+                  {externalLinks.map(({ name, href }) => (
+                    <MenuItem
+                      key={name}
+                      as="a"
+                      href={href}
+                      target="_blank"
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+            )}
           </div>
           <div className="inline-block sm:hidden">
             <Hamburger

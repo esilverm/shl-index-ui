@@ -17,6 +17,7 @@ import {
   isMainLeague,
   League,
   leagueNameToId,
+  shouldShowDivision,
 } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Standings, StandingsItem } from '../api/v1/standings';
@@ -93,7 +94,7 @@ export default ({ league }: { league: League }) => {
               <TabList className="my-7">
                 <Tab>League</Tab>
                 <Tab>Conference</Tab>
-                {isMainLeague(league) && <Tab>Division</Tab>}
+                {shouldShowDivision(league, season) && <Tab>Division</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>
