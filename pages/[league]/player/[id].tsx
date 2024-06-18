@@ -12,7 +12,7 @@ import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
@@ -54,15 +54,13 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
 
   const { portalView } = router.query;
 
-  const isIndexView = useMemo(
-    () => Boolean(portalView === undefined),
-    [portalView],
-  );
+  const shouldShowIndexView = !portalView;
+
   const { setColorMode } = useColorMode();
 
   useEffect(() => {
     if (
-      !isIndexView &&
+      !shouldShowIndexView &&
       portalView &&
       (portalView === 'dark' || portalView === 'light')
     ) {
@@ -75,7 +73,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       }
       setColorMode(portalView);
     }
-  }, [isIndexView, portalView, setColorMode]);
+  }, [shouldShowIndexView, portalView, setColorMode]);
 
   const { type } = useSeasonType();
 
@@ -91,7 +89,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     queryFn: () => fetchPlayerName(league, playerId),
   });
 
-  const { data: playerInfo, isLoading: playerInfoLoading } = useQuery<
+  const { data: playerInfo} = useQuery<
     PlayerInfo[] | GoalieInfo[]
   >({
     queryKey: ['playerInfo', league, playerId, playerTypeInfo?.playerType],
@@ -105,7 +103,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo,
   });
 
-  const { data: playerRatings, isLoading: playerRatingsLoading } = useQuery<
+  const { data: playerRatings} = useQuery<
     PlayerRatings[] | GoalieRatings[]
   >({
     queryKey: ['playerRatings', league, playerId, playerTypeInfo?.playerType],
@@ -121,7 +119,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
-  const { data: playerStats, isLoading: playerStatsLoading } = useQuery<
+  const { data: playerStats,} = useQuery<
     PlayerWithAdvancedStats[] | Goalie[]
   >({
     queryKey: [
@@ -146,30 +144,16 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
+  const isLoading = !playerInfo || !playerRatings || !playerStats;
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    let spinnerHeight;
-    let statsHeight;
-
-    if (
-      !isIndexView &&
-      (playerInfoLoading || playerRatingsLoading || playerStatsLoading)
-    ) {
-      spinnerHeight = document.getElementById('player-loading')?.offsetHeight;
-    }
-
-    if (!isIndexView && (playerInfo || playerRatings || playerStats)) {
-      statsHeight = document.getElementById('player-details')?.offsetHeight;
-    }
-
-    parent.postMessage(spinnerHeight ? spinnerHeight : statsHeight ?? 0, '*');
+    if (shouldShowIndexView)  return;
+    
+    const contentHeight = isLoading ? loaderRef.current?.offsetHeight : detailsRef.current?.offsetHeight;
+    parent.postMessage(contentHeight ?? 0, '*');
   }, [
-    isIndexView,
-    playerInfo,
-    playerInfoLoading,
-    playerRatings,
-    playerRatingsLoading,
-    playerStats,
-    playerStatsLoading,
+    isLoading, shouldShowIndexView
   ]);
 
   return (
@@ -180,27 +164,27 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           title: playerNameInfo?.name ?? 'Player',
         }}
       />
-      {isIndexView && <Header league={league} activePage="players" />}
+      {shouldShowIndexView && <Header league={league} activePage="players" />}
       <div
         className={classnames(
           'mx-auto w-full bg-grey100',
-          isIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
+          shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
         )}
       >
-        {!playerInfo || !playerRatings || !playerStats ? (
+        {isLoading ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Spinner id="player-loading" size="xl" />
+            <Spinner ref={loaderRef} size="xl" />
           </div>
         ) : (
           <div
-            id="player-details"
-            className={classnames('mx-auto', isIndexView && 'lg:w-11/12')}
+            ref={detailsRef}
+            className={classnames('mx-auto', shouldShowIndexView && 'lg:w-11/12')}
           >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-            <SeasonTypeSelector className={`${isIndexView ? 'top-7 !h-7 w-48' : ''} mb-4 md:mb-0 md:ml-4`} />
+            <SeasonTypeSelector className={classnames("mb-4 md:mb-0 md:ml-4", { 'top-7 !h-7 w-48': shouldShowIndexView })}/>
 
             </div>
-            {isIndexView && (
+            {shouldShowIndexView && (
               <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
                 <TeamLogo
                   league={league}
@@ -314,7 +298,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           </div>
         )}
       </div>
-      {isIndexView && <Footer />}
+      {shouldShowIndexView && <Footer />}
     </>
   );
 };
