@@ -89,9 +89,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     queryFn: () => fetchPlayerName(league, playerId),
   });
 
-  const { data: playerInfo} = useQuery<
-    PlayerInfo[] | GoalieInfo[]
-  >({
+  const { data: playerInfo } = useQuery<PlayerInfo[] | GoalieInfo[]>({
     queryKey: ['playerInfo', league, playerId, playerTypeInfo?.playerType],
     queryFn: () => {
       const endpoint =
@@ -103,9 +101,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo,
   });
 
-  const { data: playerRatings} = useQuery<
-    PlayerRatings[] | GoalieRatings[]
-  >({
+  const { data: playerRatings } = useQuery<PlayerRatings[] | GoalieRatings[]>({
     queryKey: ['playerRatings', league, playerId, playerTypeInfo?.playerType],
     queryFn: () => {
       const endpoint =
@@ -119,9 +115,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
     enabled: !!playerTypeInfo?.playerType,
   });
 
-  const { data: playerStats,} = useQuery<
-    PlayerWithAdvancedStats[] | Goalie[]
-  >({
+  const { data: playerStats } = useQuery<PlayerWithAdvancedStats[] | Goalie[]>({
     queryKey: [
       'playerStats',
       league,
@@ -148,13 +142,13 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
   const loaderRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (shouldShowIndexView)  return;
-    
-    const contentHeight = isLoading ? loaderRef.current?.offsetHeight : detailsRef.current?.offsetHeight;
+    if (shouldShowIndexView) return;
+
+    const contentHeight = isLoading
+      ? loaderRef.current?.offsetHeight
+      : detailsRef.current?.offsetHeight;
     parent.postMessage(contentHeight ?? 0, '*');
-  }, [
-    isLoading, shouldShowIndexView
-  ]);
+  }, [isLoading, shouldShowIndexView]);
 
   return (
     <>
@@ -178,11 +172,17 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
         ) : (
           <div
             ref={detailsRef}
-            className={classnames('mx-auto', shouldShowIndexView && 'lg:w-11/12')}
+            className={classnames(
+              'mx-auto',
+              shouldShowIndexView && 'lg:w-11/12',
+            )}
           >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
-            <SeasonTypeSelector className={classnames("mb-4 md:mb-0 md:ml-4", { 'top-7 !h-7 w-48': shouldShowIndexView })}/>
-
+              <SeasonTypeSelector
+                className={classnames('mb-4 md:mb-0 md:ml-4', {
+                  'top-7 !h-7 w-48': shouldShowIndexView,
+                })}
+              />
             </div>
             {shouldShowIndexView && (
               <div className="my-2.5 flex flex-col items-center justify-center space-y-5">
@@ -205,10 +205,8 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
               <TabList>
                 <Tab
                   _selected={{
-                    color:
-                      'rgb(var(--hyperlink))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink))',
+                    color: 'rgb(var(--hyperlink))',
+                    borderBottomColor: 'rgb(var(--hyperlink))',
                   }}
                 >
                   Stats
@@ -216,10 +214,8 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
                 {playerTypeInfo?.playerType === 'skater' && (
                   <Tab
                     _selected={{
-                      color:
-                        'rgb(var(--hyperlink))',
-                      borderBottomColor:
-                        'rgb(var(--hyperlink))',
+                      color: 'rgb(var(--hyperlink))',
+                      borderBottomColor: 'rgb(var(--hyperlink))',
                     }}
                   >
                     Adv Stats
@@ -227,10 +223,8 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
                 )}
                 <Tab
                   _selected={{
-                    color:
-                      'rgb(var(--hyperlink))',
-                    borderBottomColor:
-                      'rgb(var(--hyperlink))',
+                    color: 'rgb(var(--hyperlink))',
+                    borderBottomColor: 'rgb(var(--hyperlink))',
                   }}
                 >
                   Ratings
