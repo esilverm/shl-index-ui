@@ -54,7 +54,7 @@ export const GoalieScoreTable = ({
                         id: cellValue[1],
                       },
                     }}
-                    className="inline-block w-full max-w-[180px] text-ellipsis  whitespace-nowrap text-left leading-none text-blue600 "
+                    className="inline-block w-full max-w-[180px] text-ellipsis  whitespace-nowrap text-left leading-none text-blue600 dark:text-hyperlink"
                   >
                     {cellValue[0]}
                   </Link>

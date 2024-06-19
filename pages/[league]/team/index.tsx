@@ -83,12 +83,20 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="team" />
-      <div className="mx-auto w-full bg-grey100 pt-px pb-10 lg:w-3/4">
+      <div className="mx-auto w-full bg-grey100 pt-px pb-10 dark:bg-backgroundGrey100 lg:w-3/4">
         <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
           {shouldShowTeamStats && (
             <TabList className="mx-10 pt-8">
-              <Tab>Team List</Tab>
-              <Tab>Team Stats</Tab>
+              <Tab  _selected={{
+            color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+            borderBottomColor:
+              'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+          }}>Team List</Tab>
+              <Tab  _selected={{
+            color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+            borderBottomColor:
+              'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+          }}>Team Stats</Tab>
             </TabList>
           )}
           <TabPanels>
@@ -116,8 +124,8 @@ export default ({ league }: { league: League }) => {
                       className={classnames(
                         'text-2xl',
                         tinycolor(team.colors.primary).isDark()
-                          ? 'text-grey100'
-                          : 'text-grey900',
+                          ? 'text-grey100 dark:text-white'
+                          : 'text-grey900 dark:text-white',
                       )}
                     >
                       <span className="block font-mont font-normal tracking-widest">

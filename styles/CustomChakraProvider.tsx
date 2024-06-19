@@ -31,9 +31,9 @@ const chakraTheme: Partial<ChakraTheme> = {
     },
   },
   styles: {
-    global: () => ({
+    global: (props) => ({
       body: {
-        bg: '',
+        bg: props.colorMode === 'dark' ? 'rgb(18, 18, 18)' : 'rgb(233, 236, 239)',
       },
     }),
   },

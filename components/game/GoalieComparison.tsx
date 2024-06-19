@@ -41,9 +41,9 @@ const VerticalGoalieList = ({
           </Skeleton>
           <Skeleton isLoaded={!isLoading}>
             <div className="mb-3 flex w-full items-center justify-between">
-              <div className="flex flex-col font-mont text-sm text-grey800">
+              <div className="flex flex-col font-mont text-sm text-grey800 dark:text-boxscoreTextDarkGrey">
                 <span>{statLabels.record}</span>
-                <span className="font-semibold text-grey600">
+                <span className="font-semibold text-grey600 dark:text-boxscoreTextLightGrey">
                   {goalie.wins}-{goalie.losses}-{goalie.OT}
                 </span>
               </div>
@@ -54,11 +54,11 @@ const VerticalGoalieList = ({
                 const currentStat = stat as keyof typeof statLabels;
                 return (
                   <div
-                    className="flex flex-col font-mont text-sm text-grey800"
+                    className="flex flex-col font-mont text-sm text-grey800 dark:text-boxscoreTextDarkGrey"
                     key={`${stat}_${i}_${goalie.name}`}
                   >
                     <span>{statLabels[currentStat]}</span>
-                    <span className="font-semibold text-grey600">
+                    <span className="font-semibold text-grey600 dark:text-boxscoreTextLightGrey">
                       {currentStat === 'savePct'
                         ? goalie[currentStat].toFixed(3).padEnd(4, '0')
                         : currentStat === 'record'
@@ -160,7 +160,7 @@ export const GoalieComparison = ({
                         className="mt-2 flex w-full items-center justify-between break-all font-mont text-sm"
                         key={`${stat}_${i}`}
                       >
-                        <div className="flex-1 break-words font-semibold text-grey600">
+                        <div className="flex-1 break-words font-semibold text-grey600 dark:text-boxscoreTextLightGrey">
                           {awayGoalie &&
                             (currentStat === 'record'
                               ? `${awayGoalie.wins}-${awayGoalie.losses}-${awayGoalie.OT}`
@@ -174,10 +174,10 @@ export const GoalieComparison = ({
                                   .padEnd(4, '0')
                               : awayGoalie[currentStat])}
                         </div>
-                        <span className="font-semibold text-grey800">
+                        <span className="font-semibold text-grey800 dark:text-boxscoreTextDarkGrey">
                           {statLabels[currentStat]}
                         </span>
-                        <div className="flex-1 break-words text-right font-semibold text-grey600">
+                        <div className="flex-1 break-words text-right font-semibold text-grey600 dark:text-boxscoreTextLightGrey">
                           {homeGoalie &&
                             (currentStat === 'record'
                               ? `${homeGoalie.wins}-${homeGoalie.losses}-${homeGoalie.OT}`

@@ -134,7 +134,7 @@ export const SkaterComparison = ({
                 <span
                   className={classnames(
                     'ml-2 font-mont text-2xl md:text-3xl',
-                    leaders.away.value < leaders.home.value && 'text-grey500',
+                    leaders.away.value < leaders.home.value && 'text-grey500 dark:text-boxscoreTextLightGrey',
                   )}
                 >
                   {leaders.away.value}
@@ -149,7 +149,7 @@ export const SkaterComparison = ({
                 <span
                   className={classnames(
                     'mr-2 font-mont text-2xl md:text-3xl',
-                    leaders.home.value < leaders.away.value && 'text-grey500',
+                    leaders.home.value < leaders.away.value && 'text-grey500 dark:text-boxscoreTextLightGrey',
                   )}
                 >
                   {leaders.home.value}

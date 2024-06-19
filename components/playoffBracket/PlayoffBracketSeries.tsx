@@ -71,12 +71,12 @@ const TeamLine = ({
           'pr-[5px]',
           !shouldUseTeamShortName &&
             'overflow-hidden text-ellipsis whitespace-nowrap',
-          teamInfo.color.isDark ? 'text-grey100' : 'text-grey900',
+          teamInfo.color.isDark ? 'text-grey100 dark:text-white' : 'text-grey900 dark:text-white',
         )}
       >
         {shouldUseTeamShortName ? teamInfo.abbr : teamInfo.name}
       </span>
-      <div className="ml-auto flex h-full w-5 items-center justify-center bg-grey900/50 px-[15px] font-mont text-2xl font-bold text-grey100">
+      <div className="ml-auto flex h-full w-5 items-center justify-center bg-grey900/50 px-[15px] font-mont text-2xl font-bold text-grey100 dark:bg-LabelHeadingsDark/50 dark:text-white">
         {teamInfo.wins !== -1 && teamInfo.wins}
       </div>
     </Link>

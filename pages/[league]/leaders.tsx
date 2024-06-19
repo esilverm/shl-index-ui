@@ -47,9 +47,9 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="leaders" />
-      <div className="mx-auto w-full space-y-2 bg-grey100 py-6 sm:px-6 lg:w-3/4 lg:py-0 lg:pt-px lg:pb-10">
+      <div className="mx-auto w-full space-y-2 bg-grey100 py-6 dark:bg-backgroundGrey100 sm:px-6 lg:w-3/4 lg:py-0 lg:pt-px lg:pb-10">
         <div className="mt-3 flex !h-7 flex-col items-center justify-center space-y-2 sm:mt-0 sm:flex-row sm:space-y-0 lg:float-right lg:inline-block">
-          <SeasonTypeSelector className="!h-7 w-48 lg:top-7" />
+          <SeasonTypeSelector className="!h-7 w-48 dark:border-white dark:text-white lg:top-7" />
           <Select<LeaderboardTypes>
             options={leaderboardTypes}
             selectedOption={leaderboardTypes[currentActiveTab]}
@@ -62,7 +62,16 @@ export default ({ league }: { league: League }) => {
         <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           <TabList className="mt-7 !hidden sm:!flex">
             {leaderboardTypes.map((type) => (
-              <Tab key={type}>{type}</Tab>
+              <Tab
+                _selected={{
+                  color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                  borderBottomColor:
+                    'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                }}
+                key={type}
+              >
+                {type}
+              </Tab>
             ))}
           </TabList>
           <TabPanels>

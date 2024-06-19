@@ -161,7 +161,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       {shouldShowIndexView && <Header league={league} activePage="players" />}
       <div
         className={classnames(
-          'mx-auto w-full bg-grey100',
+          'mx-auto w-full bg-grey100 dark:bg-backgroundGrey100',
           shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
         )}
       >
@@ -179,8 +179,8 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
           >
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
               <SeasonTypeSelector
-                className={classnames('mb-4 md:mb-0 md:ml-4', {
-                  'top-7 !h-7 w-48': shouldShowIndexView,
+                className={classnames('mb-4 dark:border-white dark:text-white md:mb-0 md:ml-4', {
+                  'top-7 !h-7 w-48 dark:border-white dark:text-white': shouldShowIndexView,
                 })}
               />
             </div>

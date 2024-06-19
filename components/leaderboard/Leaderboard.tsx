@@ -105,7 +105,7 @@ export const Leaderboard = ({
             >
               <div
                 className={classnames(
-                  'relative flex min-h-[30px] items-center  border-b-2 border-b-grey300',
+                  'relative flex min-h-[30px] items-center  border-b-2 border-b-grey300 dark:border-b-globalBorderGrey',
                   i === 0 ? 'py-0.5 text-xl font-semibold' : 'text-lg',
                 )}
               >

@@ -65,9 +65,9 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="standings" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:pt-px lg:pb-10 2xl:w-5/6 2xl:px-8">
+      <div className="mx-auto w-full bg-grey100 p-[2.5%] dark:bg-backgroundGrey100 lg:pt-px lg:pb-10 2xl:w-5/6 2xl:px-8">
         <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
-          <SeasonTypeSelector className="!h-7 w-48 lg:top-7" />
+          <SeasonTypeSelector className="!h-7 w-48 dark:border-white dark:text-white lg:top-7" />
         </div>
         <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           {type === 'Playoffs' ? (
@@ -92,9 +92,35 @@ export default ({ league }: { league: League }) => {
             <>
               {/* If we are in playoffs don't render this */}
               <TabList className="my-7">
-                <Tab>League</Tab>
-                <Tab>Conference</Tab>
-                {shouldShowDivision(league, season) && <Tab>Division</Tab>}
+                <Tab
+                  _selected={{
+                    color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                    borderBottomColor:
+                      'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                  }}
+                >
+                  League
+                </Tab>
+                <Tab
+                  _selected={{
+                    color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                    borderBottomColor:
+                      'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                  }}
+                >
+                  Conference
+                </Tab>
+                {shouldShowDivision(league, season) && (
+                  <Tab
+                    _selected={{
+                      color: 'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                      borderBottomColor:
+                        'rgb(var(--blue600)) dark:rgb(var(--hyperlink))',
+                    }}
+                  >
+                    Division
+                  </Tab>
+                )}
               </TabList>
               <TabPanels>
                 <TabPanel>

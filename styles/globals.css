@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+.light {
+  --blue600: 30, 136, 229; /* blue600 */
+  --blue700: 25, 118, 210;/* blue700 */
+  --grey900: 33, 37, 41;/* grey900 */
+  --grey800: 52, 58, 64;/* grey800 */
+  --grey700: 73, 80, 87;/* grey700 */
+  --grey650: 107, 115, 123;/* grey650 */
+  --grey600: 108, 117, 125;/* grey600 */
+  --grey500: 173, 181, 189;/* grey500 */
+  --grey400: 206, 212, 218;/* grey400 */
+  --grey300: 222, 226, 230;/* grey300 */
+  --grey200: 233, 236, 239;/* grey200 */
+  --grey100: 248, 249, 250;/* grey100 */
+  --red200: 239, 154, 154;/* red200 */
+}
+
+.dark {
+  --hyperlinkDark: 82, 156, 236;
+  --backgroundBlueDark: 78, 134, 220;
+  --LabelHeadingsDark: 20, 20, 25;
+  --boxscoreTextDarkGrey: 104, 111, 118;
+  --grey650Dark: 94, 102, 109; /* not used? */
+  --boxscoreTextLightGrey: 91, 99, 107;
+  --globalBorderGrey: 78, 86, 94;
+  --boxscoreTeamRosterGrey: 56, 62, 68;
+  --grey300Dark: 35,39,43;
+  --boxscoreBorderGrey:  45, 48, 51;
+  --backgroundGrey100: 33, 37, 41;
+  --white:  248, 249, 250;
+}
+
 @layer base {
   html,
   body {
