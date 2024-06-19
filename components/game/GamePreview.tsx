@@ -64,7 +64,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600 dark:text-boxscoreTextLightGrey">
+              <span className="font-mont text-sm text-grey600 dark:text-white">
                 {previewData?.teamStats.away.record}
               </span>
             </Skeleton>
@@ -75,7 +75,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold',
                 previewData?.game.awayScore < previewData?.game.homeScore &&
-                  'text-grey500 dark:text-boxscoreTextLightGrey',
+                  'text-grey500 dark:text-white',
               )}
             >
               {previewData?.game.awayScore}
@@ -112,7 +112,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600 dark:text-boxscoreTextLightGrey">
+              <span className="font-mont text-sm text-grey600 dark:text-white">
                 {previewData?.teamStats.home.record}
               </span>
             </Skeleton>
@@ -122,7 +122,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold md:order-first',
                 previewData?.game.homeScore < previewData?.game.awayScore &&
-                  'text-grey500 dark:text-boxscoreTextLightGrey',
+                  'text-grey500 dark:text-white',
               )}
             >
               {previewData?.game.homeScore}

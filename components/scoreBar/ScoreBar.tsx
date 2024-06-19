@@ -123,7 +123,7 @@ const ScoreBarItem = ({
       }}
       className={classnames(
         'relative inline-block h-full w-full transition-all',
-        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100 hover:after:opacity-70 dark:after:bg-LabelHeadingsDark dark:hover:after:text-white',
+        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100 hover:after:opacity-80 dark:after:bg-LabelHeadingsDark dark:hover:after:text-white',
         data.played
           ? "hover:after:content-['See_Game_Results']"
           : "hover:after:content-['See_Game_Preview']",
@@ -143,7 +143,7 @@ const ScoreBarItem = ({
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.homeScore > data.awayScore || !data.played
               ? 'text-grey900 dark:text-white'
-              : 'text-grey600 dark:text-boxscoreTextLightGrey',
+              : 'text-grey600 dark:text-white',
           )}
         >
           <TeamLogo
@@ -166,7 +166,7 @@ const ScoreBarItem = ({
             'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.awayScore > data.homeScore || !data.played
               ? 'text-grey900 dark:text-white'
-              : 'text-grey600 dark:text-boxscoreTextLightGrey',
+              : 'text-grey600 dark:text-white',
           )}
         >
           <TeamLogo

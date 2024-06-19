@@ -39,7 +39,7 @@ export default () => {
         }}
       />
       <div className="mx-auto mt-24 w-11/12 sm:w-4/5">
-        <h1 className="mb-16 text-center text-5xl font-extrabold tracking-widest text-grey800 dark:text-boxscoreTextDarkGrey">
+        <h1 className="mb-16 text-center text-5xl font-extrabold tracking-widest text-grey800 dark:text-white">
           Welcome to the SHL Index
         </h1>
         <h2 className="mb-5 text-center font-mont text-4xl font-semibold tracking-widest text-grey700 md:mb-0">

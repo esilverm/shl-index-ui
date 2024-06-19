@@ -94,7 +94,7 @@ export const PreviousMatchups = ({
                   <span
                     className={classnames(
                       'text-base',
-                      matchup.awayScore < matchup.homeScore && 'text-grey500 dark:text-boxscoreTextLightGrey',
+                      matchup.awayScore < matchup.homeScore && 'text-grey500 dark:text-white',
                       !matchup.played && 'hidden',
                     )}
                   >
@@ -113,7 +113,7 @@ export const PreviousMatchups = ({
                   <span
                     className={classnames(
                       'text-base',
-                      matchup.homeScore < matchup.awayScore && 'text-grey500 dark:text-boxscoreTextLightGrey',
+                      matchup.homeScore < matchup.awayScore && 'text-grey500 dark:text-white',
                       !matchup.played && 'hidden',
                     )}
                   >

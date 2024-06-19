@@ -76,8 +76,8 @@ const TeamSkaterTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-boxscoreTeamRosterGrey dark:bg-globalBackgroundGrey dark:text-boxscoreTextLightGrey">
-        <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-boxscoreTeamRosterGrey ">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-white dark:bg-globalBackgroundGrey dark:text-white">
+        <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-white ">
           Skaters
         </TableHeader>
         <TableHeader title="Game Rating">GR</TableHeader>
@@ -201,8 +201,8 @@ const TeamGoalieTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-boxscoreTeamRosterGrey dark:bg-globalBackgroundGrey dark:text-boxscoreTextLightGrey">
-        <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-boxscoreTeamRosterGrey ">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600 dark:border-y-white dark:bg-globalBackgroundGrey dark:text-white">
+        <TableHeader firstColumn className="border-r border-r-grey400 dark:border-r-white ">
           Goalies
         </TableHeader>
         <TableHeader title="Game Rating">GR</TableHeader>
@@ -220,11 +220,11 @@ const TeamGoalieTable = ({
           player.minutesPlayed !== '00:00' && (
             <div
               key={player.id}
-              className="flex w-full min-w-[800px] items-center border-b border-t-grey400 px-4  text-xs dark:border-t-boxscoreTeamRosterGrey"
+              className="flex w-full min-w-[800px] items-center border-b border-t-grey400 px-4  text-xs dark:border-t-white"
             >
               <TableCell
                 firstColumn
-                className="border-r border-r-grey400 dark:border-r-boxscoreTeamRosterGrey "
+                className="border-r border-r-grey400 dark:border-r-white "
                 isLoading={isLoading}
               >
                 <Link

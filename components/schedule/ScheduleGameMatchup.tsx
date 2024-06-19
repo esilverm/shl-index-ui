@@ -46,7 +46,7 @@ const ScheduleMatchupTeam = ({
         'flex items-center justify-between font-medium',
         winner === 'none' || winner === teamType.toLowerCase()
           ? 'text-grey900 dark:text-white'
-          : 'text-grey500 dark:text-boxscoreTextLightGrey',
+          : 'text-grey500 dark:text-white',
       )}
     >
       <div className="flex items-center font-mont text-lg">
