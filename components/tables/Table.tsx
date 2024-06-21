@@ -108,7 +108,7 @@ export const Table = <T extends Record<string, unknown>>({
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="hover:bg-highlighted/10">
                 {tableBehavioralFlags.stickyFirstColumn && (
-                  <th className="sticky left-0 table-cell border-t border-t-table bg-table-row text-left font-mont font-normal text-table-row">
+                  <th className="sticky left-0 table-cell border-t border-t-table bg-secondary text-left font-mont font-normal text-table-row">
                     {flexRender(
                       row.getVisibleCells()[0].column.columnDef.cell,
                       row.getVisibleCells()[0].getContext(),
