@@ -112,7 +112,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="schedule" />
-      <div className="m-auto w-full bg-grey100 py-10 lg:w-3/4 lg:p-[2.5%]">
+      <div className="m-auto w-full bg-primary py-10 lg:w-3/4 lg:p-[2.5%]">
         {!teamList || !teamSelectorList || !teamSelectorMap || !data ? (
           <div className="flex size-full items-center justify-center">
             <Spinner size="xl" />
@@ -136,6 +136,7 @@ export default ({ league }: { league: League }) => {
                     unplayedOnly === 'true' ? 'false' : 'true',
                   )
                 }
+                className="border-primary"
               >
                 Hide Played Games
               </Checkbox>

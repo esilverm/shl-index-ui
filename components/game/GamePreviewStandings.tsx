@@ -45,9 +45,9 @@ const DivisionStandings = ({
 }) => {
   const router = useRouter();
   return (
-    <div className="w-full bg-grey100">
+    <div className="w-full bg-table-row">
       <div className="p-4 font-semibold">{standings.name} Standings</div>
-      <div className="flex h-10 w-full items-center bg-grey300 font-semibold">
+      <div className="flex h-10 w-full items-center bg-boxscore-header font-semibold">
         <TableCell firstColumn />
         <TableCell>PTS</TableCell>
         <TableCell>GP</TableCell>
@@ -55,7 +55,7 @@ const DivisionStandings = ({
         <TableCell>L</TableCell>
         <TableCell>OT</TableCell>
       </div>
-      <div className="divide-y-2 divide-grey300">
+      <div className="divide-y-2 divide-table">
         {standings.teams.map((team) => (
           <div
             key={team.id}

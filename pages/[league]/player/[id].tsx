@@ -5,13 +5,13 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  useColorMode,
 } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
+import { useTheme } from 'next-themes';
 import { useEffect, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
@@ -56,24 +56,17 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
 
   const shouldShowIndexView = !portalView;
 
-  const { setColorMode } = useColorMode();
+  const { setTheme } = useTheme();
 
   useEffect(() => {
-    if (
-      !shouldShowIndexView &&
-      portalView &&
-      (portalView === 'dark' || portalView === 'light')
-    ) {
-      if (portalView === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-      } else {
-        document.documentElement.classList.add('light');
-        document.documentElement.classList.remove('dark');
-      }
-      setColorMode(portalView);
+    if (!shouldShowIndexView) return;
+
+    if (portalView === 'dark') {
+      setTheme('dark');
+    } else if (portalView === 'light') {
+      setTheme('light');
     }
-  }, [shouldShowIndexView, portalView, setColorMode]);
+  }, [portalView, shouldShowIndexView, setTheme]);
 
   const { type } = useSeasonType();
 
@@ -161,7 +154,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       {shouldShowIndexView && <Header league={league} activePage="players" />}
       <div
         className={classnames(
-          'mx-auto w-full bg-grey100',
+          'mx-auto w-full bg-primary',
           shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pb-10 lg:pt-px',
         )}
       >

@@ -83,7 +83,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="team" />
-      <div className="mx-auto w-full bg-grey100 pb-10 pt-px lg:w-3/4">
+      <div className="mx-auto w-full bg-primary pb-10 pt-px lg:w-3/4">
         <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
           {shouldShowTeamStats && (
             <TabList className="mx-10 pt-8">

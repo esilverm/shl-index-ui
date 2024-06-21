@@ -41,9 +41,9 @@ const VerticalGoalieList = ({
           </Skeleton>
           <Skeleton isLoaded={!isLoading}>
             <div className="mb-3 flex w-full items-center justify-between">
-              <div className="flex flex-col font-mont text-sm text-grey800">
+              <div className="flex flex-col font-mont text-sm text-secondary">
                 <span>{statLabels.record}</span>
-                <span className="font-semibold text-grey600">
+                <span className="font-semibold text-tertiary">
                   {goalie.wins}-{goalie.losses}-{goalie.OT}
                 </span>
               </div>
@@ -54,11 +54,11 @@ const VerticalGoalieList = ({
                 const currentStat = stat as keyof typeof statLabels;
                 return (
                   <div
-                    className="flex flex-col font-mont text-sm text-grey800"
+                    className="flex flex-col font-mont text-sm text-secondary"
                     key={`${stat}_${i}_${goalie.name}`}
                   >
                     <span>{statLabels[currentStat]}</span>
-                    <span className="font-semibold text-grey600">
+                    <span className="font-semibold text-tertiary">
                       {currentStat === 'savePct'
                         ? goalie[currentStat].toFixed(3).padEnd(4, '0')
                         : currentStat === 'record'

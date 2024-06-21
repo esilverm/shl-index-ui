@@ -5,7 +5,7 @@
 @layer base {
   html,
   body {
-    @apply bg-grey200;
+    @apply bg-secondary text-primary;
   }
       
   * {
@@ -19,5 +19,5 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
-}
+  }
 }
