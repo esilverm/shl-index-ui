@@ -2,6 +2,7 @@ import { Spinner, Tooltip } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { groupBy } from 'lodash';
+import { useTheme } from 'next-themes';
 import { useMemo } from 'react';
 
 import { BoxscorePenalties } from '../../pages/api/v2/schedule/game/boxscore/penalties';
@@ -9,7 +10,6 @@ import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
 import { query } from '../../utils/query';
 
 import { Period } from './shared';
-import { useTheme } from 'next-themes';
 
 const PeriodPenaltiesColumn = ({
   gameData,
@@ -52,7 +52,7 @@ const PeriodPenaltiesColumn = ({
                   className={classnames(
                     'w-1/5 font-bold',
                     theme === 'dark' &&
-                      'bg-primary-inverted w-fit mr-3 px-1 py-0.5 rounded-lg',
+                      'mr-3 w-fit rounded-lg bg-primary-inverted px-1 py-0.5',
                   )}
                   style={{ color: teamColor }}
                 >

@@ -11,6 +11,7 @@ import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
+import { useTheme } from 'next-themes';
 import { useEffect, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
@@ -34,7 +35,6 @@ import { query } from '../../../utils/query';
 import { seasonTypeToApiFriendlyParam } from '../../../utils/seasonTypeHelpers';
 import { GoalieRatings } from '../../api/v1/goalies/ratings/[id]';
 import { SkaterRatings as PlayerRatings } from '../../api/v1/players/ratings/[id]';
-import { useTheme } from 'next-themes';
 
 const fetchPlayerType = (league: League, playerId: string) =>
   query(

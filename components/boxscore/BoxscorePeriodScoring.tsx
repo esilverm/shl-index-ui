@@ -49,7 +49,7 @@ const GoalTimingBar = ({
 
   return (
     <div
-      className="bg-grey100 mt-0.5 flex rounded-md border font-mont text-[0.7rem] leading-5"
+      className="mt-0.5 flex rounded-md border bg-grey100 font-mont text-[0.7rem] leading-5"
       style={{
         borderColor: teamColor,
       }}

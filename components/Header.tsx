@@ -210,7 +210,7 @@ export const Header = ({
             />
           </div>
           <div className="relative order-3 mr-4 sm:ml-auto sm:mr-[2%] sm:w-auto">
-            <ColorModeSwitcher className="mr-1 md:mr-2 !text-grey100 hover:!text-grey900" />
+            <ColorModeSwitcher className="mr-1 !text-grey100 hover:!text-grey900 md:mr-2" />
             {activePage !== 'game' &&
               router.pathname.indexOf('/player/') === -1 &&
               !seasonLoading && (

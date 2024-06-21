@@ -59,7 +59,7 @@ export const Table = <T extends Record<string, unknown>>({
       </div>
       <div
         className={classnames(
-          'overflow-x-auto overflow-y-hidden border border-t border-table',
+          'overflow-x-auto overflow-y-hidden border border-table',
           tableBehavioralFlags.enablePagination ? 'rounded-t-lg' : 'rounded-lg',
         )}
       >
@@ -104,11 +104,11 @@ export const Table = <T extends Record<string, unknown>>({
               </tr>
             ))}
           </thead>
-          <tbody className="relative table-row-group bg-table-row text-table-row align-middle">
+          <tbody className="relative table-row-group bg-table-row align-middle text-table-row">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="hover:bg-highlighted/10">
                 {tableBehavioralFlags.stickyFirstColumn && (
-                  <th className="sticky left-0 table-cell border-t border-t-table text-table-row bg-table-row text-left font-mont font-normal">
+                  <th className="sticky left-0 table-cell border-t border-t-table bg-table-row text-left font-mont font-normal text-table-row">
                     {flexRender(
                       row.getVisibleCells()[0].column.columnDef.cell,
                       row.getVisibleCells()[0].getContext(),
