@@ -15,7 +15,7 @@ export const ColorModeSwitcher = ({ className }: { className?: string }) => {
     <IconButton
       aria-label="Toggle theme"
       className={className}
-      icon={theme === 'light' ? <MoonIcon /> : <SunIcon />}
+      icon={theme === 'light' ? <SunIcon /> : <MoonIcon />}
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       size="sm"
       variant="ghost"
