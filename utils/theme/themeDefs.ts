@@ -54,7 +54,6 @@ export const lightTheme: ThemeVariables = {
   '--color-background-site-header': '#212529',
   '--color-background-boxscore-header': '#E9ECEF',
   '--color-background-scorebar-date': '#E9ECEF',
-  '--color-background-scorebar-game': '#F8F9FA',
 };
 
 export const darkTheme: ThemeVariables = {
@@ -89,8 +88,8 @@ export const darkTheme: ThemeVariables = {
   '--color-text-boxscore-header': '#F8F9FA',
 
   // Background
-  '--color-background-primary': '#141419',
-  '--color-background-secondary': '#212529',
+  '--color-background-primary': '#212529',
+  '--color-background-secondary': '#141419',
   '--color-background-primary-inverted': '#F8F9FA',
   '--color-background-secondary-inverted': '#E9ECEF',
   '--color-background-highlighted': '#1976D2',
@@ -98,6 +97,5 @@ export const darkTheme: ThemeVariables = {
   '--color-background-table-header': '#141419',
   '--color-background-site-header': '#141419',
   '--color-background-boxscore-header': '#141419',
-  '--color-background-scorebar-date': '#6C757D',
-  '--color-background-scorebar-game': '#343A40',
+  '--color-background-scorebar-date': '#343A40',
 };

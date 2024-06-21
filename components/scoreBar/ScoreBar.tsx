@@ -134,7 +134,7 @@ const ScoreBarItem = ({
     >
       <div
         className={classnames(
-          'relative h-full w-[189px] border-r border-r-table bg-scorebar-game pt-[23px]',
+          'relative h-full w-[189px] border-r border-r-table bg-primary pt-[23px]',
         )}
       >
         {/* Home Team */}
@@ -220,7 +220,7 @@ export const ScoreBar = ({
   loading: boolean;
   league: League;
 }) => (
-  <div className="h-24 w-full bg-scorebar-game [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
+  <div className="h-24 w-full bg-primary [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
     {loading ? (
       <div className="flex size-full items-center justify-center">
         <Spinner size="xl" />

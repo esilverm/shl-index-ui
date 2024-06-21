@@ -41,7 +41,6 @@ export const colorsRaw = {
     'table-header': 'var(--color-background-table-header)',
     'site-header': 'var(--color-background-site-header)',
     'boxscore-header': 'var(--color-background-boxscore-header)',
-    'scorebar-game': 'var(--color-background-scorebar-game)',
     'scorebar-date': 'var(--color-background-scorebar-date)',
   },
 } satisfies Record<string, Record<string, `var(--${string})`>>;
