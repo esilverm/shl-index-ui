@@ -12,6 +12,7 @@ import { League, leagueNameToId } from '../utils/leagueHelpers';
 import { query } from '../utils/query';
 import { onlyIncludeSeasonAndTypeInQuery } from '../utils/routingHelpers';
 
+import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Link } from './common/Link';
 import { Select } from './common/Select';
 import { LeagueLogo } from './LeagueLogo';
@@ -180,7 +181,13 @@ export const Header = ({
                 </MenuButton>
                 <MenuList>
                   {externalLinks.map(({ name, href }) => (
-                    <MenuItem key={name} as="a" href={href} target="_blank">
+                    <MenuItem
+                      className="hover:!bg-highlighted/40 hover:!text-primary"
+                      key={name}
+                      as="a"
+                      href={href}
+                      target="_blank"
+                    >
                       {name}
                     </MenuItem>
                   ))}
@@ -199,6 +206,7 @@ export const Header = ({
             />
           </div>
           <div className="relative order-3 mr-4 sm:ml-auto sm:mr-[2%] sm:w-auto">
+            <ColorModeSwitcher className="mr-2 !text-grey100 hover:!text-grey900" />
             {activePage !== 'game' &&
               router.pathname.indexOf('/player/') === -1 &&
               !seasonLoading && (

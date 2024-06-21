@@ -1,7 +1,8 @@
 import { ChakraProvider, ChakraTheme, extendTheme } from '@chakra-ui/react';
 import React from 'react';
+import { colors } from 'utils/theme/colors';
 
-const chakraTheme: Partial<ChakraTheme> = {
+export const chakraTheme: Partial<ChakraTheme> = {
   components: {
     Menu: {
       baseStyle: {
@@ -11,9 +12,13 @@ const chakraTheme: Partial<ChakraTheme> = {
           minWidth: 'max-content',
           w: '100%',
           zIndex: 100,
+          bg: colors.background.primary,
+          borderColor: colors.border.primary,
         },
         item: {
           fontFamily: 'var(--font-montserrat)',
+          color: colors.text.primary,
+          bg: colors.background.primary,
         },
       },
     },
@@ -34,6 +39,7 @@ const chakraTheme: Partial<ChakraTheme> = {
     global: () => ({
       body: {
         bg: '',
+        color: '',
       },
     }),
   },

@@ -24,7 +24,7 @@ export const Select = <T extends string | number>({
       <MenuButton
         as={Button}
         className={classnames(
-          dark ? 'border-grey100 text-grey100' : 'border-grey900 text-grey900',
+          dark ? 'border-grey100 !text-grey100' : 'border-grey900 text-grey900',
           '!h-auto rounded-md border !bg-[transparent] !px-2 !py-1.5 font-mont !text-sm  hover:!bg-blue600 active:!bg-blue700 sm:!px-4',
           className,
           optionClassName,
@@ -39,8 +39,8 @@ export const Select = <T extends string | number>({
             key={option}
             onClick={() => onSelection(option)}
             className={classnames(
-              'hover:!bg-grey400',
-              selectedOption === option && '!bg-grey300',
+              'hover:!bg-highlighted/40 hover:!text-primary',
+              selectedOption === option && '!bg-highlighted !text-grey100',
               optionClassName,
             )}
           >
