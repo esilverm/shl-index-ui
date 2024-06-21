@@ -1,5 +1,4 @@
 import '../styles/globals.css';
-import { Raleway, Montserrat } from '@next/font/google';
 import {
   Hydrate,
   QueryClient,
@@ -7,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
+import { Raleway, Montserrat } from 'next/font/google';
 import React from 'react';
 
 import SEO from '../next-seo.config';
