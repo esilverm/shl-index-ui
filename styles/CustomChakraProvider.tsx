@@ -50,6 +50,12 @@ export const chakraTheme: Partial<ChakraTheme> = {
         },
       },
     },
+    Code: {
+      baseStyle: {
+        background: colors.background.secondary,
+        color: colors.text.primary,
+      },
+    },
   },
   styles: {
     global: () => ({
