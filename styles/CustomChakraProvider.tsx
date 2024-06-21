@@ -4,6 +4,17 @@ import { colors } from 'utils/theme/colors';
 
 export const chakraTheme: Partial<ChakraTheme> = {
   components: {
+    Button: {
+      variants: {
+        outline: {
+          color: colors.text.primary,
+          borderColor: colors.border.secondary,
+          _hover: {
+            bg: colors.background.secondary,
+          },
+        },
+      },
+    },
     Menu: {
       baseStyle: {
         list: {
@@ -25,10 +36,15 @@ export const chakraTheme: Partial<ChakraTheme> = {
     Tabs: {
       variants: {
         line: {
+          tablist: {
+            borderColor: colors.border.secondary,
+          },
           tab: {
+            color: colors.text.tertiary,
             _selected: {
-              borderColor: '#ADB5BD',
-              color: 'black',
+              borderColor: colors.border.primary,
+              color: colors.text.primary,
+              fontWeight: 600,
             },
           },
         },

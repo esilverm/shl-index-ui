@@ -19,6 +19,7 @@ export const colorsRaw = {
     primary: 'var(--color-border-primary)',
     secondary: 'var(--color-border-secondary)',
     inverted: 'var(--color-border-inverted)',
+    table: 'var(--color-border-table)',
   },
   text: {
     primary: 'var(--color-text-primary)',
@@ -26,6 +27,9 @@ export const colorsRaw = {
     tertiary: 'var(--color-text-tertiary)',
     link: 'var(--color-text-link)',
     inverted: 'var(--color-text-inverted)',
+    'table-row': 'var(--color-text-table-row)',
+    'table-header': 'var(--color-text-table-header)',
+    'boxscore-header': 'var(--color-text-boxscore-header)',
   },
   background: {
     primary: 'var(--color-background-primary)',
@@ -33,6 +37,12 @@ export const colorsRaw = {
     'primary-inverted': 'var(--color-background-primary-inverted)',
     'secondary-inverted': 'var(--color-background-secondary-inverted)',
     highlighted: 'var(--color-background-highlighted)',
+    'table-row': 'var(--color-background-table-row)',
+    'table-header': 'var(--color-background-table-header)',
+    'site-header': 'var(--color-background-site-header)',
+    'boxscore-header': 'var(--color-background-boxscore-header)',
+    'scorebar-game': 'var(--color-background-scorebar-game)',
+    'scorebar-date': 'var(--color-background-scorebar-date)',
   },
 } satisfies Record<string, Record<string, `var(--${string})`>>;
 

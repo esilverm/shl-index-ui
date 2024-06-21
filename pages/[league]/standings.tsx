@@ -65,7 +65,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="standings" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:pb-10 lg:pt-px 2xl:w-5/6 2xl:px-8">
+      <div className="mx-auto w-full bg-primary p-[2.5%] lg:pb-10 lg:pt-px 2xl:w-5/6 2xl:px-8">
         <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
           <SeasonTypeSelector className="z-30 !h-7 w-48 lg:top-7" />
         </div>

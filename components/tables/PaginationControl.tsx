@@ -65,8 +65,8 @@ export const PaginationControl = <T extends Record<string, unknown>>({
           >
             <NumberInputField />
             <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
+              <NumberIncrementStepper className="!text-primary" />
+              <NumberDecrementStepper className="!text-primary" />
             </NumberInputStepper>
           </NumberInput>
         </span>

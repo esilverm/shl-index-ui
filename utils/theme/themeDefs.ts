@@ -31,6 +31,7 @@ export const lightTheme: ThemeVariables = {
   '--color-border-primary': '#212529',
   '--color-border-secondary': '#ADB5BD',
   '--color-border-inverted': '#F8F9FA',
+  '--color-border-table': '#ADB5BD',
 
   // Text
   '--color-text-primary': '#212529',
@@ -38,6 +39,9 @@ export const lightTheme: ThemeVariables = {
   '--color-text-tertiary': '#6C757D',
   '--color-text-inverted': '#F8F9FA',
   '--color-text-link': '#1A73E8',
+  '--color-text-table-row': '#212529',
+  '--color-text-table-header': '#F8F9FA',
+  '--color-text-boxscore-header': '#6C757D',
 
   // Background
   '--color-background-primary': '#F8F9FA',
@@ -45,6 +49,12 @@ export const lightTheme: ThemeVariables = {
   '--color-background-primary-inverted': '#212529',
   '--color-background-secondary-inverted': '#343A40',
   '--color-background-highlighted': '#1976D2',
+  '--color-background-table-row': '#F8F9FA',
+  '--color-background-table-header': '#212529',
+  '--color-background-site-header': '#212529',
+  '--color-background-boxscore-header': '#E9ECEF',
+  '--color-background-scorebar-date': '#E9ECEF',
+  '--color-background-scorebar-game': '#F8F9FA',
 };
 
 export const darkTheme: ThemeVariables = {
@@ -66,18 +76,28 @@ export const darkTheme: ThemeVariables = {
   '--color-border-primary': '#F8F9FA',
   '--color-border-secondary': '#ADB5BD',
   '--color-border-inverted': '#212529',
+  '--color-border-table': '#4E565E',
 
   // Text
   '--color-text-primary': '#F8F9FA',
   '--color-text-secondary': '#E9ECEF',
   '--color-text-tertiary': '#CED4DA',
   '--color-text-inverted': '#212529',
-  '--color-text-link': '#1A73E8',
+  '--color-text-link': '#529CEC',
+  '--color-text-table-row': '#E9ECEF',
+  '--color-text-table-header': '#F8F9FA',
+  '--color-text-boxscore-header': '#F8F9FA',
 
   // Background
-  '--color-background-primary': '#212529',
-  '--color-background-secondary': '#343A40',
+  '--color-background-primary': '#141419',
+  '--color-background-secondary': '#212529',
   '--color-background-primary-inverted': '#F8F9FA',
   '--color-background-secondary-inverted': '#E9ECEF',
   '--color-background-highlighted': '#1976D2',
+  '--color-background-table-row': '#212529',
+  '--color-background-table-header': '#141419',
+  '--color-background-site-header': '#141419',
+  '--color-background-boxscore-header': '#141419',
+  '--color-background-scorebar-date': '#6C757D',
+  '--color-background-scorebar-game': '#343A40',
 };

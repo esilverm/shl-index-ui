@@ -26,8 +26,8 @@ const RightArrow = () => {
         className={classnames(
           'transition-colors',
           isLastItemVisible
-            ? '[&_path]:!fill-grey900/10'
-            : '[&_path]:!fill-grey900',
+            ? '[&_path]:!fill-primary/30'
+            : '[&_path]:!fill-primary',
         )}
       />
     </div>
@@ -51,8 +51,8 @@ const LeftArrow = () => {
         className={classnames(
           'transition-colors',
           isFirstItemVisible
-            ? '[&_path]:!fill-grey900/10'
-            : '[&_path]:!fill-grey900',
+            ? '[&_path]:!fill-primary/30'
+            : '[&_path]:!fill-primary',
         )}
       />
     </div>
@@ -79,11 +79,11 @@ const DateItem = ({ gameid }: { gameid: string }) => {
     <div
       role="presentation"
       aria-label="Score Bar Date"
-      className="relative flex h-full w-[46px] items-center justify-center border-r border-r-grey500 bg-grey200"
+      className="relative flex h-full w-[46px] items-center justify-center border-r border-r-table bg-scorebar-date"
     >
       <span
         aria-label="Date"
-        className="relative top-[3px] text-center text-base font-bold text-grey900"
+        className="relative top-[3px] text-center text-base font-bold text-primary"
       >
         {months[parseInt(gameid.split('-')[1]) - 1]}
         <br />
@@ -134,7 +134,7 @@ const ScoreBarItem = ({
     >
       <div
         className={classnames(
-          'relative h-full w-[189px] border-r border-r-grey500 bg-grey100 pt-[23px]',
+          'relative h-full w-[189px] border-r border-r-table bg-scorebar-game pt-[23px]',
         )}
       >
         {/* Home Team */}
@@ -142,8 +142,8 @@ const ScoreBarItem = ({
           className={classnames(
             'mx-auto my-[5px] grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.homeScore > data.awayScore || !data.played
-              ? 'text-grey900'
-              : 'text-grey600',
+              ? 'text-primary'
+              : 'text-tertiary',
           )}
         >
           <TeamLogo
@@ -165,8 +165,8 @@ const ScoreBarItem = ({
           className={classnames(
             'mx-auto my-[5px] grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.awayScore > data.homeScore || !data.played
-              ? 'text-grey900'
-              : 'text-grey600',
+              ? 'text-primary'
+              : 'text-tertiary',
           )}
         >
           <TeamLogo
@@ -220,7 +220,7 @@ export const ScoreBar = ({
   loading: boolean;
   league: League;
 }) => (
-  <div className="h-24 w-full bg-grey100 [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
+  <div className="h-24 w-full bg-scorebar-game [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
     {loading ? (
       <div className="flex size-full items-center justify-center">
         <Spinner size="xl" />

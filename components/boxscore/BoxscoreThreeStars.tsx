@@ -58,10 +58,8 @@ const StarRow = ({
         className="mr-2 size-[60px]"
       />
       <div className="flex w-full flex-col truncate">
-        <div className="truncate text-base font-semibold">
-          {star.name}
-        </div>
-        <div className="text-xs text-grey700">
+        <div className="truncate text-base font-semibold">{star.name}</div>
+        <div className="text-xs text-secondary">
           {starIsGoalie
             ? `SA: ${starInfo.shotsAgainst} SV%: ${starInfo.savePct.toFixed(3)}`
             : `G: ${starInfo.goals} A: ${starInfo.assists} H: ${starInfo.hits}`}
@@ -133,10 +131,10 @@ export const BoxscoreThreeStars = ({
 
   return (
     <>
-      <div className="ml-4 mt-1 text-sm font-medium text-grey700">
+      <div className="ml-4 mt-1 text-sm font-medium text-secondary">
         Three Stars of the Game
       </div>
-      <div className="flex w-full flex-col bg-grey100 font-mont">
+      <div className="flex w-full flex-col bg-primary font-mont">
         <StarRow
           league={league}
           gameData={gameData}

@@ -53,6 +53,9 @@ export default {
       textColor: {
         ...colorPalette('text'),
       },
+      fill: {
+        ...colorPalette('text'),
+      },
     },
   },
   plugins: [themeDefsPlugin],

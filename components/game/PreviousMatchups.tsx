@@ -37,19 +37,19 @@ export const PreviousMatchups = ({
 
   if (!previewData || !data) {
     return (
-      <div className="flex h-fit w-full flex-col items-center justify-center bg-grey100 p-4">
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-primary p-4">
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col bg-grey100">
+    <div className="flex flex-col bg-primary">
       <div className="border-b-2 border-b-grey300 px-4 py-2.5 font-semibold">
         {previewData.game.type} Series
       </div>
       {data.length === 0 ? (
-        <div className="flex flex-col bg-grey100 px-4 py-2.5">
+        <div className="flex flex-col bg-primary px-4 py-2.5">
           No previous games played
         </div>
       ) : (
@@ -76,7 +76,7 @@ export const PreviousMatchups = ({
                   },
                 }}
                 className={classnames(
-                  'flex flex-col bg-grey100 px-4 py-2.5 hover:brightness-75',
+                  'flex flex-col bg-primary px-4 py-2.5 hover:brightness-75',
                 )}
               >
                 <span className="mb-1.5 font-mont text-sm font-medium">

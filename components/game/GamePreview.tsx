@@ -26,7 +26,7 @@ export const GamePreview = ({
   }`;
 
   return (
-    <div className="flex h-fit w-full flex-col bg-grey100 p-4 pt-0">
+    <div className="flex h-fit w-full flex-col bg-primary p-4 pt-0">
       <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
         <Skeleton isLoaded={!!previewData}>
           <span className="text-sm">{previewData?.game.date}</span>
@@ -64,7 +64,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600">
+              <span className="font-mont text-sm text-tertiary">
                 {previewData?.teamStats.away.record}
               </span>
             </Skeleton>
@@ -75,7 +75,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold',
                 previewData?.game.awayScore < previewData?.game.homeScore &&
-                  'text-grey500',
+                  'text-tertiary',
               )}
             >
               {previewData?.game.awayScore}
@@ -112,7 +112,7 @@ export const GamePreview = ({
               </Link>
             </Skeleton>
             <Skeleton isLoaded={!!previewData}>
-              <span className="font-mont text-sm text-grey600">
+              <span className="font-mont text-sm text-tertiary">
                 {previewData?.teamStats.home.record}
               </span>
             </Skeleton>
@@ -122,7 +122,7 @@ export const GamePreview = ({
               className={classnames(
                 'font-mont text-4xl font-semibold md:order-first',
                 previewData?.game.homeScore < previewData?.game.awayScore &&
-                  'text-grey500',
+                  'text-tertiary',
               )}
             >
               {previewData?.game.homeScore}
