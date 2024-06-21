@@ -26,7 +26,7 @@ const PeriodPenaltiesColumn = ({
       <div className="flex-1">Penalty</div>
     </div>
     {!data ? (
-      <div className="flex w-full items-center py-6 px-2.5">No Penalties</div>
+      <div className="flex w-full items-center px-2.5 py-6">No Penalties</div>
     ) : (
       <div className="divide-y divide-grey500">
         {data.map((penalty, i) => {
@@ -38,7 +38,7 @@ const PeriodPenaltiesColumn = ({
             <div
               key={i}
               className={classnames(
-                'flex w-full items-center py-6 px-2.5 font-mont',
+                'flex w-full items-center px-2.5 py-6 font-mont',
               )}
             >
               <Tooltip
@@ -90,7 +90,7 @@ export const BoxscorePeriodPenalties = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
+      <div className="ml-4 mt-1 text-sm font-medium text-grey700">
         Penalties
       </div>
       <div className="flex w-full flex-col bg-grey100">

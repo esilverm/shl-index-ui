@@ -93,9 +93,9 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="players" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:pt-px lg:pb-10">
+      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:pb-10 lg:pt-px">
         {isLoading ? (
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="flex size-full items-center justify-center">
             <Spinner size="xl" />
           </div>
         ) : (

@@ -169,7 +169,7 @@ export const DoubleBracket = ({
   return (
     <div
       className={classnames(
-        'mt-20 flex h-full w-full flex-row content-between items-center pt-2.5',
+        'mt-20 flex size-full flex-row content-between items-center pt-2.5',
         className,
       )}
     >

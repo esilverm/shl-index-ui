@@ -54,7 +54,7 @@ export const BoxscorePeriodShots = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
+      <div className="ml-4 mt-1 text-sm font-medium text-grey700">
         Shots on Goal
       </div>
       <div className="flex w-full flex-col bg-grey100">
@@ -68,7 +68,7 @@ export const BoxscorePeriodShots = ({
             <div
               key={periods[i]}
               className={classnames(
-                'flex w-full items-center py-6 px-2.5 font-mont',
+                'flex w-full items-center px-2.5 py-6 font-mont',
               )}
             >
               <div className="w-1/2">{periods[i]}</div>

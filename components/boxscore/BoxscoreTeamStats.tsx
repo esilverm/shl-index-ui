@@ -72,7 +72,7 @@ const BoxscoreTeamStatsRow = ({
           <TeamLogo
             league={league}
             teamAbbreviation={gameData?.teams[team].abbr}
-            className="h-full w-full"
+            className="size-full"
           />
         </SkeletonCircle>
         <div className="hidden md:inline-block">

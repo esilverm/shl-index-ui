@@ -70,7 +70,7 @@ const TeamLine = ({
         className={classnames(
           'pr-[5px]',
           !shouldUseTeamShortName &&
-            'overflow-hidden text-ellipsis whitespace-nowrap',
+            'truncate',
           teamInfo.color.isDark ? 'text-grey100' : 'text-grey900',
         )}
       >

@@ -19,7 +19,7 @@ export const LinePlayer = ({
   return (
     <div
       className={classnames(
-        'mx-5 flex min-w-[200px] max-w-[350px] flex-col items-center justify-center overflow-hidden whitespace-nowrap rounded py-8 px-12 shadow-[0px_0px_15px_rgba(0,_0,_0,_0.1)]',
+        'mx-5 flex min-w-[200px] max-w-[350px] flex-col items-center justify-center overflow-hidden whitespace-nowrap rounded px-12 py-8 shadow-[0px_0px_15px_rgba(0,_0,_0,_0.1)]',
         className,
       )}
     >

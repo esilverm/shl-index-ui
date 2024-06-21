@@ -69,7 +69,7 @@ const TeamFinalScoreRow = ({
         />
       </SkeletonCircle>
       <div className="flex flex-col">
-        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
+        <div className="truncate text-base font-semibold">
           {gameData?.teams[team].abbr}
         </div>
         <div className="text-xs text-grey700">

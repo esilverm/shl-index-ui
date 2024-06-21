@@ -72,7 +72,7 @@ const DivisionStandings = ({
               <TeamLogo
                 league={league}
                 teamAbbreviation={team.abbreviation}
-                className="mr-2 h-[25px] w-[25px]"
+                className="mr-2 size-[25px]"
               />
               <Link
                 href={{

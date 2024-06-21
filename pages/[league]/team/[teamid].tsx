@@ -149,7 +149,7 @@ export default ({
       />
       <Header league={league} activePage="team" daysToShow={10} />
       <div
-        className="flex h-[40vh] min-h-[300px] w-full flex-col items-center py-[5%] md:flex-row md:py-0 md:px-[12.5%]"
+        className="flex h-[40vh] min-h-[300px] w-full flex-col items-center py-[5%] md:flex-row md:px-[12.5%] md:py-0"
         style={{ backgroundColor: colors.primary }}
       >
         <TeamLogo

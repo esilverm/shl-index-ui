@@ -1,5 +1,5 @@
-import { NextSeo } from 'next-seo';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import { NextSeo } from 'next-seo';
 
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
@@ -17,7 +17,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} />
-      <div className="my-0 mx-auto block h-auto w-full flex-1 grid-cols-4 grid-rows-6 gap-6 bg-grey100 p-6 lg:grid xl:w-3/4">
+      <div className="mx-auto my-0 block h-auto w-full flex-1 grid-cols-4 grid-rows-6 gap-6 bg-grey100 p-6 lg:grid xl:w-3/4">
         <div className="col-[initial] row-[initial] m-auto w-4/5 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-7 md:m-0 md:w-full">
           <Livestream league={league} />
         </div>
