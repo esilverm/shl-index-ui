@@ -53,7 +53,7 @@ export const SingleBracket = ({
   return (
     <div
       className={classnames(
-        'mt-6 flex h-full w-full flex-wrap items-center justify-center text-center',
+        'mt-6 flex size-full flex-wrap items-center justify-center text-center',
         className,
       )}
     >

@@ -50,9 +50,9 @@ export default () => {
             <Link
               key={href}
               href={href}
-              className="relative my-10 mx-6 inline-block aspect-square min-h-[200px] w-1/5 min-w-[200px] rounded-full bg-grey100 shadow-md !transition-all !duration-200 !ease-out hover:scale-105 hover:shadow-lg lg:my-20"
+              className="relative mx-6 my-10 inline-block aspect-square min-h-[200px] w-1/5 min-w-[200px] rounded-full bg-grey100 shadow-md !transition-all !duration-200 !ease-out hover:scale-105 hover:shadow-lg lg:my-20"
             >
-              <Logo className="absolute top-[10%] left-[10%] h-4/5 w-4/5 object-contain" />
+              <Logo className="absolute left-[10%] top-[10%] size-4/5 object-contain" />
             </Link>
           ))}
         </div>

@@ -37,7 +37,7 @@ export const Livestream = ({ league }: { league: string }) => {
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="absolute top-0 left-0 h-full w-full rounded-xl"
+            className="absolute left-0 top-0 size-full rounded-xl"
           />
         )}
       </div>

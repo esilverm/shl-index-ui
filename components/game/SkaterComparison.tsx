@@ -121,7 +121,7 @@ export const SkaterComparison = ({
             <div className="flex min-w-[100px] flex-1 items-center justify-between font-semibold">
               <Skeleton
                 isLoaded={!isLoading}
-                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
+                className="max-w-[200px] truncate"
               >
                 <span className="inline-block  text-sm lg:hidden">
                   {getPlayerShortname(leaders.away.player)}
@@ -157,7 +157,7 @@ export const SkaterComparison = ({
               </Skeleton>
               <Skeleton
                 isLoaded={!isLoading}
-                className="overflow-hidden text-ellipsis whitespace-nowrap text-right"
+                className="truncate text-right"
               >
                 <span className="inline-block text-sm lg:hidden">
                   {getPlayerShortname(leaders.home.player)}

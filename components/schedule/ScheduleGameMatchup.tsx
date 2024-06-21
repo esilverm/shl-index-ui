@@ -53,7 +53,7 @@ const ScheduleMatchupTeam = ({
         <TeamLogo
           league={league}
           teamAbbreviation={team?.abbreviation}
-          className="mr-1 h-6 w-6"
+          className="mr-1 size-6"
         />
         {team?.location} {winner === teamType.toLowerCase() && winNote}
       </div>
@@ -89,7 +89,7 @@ export const ScheduleGameMatchup = ({
           gameid: game.slug,
         },
       }}
-      className="flex flex-col border-b-2 border-b-grey500 py-1 px-2.5 hover:bg-grey300"
+      className="flex flex-col border-b-2 border-b-grey500 px-2.5 py-1 hover:bg-grey300"
     >
       <ScheduleMatchupTeam
         game={game}

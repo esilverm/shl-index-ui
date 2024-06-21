@@ -22,7 +22,7 @@ export const GamePreviewCard = ({
         <TeamLogo
           league={league}
           teamAbbreviation={awayAbbr}
-          className="h-[25px] w-[25px]"
+          className="size-[25px]"
         />
       </SkeletonCircle>
       <span>{title}</span>
@@ -30,7 +30,7 @@ export const GamePreviewCard = ({
         <TeamLogo
           league={league}
           teamAbbreviation={homeAbbr}
-          className="h-[25px] w-[25px]"
+          className="size-[25px]"
         />
       </SkeletonCircle>
     </div>

@@ -55,10 +55,10 @@ const StarRow = ({
       <TeamLogo
         league={league}
         teamAbbreviation={starTeamAbbreviation}
-        className="mr-2 h-[60px] w-[60px]"
+        className="mr-2 size-[60px]"
       />
-      <div className="flex w-full flex-col overflow-hidden text-ellipsis whitespace-nowrap">
-        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
+      <div className="flex w-full flex-col truncate">
+        <div className="truncate text-base font-semibold">
           {star.name}
         </div>
         <div className="text-xs text-grey700">
@@ -133,7 +133,7 @@ export const BoxscoreThreeStars = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">
+      <div className="ml-4 mt-1 text-sm font-medium text-grey700">
         Three Stars of the Game
       </div>
       <div className="flex w-full flex-col bg-grey100 font-mont">

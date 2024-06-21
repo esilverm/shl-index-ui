@@ -86,7 +86,7 @@ export const Leaderboard = ({
   const dataOrPlaceholderArray = data ?? new Array(10).fill({});
 
   return (
-    <div className="flex w-full min-w-[250px] flex-col py-4 px-6 sm:w-[450px]">
+    <div className="flex w-full min-w-[250px] flex-col px-6 py-4 sm:w-[450px]">
       <div className="min-h-[30px] min-w-[50px] text-2xl font-semibold capitalize">
         {currentStatName}
       </div>
@@ -113,7 +113,7 @@ export const Leaderboard = ({
                   currentStat={player.stat}
                   leaderStat={data[0].stat}
                 />
-                <div className="z-10 ml-2.5 flex items-center overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="z-10 ml-2.5 flex items-center truncate">
                   <span
                     className={classnames(
                       'w-6 font-mont',
@@ -127,7 +127,7 @@ export const Leaderboard = ({
                     teamAbbreviation={player.team?.abbr}
                     className={classnames(
                       'mr-1',
-                      i === 0 ? 'h-7 w-7' : 'h-5 w-5',
+                      i === 0 ? 'size-7' : 'size-5',
                     )}
                   />
                   <Link
@@ -138,7 +138,7 @@ export const Leaderboard = ({
                         id: player.id,
                       },
                     }}
-                    className="overflow-hidden text-ellipsis whitespace-nowrap hover:underline"
+                    className="truncate hover:underline"
                   >
                     {player.name}
                   </Link>

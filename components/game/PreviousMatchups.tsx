@@ -45,11 +45,11 @@ export const PreviousMatchups = ({
 
   return (
     <div className="flex flex-col bg-grey100">
-      <div className="border-b-2 border-b-grey300 py-2.5 px-4 font-semibold">
+      <div className="border-b-2 border-b-grey300 px-4 py-2.5 font-semibold">
         {previewData.game.type} Series
       </div>
       {data.length === 0 ? (
-        <div className="flex flex-col bg-grey100 py-2.5 px-4">
+        <div className="flex flex-col bg-grey100 px-4 py-2.5">
           No previous games played
         </div>
       ) : (
@@ -76,7 +76,7 @@ export const PreviousMatchups = ({
                   },
                 }}
                 className={classnames(
-                  'flex flex-col bg-grey100 py-2.5 px-4 hover:brightness-75',
+                  'flex flex-col bg-grey100 px-4 py-2.5 hover:brightness-75',
                 )}
               >
                 <span className="mb-1.5 font-mont text-sm font-medium">
@@ -87,7 +87,7 @@ export const PreviousMatchups = ({
                     <TeamLogo
                       league={league}
                       teamAbbreviation={awayTeamInfo.abbr}
-                      className="mr-2 h-[25px] w-[25px]"
+                      className="mr-2 size-[25px]"
                     />
                     {awayTeamInfo.nickname}
                   </div>
@@ -106,7 +106,7 @@ export const PreviousMatchups = ({
                     <TeamLogo
                       league={league}
                       teamAbbreviation={homeTeamInfo.abbr}
-                      className="mr-2 h-[25px] w-[25px]"
+                      className="mr-2 size-[25px]"
                     />
                     {homeTeamInfo.nickname}
                   </div>

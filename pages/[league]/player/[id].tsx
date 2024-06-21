@@ -10,8 +10,8 @@ import {
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
-import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import { useEffect, useRef } from 'react';
 
 import { Footer } from '../../../components/Footer';
@@ -162,11 +162,11 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
       <div
         className={classnames(
           'mx-auto w-full bg-grey100',
-          shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pt-px lg:pb-10',
+          shouldShowIndexView && 'p-[2.5%] lg:w-3/4 lg:px-0 lg:pb-10 lg:pt-px',
         )}
       >
         {isLoading ? (
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="flex size-full items-center justify-center">
             <Spinner ref={loaderRef} size="xl" />
           </div>
         ) : (
@@ -189,7 +189,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
                 <TeamLogo
                   league={league}
                   teamAbbreviation={playerInfo[0]?.team}
-                  className="mt-10 h-40 w-40 md:mt-2.5"
+                  className="mt-10 size-40 md:mt-2.5"
                 />
                 <div className="text-3xl font-bold uppercase">
                   {playerNameInfo?.name ?? 'Player'}

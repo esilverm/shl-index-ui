@@ -122,8 +122,8 @@ const ScoreBarItem = ({
         },
       }}
       className={classnames(
-        'relative inline-block h-full w-full transition-all',
-        'hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:flex hover:after:h-full hover:after:w-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100/80',
+        'relative inline-block size-full transition-all',
+        'hover:after:absolute hover:after:left-0 hover:after:top-0 hover:after:flex hover:after:size-full hover:after:items-center hover:after:justify-center hover:after:bg-grey900/80 hover:after:text-grey100/80',
         data.played
           ? "hover:after:content-['See_Game_Results']"
           : "hover:after:content-['See_Game_Preview']",
@@ -140,7 +140,7 @@ const ScoreBarItem = ({
         {/* Home Team */}
         <div
           className={classnames(
-            'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
+            'mx-auto my-[5px] grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.homeScore > data.awayScore || !data.played
               ? 'text-grey900'
               : 'text-grey600',
@@ -163,7 +163,7 @@ const ScoreBarItem = ({
         {/* Away Team */}
         <div
           className={classnames(
-            'my-[5px] mx-auto grid w-4/5 grid-cols-[12%_65px_1fr]',
+            'mx-auto my-[5px] grid w-4/5 grid-cols-[12%_65px_1fr]',
             data.awayScore > data.homeScore || !data.played
               ? 'text-grey900'
               : 'text-grey600',
@@ -222,7 +222,7 @@ export const ScoreBar = ({
 }) => (
   <div className="h-24 w-full bg-grey100 [&_.react-horizontal-scrolling-menu--inner-wrapper]:h-full">
     {loading ? (
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex size-full items-center justify-center">
         <Spinner size="xl" />
       </div>
     ) : (
