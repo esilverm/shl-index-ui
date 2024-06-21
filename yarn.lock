@@ -3699,10 +3699,10 @@ csstype@^3.1.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-csv-stringify@^6.2.3:
-  version "6.2.3"
-  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-6.2.3.tgz#fefd25e66fd48f8f42f43b85a66a4663a2c3e796"
-  integrity sha512-4qGjUMwnlaRc00gc2jrIYh2w/h1fo25B0mTuY9K8fBiIgtmCX3LcgUbrEGViL98Ci4Se/F5LFEtu8k+dItJVZQ==
+csv-stringify@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-6.5.0.tgz#7b1491893c917e018a97de9bf9604e23b88647c2"
+  integrity sha512-edlXFVKcUx7r8Vx5zQucsuMg4wb/xT6qyz+Sr1vnLrdXqlLD1+UKyWNyZ9zn6mUW1ewmGxrpVwAcChGF0HQ/2Q==
 
 d@1, d@^1.0.1:
   version "1.0.1"
