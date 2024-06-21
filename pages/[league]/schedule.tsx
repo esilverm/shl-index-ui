@@ -136,6 +136,7 @@ export default ({ league }: { league: League }) => {
                     unplayedOnly === 'true' ? 'false' : 'true',
                   )
                 }
+                className="border-primary"
               >
                 Hide Played Games
               </Checkbox>
