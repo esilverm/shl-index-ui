@@ -105,7 +105,6 @@ export default ({
   });
 
   const shouldShowLinesTab = !isLoadingLines && !!teamLines;
-
   const teamColorIsDark = useMemo(
     () => tinycolor(colors.primary).isDark(),
     [colors.primary],

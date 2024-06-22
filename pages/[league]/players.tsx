@@ -69,6 +69,7 @@ export default ({ league }: { league: League }) => {
         `api/v1/players/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
+    enabled: season !==undefined && season >= 53,
   });
 
   const { data: goalieRatings } = useQuery<GoalieRatings[]>({
@@ -79,6 +80,7 @@ export default ({ league }: { league: League }) => {
         `api/v1/goalies/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
+    enabled: season !==undefined && season >= 53,
   });
 
   const isLoading =
