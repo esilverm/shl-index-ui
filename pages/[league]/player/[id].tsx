@@ -105,7 +105,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
         )}`,
       );
     },
-    enabled: !!playerTypeInfo?.playerType,
+    enabled: !!playerTypeInfo?.playerType ,
   });
 
   const { data: playerStats } = useQuery<PlayerWithAdvancedStats[] | Goalie[]>({

@@ -13,7 +13,7 @@ import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
 import { useRouterPageState } from '../../hooks/useRouterPageState';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
-import { League, leagueNameToId } from '../../utils/leagueHelpers';
+import { isSTHS, League, leagueNameToId } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Game } from '../api/v1/schedule';
 import { TeamInfo } from '../api/v1/teams';
@@ -42,7 +42,6 @@ export default ({ league }: { league: League }) => {
     },
   });
 
-  const isSTHS: boolean = season !== undefined && season <= 52;
   const selectedTeam = parseInt(currentSelectedTeam);
 
   const { data: teamList } = useQuery<TeamInfo[]>({
@@ -114,7 +113,7 @@ export default ({ league }: { league: League }) => {
       />
       <Header league={league} activePage="schedule" />
       <div className="m-auto w-full bg-primary py-10 lg:w-3/4 lg:p-[2.5%]">
-        {isSTHS ? (
+        {isSTHS(season) ? (
           <div className="text-center text-2xl font-bold">
             No Schedule before S53
           </div>
