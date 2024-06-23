@@ -7,6 +7,7 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import STHS from 'components/common/STHS';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 
@@ -21,7 +22,7 @@ import { SkaterScoreTable } from '../../components/tables/SkaterScoreTable';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
 import { Goalie, PlayerWithAdvancedStats } from '../../typings/api';
-import { League, leagueNameToId } from '../../utils/leagueHelpers';
+import { isSTHS, League, leagueNameToId } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { seasonTypeToApiFriendlyParam } from '../../utils/seasonTypeHelpers';
 import { GoalieRatings } from '../api/v1/goalies/ratings/[id]';
@@ -30,7 +31,7 @@ import { SkaterRatings } from '../api/v1/players/ratings/[id]';
 export default ({ league }: { league: League }) => {
   const { season } = useSeason();
   const { type } = useSeasonType();
-
+  
   const { data: skaterScoring } = useQuery<PlayerWithAdvancedStats[]>({
     queryKey: ['skaterScoring', league, type, season],
     queryFn: () => {
@@ -69,7 +70,7 @@ export default ({ league }: { league: League }) => {
         `api/v1/players/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
-    enabled: season !==undefined && season >= 53,
+    enabled: season !== undefined && season >= 53,
   });
 
   const { data: goalieRatings } = useQuery<GoalieRatings[]>({
@@ -80,11 +81,16 @@ export default ({ league }: { league: League }) => {
         `api/v1/goalies/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
-    enabled: season !==undefined && season >= 53,
+    enabled: season !== undefined && season >= 53,
   });
 
-  const isLoading =
-    !skaterScoring || !skaterRatings || !goalieRatings || !goalieScoring;
+  let isLoading: boolean;
+  if(season !== undefined && season >= 53){
+    isLoading =
+      !skaterScoring || !skaterRatings || !goalieRatings || !goalieScoring;
+  } else {
+    isLoading = !skaterScoring || !goalieScoring;
+  }
 
   return (
     <>
@@ -111,19 +117,28 @@ export default ({ league }: { league: League }) => {
             <Tabs>
               <TabList>
                 <Tab>Stats</Tab>
-                <Tab>Advanced Stats</Tab>
-                <Tab>Ratings</Tab>
+                {season !== undefined && season >= 53 && (
+                  <Tab>Advanced Stats</Tab>
+                )}
+                {season !== undefined && season >= 53 && (
+                  <Tab>Ratings</Tab>
+                )}
               </TabList>
+              {isSTHS(season) && <STHS />}
               <TabPanels>
                 <TabPanel>
                   <SkaterScoreTable data={skaterScoring} type="league" />
                 </TabPanel>
-                <TabPanel>
-                  <SkaterAdvStatsTable data={skaterScoring} type="league" />
-                </TabPanel>
-                <TabPanel>
-                  <SkaterRatingsTable data={skaterRatings} type="league" />
-                </TabPanel>
+                {season !== undefined && season >= 53 && (
+                  <TabPanel>
+                    <SkaterAdvStatsTable data={skaterScoring} type="league" />
+                  </TabPanel>
+                )}
+                {season !== undefined && season >= 53 && (
+                  <TabPanel>
+                    <SkaterRatingsTable data={skaterRatings} type="league" />
+                  </TabPanel>
+                )}
               </TabPanels>
             </Tabs>
             <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
@@ -132,15 +147,19 @@ export default ({ league }: { league: League }) => {
             <Tabs>
               <TabList>
                 <Tab>Stats</Tab>
-                <Tab>Ratings</Tab>
+                {season !== undefined && season >= 53 && (
+                  <Tab>Ratings</Tab>
+                )}
               </TabList>
               <TabPanels>
                 <TabPanel>
                   <GoalieScoreTable data={goalieScoring} type="league" />
                 </TabPanel>
-                <TabPanel>
-                  <GoalieRatingsTable data={goalieRatings} type="league" />
-                </TabPanel>
+                {season !== undefined && season >= 53 && (
+                  <TabPanel>
+                    <GoalieRatingsTable data={goalieRatings} type="league" />
+                  </TabPanel>
+                )}
               </TabPanels>
             </Tabs>
           </>
