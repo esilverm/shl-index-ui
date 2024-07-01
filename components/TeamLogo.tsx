@@ -290,6 +290,8 @@ const getLogoId = (
             return 'St_LouisOld';
           }
           return 'St_Louis';
+        case 'TBW':
+          return 'Thunder_Bay';
         case 'VAN':
           if (season < 71) {
             return 'VancouverOld';
