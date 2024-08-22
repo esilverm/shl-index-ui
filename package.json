@@ -34,7 +34,7 @@
     "hamburger-react": "^2.5.0",
     "lodash": "^4.17.21",
     "net-browserify": "^0.2.4",
-    "next": "^13.1.0",
+    "next": "^14.2.6",
     "next-themes": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
