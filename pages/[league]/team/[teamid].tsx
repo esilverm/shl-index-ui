@@ -149,7 +149,7 @@ export default ({
       />
       <Header league={league} activePage="team" daysToShow={10} />
       <div
-        className="flex h-[40vh] min-h-[300px] w-full flex-col items-center py-[5%] md:flex-row md:py-0 md:px-[12.5%]"
+        className="flex h-[40vh] min-h-[300px] w-full flex-col items-center py-[5%] md:flex-row md:px-[12.5%] md:py-0"
         style={{ backgroundColor: colors.primary }}
       >
         <TeamLogo
@@ -186,7 +186,7 @@ export default ({
           </h3>
         </div>
       </div>
-      <div className="m-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:p-8">
+      <div className="m-auto w-full bg-primary p-[2.5%] lg:w-3/4 lg:p-8">
         {shouldShowTeamStats && (
           <div className="mb-6 hidden flex-col space-y-6 sm:flex">
             <h3 className="text-4xl font-bold">Current Season Stats</h3>

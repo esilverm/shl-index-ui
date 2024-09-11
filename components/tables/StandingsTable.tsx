@@ -64,12 +64,12 @@ export const StandingsTable = ({
                   league={league}
                   teamAbbreviation={cellValue[1] as string}
                   aria-label={`${cellValue[3]} logo`}
-                  className="h-[30px] w-[30px]"
+                  className="size-[30px]"
                 />
                 <span className="inline text-left text-blue600 md:hidden">
                   {cellValue[1]}
                 </span>
-                <span className="my-0 mx-2.5 hidden min-w-max text-left text-blue600 md:inline">
+                <span className="mx-2.5 my-0 hidden min-w-max text-left text-blue600 md:inline">
                   {cellValue[2]}
                 </span>
               </Link>

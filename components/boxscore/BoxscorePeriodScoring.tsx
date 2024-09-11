@@ -49,7 +49,7 @@ const GoalTimingBar = ({
 
   return (
     <div
-      className="mt-0.5 flex rounded-md border font-mont text-[0.7rem] leading-5"
+      className="mt-0.5 flex rounded-md border bg-grey100 font-mont text-[0.7rem] leading-5"
       style={{
         borderColor: teamColor,
       }}
@@ -111,11 +111,11 @@ const PeriodScoringColumn = ({
   const router = useRouter();
   return (
     <>
-      <div className="w-full border-b border-b-grey500 bg-grey300 p-2.5 font-mont text-sm text-grey700">
+      <div className="w-full border-b border-b-table bg-boxscore-header p-2.5 font-mont text-sm text-boxscore-header">
         {title}
       </div>
       {!data ? (
-        <div className="flex w-full items-center py-6 px-2.5">
+        <div className="flex w-full items-center px-2.5 py-6">
           {period === 'SO'
             ? "Apologies. As of right now we don't have a way to show shootout statistics."
             : 'No Goals'}
@@ -126,13 +126,13 @@ const PeriodScoringColumn = ({
             <div
               key={i}
               className={classnames(
-                'flex w-full items-center border-b border-b-grey500 py-6 px-2.5',
+                'flex w-full items-center border-b border-b-table px-2.5 py-6',
               )}
             >
               <TeamLogo
                 league={league}
                 teamAbbreviation={goal.teamAbbr}
-                className="mx-2 h-[60px] w-[60px]"
+                className="mx-2 size-[60px]"
               />
               <div className="flex w-full flex-col overflow-hidden text-ellipsis">
                 <Link
@@ -143,11 +143,11 @@ const PeriodScoringColumn = ({
                       id: goal.scorer.id,
                     },
                   }}
-                  className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-xl font-semibold hover:text-blue600"
+                  className="w-full truncate text-xl font-semibold hover:text-link"
                 >
                   {goal.scorer.name}
                 </Link>
-                <div className="text-xs text-grey700">
+                <div className="text-xs text-secondary">
                   {!goal.primaryAssist
                     ? 'Unassisted'
                     : `${getPlayerShortname(goal.primaryAssist.name ?? '')}${
@@ -228,8 +228,10 @@ export const BoxscorePeriodScoring = ({
 
   return (
     <>
-      <div className="mt-1 ml-4 text-sm font-medium text-grey700">Scoring</div>
-      <div className="flex w-full flex-col bg-grey100">
+      <div className="ml-4 mt-1 text-sm font-medium text-secondary">
+        Scoring
+      </div>
+      <div className="flex w-full flex-col bg-table-row">
         <PeriodScoringColumn
           league={league}
           data={periodByPeriodScoring[1]}

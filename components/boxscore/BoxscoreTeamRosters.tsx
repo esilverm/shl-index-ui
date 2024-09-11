@@ -76,8 +76,8 @@ const TeamSkaterTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600">
-        <TableHeader firstColumn className="border-r border-r-grey400">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-table bg-boxscore-header px-4 text-xs text-boxscore-header">
+        <TableHeader firstColumn className="border-r border-r-table">
           Skaters
         </TableHeader>
         <TableHeader title="Game Rating">GR</TableHeader>
@@ -105,7 +105,7 @@ const TeamSkaterTable = ({
         </TableHeader>
         <TableHeader title="Faceoff Win %">FO%</TableHeader>
       </div>
-      <div className="divide-y divide-grey400">
+      <div className="divide-y divide-table">
         {skatersData?.map((player) => (
           <div
             key={player.id}
@@ -113,7 +113,7 @@ const TeamSkaterTable = ({
           >
             <TableCell
               firstColumn
-              className="border-r border-r-grey400"
+              className="border-r border-r-table"
               isLoading={isLoading}
             >
               <Link
@@ -201,8 +201,8 @@ const TeamGoalieTable = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex w-full min-w-[800px] items-center border-y border-y-grey400 bg-grey200 px-4 text-xs text-grey600">
-        <TableHeader firstColumn className="border-r border-r-grey400">
+      <div className="flex w-full min-w-[800px] items-center border-y border-y-table bg-boxscore-header px-4 text-xs text-boxscore-header">
+        <TableHeader firstColumn className="border-r border-r-table">
           Goalies
         </TableHeader>
         <TableHeader title="Game Rating">GR</TableHeader>
@@ -220,11 +220,11 @@ const TeamGoalieTable = ({
           player.minutesPlayed !== '00:00' && (
             <div
               key={player.id}
-              className="flex w-full min-w-[800px] items-center border-b border-t-grey400 px-4 text-xs"
+              className="flex w-full min-w-[800px] items-center border-b border-t-table px-4 text-xs"
             >
               <TableCell
                 firstColumn
-                className="border-r border-r-grey400"
+                className="border-r border-r-table"
                 isLoading={isLoading}
               >
                 <Link
@@ -295,7 +295,7 @@ export const BoxscoreTeamRosters = ({
   });
 
   return (
-    <div className="flex w-full flex-col bg-grey100">
+    <div className="flex w-full flex-col bg-table-row">
       {/* AWAY */}
       <h5 className="m-4 text-xl font-bold">
         {gameData?.teams.away.name} {gameData?.teams.away.nickname}

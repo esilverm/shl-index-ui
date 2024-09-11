@@ -15,7 +15,7 @@ export const PaginationControl = <T extends Record<string, unknown>>({
   table: Table<T>;
 }) => {
   return (
-    <div className="flex w-full items-center justify-between space-x-3 rounded-b-lg border border-t-0 border-grey500 py-2 px-4 lg:space-x-10">
+    <div className="flex w-full items-center justify-between space-x-3 rounded-b-lg border border-t-0 border-grey500 px-4 py-2 lg:space-x-10">
       <Tooltip
         label="Jump to first page"
         isDisabled={!table.getCanPreviousPage()}
@@ -65,8 +65,8 @@ export const PaginationControl = <T extends Record<string, unknown>>({
           >
             <NumberInputField />
             <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
+              <NumberIncrementStepper className="!text-primary" />
+              <NumberDecrementStepper className="!text-primary" />
             </NumberInputStepper>
           </NumberInput>
         </span>

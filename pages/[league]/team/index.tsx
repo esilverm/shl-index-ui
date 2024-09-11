@@ -2,8 +2,8 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { GetServerSideProps } from 'next';
-import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import { useEffect, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
@@ -83,7 +83,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="team" />
-      <div className="mx-auto w-full bg-grey100 pt-px pb-10 lg:w-3/4">
+      <div className="mx-auto w-full bg-primary pb-10 pt-px lg:w-3/4">
         <Tabs isLazy index={currentTab} onChange={setCurrentTab}>
           {shouldShowTeamStats && (
             <TabList className="mx-10 pt-8">
@@ -104,7 +104,7 @@ export default ({ league }: { league: League }) => {
                         id: team.id,
                       },
                     }}
-                    className="m-auto flex h-[90%] w-[90%] items-center rounded-lg"
+                    className="m-auto flex size-[90%] items-center rounded-lg"
                     style={{ backgroundColor: team.colors.primary }}
                   >
                     <TeamLogo

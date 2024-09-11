@@ -72,7 +72,7 @@ const BoxscoreTeamStatsRow = ({
           <TeamLogo
             league={league}
             teamAbbreviation={gameData?.teams[team].abbr}
-            className="h-full w-full"
+            className="size-full"
           />
         </SkeletonCircle>
         <div className="hidden md:inline-block">
@@ -118,7 +118,7 @@ export const BoxscoreTeamStats = ({
   });
 
   return (
-    <div className="flex w-full flex-col bg-grey100 p-4 pt-0">
+    <div className="flex w-full flex-col bg-primary p-4 pt-0">
       <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
         <Skeleton isLoaded={!!gameData}>
           <span className="text-sm">{gameData?.game.date}</span>

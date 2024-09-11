@@ -93,9 +93,9 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="players" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:w-3/4 lg:pt-px lg:pb-10">
+      <div className="mx-auto w-full bg-primary p-[2.5%] lg:w-3/4 lg:pb-10 lg:pt-px">
         {isLoading ? (
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="flex size-full items-center justify-center">
             <Spinner size="xl" />
           </div>
         ) : (
@@ -103,7 +103,7 @@ export default ({ league }: { league: League }) => {
             <div className="flex flex-col items-center md:mr-8 md:flex-row md:justify-end">
               <SeasonTypeSelector className="top-7 !h-7 w-48" />
             </div>
-            <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
+            <h2 className="my-7 border-b border-b-primary py-1 text-4xl font-bold">
               Skaters
             </h2>
             <Tabs>

@@ -1,3 +1,4 @@
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Squash as Hamburger } from 'hamburger-react';
@@ -11,6 +12,7 @@ import { League, leagueNameToId } from '../utils/leagueHelpers';
 import { query } from '../utils/query';
 import { onlyIncludeSeasonAndTypeInQuery } from '../utils/routingHelpers';
 
+import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Link } from './common/Link';
 import { Select } from './common/Select';
 import { LeagueLogo } from './LeagueLogo';
@@ -23,7 +25,23 @@ const menuLinks = [
   'schedule',
   'players',
 ] as const;
-type MenuLinks = typeof menuLinks[number] | 'game';
+
+const externalLinks = [
+  {
+    name: 'Forums',
+    href: 'https://simulationhockey.com/index.php',
+  },
+  {
+    name: 'Portal',
+    href: 'https://portal.simulationhockey.com/',
+  },
+  {
+    name: 'Cards',
+    href: 'https://cards.simulationhockey.com/',
+  },
+];
+
+type MenuLinks = (typeof menuLinks)[number] | 'game';
 
 export const Header = ({
   league,
@@ -41,7 +59,6 @@ export const Header = ({
   const [scheduleVisible, setScheduleVisible] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const router = useRouter();
-
   const { season, seasonsList, setSeason, seasonLoading } = useSeason();
   const { teamid } = router.query;
 
@@ -69,7 +86,7 @@ export const Header = ({
           onChange={(e: boolean) => setScheduleVisible(e)}
           offset={{ top: 8 }}
         >
-          <div className={'h-24 w-full bg-grey100'}>
+          <div className="h-24 w-full bg-primary">
             <ScoreBar
               data={scheduleData}
               loading={scheduleIsLoading}
@@ -83,12 +100,12 @@ export const Header = ({
           (!scheduleVisible || !shouldShowScoreBar) &&
             shouldStickToTop &&
             'fixed top-0',
-          'z-50 h-16 w-full bg-grey900',
+          'z-50 h-16 w-full bg-site-header',
         )}
         role="navigation"
         aria-label="Main"
       >
-        <div className="relative mx-auto flex h-full w-full items-center justify-between px-[5%] sm:w-11/12 sm:justify-start sm:p-0 lg:w-3/4">
+        <div className="relative mx-auto flex size-full items-center justify-between px-[5%] sm:w-11/12 sm:justify-start sm:p-0 lg:w-3/4">
           <Link href="/" className="hidden h-2/5 w-max sm:inline-block">
             <Back className="top-[5%] mx-2 h-[90%] text-grey100" />
           </Link>
@@ -117,7 +134,7 @@ export const Header = ({
           <div
             className={classnames(
               !drawerVisible && 'hidden',
-              'absolute top-16 left-0 z-50 order-1 h-auto w-full flex-col bg-grey800 sm:relative sm:top-0 sm:order-3 sm:flex sm:h-full sm:w-auto sm:flex-row sm:bg-[transparent]',
+              'absolute left-0 top-16 z-50 order-1 h-auto w-full flex-col bg-grey800 sm:relative sm:top-0 sm:order-3 sm:flex sm:h-full sm:w-auto sm:flex-row sm:bg-[transparent]',
             )}
           >
             <Link
@@ -135,7 +152,7 @@ export const Header = ({
                 }}
                 className={classnames(
                   activePage === linkName &&
-                    'border-l-4 border-l-grey100 pr-4 sm:border-l-0 sm:border-b-4 sm:border-b-grey100 sm:pr-[10px] sm:pt-1',
+                    'border-l-4 border-l-grey100 pr-4 sm:border-b-4 sm:border-l-0 sm:border-b-grey100 sm:pr-[10px] sm:pt-1',
                   '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-blue600 sm:h-full sm:w-max',
                 )}
                 _hover={{ textDecoration: 'none' }}
@@ -144,6 +161,43 @@ export const Header = ({
                 {linkName}
               </Link>
             ))}
+            <div
+              className={classnames(!drawerVisible && 'hidden', 'sm:hidden')}
+            >
+              {externalLinks.map(({ name, href }) => (
+                <Link
+                  className={classnames(
+                    '!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-blue600',
+                  )}
+                  key={name}
+                  href={href}
+                  _hover={{ textDecoration: 'none' }}
+                  target="_blank"
+                >
+                  {name}
+                </Link>
+              ))}
+            </div>
+            <div className="max-md:hidden">
+              <Menu>
+                <MenuButton className="!hover:no-underline flex h-12 w-full items-center justify-center px-[10px] text-sm font-bold capitalize !text-grey100 hover:bg-blue600 sm:h-full sm:w-max">
+                  More
+                </MenuButton>
+                <MenuList>
+                  {externalLinks.map(({ name, href }) => (
+                    <MenuItem
+                      className="hover:!bg-highlighted/40 hover:!text-primary"
+                      key={name}
+                      as="a"
+                      href={href}
+                      target="_blank"
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+            </div>
           </div>
           <div className="inline-block sm:hidden">
             <Hamburger
@@ -155,15 +209,16 @@ export const Header = ({
               size={24}
             />
           </div>
-          <div className="relative order-3 mr-4 sm:mr-[2%] sm:ml-auto sm:w-auto">
+          <div className="relative order-3 mr-4 sm:ml-auto sm:mr-[2%] sm:w-auto">
+            <ColorModeSwitcher className="mr-1 !text-grey100 hover:!text-grey900 md:mr-2" />
             {activePage !== 'game' &&
               router.pathname.indexOf('/player/') === -1 &&
               !seasonLoading && (
-                <Select<typeof seasonsList[0]>
+                <Select<(typeof seasonsList)[0]>
                   options={seasonsList.sort((a: number, b: number) => b - a)}
                   selectedOption={season ?? 0}
                   onSelection={setSeason}
-                  optionClassName="before:content-['S'] sm:before:content-['Season'] sm:before:mr-1"
+                  optionClassName="before:content-['S'] md:before:content-['Season'] md:before:mr-1"
                   dark
                 />
               )}

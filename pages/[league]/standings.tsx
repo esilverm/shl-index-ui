@@ -17,6 +17,7 @@ import {
   isMainLeague,
   League,
   leagueNameToId,
+  shouldShowDivision,
 } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Standings, StandingsItem } from '../api/v1/standings';
@@ -64,9 +65,9 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="standings" />
-      <div className="mx-auto w-full bg-grey100 p-[2.5%] lg:pt-px lg:pb-10 2xl:w-5/6 2xl:px-8">
+      <div className="mx-auto w-full bg-primary p-[2.5%] lg:pb-10 lg:pt-px 2xl:w-5/6 2xl:px-8">
         <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
-          <SeasonTypeSelector className="!h-7 w-48 lg:top-7" />
+          <SeasonTypeSelector className="z-30 !h-7 w-48 lg:top-7" />
         </div>
         <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           {type === 'Playoffs' ? (
@@ -93,7 +94,7 @@ export default ({ league }: { league: League }) => {
               <TabList className="my-7">
                 <Tab>League</Tab>
                 <Tab>Conference</Tab>
-                {isMainLeague(league) && <Tab>Division</Tab>}
+                {shouldShowDivision(league, season) && <Tab>Division</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>

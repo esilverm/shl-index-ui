@@ -23,9 +23,11 @@ export const getPlayerShortname = (name: string): string => {
       /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/,
     )
   ) {
-    // get first alphanumeric character of first name
+    if (splitName[0].match(/[a-zA-Z0-9]/) === null) {
+      console.log(splitName);
+    }
     //@ts-ignore
-    const firstChar = splitName[0].match(/[a-zA-Z0-9]/)[0];
+    const firstChar = splitName[0].match(/[a-zA-Z0-9\-]/)[0];
 
     // if ends with jr
     if (
@@ -43,7 +45,7 @@ export const getPlayerShortname = (name: string): string => {
     return `${firstChar}. ${splitName[1]}`;
   }
   const shortName = splitName.slice(0, -1).reduce((acc, curr) => {
-    const firstChar = curr.match(/[a-zA-Z0-9]/);
+    const firstChar = curr.match(/[a-zA-Z0-9\-]/);
     if (firstChar) {
       return acc + `${firstChar[0]}. `;
     }
