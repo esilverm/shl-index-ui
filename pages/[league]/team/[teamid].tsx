@@ -1,6 +1,7 @@
 import { Tabs, Tab, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
+import STHS from 'components/common/STHS';
 import { partition } from 'lodash';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -21,7 +22,7 @@ import { TeamStat } from '../../../components/teams/TeamStat';
 import { useSeason } from '../../../hooks/useSeason';
 import { useSeasonType } from '../../../hooks/useSeasonType';
 import { Goalie, PlayerWithAdvancedStats } from '../../../typings/api';
-import { League, leagueNameToId } from '../../../utils/leagueHelpers';
+import { isSTHS, League, leagueNameToId } from '../../../utils/leagueHelpers';
 import { query } from '../../../utils/query';
 import { seasonTypeToApiFriendlyParam } from '../../../utils/seasonTypeHelpers';
 import { GoalieRatings } from '../../api/v1/goalies/ratings/[id]';
@@ -37,6 +38,8 @@ export default ({
   league: League;
   teamdata: TeamInfo;
 }) => {
+  console.log('teamdata:', teamdata);
+  console.log('teamdata.colors:', teamdata.colors);
   const [currentTab, setCurrentTab] = useState(0);
   const { name, colors, nameDetails, stats, abbreviation } = teamdata;
   const { season } = useSeason();
@@ -106,8 +109,8 @@ export default ({
 
   const shouldShowLinesTab = !isLoadingLines && !!teamLines;
   const teamColorIsDark = useMemo(
-    () => tinycolor(colors.primary).isDark(),
-    [colors.primary],
+    () => colors && tinycolor(colors.primary).isDark(),
+    [colors?.primary],
   );
 
   const [rosterSkaters, rosterGoalies] = useMemo(
@@ -293,11 +296,14 @@ export default ({
               <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
                 Skaters
               </h2>
+              {isSTHS(season) && <STHS />}
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  <Tab>Advanced Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  {season !== undefined && season >= 53 && (
+                    <Tab>Advanced Stats</Tab>
+                  )}
+                  {season !== undefined && season >= 53 && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -314,10 +320,11 @@ export default ({
               <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
                 Goalies
               </h2>
+              {isSTHS(season) && <STHS />}
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  {season !== undefined && season >= 53 && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -349,16 +356,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       typeof league === 'string' ? league : 'shl',
     );
 
+    const baseUrl =
+      ctx.req.headers.host?.includes('127.0.0.1') || ctx.req.headers.host?.includes('localhost')
+        ? 'http://127.0.0.1:3000'
+        : 'https://index.simulation.com'; 
+
     const teamdata = await fetch(
-      `https://index.simulationhockey.com/api/v1/teams/${teamid}?league=${leagueid}${
-        season ? `&season=${season}` : ``
+      `${baseUrl}/api/v1/teams/${teamid}?league=${leagueid}${
+        season ? `&season=${season}` : ''
       }`,
     ).then((res) => res.json());
 
     return { props: { league, teamdata } };
   } catch (error) {
     ctx.res.statusCode = 404;
-
     return { props: { error } };
   }
 };
