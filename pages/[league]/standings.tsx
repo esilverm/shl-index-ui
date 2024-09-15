@@ -73,6 +73,7 @@ export default ({ league }: { league: League }) => {
         <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           {type === 'Playoffs' ? (
             <>
+            {isSTHS(season) && <STHS />}
               {shouldShowDoublePlayoffsBracket && (
                 <DoubleBracket
                   data={data as Exclude<Standings | PlayoffsRound[], Standings>}
