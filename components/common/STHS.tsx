@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Container, IconButton, Stack, Text } from '@chakra-ui/react';
+import { Box, Container, IconButton, Stack, Text, Link } from '@chakra-ui/react';
 import { useState } from 'react';
 
 export const STHSBanner = () => {
@@ -22,6 +22,9 @@ export const STHSBanner = () => {
               <Text color="fg.muted">
                 Index may be missing certain stats and results in STHS seasons.
               </Text>
+              <Link href="/sths-info" color="blue.500" fontWeight="bold">
+                Learn more about STHS
+              </Link>
             </Box>
             <IconButton
               icon={<CloseIcon />}
