@@ -114,6 +114,7 @@ export default ({ league }: { league: League }) => {
             <h2 className="my-7 border-b border-b-primary py-1 text-4xl font-bold">
               Skaters
             </h2>
+            {isSTHS(season) && <STHS />}
             <Tabs>
               <TabList>
                 <Tab>Stats</Tab>
@@ -124,7 +125,6 @@ export default ({ league }: { league: League }) => {
                   <Tab>Ratings</Tab>
                 )}
               </TabList>
-              {isSTHS(season) && <STHS />}
               <TabPanels>
                 <TabPanel>
                   <SkaterScoreTable data={skaterScoring} type="league" />

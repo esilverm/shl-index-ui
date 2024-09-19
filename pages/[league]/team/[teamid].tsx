@@ -281,6 +281,7 @@ export default ({
             </div>
           </div>
         )}
+        {isSTHS(season) && <STHS />}
         <Tabs index={currentTab} onChange={setCurrentTab}>
           {shouldShowLinesTab && (
             <TabList>
@@ -296,7 +297,6 @@ export default ({
               <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
                 Skaters
               </h2>
-              {isSTHS(season) && <STHS />}
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
@@ -320,7 +320,6 @@ export default ({
               <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
                 Goalies
               </h2>
-              {isSTHS(season) && <STHS />}
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>

@@ -1,9 +1,39 @@
-import React from 'react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Box, Container, IconButton, Stack, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
-const STHS: React.FC = () => {
+export const STHSBanner = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   return (
-      <h1 className="text-center font-bold">Results were in STHS not FHM</h1>
+    <Box as="section" pb={{ base: '12', md: '24' }} width="100%">
+      <Box borderBottomWidth="1px" bg="bg.surface" width="100%">
+        <Container maxW="100%" py={{ base: '4', md: '3.5' }}>
+          <Stack
+            direction="row"
+            spacing={{ base: '3', md: '4' }}
+            justify="space-between"
+            align={{ base: 'start', md: 'center' }}
+          >
+            <Box>
+              <Text fontWeight="medium">Results are in STHS</Text>
+              <Text color="fg.muted">
+                Index may be missing certain stats and results in STHS seasons.
+              </Text>
+            </Box>
+            <IconButton
+              icon={<CloseIcon />}
+              variant="ghost"
+              aria-label="Close banner"
+              onClick={() => setIsVisible(false)}
+            />
+          </Stack>
+        </Container>
+      </Box>
+    </Box>
   );
 };
 
-export default STHS;
+export default STHSBanner;
