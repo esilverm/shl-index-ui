@@ -284,6 +284,9 @@ const getLogoId = (
         case 'QCC':
           return 'Quebec_City';
         case 'REG':
+          if (season < 30){
+            return 'SMJHL'
+          }
           return 'Regina';
         case 'SDT':
           return 'San_Diego';

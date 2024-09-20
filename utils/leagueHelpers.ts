@@ -10,7 +10,7 @@ export const shouldShowDivision = (
   league: League,
   season?: number,
 ): boolean => {
-  return league === 'shl' && !!season && season > 46 || (league === 'smjhl' && !!season && season < 76);
+  return league === 'shl' && !!season && season > 46 || (league === 'smjhl' && !!season && season < 76 && season >53);
 };
 
 export const isSTHS = (

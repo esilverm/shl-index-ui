@@ -1,5 +1,12 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Container, IconButton, Stack, Text, Link } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  IconButton,
+  Stack,
+  Text,
+  Link,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 
 export const STHSBanner = () => {
@@ -8,7 +15,7 @@ export const STHSBanner = () => {
   if (!isVisible) return null;
 
   return (
-    <Box as="section" pb={{ base: '12', md: '24' }} width="100%">
+    <Box as="section" pb={{ base: '3', md: '6' }} width="100%">
       <Box borderBottomWidth="1px" bg="bg.surface" width="100%">
         <Container maxW="100%" py={{ base: '4', md: '3.5' }}>
           <Stack
@@ -18,17 +25,22 @@ export const STHSBanner = () => {
             align={{ base: 'start', md: 'center' }}
           >
             <Box>
-              <Text fontWeight="medium">Results are in STHS</Text>
+              <Text fontWeight="medium">Results were in the STHS Game Engine</Text>
               <Text color="fg.muted">
-                Index may be missing certain stats and results in STHS seasons.
+                Index may be missing certain stats and results in STHS seasons. {' '}
+                <Link
+                  href="/sths-info"
+                  target="_blank"
+                  color="blue.500"
+                  fontWeight="bold"
+                >
+                  Learn more about STHS
+                </Link>
               </Text>
-              <Link href="/sths-info" color="blue.500" fontWeight="bold">
-                Learn more about STHS
-              </Link>
             </Box>
             <IconButton
               icon={<CloseIcon />}
-              variant="ghost"
+              variant="outline"
               aria-label="Close banner"
               onClick={() => setIsVisible(false)}
             />
