@@ -40,6 +40,11 @@ export default async (
 
   const [season] = seasonResponse;
 
+  if(season.SeasonID <= 52){
+    res.status(400).send('Error: no player ratings before S52')
+    return;
+  }
+
   const basePlayerData = await query<InternalPlayerRatings>(SQL`
   SELECT r.*, p.\`Last Name\` as Name, t.\`Abbr\`
   FROM corrected_player_ratings as r

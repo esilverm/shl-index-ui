@@ -129,7 +129,7 @@ export const StandingsTable = ({
             <span
               className={classnames(
                 currentValue === 0
-                  ? 'text-grey900'
+                  ? 'text-primary'
                   : currentValue > 0
                   ? 'text-[#48b400]'
                   : 'text-[#d60000]',

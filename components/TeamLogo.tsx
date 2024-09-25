@@ -209,7 +209,7 @@ const getLogoId = (
           }
         case 'LVK':
           if (season < 16) {
-            return { spriteId: 'LasVegasKings', isHistorical: true };
+            return { spriteId: 'LosVegasKings', isHistorical: true };
           }
         case 'POR':
           if (season < 36) {
@@ -284,6 +284,9 @@ const getLogoId = (
         case 'QCC':
           return 'Quebec_City';
         case 'REG':
+          if (season < 30){
+            return 'SMJHL'
+          }
           return 'Regina';
         case 'SDT':
           return 'San_Diego';
