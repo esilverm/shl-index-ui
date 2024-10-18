@@ -8,7 +8,7 @@ import VisibilitySensor from 'react-visibility-sensor-v2';
 
 import { useSeason } from '../hooks/useSeason';
 import Back from '../public/back.svg';
-import { League, leagueNameToId } from '../utils/leagueHelpers';
+import { isSTHS, League, leagueNameToId } from '../utils/leagueHelpers';
 import { query } from '../utils/query';
 import { onlyIncludeSeasonAndTypeInQuery } from '../utils/routingHelpers';
 
@@ -71,6 +71,9 @@ export const Header = ({
         }${daysToShow ? `&days=${daysToShow}` : ``}`,
       ),
   });
+  if(isSTHS(season)){
+    shouldShowScoreBar = false;
+  }
 
   return (
     <div

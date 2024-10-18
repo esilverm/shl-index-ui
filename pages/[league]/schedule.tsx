@@ -13,7 +13,7 @@ import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
 import { useRouterPageState } from '../../hooks/useRouterPageState';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
-import { League, leagueNameToId } from '../../utils/leagueHelpers';
+import { isSTHS, League, leagueNameToId } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Game } from '../api/v1/schedule';
 import { TeamInfo } from '../api/v1/teams';
@@ -113,63 +113,73 @@ export default ({ league }: { league: League }) => {
       />
       <Header league={league} activePage="schedule" />
       <div className="m-auto w-full bg-primary py-10 lg:w-3/4 lg:p-[2.5%]">
-        {!teamList || !teamSelectorList || !teamSelectorMap || !data ? (
-          <div className="flex size-full items-center justify-center">
-            <Spinner size="xl" />
+        {isSTHS(season) ? (
+          <div className="text-center text-2xl font-bold">
+            No Schedule before S53
           </div>
         ) : (
           <>
-            <div className="flex flex-col items-center space-y-2 md:mr-8 md:flex-row md:justify-end md:space-x-2 md:space-y-0">
-              <SeasonTypeSelector className="!h-7 w-48" />
-              <Select<number>
-                options={teamSelectorList}
-                selectedOption={selectedTeam}
-                onSelection={onTeamSelection}
-                optionsMap={teamSelectorMap}
-                className="!h-7 w-56"
-              />
-              <Checkbox
-                isChecked={unplayedOnly === 'true'}
-                onChange={() =>
-                  setRouterPageState(
-                    'unplayedOnly',
-                    unplayedOnly === 'true' ? 'false' : 'true',
-                  )
-                }
-                className="border-primary"
-              >
-                Hide Played Games
-              </Checkbox>
-            </div>
-            <div className="mx-auto mb-10 flex w-11/12 flex-wrap justify-evenly">
-              {isEmpty(gamesByDate) && (
-                <div className="mt-8 text-3xl font-bold">No games found</div>
-              )}
-              {Object.entries(gamesByDate)
-                .sort((a, b) => {
-                  // NOTE: this is necessary since date parser on mobile requires the dates to follow ISO 8601 (ex. "2017-04-16")
-                  const [aYear, aMonth, aDate] = a[0]
-                    .split('-')
-                    .map((datePart) => parseInt(datePart));
-                  const [bYear, bMonth, bDate] = b[0]
-                    .split('-')
-                    .map((datePart) => parseInt(datePart));
-
-                  return (
-                    new Date(aYear, aMonth, aDate).getTime() -
-                    new Date(bYear, bMonth, bDate).getTime()
-                  );
-                })
-                .map(([date, games]) => (
-                  <ScheduleDay
-                    key={date}
-                    league={league}
-                    date={date}
-                    games={games}
-                    teamData={teamList}
+            {!teamList || !teamSelectorList || !teamSelectorMap || !data ? (
+              <div className="flex size-full items-center justify-center">
+                <Spinner size="xl" />
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col items-center space-y-2 md:mr-8 md:flex-row md:justify-end md:space-x-2 md:space-y-0">
+                  <SeasonTypeSelector className="!h-7 w-48" />
+                  <Select<number>
+                    options={teamSelectorList}
+                    selectedOption={selectedTeam}
+                    onSelection={onTeamSelection}
+                    optionsMap={teamSelectorMap}
+                    className="!h-7 w-56"
                   />
-                ))}
-            </div>
+                  <Checkbox
+                    isChecked={unplayedOnly === 'true'}
+                    onChange={() =>
+                      setRouterPageState(
+                        'unplayedOnly',
+                        unplayedOnly === 'true' ? 'false' : 'true',
+                      )
+                    }
+                    className="border-primary"
+                  >
+                    Hide Played Games
+                  </Checkbox>
+                </div>
+                <div className="mx-auto mb-10 flex w-11/12 flex-wrap justify-evenly">
+                  {isEmpty(gamesByDate) && (
+                    <div className="mt-8 text-3xl font-bold">
+                      No games found
+                    </div>
+                  )}
+                  {Object.entries(gamesByDate)
+                    .sort((a, b) => {
+                      // NOTE: this is necessary since date parser on mobile requires the dates to follow ISO 8601 (ex. "2017-04-16")
+                      const [aYear, aMonth, aDate] = a[0]
+                        .split('-')
+                        .map((datePart) => parseInt(datePart));
+                      const [bYear, bMonth, bDate] = b[0]
+                        .split('-')
+                        .map((datePart) => parseInt(datePart));
+
+                      return (
+                        new Date(aYear, aMonth, aDate).getTime() -
+                        new Date(bYear, bMonth, bDate).getTime()
+                      );
+                    })
+                    .map(([date, games]) => (
+                      <ScheduleDay
+                        key={date}
+                        league={league}
+                        date={date}
+                        games={games}
+                        teamData={teamList}
+                      />
+                    ))}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>

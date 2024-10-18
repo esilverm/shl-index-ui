@@ -5,6 +5,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { useMemo, useState } from 'react';
 
+import STHS from '../../components/common/STHS';
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
 import { DoubleBracket } from '../../components/playoffBracket/DoubleBracket';
@@ -18,6 +19,7 @@ import {
   League,
   leagueNameToId,
   shouldShowDivision,
+  isSTHS,
 } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Standings, StandingsItem } from '../api/v1/standings';
@@ -55,7 +57,6 @@ export default ({ league }: { league: League }) => {
     () => data && data[0] && (data[0] as PlayoffsRound).length > 4,
     [data],
   );
-
   return (
     <>
       <NextSeo
@@ -72,6 +73,7 @@ export default ({ league }: { league: League }) => {
         <Tabs isLazy index={currentActiveTab} onChange={setCurrentActiveTab}>
           {type === 'Playoffs' ? (
             <>
+            {isSTHS(season) && <STHS />}
               {shouldShowDoublePlayoffsBracket && (
                 <DoubleBracket
                   data={data as Exclude<Standings | PlayoffsRound[], Standings>}
@@ -96,6 +98,7 @@ export default ({ league }: { league: League }) => {
                 <Tab>Conference</Tab>
                 {shouldShowDivision(league, season) && <Tab>Division</Tab>}
               </TabList>
+              {isSTHS(season) && <STHS />}
               <TabPanels>
                 <TabPanel>
                   {!isLoading && data && !('teams' in data[0]) && (

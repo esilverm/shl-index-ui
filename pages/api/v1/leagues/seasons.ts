@@ -24,10 +24,10 @@ export default async (
     SeasonID: number;
   }>(
     SQL`
-    SELECT DISTINCT schedules.SeasonID, league_data.LeagueID, league_data.Name, league_data.Abbr
-    FROM schedules
+    SELECT DISTINCT team_data.SeasonID, league_data.LeagueID, league_data.Name, league_data.Abbr
+    FROM team_data
     INNER JOIN league_data
-    ON league_data.LeagueID = schedules.LeagueID
+    ON league_data.LeagueID = team_data.LeagueID
 	`
       .append(
         league != null
@@ -36,7 +36,7 @@ export default async (
         `
           : '',
       )
-      .append(SQL`ORDER BY league_data.LeagueID ASC, schedules.SeasonID ASC`),
+      .append(SQL`ORDER BY league_data.LeagueID ASC, team_data.SeasonID ASC`),
   );
 
   if ('error' in seasons) {
