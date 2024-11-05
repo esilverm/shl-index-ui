@@ -65,8 +65,8 @@ const STHSInfo = () => {
             dramatically compared to the previous seasons and realism era.
           </Text>
           <Text>
-            <strong>S12-S20 & S25-S52 Realism Era:</strong> This was the most
-            stable era, focusing on realism in player performance and game
+            <strong>S12-S20 &amp; S25-S52 Realism Era:</strong> This was the
+            most stable era, focusing on realism in player performance and game
             outcomes.
           </Text>
           <Text>
@@ -119,7 +119,7 @@ const STHSInfo = () => {
 
         <Box>
           <Heading as="h3" size="md">
-            What if I find something in the data that's wrong?
+            What if I find something in the data that&apos;s wrong?
           </Heading>
           <Text>
             If you find any incorrect data, feel free to reach out to any
@@ -136,8 +136,8 @@ const STHSInfo = () => {
           </Heading>
           <Text>
             IIHF and WJC information is difficult to find and often lost due to
-            time. We're hopeful that some of the STHS data for IIHF and WJC will
-            be available in the future, but it's currently missing.
+            time. We&apos;re hopeful that some of the STHS data for IIHF and WJC
+            will be available in the future, but it&apos;s currently missing.
           </Text>
         </Box>
 

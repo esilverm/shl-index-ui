@@ -119,6 +119,9 @@ const getLogoId = (
           if (season < 42) {
             return { spriteId: 'ManhattanPreS42', isHistorical: true };
           }
+          if (season < 78) {
+            return { spriteId: 'ManhattanPreS78', isHistorical: true };
+          }
           return 'Manhattan';
         case 'MIN':
           if (season < 11) {
@@ -248,6 +251,9 @@ const getLogoId = (
     case 'smjhl': {
       switch (teamAbbreviation) {
         case 'ANA':
+          if (season < 49) {
+            return { spriteId: 'AnaheimPreS49', isHistorical: true };
+          }
           if (season < 59) {
             return 'AnaheimOld';
           }
@@ -260,15 +266,27 @@ const getLogoId = (
         case 'CAR':
           return 'Carolina';
         case 'COL':
+          if (season < 41) {
+            return { spriteId: 'ColoradoPreS41', isHistorical: true };
+          }
           if (season < 58) {
             return 'ColoradoOld';
           }
           return 'Colorado';
         case 'DET':
+          if (season < 9) {
+            return { spriteId: 'DetroitPreS9', isHistorical: true };
+          }
+          if (season < 41) {
+            return { spriteId: 'DetroitPreS40', isHistorical: true };
+          }
           return 'Detroit';
         case 'GFG':
           return 'Great_Falls';
         case 'KEL':
+          if (season < 49) {
+            return { spriteId: 'KelownaPreS49', isHistorical: true };
+          }
           return 'Kelowna';
         case 'MET':
           return 'Maine';
@@ -284,13 +302,19 @@ const getLogoId = (
         case 'QCC':
           return 'Quebec_City';
         case 'REG':
-          if (season < 30){
-            return 'SMJHL'
+          if (season < 24) {
+            return { spriteId: 'ReginaPreS24', isHistorical: true };
           }
           return 'Regina';
         case 'SDT':
           return 'San_Diego';
         case 'STL':
+          if (season < 33) {
+            return { spriteId: 'StLouisPreS33', isHistorical: true };
+          }
+          if (season < 45) {
+            return { spriteId: 'StLouisPreS45', isHistorical: true };
+          }
           if (season < 55) {
             return 'St_LouisOld';
           }
@@ -298,12 +322,38 @@ const getLogoId = (
         case 'TBW':
           return 'Thunder_Bay';
         case 'VAN':
+          if (season < 23) {
+            return { spriteId: 'VancouverPreS23', isHistorical: true };
+          }
           if (season < 71) {
             return 'VancouverOld';
           }
           return 'Vancouver';
         case 'YUM':
           return 'Yukon';
+        // defunct teams
+        case 'CHI':
+          return { spriteId: 'ChicagoPreS12', isHistorical: true };
+        case 'LET':
+          return { spriteId: 'LethbridgePreS51', isHistorical: true };
+        case 'PGF':
+          if (season < 17) {
+            return { spriteId: 'PrinceGeorgePreS17', isHistorical: true };
+          }
+          return { spriteId: 'PrinceGeorgePreS41', isHistorical: true };
+        case 'HFX':
+          if (season < 44) {
+            return { spriteId: 'HalifaxPreS44', isHistorical: true };
+          }
+          return { spriteId: 'HalifaxPreS52', isHistorical: true };
+        case 'MTL':
+          if (season < 27) {
+            return { spriteId: 'MontrealPreS27', isHistorical: true };
+          }
+          if (season < 34) {
+            return { spriteId: 'MontrealPreS34', isHistorical: true };
+          }
+          return { spriteId: 'MontrealPreS45', isHistorical: true };
         default:
           return 'SMJHL';
       }
@@ -397,8 +447,9 @@ export const TeamLogo = ({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       className={className}
-      src={`/stack/${isHistorical ? 'historical' : ''
-        }${league.toLowerCase()}.stack.svg#${spriteId}`}
+      src={`/stack/${
+        isHistorical ? 'historical' : ''
+      }${league.toLowerCase()}.stack.svg#${spriteId}`}
     />
   );
 };

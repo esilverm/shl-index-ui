@@ -38,8 +38,6 @@ export default ({
   league: League;
   teamdata: TeamInfo;
 }) => {
-  console.log('teamdata:', teamdata);
-  console.log('teamdata.colors:', teamdata.colors);
   const [currentTab, setCurrentTab] = useState(0);
   const { name, colors, nameDetails, stats, abbreviation } = teamdata;
   const { season } = useSeason();
@@ -110,7 +108,7 @@ export default ({
   const shouldShowLinesTab = !isLoadingLines && !!teamLines;
   const teamColorIsDark = useMemo(
     () => colors && tinycolor(colors.primary).isDark(),
-    [colors?.primary],
+    [colors],
   );
 
   const [rosterSkaters, rosterGoalies] = useMemo(
@@ -356,9 +354,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
 
     const baseUrl =
-      ctx.req.headers.host?.includes('127.0.0.1') || ctx.req.headers.host?.includes('localhost')
+      ctx.req.headers.host?.includes('127.0.0.1') ||
+      ctx.req.headers.host?.includes('localhost')
         ? 'http://127.0.0.1:3000'
-        : 'https://index.simulation.com'; 
+        : 'https://index.simulation.com';
 
     const teamdata = await fetch(
       `${baseUrl}/api/v1/teams/${teamid}?league=${leagueid}${
