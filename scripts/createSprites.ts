@@ -62,6 +62,26 @@ gulp
   .pipe(gulp.dest('./public/'));
 
 gulp
+  .src('./public/team_logos/Historical/SMJHL/*.svg')
+  .pipe(
+    svgSprite({
+      shape: {
+        dimension: {
+          precision: 3,
+        },
+        transform: ['svgo'],
+      },
+      mode: {
+        stack: {
+          dest: '../public/stack/',
+          sprite: 'historicalsmjhl.stack.svg',
+        },
+      },
+    }),
+  )
+  .pipe(gulp.dest('./public/'));
+
+gulp
   .src('./public/team_logos/SMJHL/*.svg')
   .pipe(
     svgSprite({
