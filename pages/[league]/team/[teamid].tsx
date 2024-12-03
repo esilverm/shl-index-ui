@@ -39,8 +39,7 @@ export default ({
   teamdata: TeamInfo;
 }) => {
   const [currentTab, setCurrentTab] = useState(0);
-  console.log(teamdata);
-  const { name = '', colors, nameDetails, stats, abbreviation } = teamdata;
+  const { name, colors, nameDetails, stats, abbreviation } = teamdata;
   const { season, isSTHS } = useSeason();
   const { type } = useSeasonType();
 
