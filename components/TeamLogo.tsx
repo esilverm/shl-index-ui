@@ -212,7 +212,7 @@ const getLogoId = (
           }
         case 'LVK':
           if (season < 16) {
-            return { spriteId: 'LosVegasKings', isHistorical: true };
+            return { spriteId: 'LasVegasKings', isHistorical: true };
           }
         case 'POR':
           if (season < 36) {

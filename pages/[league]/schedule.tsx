@@ -13,7 +13,7 @@ import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
 import { useRouterPageState } from '../../hooks/useRouterPageState';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
-import { isSTHS, League, leagueNameToId } from '../../utils/leagueHelpers';
+import { League, leagueNameToId } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { Game } from '../api/v1/schedule';
 import { TeamInfo } from '../api/v1/teams';
@@ -25,7 +25,7 @@ const getTeamsListData = async (league: League, season: number | undefined) => {
 
 export default ({ league }: { league: League }) => {
   const { type } = useSeasonType();
-  const { season } = useSeason();
+  const { season, isSTHS } = useSeason();
 
   const {
     selectedTeam: currentSelectedTeam,
@@ -113,7 +113,7 @@ export default ({ league }: { league: League }) => {
       />
       <Header league={league} activePage="schedule" />
       <div className="m-auto w-full bg-primary py-10 lg:w-3/4 lg:p-[2.5%]">
-        {isSTHS(season) ? (
+        {isSTHS ? (
           <div className="text-center text-2xl font-bold">
             No Schedule before S53
           </div>

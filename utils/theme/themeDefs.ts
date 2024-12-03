@@ -42,6 +42,7 @@ export const lightTheme: ThemeVariables = {
   '--color-text-table-row': '#212529',
   '--color-text-table-header': '#F8F9FA',
   '--color-text-boxscore-header': '#6C757D',
+  '--color-text-info-icon': '#005AAF',
 
   // Background
   '--color-background-primary': '#F8F9FA',
@@ -54,6 +55,7 @@ export const lightTheme: ThemeVariables = {
   '--color-background-site-header': '#212529',
   '--color-background-boxscore-header': '#E9ECEF',
   '--color-background-scorebar-date': '#E9ECEF',
+  '--color-background-info': '#74b0f4',
 };
 
 export const darkTheme: ThemeVariables = {
@@ -86,6 +88,7 @@ export const darkTheme: ThemeVariables = {
   '--color-text-table-row': '#E9ECEF',
   '--color-text-table-header': '#F8F9FA',
   '--color-text-boxscore-header': '#F8F9FA',
+  '--color-text-info-icon': '#7DC0FF',
 
   // Background
   '--color-background-primary': '#212529',
@@ -98,4 +101,5 @@ export const darkTheme: ThemeVariables = {
   '--color-background-site-header': '#141419',
   '--color-background-boxscore-header': '#141419',
   '--color-background-scorebar-date': '#343A40',
+  '--color-background-info': '#2070CB',
 };

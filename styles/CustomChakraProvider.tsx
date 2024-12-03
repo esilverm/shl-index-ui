@@ -56,6 +56,32 @@ export const chakraTheme: Partial<ChakraTheme> = {
         color: colors.text.primary,
       },
     },
+    Alert: {
+      parts: ['container', 'icon'],
+      baseStyle: {
+        container: {
+          display: 'flex',
+          alignItems: 'center',
+          py: '3',
+          gap: '2',
+          '&[data-status="info"]': {
+            backgroundColor: colors.background.info,
+          },
+        },
+        icon: {
+          '&[data-status="info"]': {
+            color: colors.text['info-icon'],
+          },
+        },
+      },
+    },
+    Modal: {
+      baseStyle: {
+        dialog: {
+          bg: colors.background.primary,
+        },
+      },
+    },
   },
   styles: {
     global: () => ({

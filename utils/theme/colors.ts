@@ -30,6 +30,7 @@ export const colorsRaw = {
     'table-row': 'var(--color-text-table-row)',
     'table-header': 'var(--color-text-table-header)',
     'boxscore-header': 'var(--color-text-boxscore-header)',
+    'info-icon': 'var(--color-text-info-icon)',
   },
   background: {
     primary: 'var(--color-background-primary)',
@@ -42,6 +43,7 @@ export const colorsRaw = {
     'site-header': 'var(--color-background-site-header)',
     'boxscore-header': 'var(--color-background-boxscore-header)',
     'scorebar-date': 'var(--color-background-scorebar-date)',
+    info: 'var(--color-background-info)',
   },
 } satisfies Record<string, Record<string, `var(--${string})`>>;
 

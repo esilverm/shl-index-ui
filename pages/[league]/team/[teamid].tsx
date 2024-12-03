@@ -1,7 +1,6 @@
 import { Tabs, Tab, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
-import STHS from 'components/common/STHS';
 import { partition } from 'lodash';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
@@ -12,6 +11,7 @@ import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
 import { Lines } from '../../../components/lines/Lines';
 import { SeasonTypeSelector } from '../../../components/SeasonTypeSelector';
+import { STHSWarningBanner } from '../../../components/sths/STHSWarningBanner';
 import { GoalieRatingsTable } from '../../../components/tables/GoalieRatingsTable';
 import { GoalieScoreTable } from '../../../components/tables/GoalieScoreTable';
 import { SkaterAdvStatsTable } from '../../../components/tables/SkaterAdvStatsTable';
@@ -22,7 +22,7 @@ import { TeamStat } from '../../../components/teams/TeamStat';
 import { useSeason } from '../../../hooks/useSeason';
 import { useSeasonType } from '../../../hooks/useSeasonType';
 import { Goalie, PlayerWithAdvancedStats } from '../../../typings/api';
-import { isSTHS, League, leagueNameToId } from '../../../utils/leagueHelpers';
+import { League, leagueNameToId } from '../../../utils/leagueHelpers';
 import { query } from '../../../utils/query';
 import { seasonTypeToApiFriendlyParam } from '../../../utils/seasonTypeHelpers';
 import { GoalieRatings } from '../../api/v1/goalies/ratings/[id]';
@@ -40,7 +40,7 @@ export default ({
 }) => {
   const [currentTab, setCurrentTab] = useState(0);
   const { name, colors, nameDetails, stats, abbreviation } = teamdata;
-  const { season } = useSeason();
+  const { season, isSTHS } = useSeason();
   const { type } = useSeasonType();
 
   const { data } = useQuery<(PlayerWithAdvancedStats | Goalie)[]>({
@@ -279,7 +279,7 @@ export default ({
             </div>
           </div>
         )}
-        {isSTHS(season) && <STHS />}
+        {isSTHS && <STHSWarningBanner />}
         <Tabs index={currentTab} onChange={setCurrentTab}>
           {shouldShowLinesTab && (
             <TabList>
@@ -298,10 +298,8 @@ export default ({
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  {season !== undefined && season >= 53 && (
-                    <Tab>Advanced Stats</Tab>
-                  )}
-                  {season !== undefined && season >= 53 && <Tab>Ratings</Tab>}
+                  {!isSTHS && <Tab>Advanced Stats</Tab>}
+                  {!isSTHS && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -321,7 +319,7 @@ export default ({
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  {season !== undefined && season >= 53 && <Tab>Ratings</Tab>}
+                  {!isSTHS && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
