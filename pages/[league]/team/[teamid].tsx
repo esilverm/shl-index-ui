@@ -352,7 +352,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     );
 
     const teamdata = await fetch(
-      `https://index.simulation.com/api/v1/teams/${teamid}?league=${leagueid}${
+      `https://index.simulationhockey.com/api/v1/teams/${teamid}?league=${leagueid}${
         season ? `&season=${season}` : ''
       }`,
     ).then((res) => res.json());
