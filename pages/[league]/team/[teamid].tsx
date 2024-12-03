@@ -351,14 +351,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       typeof league === 'string' ? league : 'shl',
     );
 
-    const baseUrl =
-      ctx.req.headers.host?.includes('127.0.0.1') ||
-      ctx.req.headers.host?.includes('localhost')
-        ? 'http://127.0.0.1:3000'
-        : 'https://index.simulation.com';
-
     const teamdata = await fetch(
-      `${baseUrl}/api/v1/teams/${teamid}?league=${leagueid}${
+      `https://index.simulation.com/api/v1/teams/${teamid}?league=${leagueid}${
         season ? `&season=${season}` : ''
       }`,
     ).then((res) => res.json());
