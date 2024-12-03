@@ -4,6 +4,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { STHSInfoModal } from 'components/sths/STHSInfoModal';
 import type { AppProps } from 'next/app';
 import { Raleway, Montserrat } from 'next/font/google';
 import { DefaultSeo } from 'next-seo';
@@ -48,7 +49,10 @@ export default ({ Component, pageProps }: AppProps) => {
             enableColorScheme={false}
           >
             <CustomChakraProvider>
-              <Component {...pageProps} />
+              <>
+                <Component {...pageProps} />
+                <STHSInfoModal />
+              </>
             </CustomChakraProvider>
           </ThemeProvider>
         </main>

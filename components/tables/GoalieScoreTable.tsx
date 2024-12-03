@@ -135,7 +135,10 @@ export const GoalieScoreTable = ({
           <TableHeader title="Goals Against Average">GAA</TableHeader>
         ),
         footer: ({ table }) =>
-          calculateColumnAverageForColumnID(table, 'gaa').toFixed(2),
+          (
+            calculateColumnSumForColumnID(table, 'goalsAgainst') /
+            calculateColumnSumForColumnID(table, 'gamesPlayed')
+          ).toFixed(2),
         enableGlobalFilter: false,
         sortDescFirst: true,
       }),
@@ -148,7 +151,10 @@ export const GoalieScoreTable = ({
       columnHelper.accessor('savePct', {
         header: () => <TableHeader title="Save Percentage">SV%</TableHeader>,
         footer: ({ table }) =>
-          calculateColumnAverageForColumnID(table, 'savePct').toFixed(3),
+          (
+            calculateColumnSumForColumnID(table, 'saves') /
+            calculateColumnSumForColumnID(table, 'shotsAgainst')
+          ).toFixed(3),
         enableGlobalFilter: false,
         sortDescFirst: true,
       }),

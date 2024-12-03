@@ -48,6 +48,9 @@ export const useSeason = () => {
     [router],
   );
 
+  // If the season is less than or equal to 52 then the data comes from the STHS sim engine
+  const isSTHS = useMemo(() => selectedSeason <= 52, [selectedSeason]);
+
   return {
     // Note: If the season is not loaded yet we will get -Infinity due to the math.max so we should instead give undefined.
     season: selectedSeason === -Infinity ? undefined : selectedSeason,
@@ -55,5 +58,6 @@ export const useSeason = () => {
     seasonLoading: isLoading,
     setSeason,
     isActiveSeason,
+    isSTHS,
   };
 };

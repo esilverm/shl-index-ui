@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { Squash as Hamburger } from 'hamburger-react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import VisibilitySensor from 'react-visibility-sensor-v2';
 
 import { useSeason } from '../hooks/useSeason';
@@ -48,7 +48,7 @@ export const Header = ({
   activePage,
   daysToShow,
   shouldStickToTop,
-  shouldShowScoreBar = true,
+  shouldShowScoreBar: shouldShowScoreBarFromProps = true,
 }: {
   league: League;
   activePage?: MenuLinks;
@@ -59,7 +59,7 @@ export const Header = ({
   const [scheduleVisible, setScheduleVisible] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const router = useRouter();
-  const { season, seasonsList, setSeason, seasonLoading } = useSeason();
+  const { season, seasonsList, setSeason, seasonLoading, isSTHS } = useSeason();
   const { teamid } = router.query;
 
   const { data: scheduleData, isLoading: scheduleIsLoading } = useQuery({
@@ -71,6 +71,14 @@ export const Header = ({
         }${daysToShow ? `&days=${daysToShow}` : ``}`,
       ),
   });
+
+  const shouldShowScoreBar = shouldShowScoreBarFromProps && !isSTHS;
+
+  const visibleMenuLinks = useMemo(() => {
+    return menuLinks.filter((link) => {
+      return link !== 'schedule' || !isSTHS;
+    });
+  }, [isSTHS]);
 
   return (
     <div
@@ -144,7 +152,7 @@ export const Header = ({
             >
               Home
             </Link>
-            {menuLinks.map((linkName) => (
+            {visibleMenuLinks.map((linkName) => (
               <Link
                 href={{
                   pathname: `/[league]/${linkName}`,

@@ -11,6 +11,7 @@ import { Footer } from '../../../components/Footer';
 import { Header } from '../../../components/Header';
 import { Lines } from '../../../components/lines/Lines';
 import { SeasonTypeSelector } from '../../../components/SeasonTypeSelector';
+import { STHSWarningBanner } from '../../../components/sths/STHSWarningBanner';
 import { GoalieRatingsTable } from '../../../components/tables/GoalieRatingsTable';
 import { GoalieScoreTable } from '../../../components/tables/GoalieScoreTable';
 import { SkaterAdvStatsTable } from '../../../components/tables/SkaterAdvStatsTable';
@@ -39,7 +40,7 @@ export default ({
 }) => {
   const [currentTab, setCurrentTab] = useState(0);
   const { name, colors, nameDetails, stats, abbreviation } = teamdata;
-  const { season } = useSeason();
+  const { season, isSTHS } = useSeason();
   const { type } = useSeasonType();
 
   const { data } = useQuery<(PlayerWithAdvancedStats | Goalie)[]>({
@@ -105,10 +106,9 @@ export default ({
   });
 
   const shouldShowLinesTab = !isLoadingLines && !!teamLines;
-
   const teamColorIsDark = useMemo(
-    () => tinycolor(colors.primary).isDark(),
-    [colors.primary],
+    () => colors && tinycolor(colors.primary).isDark(),
+    [colors],
   );
 
   const [rosterSkaters, rosterGoalies] = useMemo(
@@ -279,6 +279,7 @@ export default ({
             </div>
           </div>
         )}
+        {isSTHS && <STHSWarningBanner />}
         <Tabs index={currentTab} onChange={setCurrentTab}>
           {shouldShowLinesTab && (
             <TabList>
@@ -297,8 +298,8 @@ export default ({
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  <Tab>Advanced Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  {!isSTHS && <Tab>Advanced Stats</Tab>}
+                  {!isSTHS && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -318,7 +319,7 @@ export default ({
               <Tabs>
                 <TabList>
                   <Tab>Stats</Tab>
-                  <Tab>Ratings</Tab>
+                  {!isSTHS && <Tab>Ratings</Tab>}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -350,16 +351,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       typeof league === 'string' ? league : 'shl',
     );
 
+    const baseUrl =
+      ctx.req.headers.host?.includes('127.0.0.1') ||
+      ctx.req.headers.host?.includes('localhost')
+        ? 'http://127.0.0.1:3000'
+        : 'https://index.simulation.com';
+
     const teamdata = await fetch(
-      `https://index.simulationhockey.com/api/v1/teams/${teamid}?league=${leagueid}${
-        season ? `&season=${season}` : ``
+      `${baseUrl}/api/v1/teams/${teamid}?league=${leagueid}${
+        season ? `&season=${season}` : ''
       }`,
     ).then((res) => res.json());
 
     return { props: { league, teamdata } };
   } catch (error) {
     ctx.res.statusCode = 404;
-
     return { props: { error } };
   }
 };

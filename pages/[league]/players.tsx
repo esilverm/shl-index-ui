@@ -13,6 +13,7 @@ import { NextSeo } from 'next-seo';
 import { Footer } from '../../components/Footer';
 import { Header } from '../../components/Header';
 import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
+import { STHSWarningBanner } from '../../components/sths/STHSWarningBanner';
 import { GoalieRatingsTable } from '../../components/tables/GoalieRatingsTable';
 import { GoalieScoreTable } from '../../components/tables/GoalieScoreTable';
 import { SkaterAdvStatsTable } from '../../components/tables/SkaterAdvStatsTable';
@@ -28,7 +29,7 @@ import { GoalieRatings } from '../api/v1/goalies/ratings/[id]';
 import { SkaterRatings } from '../api/v1/players/ratings/[id]';
 
 export default ({ league }: { league: League }) => {
-  const { season } = useSeason();
+  const { season, isSTHS } = useSeason();
   const { type } = useSeasonType();
 
   const { data: skaterScoring } = useQuery<PlayerWithAdvancedStats[]>({
@@ -69,6 +70,7 @@ export default ({ league }: { league: League }) => {
         `api/v1/players/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
+    enabled: !isSTHS,
   });
 
   const { data: goalieRatings } = useQuery<GoalieRatings[]>({
@@ -79,10 +81,12 @@ export default ({ league }: { league: League }) => {
         `api/v1/goalies/ratings?league=${leagueNameToId(league)}${seasonParam}`,
       );
     },
+    enabled: !isSTHS,
   });
 
-  const isLoading =
-    !skaterScoring || !skaterRatings || !goalieRatings || !goalieScoring;
+  let isLoading = isSTHS
+    ? !skaterScoring || !goalieScoring
+    : !skaterScoring || !skaterRatings || !goalieRatings || !goalieScoring;
 
   return (
     <>
@@ -106,22 +110,27 @@ export default ({ league }: { league: League }) => {
             <h2 className="my-7 border-b border-b-primary py-1 text-4xl font-bold">
               Skaters
             </h2>
+            {isSTHS && <STHSWarningBanner />}
             <Tabs>
               <TabList>
                 <Tab>Stats</Tab>
-                <Tab>Advanced Stats</Tab>
-                <Tab>Ratings</Tab>
+                {!isSTHS && <Tab>Advanced Stats</Tab>}
+                {!isSTHS && <Tab>Ratings</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <SkaterScoreTable data={skaterScoring} type="league" />
+                  <SkaterScoreTable data={skaterScoring ?? []} type="league" />
                 </TabPanel>
-                <TabPanel>
-                  <SkaterAdvStatsTable data={skaterScoring} type="league" />
-                </TabPanel>
-                <TabPanel>
-                  <SkaterRatingsTable data={skaterRatings} type="league" />
-                </TabPanel>
+                {!isSTHS && skaterScoring && (
+                  <TabPanel>
+                    <SkaterAdvStatsTable data={skaterScoring} type="league" />
+                  </TabPanel>
+                )}
+                {!isSTHS && skaterRatings && (
+                  <TabPanel>
+                    <SkaterRatingsTable data={skaterRatings} type="league" />
+                  </TabPanel>
+                )}
               </TabPanels>
             </Tabs>
             <h2 className="my-7 border-b border-b-grey900 py-1 text-4xl font-bold">
@@ -130,15 +139,17 @@ export default ({ league }: { league: League }) => {
             <Tabs>
               <TabList>
                 <Tab>Stats</Tab>
-                <Tab>Ratings</Tab>
+                {!isSTHS && <Tab>Ratings</Tab>}
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <GoalieScoreTable data={goalieScoring} type="league" />
+                  <GoalieScoreTable data={goalieScoring ?? []} type="league" />
                 </TabPanel>
-                <TabPanel>
-                  <GoalieRatingsTable data={goalieRatings} type="league" />
-                </TabPanel>
+                {!isSTHS && goalieRatings && (
+                  <TabPanel>
+                    <GoalieRatingsTable data={goalieRatings} type="league" />
+                  </TabPanel>
+                )}
               </TabPanels>
             </Tabs>
           </>

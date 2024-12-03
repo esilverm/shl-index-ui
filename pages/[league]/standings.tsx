@@ -10,6 +10,7 @@ import { Header } from '../../components/Header';
 import { DoubleBracket } from '../../components/playoffBracket/DoubleBracket';
 import { SingleBracket } from '../../components/playoffBracket/SingleBracket';
 import { SeasonTypeSelector } from '../../components/SeasonTypeSelector';
+import { STHSWarningBanner } from '../../components/sths/STHSWarningBanner';
 import { StandingsTable } from '../../components/tables/StandingsTable';
 import { useSeason } from '../../hooks/useSeason';
 import { useSeasonType } from '../../hooks/useSeasonType';
@@ -28,7 +29,7 @@ const tabs = ['league', 'conference', 'division'];
 export default ({ league }: { league: League }) => {
   const [currentActiveTab, setCurrentActiveTab] = useState(0);
   const { type } = useSeasonType();
-  const { season } = useSeason();
+  const { season, isSTHS } = useSeason();
 
   const { data, isLoading } = useQuery<Standings | PlayoffsRound[]>({
     queryKey: ['standings', league, type, season, tabs[currentActiveTab]],
@@ -55,7 +56,6 @@ export default ({ league }: { league: League }) => {
     () => data && data[0] && (data[0] as PlayoffsRound).length > 4,
     [data],
   );
-
   return (
     <>
       <NextSeo
@@ -65,6 +65,7 @@ export default ({ league }: { league: League }) => {
         }}
       />
       <Header league={league} activePage="standings" />
+      {isSTHS && <STHSWarningBanner />}
       <div className="mx-auto w-full bg-primary p-[2.5%] lg:pb-10 lg:pt-px 2xl:w-5/6 2xl:px-8">
         <div className="flex !h-7 items-center justify-center lg:float-right lg:inline-block ">
           <SeasonTypeSelector className="z-30 !h-7 w-48 lg:top-7" />
