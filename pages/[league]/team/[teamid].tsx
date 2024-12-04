@@ -357,9 +357,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }`,
     ).then((res) => res.json());
 
+    if ('error' in teamdata) {
+      ctx.res.statusCode = 404;
+      return {
+        redirect: {
+          destination: `/${league}${season ? `?season=${season}` : ''}`,
+          permanent: false,
+        },
+      };
+    }
+
     return { props: { league, teamdata } };
   } catch (error) {
+    const { league, season } = ctx.query;
     ctx.res.statusCode = 404;
-    return { props: { error } };
+    return {
+      redirect: {
+        destination: `/${league ?? ''}${
+          league && season ? `?season=${season}` : ''
+        }`,
+        permanent: false,
+      },
+    };
   }
 };
