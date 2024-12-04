@@ -27,10 +27,13 @@ export const STHSInfoModal = () => {
   const closeModal = useCallback(() => {
     const { pathname, query } = router;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { overlay, ...rest } = query;
+
     router.replace(
       {
         pathname,
-        query: onlyIncludeSeasonAndTypeInQuery(query),
+        query: rest,
       },
       undefined,
       { shallow: true },
