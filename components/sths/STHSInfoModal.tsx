@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { onlyIncludeSeasonAndTypeInQuery } from 'utils/routingHelpers';
 
 export const STHS_INFO_MODAL_NAME = 'sths-info';
 
