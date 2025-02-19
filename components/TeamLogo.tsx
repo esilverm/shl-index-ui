@@ -119,8 +119,8 @@ const getLogoId = (
           if (season < 42) {
             return { spriteId: 'ManhattanPreS42', isHistorical: true };
           }
-          if (season < 78) {
-            return { spriteId: 'ManhattanPreS78', isHistorical: true };
+          if (season < 79) {
+            return { spriteId: 'ManhattanPreS79', isHistorical: true };
           }
           return 'Manhattan';
         case 'MIN':
