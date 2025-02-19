@@ -49,7 +49,10 @@ export const useSeason = () => {
   );
 
   // If the season is less than or equal to 52 then the data comes from the STHS sim engine
-  const isSTHS = useMemo(() => selectedSeason <= 52, [selectedSeason]);
+  const isSTHS = useMemo(
+    () => selectedSeason > 0 && selectedSeason <= 52,
+    [selectedSeason],
+  );
 
   return {
     // Note: If the season is not loaded yet we will get -Infinity due to the math.max so we should instead give undefined.
