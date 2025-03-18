@@ -1,34 +1,64 @@
-import { InternalPlayerAchievement } from 'typings/portalApi';
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useMemo } from 'react';
+
+import { InternalPlayerAchievement } from '../../typings/portalApi';
+
+import { Table } from './Table';
+import { AWARD_TABLE_FLAGS } from './tableBehavioralFlags';
+import { TableHeader } from './TableHeader';
+
+const columnHelper = createColumnHelper<InternalPlayerAchievement>();
 
 export const PlayerAwards = ({
   playerAwards,
 }: {
   playerAwards: InternalPlayerAchievement[];
 }) => {
-  const uniqueAwardsNames = playerAwards
-    .map((playerAward) => playerAward.achievementName)
-    .filter((value, index, self) => self.indexOf(value) === index);
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('seasonID', {
+        header: () => <TableHeader title="Season">Season</TableHeader>,
+        enableGlobalFilter: true,
+      }),
+      columnHelper.accessor(
+        (row) => {
+          const result = row.isAward ? (row.won ? 'Won' : 'Nom') : '';
+          return `${row.achievementName}${result ? ` - ${result}` : ''}`;
+        },
+        {
+          id: 'awardResult',
+          header: () => <TableHeader title="Award">Award</TableHeader>,
+          enableGlobalFilter: true,
+        },
+      ),
+      columnHelper.accessor('teamID', {
+        header: () => <TableHeader title="Team">Team</TableHeader>, //Figure out way to put team Abbr or logo here
+        enableGlobalFilter: true,
+      }),
+    ],
+    [],
+  );
+
+  const table = useReactTable({
+    columns,
+    data: playerAwards,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: [{ id: 'seasonID', desc: true }],
+    },
+  });
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-5">
-      <div className="text-center font-mont text-lg uppercase">Awards</div>
-      <div className="flex flex-col items-center justify-center space-y-2">
-        {playerAwards.map((playerAward) => (
-          <div
-            key={playerAward.achievementName}
-            className="flex flex-col items-center justify-center space-y-2"
-          >
-            <div className="text-center font-mont text-lg uppercase">
-              {playerAward.achievementName}
-            </div>
-            <div> TeamID {playerAward.teamID}</div>
-
-            <div className="text-center font-mont">
-              {playerAward.won ? 'Won' : 'Lost'}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Table<InternalPlayerAchievement>
+      table={table}
+      tableBehavioralFlags={AWARD_TABLE_FLAGS()}
+      label="player_awards"
+    />
   );
 };

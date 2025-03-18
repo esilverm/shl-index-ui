@@ -33,6 +33,15 @@ export const SKATER_TABLE_FLAGS = ({
   showTableFilterOptions: playerType !== 'goalie',
 });
 
+export const AWARD_TABLE_FLAGS = (): TableBehavioralFlags => ({
+  stickyFirstColumn: false,
+  showTableFooter: false,
+  showCSVExportButton: false,
+  enablePagination: false,
+  enableFiltering: false,
+  showTableFilterOptions: false,
+});
+
 export interface TableBehavioralFlags {
   stickyFirstColumn: boolean;
   showTableFooter: boolean;
