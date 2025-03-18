@@ -94,6 +94,9 @@ const getLogoId = (
           if (season < 37) {
             return { spriteId: 'HamiltonPreS37', isHistorical: true };
           }
+          if (season < 81) {
+            return { spriteId: 'HamiltonPreS81', isHistorical: true };
+          }
           return 'Hamilton';
         case 'LAP':
           if (season < 11) {
