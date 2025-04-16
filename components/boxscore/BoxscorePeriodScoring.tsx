@@ -219,9 +219,11 @@ const PeriodScoringColumn = ({
 export const BoxscorePeriodScoring = ({
   league,
   gameData,
+  isFHM10,
 }: {
   league: League;
   gameData: GamePreviewData | undefined;
+  isFHM10: boolean;
 }) => {
   const { data } = useQuery<BoxscoreScoring[]>({
     queryKey: [
@@ -283,6 +285,7 @@ export const BoxscorePeriodScoring = ({
           gameData={gameData}
           title="1st Period"
           period="1st"
+          isFHM10={isFHM10}
         />
         <PeriodScoringColumn
           league={league}
@@ -290,6 +293,7 @@ export const BoxscorePeriodScoring = ({
           gameData={gameData}
           title="2nd Period"
           period="2nd"
+          isFHM10={isFHM10}
         />
         <PeriodScoringColumn
           league={league}
@@ -297,6 +301,7 @@ export const BoxscorePeriodScoring = ({
           gameData={gameData}
           title="3rd Period"
           period="3rd"
+          isFHM10={isFHM10}
         />
         {!!gameData.game.overtime && (
           <PeriodScoringColumn
@@ -305,6 +310,7 @@ export const BoxscorePeriodScoring = ({
             gameData={gameData}
             title="Overtime"
             period="OT"
+            isFHM10={isFHM10}
           />
         )}
         {!!gameData.game.shootout && (
@@ -314,6 +320,7 @@ export const BoxscorePeriodScoring = ({
             gameData={gameData}
             title="Shootout"
             period="SO"
+            isFHM10={isFHM10}
           />
         )}
       </div>

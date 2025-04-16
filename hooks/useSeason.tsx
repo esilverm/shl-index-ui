@@ -54,6 +54,8 @@ export const useSeason = () => {
     [selectedSeason],
   );
 
+  const isFHM10 = useMemo(() => selectedSeason >= 82, [selectedSeason]);
+
   return {
     // Note: If the season is not loaded yet we will get -Infinity due to the math.max so we should instead give undefined.
     season: selectedSeason === -Infinity ? undefined : selectedSeason,
@@ -62,5 +64,6 @@ export const useSeason = () => {
     setSeason,
     isActiveSeason,
     isSTHS,
+    isFHM10,
   };
 };

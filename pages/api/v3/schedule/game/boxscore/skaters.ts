@@ -99,7 +99,6 @@ const parseSkaterInfo = (skater: BoxscoreSkatersInternal) => ({
   gameRating: Math.floor(skater.GR),
   offensiveGameRating: Math.floor(skater.OGR),
   defensiveGameRating: Math.floor(skater.DGR),
-  shotQualities: [skater.sq0, skater.sq1, skater.sq2, skater.sq3, skater.sq4],
   team_shots_on: skater.team_shots_on,
   team_shots_against_on: skater.team_shots_against_on,
   team_shots_missed_on: skater.team_shots_missed_on,
@@ -122,6 +121,11 @@ const parseSkaterInfo = (skater: BoxscoreSkatersInternal) => ({
   team_oz_starts: skater.team_oz_starts,
   team_nz_starts: skater.team_nz_starts,
   team_dz_starts: skater.team_dz_starts,
+  sq0: skater.sq0,
+  sq1: skater.sq1,
+  sq2: skater.sq2,
+  sq3: skater.sq3,
+  sq4: skater.sq4,
 });
 
 export default async (

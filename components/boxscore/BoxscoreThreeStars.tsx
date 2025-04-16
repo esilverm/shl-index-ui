@@ -100,7 +100,7 @@ export const BoxscoreThreeStars = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
