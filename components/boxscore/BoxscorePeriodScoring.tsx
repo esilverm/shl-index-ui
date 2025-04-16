@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 
-import { BoxscoreScoring } from '../../pages/api/v2/schedule/game/boxscore/scoring';
 import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { BoxscoreScoring } from '../../pages/api/v3/schedule/game/boxscore/scoring';
 import { League } from '../../utils/leagueHelpers';
 import { getPlayerShortname } from '../../utils/playerHelpers';
 import { query } from '../../utils/query';
@@ -20,6 +20,11 @@ import { Period } from './shared';
 type BoxscoreGoalWithCurrentScore = BoxscoreScoring & {
   homeScore: number;
   awayScore: number;
+};
+
+type ShotQualityEvent = {
+  teamAbbr: string;
+  shotQuality: number;
 };
 
 const GoalTimingBar = ({
@@ -95,6 +100,43 @@ const GoalTimingBar = ({
   );
 };
 
+export const ShotQualityBar = ({
+  shot,
+  gameData,
+}: {
+  shot: ShotQualityEvent;
+  gameData: GamePreviewData;
+}) => {
+  const { teamColor } = useMemo(() => {
+    const isHomeTeamShot = shot.teamAbbr === gameData?.teams.home.abbr;
+    const teamColor = isHomeTeamShot
+      ? gameData.teams.home.primaryColor
+      : gameData?.teams.away.primaryColor;
+    return {
+      isHomeTeamShot,
+      teamColor,
+      teamColorIsDark: tinycolor(teamColor).isDark(),
+    };
+  }, [gameData, shot.teamAbbr]);
+
+  return (
+    <div
+      className="mt-0.5 flex items-center justify-center rounded-md border bg-grey100 text-center font-mont text-[0.7rem] leading-5"
+      style={{
+        borderColor: teamColor,
+        backgroundColor: teamColor,
+      }}
+    >
+      Shot Quality:{' '}
+      <span className="ml-1 font-bold">
+        {typeof shot.shotQuality === 'number'
+          ? `${shot.shotQuality}`
+          : shot.shotQuality}
+      </span>
+    </div>
+  );
+};
+
 const PeriodScoringColumn = ({
   league,
   gameData,
@@ -162,6 +204,9 @@ const PeriodScoringColumn = ({
                   goal={goal}
                   period={period}
                 />
+                {goal.shotQuality && (
+                  <ShotQualityBar gameData={gameData} shot={goal} />
+                )}
               </div>
             </div>
           );
@@ -186,7 +231,7 @@ export const BoxscorePeriodScoring = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/scoring?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/scoring?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
