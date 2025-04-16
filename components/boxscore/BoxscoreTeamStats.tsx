@@ -1,5 +1,4 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Box, Link, Skeleton, SkeletonCircle, Tooltip } from '@chakra-ui/react';
+import { Skeleton, SkeletonCircle } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useMemo } from 'react';
@@ -9,6 +8,8 @@ import { BoxscoreSummary } from '../../pages/api/v3/schedule/game/boxscore/summa
 import { League } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { TeamLogo } from '../TeamLogo';
+
+import { ShotQualityHeader } from './ShotQualityHeader';
 
 const TableCell = ({
   children,
@@ -152,9 +153,11 @@ const BoxscoreShotQualityRow = ({
 export const BoxscoreTeamStats = ({
   league,
   gameData,
+  isFHM10,
 }: {
   league: League;
   gameData: GamePreviewData | undefined;
+  isFHM10: boolean;
 }) => {
   const { data, isLoading } = useQuery<BoxscoreSummary>({
     queryKey: [
@@ -169,9 +172,6 @@ export const BoxscoreTeamStats = ({
     enabled: !!gameData,
   });
 
-  const isFHM10 = useMemo(() => {
-    return data?.summary?.home?.sq0 != null;
-  }, [data]);
   return (
     <div className="flex w-full flex-col bg-primary p-4 pt-0">
       <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
@@ -207,21 +207,7 @@ export const BoxscoreTeamStats = ({
         <>
           <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
             <span>
-              <Box>
-                Shot Quality{'  '}
-                <Tooltip
-                  label="Info on Shot Quality"
-                  aria-label="Info on Shot Quality"
-                >
-                  <Link
-                    className="hidden h-2/5 w-max !text-blue600 sm:inline-block"
-                    href="https://simulationhockey.com/showthread.php?tid=142548"
-                    isExternal
-                  >
-                    <ExternalLinkIcon />
-                  </Link>
-                </Tooltip>
-              </Box>
+              <ShotQualityHeader />
             </span>
           </div>
           <div className="flex w-full items-center py-2.5">

@@ -11,7 +11,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
-import { SetStateAction, useMemo, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 import { BoxscoreGoalie } from '../../pages/api/v2/schedule/game/boxscore/goalies';
 import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
@@ -573,8 +573,10 @@ const ShotQualityTable = ({
 
 export const BoxscoreTeamRosters = ({
   gameData,
+  isFHM10,
 }: {
   gameData: GamePreviewData | undefined;
+  isFHM10: boolean;
 }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (index: SetStateAction<number>) => setTabIndex(index);
@@ -610,13 +612,6 @@ export const BoxscoreTeamRosters = ({
       ),
     enabled: !!gameData,
   });
-
-  const isFHM10 = useMemo(() => {
-    if (!skatersData || isLoadingSkaters) return false;
-    const homePlayers = skatersData.home;
-    const samplePlayer = homePlayers[0];
-    return samplePlayer.sq0 != null;
-  }, [skatersData, isLoadingSkaters]);
 
   const renderTeamSection = (team: 'away' | 'home', tabIndex: number) => {
     return (

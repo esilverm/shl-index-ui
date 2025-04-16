@@ -143,12 +143,14 @@ const PeriodScoringColumn = ({
   data,
   title,
   period,
+  isFHM10,
 }: {
   league: League;
   gameData: GamePreviewData;
   data: BoxscoreGoalWithCurrentScore[] | undefined;
   title: string;
   period: Period;
+  isFHM10: boolean;
 }) => {
   const router = useRouter();
   return (
@@ -204,9 +206,7 @@ const PeriodScoringColumn = ({
                   goal={goal}
                   period={period}
                 />
-                {goal.shotQuality && (
-                  <ShotQualityBar gameData={gameData} shot={goal} />
-                )}
+                {isFHM10 && <ShotQualityBar gameData={gameData} shot={goal} />}
               </div>
             </div>
           );
