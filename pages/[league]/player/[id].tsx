@@ -223,6 +223,7 @@ export default ({ playerId, league }: { playerId: string; league: League }) => {
                     <Link
                       className="!text-blue600"
                       href={`https://portal.simulationhockey.com/player/${playerPortalID[0].playerUpdateID}`}
+                      isExternal
                       //Need to figure out system of when 2 players are on the same ID.
                       // Is it fix it in the db? Would be the best way. Need to talk with Grok
                       // Biggest glare is IIHF and WJC Files. Then sometimes SMJHL as well
