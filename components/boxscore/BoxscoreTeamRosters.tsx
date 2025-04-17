@@ -13,8 +13,8 @@ import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import { SetStateAction, useState } from 'react';
 
-import { BoxscoreGoalie } from '../../pages/api/v2/schedule/game/boxscore/goalies';
 import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { BoxscoreGoalie } from '../../pages/api/v3/schedule/game/boxscore/goalies';
 import { BoxscoreSkater } from '../../pages/api/v3/schedule/game/boxscore/skaters';
 import { getPlayerShortname } from '../../utils/playerHelpers';
 import { query } from '../../utils/query';
@@ -608,7 +608,7 @@ export const BoxscoreTeamRosters = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });

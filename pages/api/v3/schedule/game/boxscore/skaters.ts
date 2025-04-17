@@ -10,6 +10,7 @@ type BoxscoreSkatersInternal = {
   playerID: number;
   name: string;
   isHomeTeam: 1 | 0;
+  teamID: number;
   GR: number;
   OGR: number;
   DGR: number;
@@ -68,6 +69,8 @@ const cors = Cors({
 
 const parseSkaterInfo = (skater: BoxscoreSkatersInternal) => ({
   name: skater.name,
+  isHomeTeam: skater.isHomeTeam,
+  teamID: skater.teamID,
   id: skater.playerID,
   goals: skater.G,
   assists: skater.A,
@@ -148,7 +151,7 @@ export default async (
            THEN 1
            ELSE 0
       END as isHomeTeam,
-      b.GR, b.OGR, b.DGR, b.G, b.A,
+      p.teamID, b.GR, b.OGR, b.DGR, b.G, b.A,
       b.PlusMinus, b.SOG, b.MS, b.BS, b.PIM,
       b.HT, b.TK, b.GV, b.SHF, b.TOT, b.PP,
       b.SH, b.EV, b.FOW, b.FOL, b.FOPct, 
