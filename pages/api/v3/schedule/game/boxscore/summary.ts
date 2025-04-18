@@ -59,6 +59,8 @@ type BoxscoreSummaryInternal = {
   sq2_away: number;
   sq3_away: number;
   sq4_away: number;
+  shot_attempts_home: number;
+  shot_attempts_away: number;
 };
 
 export type BoxscoreSummary = ReturnType<typeof parseSummaryInfo>;
@@ -79,6 +81,7 @@ const parseSummaryInfo = (summary: BoxscoreSummaryInternal) => ({
       sq2: summary.sq2_home,
       sq3: summary.sq3_home,
       sq4: summary.sq4_home,
+      shot_attempts: summary.shot_attempts_home,
     },
     away: {
       shots: summary.shots_away,
@@ -94,6 +97,7 @@ const parseSummaryInfo = (summary: BoxscoreSummaryInternal) => ({
       sq2: summary.sq2_away,
       sq3: summary.sq3_away,
       sq4: summary.sq4_away,
+      shot_attempts: summary.shot_attempts_away,
     },
   },
   stars: {
@@ -189,7 +193,8 @@ export default async (
         b.star1, p1.\`Last Name\` as star1Name, p1.TeamID as star1Team,
         b.star2, p2.\`Last Name\` as star2Name, p2.TeamID as star2Team,
         b.star3, p3.\`Last Name\` as star3Name, p3.TeamID as star3Team,
-        b.shots_home, b.shots_away, 
+        (b.SOG_home_p1 + b.SOG_home_p2 + b.SOG_home_p3 + b.SOG_home_OT) as shots_home , 
+        (b.SOG_away_p1 + b.SOG_away_p2 + b.SOG_away_p3 + b.SOG_away_OT) as shots_away,
         b.PIM_home, b.PIM_away,
         b.hits_home, b.hits_away, 
         b.GA_home, b.GA_away, 
@@ -199,7 +204,7 @@ export default async (
         b.SOG_away_p1, b.SOG_away_p2, b.SOG_away_p3, b.SOG_away_OT,
         b.PPG_home, b.PPO_home, b.PPG_away, b.PPO_away, 
         b.sq0_home, b.sq1_home, b.sq2_home, b.sq3_home, b.sq4_home, 
-        b.sq0_away, b.sq1_away, b.sq2_away, b.sq3_away, b.sq4_away
+        b.sq0_away, b.sq1_away, b.sq2_away, b.sq3_away, b.sq4_away,b.shots_home as shot_attempts_home, b.shots_away as shot_attempts_away
     FROM boxscore_summary as b
     INNER JOIN player_master as p1
       ON p1.PlayerID = b.star1

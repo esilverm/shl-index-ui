@@ -45,6 +45,11 @@ export const ShotQualityModal = () => {
         'Attempts from the low danger areas are assigned a value of 1, attempts from the medium danger areas are assigned a value of 2, and attempts in the high danger area are assigned a value of 3. Add 1 to this value if the attempt is considered a rush shot or a rebound. A rebound is any attempt made within 3 seconds of another blocked, missed or saved attempt without a stoppage in play in between. A rush shot is any attempt within 4 seconds of any event in the neutral or defensive zone without a stoppage in play in between.',
     },
     {
+      title: 'FHM Concepts of Shot Quality',
+      description:
+        'The total Shot Quality does not equal the number of shots shown or saves. It includes all shots taken, which includes blocked shots and missed shots. Keep that in mind when looking at your players shot attempts',
+    },
+    {
       title: 'Shot Quality 0',
       description:
         "It is the low danger area's that also got their shot blocked.",

@@ -146,6 +146,9 @@ const BoxscoreShotQualityRow = ({
       <TableCell isLoading={isLoading}>
         {data?.summary[team].sq4 ?? 0}
       </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].shot_attempts ?? 0}
+      </TableCell>
     </div>
   );
 };
@@ -217,6 +220,7 @@ export const BoxscoreTeamStats = ({
             <TableCell>SQ 2</TableCell>
             <TableCell>SQ 3</TableCell>
             <TableCell>SQ 4</TableCell>
+            <TableCell>Total</TableCell>
           </div>
           <BoxscoreShotQualityRow
             league={league}
