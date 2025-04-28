@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Link } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { SHOT_QUALITY_MODAL_NAME } from './ShotQualityModal';
@@ -20,7 +20,7 @@ export const ShotQualityHeader = () => {
   return (
     <Box>
       Shot Quality{' '}
-      <Text
+      <Link
         as="button"
         onClick={openSQModal}
         fontWeight="semibold"
@@ -29,7 +29,7 @@ export const ShotQualityHeader = () => {
         className="!text-sm"
       >
         Learn more about Shot Quality
-      </Text>
+      </Link>
     </Box>
   );
 };

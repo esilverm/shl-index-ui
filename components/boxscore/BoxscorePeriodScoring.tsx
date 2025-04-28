@@ -127,12 +127,7 @@ export const ShotQualityBar = ({
         backgroundColor: teamColor,
       }}
     >
-      Shot Quality:{' '}
-      <span className="ml-1 font-bold">
-        {typeof shot.shotQuality === 'number'
-          ? `${shot.shotQuality}`
-          : shot.shotQuality}
-      </span>
+      Shot Quality: <span className="ml-1 font-bold">{shot.shotQuality}</span>
     </div>
   );
 };
