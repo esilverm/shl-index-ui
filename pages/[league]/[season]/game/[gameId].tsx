@@ -1,5 +1,6 @@
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
+import { useSeason } from 'hooks/useSeason';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 
@@ -9,6 +10,7 @@ import { BoxscorePeriodScoring } from '../../../../components/boxscore/BoxscoreP
 import { BoxscorePeriodShots } from '../../../../components/boxscore/BoxscorePeriodShots';
 import { BoxscoreTeamRosters } from '../../../../components/boxscore/BoxscoreTeamRosters';
 import { BoxscoreTeamStats } from '../../../../components/boxscore/BoxscoreTeamStats';
+import { BoxscoreTeamZoneStarts } from '../../../../components/boxscore/BoxscoreTeamZoneStarts';
 import { BoxscoreThreeStars } from '../../../../components/boxscore/BoxscoreThreeStars';
 import { Footer } from '../../../../components/Footer';
 import { GamePreview } from '../../../../components/game/GamePreview';
@@ -30,6 +32,7 @@ export default ({ gameId, league }: { gameId: string; league: League }) => {
     queryKey: ['shouldShowBoxscore', gameId],
     queryFn: () => fetchShouldShowBoxscore(gameId),
   });
+  const { isFHM10 } = useSeason();
 
   const { data: gameData } = useQuery<GamePreviewData>({
     queryKey: ['gamePreview', gameId],
@@ -76,16 +79,25 @@ export default ({ gameId, league }: { gameId: string; league: League }) => {
               <div className="lg:hidden">
                 <BoxscoreFinalScores league={league} gameData={gameData} />
               </div>
-              <BoxscoreTeamStats league={league} gameData={gameData} />
-              <BoxscoreTeamRosters gameData={gameData} />
+              <BoxscoreTeamStats
+                league={league}
+                gameData={gameData}
+                isFHM10={isFHM10}
+              />
+              <BoxscoreTeamRosters gameData={gameData} isFHM10={isFHM10} />
             </div>
             <div className="flex w-full flex-col gap-2.5 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:w-[300px]">
               <div className="hidden lg:inline-block">
                 <BoxscoreFinalScores league={league} gameData={gameData} />
               </div>
-              <BoxscorePeriodScoring league={league} gameData={gameData} />
+              <BoxscorePeriodScoring
+                league={league}
+                gameData={gameData}
+                isFHM10={isFHM10}
+              />
               <BoxscorePeriodPenalties gameData={gameData} />
               <BoxscorePeriodShots gameData={gameData} />
+              {isFHM10 && <BoxscoreTeamZoneStarts gameData={gameData} />}
               <BoxscoreThreeStars league={league} gameData={gameData} />
             </div>
           </>

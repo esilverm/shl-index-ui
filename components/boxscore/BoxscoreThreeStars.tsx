@@ -2,10 +2,10 @@ import { Spinner } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { BoxscoreGoalie } from '../../pages/api/v2/schedule/game/boxscore/goalies';
 import { BoxscoreSkater } from '../../pages/api/v2/schedule/game/boxscore/skaters';
 import { BoxscoreSummary } from '../../pages/api/v2/schedule/game/boxscore/summary';
 import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { BoxscoreGoalie } from '../../pages/api/v3/schedule/game/boxscore/goalies';
 import { League } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { TeamLogo } from '../TeamLogo';
@@ -84,7 +84,7 @@ export const BoxscoreThreeStars = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
@@ -100,7 +100,7 @@ export const BoxscoreThreeStars = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/skaters?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
@@ -116,7 +116,7 @@ export const BoxscoreThreeStars = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/goalies?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });

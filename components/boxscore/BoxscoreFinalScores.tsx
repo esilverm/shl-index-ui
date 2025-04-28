@@ -107,7 +107,7 @@ export const BoxscoreFinalScores = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });

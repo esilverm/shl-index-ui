@@ -3,11 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import classnames from 'classnames';
 import { useMemo } from 'react';
 
-import { BoxscoreSummary } from '../../pages/api/v2/schedule/game/boxscore/summary';
 import { GamePreviewData } from '../../pages/api/v2/schedule/game/preview';
+import { BoxscoreSummary } from '../../pages/api/v3/schedule/game/boxscore/summary';
 import { League } from '../../utils/leagueHelpers';
 import { query } from '../../utils/query';
 import { TeamLogo } from '../TeamLogo';
+
+import { ShotQualityHeader } from './ShotQualityHeader';
 
 const TableCell = ({
   children,
@@ -97,12 +99,68 @@ const BoxscoreTeamStatsRow = ({
   );
 };
 
-export const BoxscoreTeamStats = ({
+const BoxscoreShotQualityRow = ({
   league,
   gameData,
+  data,
+  isLoading,
+  team,
 }: {
   league: League;
   gameData: GamePreviewData | undefined;
+  data: BoxscoreSummary | undefined;
+  isLoading: boolean;
+  team: 'away' | 'home';
+}) => {
+  return (
+    <div className="mb-2 flex w-full items-center text-xl font-semibold md:text-3xl">
+      <TableCell firstColumn className="flex items-center text-lg">
+        <SkeletonCircle
+          isLoaded={!!gameData}
+          width={50}
+          height={50}
+          className="mr-2"
+        >
+          <TeamLogo
+            league={league}
+            teamAbbreviation={gameData?.teams[team].abbr}
+            className="size-full"
+          />
+        </SkeletonCircle>
+        <div className="hidden md:inline-block">
+          {gameData?.teams[team].nickname}
+        </div>
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].sq0 ?? 0}
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].sq1 ?? 0}
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].sq2 ?? 0}
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].sq3 ?? 0}
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].sq4 ?? 0}
+      </TableCell>
+      <TableCell isLoading={isLoading}>
+        {data?.summary[team].shot_attempts ?? 0}
+      </TableCell>
+    </div>
+  );
+};
+
+export const BoxscoreTeamStats = ({
+  league,
+  gameData,
+  isFHM10,
+}: {
+  league: League;
+  gameData: GamePreviewData | undefined;
+  isFHM10: boolean;
 }) => {
   const { data, isLoading } = useQuery<BoxscoreSummary>({
     queryKey: [
@@ -112,7 +170,7 @@ export const BoxscoreTeamStats = ({
     ],
     queryFn: () =>
       query(
-        `api/v2/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
+        `api/v3/schedule/game/boxscore/summary?league=${gameData?.game.league}&gameid=${gameData?.game.gameid}`,
       ),
     enabled: !!gameData,
   });
@@ -148,6 +206,38 @@ export const BoxscoreTeamStats = ({
         gameData={gameData}
         team="home"
       />
+      {isFHM10 && (
+        <>
+          <div className="mb-2.5 flex border-b-4 border-b-grey300 py-2.5 font-mont text-sm font-semibold">
+            <span>
+              <ShotQualityHeader />
+            </span>
+          </div>
+          <div className="flex w-full items-center py-2.5">
+            <TableCell firstColumn />
+            <TableCell>SQ 0</TableCell>
+            <TableCell>SQ 1</TableCell>
+            <TableCell>SQ 2</TableCell>
+            <TableCell>SQ 3</TableCell>
+            <TableCell>SQ 4</TableCell>
+            <TableCell>Total</TableCell>
+          </div>
+          <BoxscoreShotQualityRow
+            league={league}
+            data={data}
+            isLoading={isLoading}
+            gameData={gameData}
+            team="away"
+          />
+          <BoxscoreShotQualityRow
+            league={league}
+            data={data}
+            isLoading={isLoading}
+            gameData={gameData}
+            team="home"
+          />
+        </>
+      )}
     </div>
   );
 };

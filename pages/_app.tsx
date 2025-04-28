@@ -4,6 +4,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { ShotQualityModal } from 'components/boxscore/ShotQualityModal';
 import { STHSInfoModal } from 'components/sths/STHSInfoModal';
 import type { AppProps } from 'next/app';
 import { Raleway, Montserrat } from 'next/font/google';
@@ -52,6 +53,7 @@ export default ({ Component, pageProps }: AppProps) => {
               <>
                 <Component {...pageProps} />
                 <STHSInfoModal />
+                <ShotQualityModal />
               </>
             </CustomChakraProvider>
           </ThemeProvider>
